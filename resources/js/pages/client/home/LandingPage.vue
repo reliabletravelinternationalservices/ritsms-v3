@@ -9,6 +9,7 @@ import AgencyServices from './section/AgencyServices.vue';
 import AboutAgency from './section/AboutAgency.vue';
 import PartnerAgency from './section/PartnerAgency.vue';
 import InquiryForm from './section/InquiryForm.vue';
+import ClientFeedback from './section/ClientFeedback.vue';
 
 </script>
 
@@ -23,5 +24,6 @@ import InquiryForm from './section/InquiryForm.vue';
         <AboutAgency />
         <PartnerAgency />
         <InquiryForm />
+        <ClientFeedback />
     </AppLayout>     
 </template>
