@@ -100,7 +100,7 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
           <Textarea id="message" rows="3" placeholder="Tell us about your concern..." class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
         </div>
         <div class="w-full flex justify-end">
-          <Button type="submit" class="bg-[var(--secondary-custom)] hover:bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--t-custom)]">Send Message</Button>
+          <Button type="submit" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--tertiary-custom)] duration-75 ease-in">Send Message</Button>
         </div>
       </div>
     </div>
