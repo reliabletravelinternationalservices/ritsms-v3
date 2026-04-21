@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue'
 </script>
 
 <template>
-  <section class="relative max-w-5xl mx-auto flex flex-col gap-12 md:gap-16 items-center justify-center min-h-screen lg:min-h-[800px] py-12 px-4 w-full">
+  <section class="relative max-w-5xl mx-auto flex flex-col gap-12 md:gap-16 items-center justify-center min-h-screen lg:min-h-[1000px] py-12 px-4 w-full">
     
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div class="w-full space-y-4">
