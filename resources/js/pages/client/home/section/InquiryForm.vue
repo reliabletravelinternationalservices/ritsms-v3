@@ -28,9 +28,9 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
       </div>
     </div>
     
-    <div class="w-full flex justify-between gap-8 h-full">
+    <div class="w-full flex flex-col lg:flex-row gap-8">
       <div class="w-full flex flex-col gap-4">
-        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2 h-full">
+        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
           <h3 class="font-bold font-roboto text-lg md:text-xl">Satellite Address</h3>
           <div class="flex flex-col gap-2">
             <span class="flex items-center justify-start gap-2">
@@ -49,7 +49,7 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
           </div>
         </div>  
 
-        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2 h-full">
+        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
           <h3 class="font-bold font-roboto text-lg md:text-xl">Contact Information</h3>
           <div class="flex flex-col gap-2">
             <span class="flex items-center justify-start gap-2">
@@ -68,7 +68,7 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
           </div>
         </div>  
 
-        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2 h-full">
+        <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
           <h3 class="font-bold font-roboto text-lg md:text-xl">Email Address</h3>
           <div class="flex flex-col gap-2">
             <span class="flex items-center justify-start gap-2">
@@ -81,7 +81,7 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
         </div>  
       </div>
 
-      <div class="w-2/3 border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
+      <div class="w-full lg:w-3/4 border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
         <h3 class="font-bold font-roboto text-lg md:text-xl">Ask us About your Travel?</h3>
         <div class="space-y-1">
           <Label for="name" class="font-roboto text-[var(--muted-custom)]">Fullname</Label>
@@ -100,7 +100,7 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
           <Textarea id="message" rows="3" placeholder="Tell us about your concern..." class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
         </div>
         <div class="w-full flex justify-end">
-          <Button type="submit" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--tertiary-custom)] duration-75 ease-in">Send Message</Button>
+          <Button type="submit" class="bg-[var(--secondary-custom)] hover:bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--t-custom)]">Send Message</Button>
         </div>
       </div>
     </div>
