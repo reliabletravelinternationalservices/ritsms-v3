@@ -3,6 +3,8 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import AppLogoIcon from './AppClientLogoIcon.vue';
 import Button from './ui/button/Button.vue';
+import { cn } from '@/lib/utils';
+import { route } from 'ziggy-js'
 
 
 const isMobileMenuOpen = ref(false);
@@ -16,10 +18,10 @@ const isMobileMenuOpen = ref(false);
                 </a>
 
                 <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
-                    <a href="#" class="font-bold text-[var(--tertiary-custom)]"><span>Home</span></a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>Destinations</span></a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>Contact us</span></a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>About us</span></a>
+                    <a :href="route('client.landing')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"><span>Home</span></a>
+                    <a :href="route('client.destination')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"><span>Destinations</span></a>
+                    <a href="#" class="font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>Contact us</span></a>
+                    <a href="#" class="font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>About us</span></a>
                 </nav>
 
                 <div class="hidden md:flex items-center">
