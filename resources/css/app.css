@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +7,7 @@
 
 body,
 html {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:  'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 @layer base {
@@ -46,7 +46,7 @@ html {
         --sidebar-border: 0 0% 91%;
         --sidebar-ring: 217.2 91.2% 59.8%;
 
-               /* CUSTOM COLORS (Fixed Syntax) */
+        /* CUSTOM COLORS (Fixed Syntax) */
         --primary-custom: #FAFAFA;
         --secondary-custom: #1E1E1E;
         --tertiary-custom: #EDBD53;
@@ -54,6 +54,8 @@ html {
         --muted-custom: #5C5C5C;
         --inbound-custom: #00946A;
         --outbound-custom: #B96C00;
+        --inbound-opacity-custom: #00946a50;
+        --outbound-opacity-custom: #b96c0051;
         --warning-custom: #CF0000;
         --tag-custom: #009ECA;
         --correct-custom: #009912;

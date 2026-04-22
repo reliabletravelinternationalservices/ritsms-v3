@@ -14,7 +14,7 @@ import ClientFeedback from './section/ClientFeedback.vue';
 </script>
 
 <template>
-    <Head title="Reliable International Travel Services" />
+    <Head title="Discover The World With Us" />
     <AppLayout>
         <CarouselSection />
         <DestinationCarousel />
