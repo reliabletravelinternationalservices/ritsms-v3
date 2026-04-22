@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { route } from 'ziggy-js';
 
 
 
@@ -31,10 +32,10 @@ import { Icon } from '@iconify/vue';
             <div class="col-span-1 flex flex-col gap-4">
                 <h2 class="text-[var(--primary-custom)] font-bold font-roboto text-sm uppercase">QUICK LINKS</h2>
                 <ul class="flex flex-col gap-2 text-[var(--primary-custom)] font-roboto text-xs w-min">
-                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a href="#">Home</a></li>
-                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a href="#">Destinations</a></li>
-                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a href="#">Contact Us</a></li>
-                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a href="#">Blog</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.landing')">Home</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.destination')">Destinations</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a >Contact Us</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a >Blog</a></li>
                 </ul>
             </div>
 
