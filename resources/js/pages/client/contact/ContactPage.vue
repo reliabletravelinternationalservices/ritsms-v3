@@ -9,7 +9,7 @@ import AgencyFaq from './section/AgencyFaq.vue';
 </script>
 
 <template>
-    <Head title="Explore Most Popular Destinations" />
+    <Head title="Contact Us for More Information" />
     <AppLayout>
         <AgencyOffer />
         <InquiryForm />
