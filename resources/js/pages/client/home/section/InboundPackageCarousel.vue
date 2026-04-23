@@ -2,6 +2,7 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
+import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 
 
 interface Package {
@@ -90,9 +91,7 @@ const packages: Package[] = [
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
             See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away.
           </p>
-          <div class="bg-[var(--warning-custom)] text-[var(--primary-custom)] p-2 font-roboto uppercase italic w-fit text-sm">
-            <p>VALID FOR FOREIGN ONLY!</p>
-          </div>
+            <ValidToForeignBanner />
         </div>
       </div>
 
