@@ -76,7 +76,7 @@ const carouselConfig2 = {
           <img
             :src="destimage"
             :alt="props.destinations[selectedImage]?.name"
-            class="w-full h-full object-cover object-bottom"
+            class="w-full h-full object-cover object-center"
           />
         </div>
       </Slide>
