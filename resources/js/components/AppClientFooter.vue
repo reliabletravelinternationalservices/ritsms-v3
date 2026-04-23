@@ -51,7 +51,7 @@ withDefaults(defineProps<Props>(), {
                 <ul class="flex flex-col gap-2 text-[var(--primary-custom)] font-roboto text-xs w-min">
                     <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.landing')">Home</a></li>
                     <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.destination')">Destinations</a></li>
-                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a>Contact Us</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.contact')">Contact Us</a></li>
                     <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a>Blog</a></li>
                 </ul>
             </div>
