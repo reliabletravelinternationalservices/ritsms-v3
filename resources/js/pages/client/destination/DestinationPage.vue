@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import DestinationCarousel from './section/DestinationCarousel.vue';
 import TitleHeader from './section/TitleHeader.vue';
+import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
 
 </script>
 
@@ -11,5 +12,6 @@ import TitleHeader from './section/TitleHeader.vue';
     <AppLayout>
         <TitleHeader />
         <DestinationCarousel />
+        <FeaturedInboundPackage />
     </AppLayout>     
 </template>
