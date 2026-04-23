@@ -26,10 +26,10 @@ const isMobileMenuOpen = ref(false);
 
                 <div class="hidden md:flex items-center">
                     <a href="#">
-                        <Button class="text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)]">
-                            <span class="font-roboto">Login</span>
-                            <Icon icon="material-symbols:login" width="20" height="20" />
-                        </Button>
+                        <button class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
+                            <span class="font-roboto text-xs md:text-sm">Account</span>
+                            <Icon icon="lucide:key-round" width="20" height="20" />
+                        </button>
                     </a>
                 </div>
 
