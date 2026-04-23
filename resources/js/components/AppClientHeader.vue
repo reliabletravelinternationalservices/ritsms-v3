@@ -20,7 +20,7 @@ const isMobileMenuOpen = ref(false);
                 <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
                     <a :href="route('client.landing')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"><span>Home</span></a>
                     <a :href="route('client.destination')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"><span>Destinations</span></a>
-                    <a href="#" class="font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>Contact us</span></a>
+                    <a :href="route('client.contact')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })"><span>Contact us</span></a>
                     <a href="#" class="font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>About us</span></a>
                 </nav>
 
