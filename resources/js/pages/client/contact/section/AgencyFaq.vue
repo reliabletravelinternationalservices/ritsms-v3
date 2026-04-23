@@ -21,21 +21,21 @@ import { Icon } from '@iconify/vue';
                 <div class="w-full">
                     <Accordion type="single" collapsible>
                         <AccordionItem value="item-1" class="border-[var(--shadow-custom)]">
-                            <AccordionTrigger class="font-bold">How do I book a trip with your agency?</AccordionTrigger>
+                            <AccordionTrigger class="font-bold">What’s included in your packages?</AccordionTrigger>
                             <AccordionContent>
-                                You can book online through our website, call our hotline, or visit our office. Our travel consultants will guide you through the process step-by-step.
+                                Our packages are hassle-free, but inclusions vary depending on destination and promo.
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-2" class="border-[var(--shadow-custom)]">
-                            <AccordionTrigger class="font-bold">What is your cancellation policy?</AccordionTrigger>
+                            <AccordionTrigger class="font-bold">Do you offer installment plans?</AccordionTrigger>
                             <AccordionContent>
-                                Our cancellation policy varies depending on the type of booking and the time of cancellation. Please refer to our terms and conditions for more details.
+                                Yes, we offer flexible installment plans. You can secure your slot with a small reservation fee, then pay the remaining balance in installments before your travel date.
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-3" class="border-[var(--shadow-custom)]">
-                            <AccordionTrigger class="font-bold">Is your website accessible to users with disabilities?</AccordionTrigger>
+                            <AccordionTrigger class="font-bold">What other services do you offer?</AccordionTrigger>
                             <AccordionContent>
-                                Yes, we are committed to making our website accessible to all users. We follow web accessibility guidelines and continuously work to improve the user experience for everyone.
+                                We offer complete travel services for a hassle-free experience. Domestic & International Tour Packages, Visa Processing Assistance, Passport Assistance, Hotel Reservations, Cruise Bookings and more!                            
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-4" class="border-[var(--shadow-custom)]">
