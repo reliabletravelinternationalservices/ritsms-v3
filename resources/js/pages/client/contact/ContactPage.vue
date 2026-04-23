@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import InquiryForm from '../home/section/InquiryForm.vue';
 import AgencyOffer from './section/AgencyOffer.vue';
 import SocialMedia from './section/SocialMedia.vue';
+import AgencyFaq from './section/AgencyFaq.vue';
 
 </script>
 
@@ -13,11 +14,7 @@ import SocialMedia from './section/SocialMedia.vue';
         <AgencyOffer />
         <InquiryForm />
         <SocialMedia />     
-
-
-
-         
-          
+        <AgencyFaq />
     </AppLayout>     
 </template>
 w
