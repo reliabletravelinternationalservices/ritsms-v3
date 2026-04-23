@@ -18,7 +18,7 @@ import { Icon } from '@iconify/vue'
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 b      ">
                     
                     <a href="#" class="flex flex-col items-center justify-center p-4 shadow-md bg-[var(--primary-custom)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group">
                         <Icon icon="ic:baseline-facebook" class="text-5xl text-[var(--secondary-custom)] group-hover:text-[#1877F2] transition-colors" />
