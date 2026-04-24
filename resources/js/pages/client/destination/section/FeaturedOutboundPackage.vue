@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue';
-import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import { Icon } from '@iconify/vue';
 
 interface DestubationItem {
