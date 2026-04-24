@@ -23,7 +23,7 @@ interface BreadcrumbItemType {
   dropdown?: DropdownItem[]
 }
 
-const props = defineProps<{
+defineProps<{
   items: BreadcrumbItemType[]
 }>()
 
