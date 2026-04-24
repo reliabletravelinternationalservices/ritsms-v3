@@ -34,7 +34,7 @@ const countryOptions: Option[] = [
 </script>
 
 <template>
-    <section class="w-full h-auto py-12 relative flex px-4">
+    <section class="w-full relative flex">
         <div class="max-w-5xl m-auto w-full flex flex-col md:flex-row items-stretch md:items-end justify-start gap-6">
             
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
