@@ -2,6 +2,7 @@
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
+import OutboundFilter from './section/OutboundFilter.vue';
 
 </script>
 
@@ -9,5 +10,6 @@ import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
     <Head title="Explore International Destinations With Us" />
     <AppLayout>
         <OutboundTitleHeader />
+        <OutboundFilter />
     </AppLayout>     
 </template>
