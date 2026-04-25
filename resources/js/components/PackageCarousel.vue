@@ -70,8 +70,14 @@ const carouselConfig = {
             <div class="p-3 md:p-4 flex flex-col justify-between text-left">
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="font-bold font-roboto text-[10px] md:text-xs bg-[var(--inbound-custom)] text-[var(--primary-custom)] py-1 px-3 inline-block">{{ packageData.duration }}</span>
-                        <span class="flex items-center space-x-1 text-[var(--inbound-custom)] text-[10px] md:text-xs font-roboto">
+                        <span 
+                          class="font-bold font-roboto text-[10px] md:text-xs text-[var(--primary-custom)] py-1 px-3 inline-block"
+                          :class="isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
+                        >
+                          {{ packageData.duration }}
+                        </span>
+                        <span class="flex items-center space-x-1 text-[10px] md:text-xs font-roboto"
+                        :class="isInbound ? 'text-[var(--inbound-custom)]' : 'text-[var(--outbound-custom)]'">
                           <Icon icon="mdi:map-marker" width="16" height="16" />
                           <span class="truncate max-w-[100px] md:max-w-none">{{ packageData.destination }}</span>
                         </span>

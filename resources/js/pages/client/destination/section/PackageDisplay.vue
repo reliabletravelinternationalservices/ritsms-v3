@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import OutboundFilter from './OutboundFilter.vue';
 import GroupPackage from './GroupPackage.vue';
 
@@ -76,12 +75,13 @@ const packages: Package[] = [
 
 <template>
     <section class="w-full">
-        <div class="max-w-5xl m-auto">
+        <div class="max-w-5xl m-auto py-8">
             <GroupPackage
                 title="READY TO GO TRAVELS" 
                 description="Experience the beauty of Asia, Europe, and our very own islands. We bring the world’s most loved spots right to your feet" 
                 :packages="packages" 
                 :is-featured="true" 
+                :is-inbound="false"
             />
 
 
@@ -92,12 +92,14 @@ const packages: Package[] = [
                     description="Experience the beauty of Asia, Europe, and our very own islands. We bring the world’s most loved spots right to your feet" 
                     :packages="packages" 
                     :is-featured="false" 
+                    :is-inbound="false"
                 />
                 <GroupPackage
                     title="AUTUMN VACATION DESTINATIONS" 
                     description="Experience the beauty of Asia, Europe, and our very own islands. We bring the world’s most loved spots right to your feet" 
                     :packages="packages" 
-                    :is-featured="false" 
+                    :is-featured="false"
+                    :is-inbound="false"
                 />
             </div>
         </div>
