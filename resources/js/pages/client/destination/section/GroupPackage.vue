@@ -19,8 +19,11 @@ defineProps<{
     title: string
     description: string
     isFeatured: boolean
+    isInbound: boolean
     packages: Package[]
 }>();
+
+
 
 </script>
 
@@ -36,7 +39,7 @@ defineProps<{
             <p class="font-roboto text-sm md:text-base">{{ description }}</p>
         </div>
         <div class="w-full">
-            <PackageCarousel :packages="packages" :is-inbound="false" />
+            <PackageCarousel :packages="packages" :is-inbound="isInbound" />
         </div>
     </div>
 </template>
