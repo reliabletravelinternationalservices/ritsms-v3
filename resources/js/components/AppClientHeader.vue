@@ -5,6 +5,7 @@ import AppLogoIcon from './AppClientLogoIcon.vue';
 import Button from './ui/button/Button.vue';
 import { cn } from '@/lib/utils';
 import { route } from 'ziggy-js'
+import { Link } from '@inertiajs/vue3';
 
 
 const isMobileMenuOpen = ref(false);
@@ -18,19 +19,19 @@ const isMobileMenuOpen = ref(false);
                 </a>
 
                 <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
-                    <a :href="route('client.landing')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"><span>Home</span></a>
-                    <a :href="route('client.destination')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"><span>Destinations</span></a>
-                    <a :href="route('client.contact')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })"><span>Contact us</span></a>
-                    <a href="#" class="font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"><span>About us</span></a>
+                    <Link :href="route('client.landing')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"><span>Home</span></Link>
+                    <Link :href="route('client.destination')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"><span>Destinations</span></Link>
+                    <Link :href="route('client.contact')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })"><span>Contact us</span></Link>
+                    <Link href="#" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })"><span>About us</span></Link>
                 </nav>
 
                 <div class="hidden md:flex items-center">
-                    <a href="#">
+                    <Link href="#">
                         <button class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
                             <span class="font-roboto text-xs md:text-sm">Account</span>
                             <Icon icon="lucide:key-round" width="20" height="20" />
                         </button>
-                    </a>
+                    </Link>
                 </div>
 
                 <button 
@@ -43,17 +44,17 @@ const isMobileMenuOpen = ref(false);
 
             <Transition name="fade-slide">
                 <div v-if="isMobileMenuOpen" class="md:hidden bg-[var(--primary-custom)] border-t border-[var(--shadow-custom)] p-4 space-y-4 flex flex-col">
-                    <a href="#" class="text-[var(--tertiary-custom)] font-bold">Home</a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Destinations</a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Contact us</a>
-                    <a href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">About us</a>
+                    <Link :href="route('client.landing')" class="text-[var(--tertiary-custom)] font-bold">Home</Link>
+                    <Link :href="route('client.destination')" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Destinations</Link>
+                    <Link :href="route('client.contact')" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Contact us</Link>
+                    <Link href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">About us</Link>
                     <hr class="border-[var(--shadow-custom)]" />
-                    <a href="#">
+                    <Link href="#">
                         <Button class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]">
                             <span>Login</span>
                             <Icon icon="material-symbols:login" width="20" height="20" />
                         </Button>
-                    </a>
+                    </Link>
                 </div>
             </Transition>
         </header>

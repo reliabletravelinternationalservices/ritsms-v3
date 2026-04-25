@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class OutboundDestinationController extends Controller
+class InboundDestinationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('client/package/OutboundDestinationPage');
+        return Inertia::render('client/package/InboundDestinationPage');
     }
 }

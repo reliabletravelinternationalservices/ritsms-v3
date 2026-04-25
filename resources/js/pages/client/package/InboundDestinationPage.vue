@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
-import PackageDisplay from './section/PackageDisplay.vue';
+import InboundTitleHeader from './section/InboundTitleHeader.vue';
+import InboundPackageDisplay from './section/InboundPackageDisplay.vue';
 </script>
 
 <template>
     <Head title="Explore International Destinations With Us" />
     <AppLayout>
-        <OutboundTitleHeader />
-        <PackageDisplay />
+        <InboundTitleHeader />
+        <InboundPackageDisplay />
     </AppLayout>     
 </template>

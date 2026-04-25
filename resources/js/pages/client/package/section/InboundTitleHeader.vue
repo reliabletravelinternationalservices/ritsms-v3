@@ -12,8 +12,15 @@ interface BreadcrumbItemType {
 const breadcrumbItems: BreadcrumbItemType[] = [
   { label: 'Home', href: '/' },
   { label: 'Destinations', href: route('client.destination') },
-  { label: 'Outbound', href: route('client.outbound'), dropdown: [
-    { label: 'Inbound', action: () => { router.visit(route('client.destination.inbound')) } },
+  { label: 'Inbound', href: route('client.inbound'), dropdown: [
+    { label: 'Outbound', action: () => { 
+        router.get(route('client.outbound'), {}, {
+          preserveState: true,
+          preserveScroll: true,
+          replace: true
+        })
+      } 
+    },
   ]},
 ]
 </script>
@@ -21,7 +28,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
 <template>
   <section class="w-full h-auto min-h-[400px] md:h-[400px] lg:h-[500px] relative overflow-hidden flex">
     <div class="w-full h-full absolute top-0 left-0">
-      <img class="w-full h-full object-cover" src="https://media.cnn.com/api/v1/images/stellar/prod/220922155226-japan-tourism-lifting-covid-restrictions.jpg?c=16x9&q=h_833,w_1480,c_fill" alt="Traveler">
+      <img class="w-full h-full object-cover" src="https://cdn.sanity.io/images/nxpteyfv/goguides/e3aa344049e8f48f8bd038baad9d88ddd9732fdc-1600x1066.jpg" alt="Traveler">
       
       <span class="absolute inset-0 bg-gradient-to-t bg-black/60 flex items-end justify-start">
         <div class="max-w-3xl flex flex-col items-start gap-6 md:gap-8 p-6 md:p-12 text-[var(--primary-custom)]">
@@ -32,11 +39,11 @@ const breadcrumbItems: BreadcrumbItemType[] = [
             </div> 
             
             <h1 class="text-2xl md:text-3xl lg:text-4xl font-montserrat font-extralight uppercase">
-              EXPLORE <span class="font-extrabold">INTERNATIONAL DESTINATIONS</span> WITH US
+              EXPLORE <span class="font-extrabold">LOCAL SPOT HERE IN THE</span> PHILIPPINES
             </h1>
             
             <p class="text-sm md:text-base font-roboto max-w-2xl leading-relaxed">
-              Cross borders and create memories. Experience seamless international travel to the world's most sought-after hidden gems and vibrant cities
+              Crystal clear waters, majestic cliffs, and endless sunshine. Your ultimate Philippine adventure starts right here
             </p>
           </span>
 
