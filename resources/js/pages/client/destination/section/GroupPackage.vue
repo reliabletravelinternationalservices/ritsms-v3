@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PackageCarousel from '@/components/PackageCarousel.vue';
 import { Icon } from '@iconify/vue';
-import OutboundFilter from './OutboundFilter.vue';
 
 
 interface Package {

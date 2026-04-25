@@ -70,8 +70,10 @@ const carouselConfig = {
             <div class="p-3 md:p-4 flex flex-col justify-between text-left">
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="font-bold font-roboto text-[10px] md:text-xs text-[var(--primary-custom)] py-1 px-3 inline-block", 
-                        :class="isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'">
+                        <span 
+                          class="font-bold font-roboto text-[10px] md:text-xs text-[var(--primary-custom)] py-1 px-3 inline-block"
+                          :class="isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
+                        >
                           {{ packageData.duration }}
                         </span>
                         <span class="flex items-center space-x-1 text-[10px] md:text-xs font-roboto"

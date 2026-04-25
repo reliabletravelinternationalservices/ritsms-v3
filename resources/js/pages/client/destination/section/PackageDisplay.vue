@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import OutboundFilter from './OutboundFilter.vue';
 import GroupPackage from './GroupPackage.vue';
 
