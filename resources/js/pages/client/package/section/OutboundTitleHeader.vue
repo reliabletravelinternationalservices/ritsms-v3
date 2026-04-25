@@ -10,10 +10,16 @@ interface BreadcrumbItemType {
 }
 
 const breadcrumbItems: BreadcrumbItemType[] = [
-  { label: 'Home', href: '/' },
+  { label: 'Home', href: route('client.landing') },
   { label: 'Destinations', href: route('client.destination') },
   { label: 'Outbound', href: route('client.outbound'), dropdown: [
-    { label: 'Inbound', action: () => { router.visit(route('client.destination.inbound')) } },
+    { label: 'Inbound', action: () => { 
+      router.get(route('client.inbound'), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true
+      })
+    } },
   ]},
 ]
 </script>

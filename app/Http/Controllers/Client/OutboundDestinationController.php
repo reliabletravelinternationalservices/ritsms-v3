@@ -10,6 +10,6 @@ class OutboundDestinationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('client/destination/OutboundDestinationPage');
+        return Inertia::render('client/package/OutboundDestinationPage');
     }
 }
