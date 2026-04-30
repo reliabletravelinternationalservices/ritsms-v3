@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<{ packages?: Package[] }>(), {
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="false" :packages="packages" />
+        <PackageCarousel :is-inbound="false" :packages="props.packages" />
     </div>
   </section>
 </template>
