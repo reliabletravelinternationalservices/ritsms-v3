@@ -47,6 +47,14 @@ class Package extends Model
         return $this->hasMany(PackageSchedule::class, 'package_id');
     }
 
-    
+    public function images()
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function primaryImage()
+    {
+        return $this->morphOne(Media::class, 'mediable')->where('is_primary', true);
+    }
 
 }

@@ -3,18 +3,10 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, getPackageDurationLabel } from '@/lib/utils'
 import { Link } from '@inertiajs/vue3'
+import { Package } from '@/types/package'
 
-interface Package {
-  id: number
-  name: string
-  price: number
-  description: string
-  duration: string
-  destination: string
-  image_path: string
-}
 interface Props {
   isInbound: boolean
   packages?: Package[]
@@ -60,10 +52,17 @@ const carouselConfig = {
               
               <div class="relative h-[180px] md:h-full">
                 <img 
-                  :src="packageData.image_path" 
+                  v-if="packageData.primary_image"
+                  :src="packageData.primary_image.url" 
                   :alt="packageData.name"
                   class="w-full h-full object-cover"
                 />
+                <div 
+                  v-else
+                  class="w-full h-full bg-gray-200 flex items-center justify-center"
+                >
+                  <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
+                </div>
                 <span class="bg-black/50 flex items-center justify-center absolute top-0 left-0 py-1 px-4 text-[var(--primary-custom)] font-roboto m-2 text-[10px] md:text-xs">
                   Group Tour
                 </span>
@@ -76,7 +75,7 @@ const carouselConfig = {
                             class="font-bold font-roboto text-[10px] md:text-xs text-[var(--primary-custom)] py-1 px-3 inline-block"
                             :class="isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
                           >
-                            {{ packageData.duration }}
+                            {{ getPackageDurationLabel(packageData.duration) }}
                           </span>
                           <span class="flex items-center space-x-1 text-[10px] md:text-xs font-roboto"
                           :class="isInbound ? 'text-[var(--inbound-custom)]' : 'text-[var(--outbound-custom)]'">
@@ -90,7 +89,7 @@ const carouselConfig = {
                             {{ packageData.name }}
                           </h1>
                           <h4 class="font-medium font-roboto text-[10px] md:text-sm text-[var(--muted-custom)] mb-4">
-                            from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(packageData.price, isInbound? 'USD' : 'PHP') }}/pax</span>
+                            from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(packageData.base_price, isInbound? 'USD' : 'PHP') }}/pax</span>
                           </h4>
                           <p class="font-roboto text-[11px] md:text-sm line-clamp-2 text-gray-600">{{ packageData.description }}</p>
                       </div>
@@ -103,12 +102,12 @@ const carouselConfig = {
       <template #addons>
         <Navigation class="hidden md:block">
           <template #prev>
-            <div class="md:h-[400px] h-[330px] w-full bg-black/10 hover:bg-black/30 flex items-center justify-center duration-100">
+            <div class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
               <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" />
             </div>
           </template>
           <template #next>
-            <div class="md:h-[400px] h-[330px] w-full bg-black/10 hover:bg-black/30 flex items-center justify-center duration-100">
+            <div class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
               <Icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="text-white" />
             </div>
           </template>

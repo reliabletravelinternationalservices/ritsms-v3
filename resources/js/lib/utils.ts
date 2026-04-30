@@ -31,3 +31,13 @@ export const formatCurrency = (amount: number, currency: string = 'PHP'): string
     maximumFractionDigits: 2,
   }).format(amount);
 };
+
+
+
+export const getPackageDurationLabel = (days: number): string => {
+  if (days > 1) {
+    return `${days}D${days - 1}N`;
+  } else {
+    return `${days} day`;
+  }
+};

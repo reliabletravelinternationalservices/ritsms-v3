@@ -21,4 +21,5 @@ class PackageRepository
     {
         return collect($data)->map(fn (array $item) => $this->createPackage($item));
     }
+
 }
