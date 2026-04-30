@@ -5,16 +5,8 @@ import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils'
 import { Link } from '@inertiajs/vue3'
+import { Package } from '@/types/package'
 
-interface Package {
-  id: number
-  name: string
-  price: number
-  description: string
-  duration: string
-  destination: string
-  image_path: string
-}
 interface Props {
   isInbound: boolean
   packages?: Package[]
