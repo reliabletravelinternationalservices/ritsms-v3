@@ -20,6 +20,8 @@ class PackageSchedule extends Model
         'is_limited',
     ];
 
+
+    // Relationships
     public function package()
     {
         return $this->belongsTo(Package::class, 'package_id');
