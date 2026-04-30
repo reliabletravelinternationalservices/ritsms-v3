@@ -27,7 +27,7 @@
         ],
         "destination": "South Korea",
         "season": "spring",
-        "is_featured": true
+        "is_foreign_only": false
     },
     {
         "name": "Europe Grand Capitals",
@@ -60,7 +60,7 @@
         ],
         "destination": "Europe",
         "season": "spring",
-        "is_featured": false
+        "is_foreign_only": false
     },
 
     {
@@ -90,7 +90,7 @@
         ],
         "destination": "Palawan",
         "season": "summer",
-        "is_featured": true
+        "is_foreign_only": true
     },
     {
         "name": "Boracay Beach & Culture Retreat",
@@ -118,6 +118,6 @@
         ],
         "destination": "Boracay",
         "season": "summer",
-        "is_featured": false
+        "is_foreign_only": true
     }
 ]
