@@ -5,12 +5,12 @@ use App\Repository\Package\PackageRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 
-uses(Tests\TestCase::class, RefreshDatabase::class)->in('Unit');
+uses(RefreshDatabase::class);
 
 test('package repository can create a package', function () {
     $repository = app(PackageRepository::class);
 
-    $package = $repository->create([
+    $package = $repository->createPackage([
         'name' => 'Bohol Countryside Retreat',
         'tag' => 'Group Tour',
         'description' => 'A relaxing countryside escape in Bohol with river cruises, chocolate hills views, and local farm visits.',
@@ -42,7 +42,7 @@ test('package repository can create a package', function () {
 test('package repository can create many packages', function () {
     $repository = app(PackageRepository::class);
 
-    $packages = $repository->createMany([
+    $packages = $repository->createManyPackage([
         [
             'name' => 'Cebu Coastal Adventure',
             'tag' => 'Family Tour',
