@@ -3,7 +3,7 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, getPackageDurationLabel } from '@/lib/utils'
 import { Link } from '@inertiajs/vue3'
 
 interface Package {
