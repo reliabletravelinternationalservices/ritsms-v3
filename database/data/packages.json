@@ -1,0 +1,123 @@
+[
+    {
+        "name": "Seoul K-Culture Highlights",
+        "tag": "Group Tour",
+        "base_price": 128500.0,
+        "down_payment": 35000.0,
+        "duration": 7,
+        "selling_start_date": "2026-05-15",
+        "selling_end_date": "2026-12-31",
+        "description": "A 7-day cultural tour of Seoul, combining palace visits, street food, K-pop landmarks, and a day trip to the DMZ.",
+        "highlights": "Gyeongbokgung Palace, Myeongdong shopping, Korean BBQ dinner, K-pop studio visit, DMZ guided tour.",
+        "itineraries": [
+            { "day": 1, "activity": "Arrival in Seoul and welcome dinner" },
+            { "day": 2, "activity": "Gyeongbokgung Palace and Bukchon Hanok Village" },
+            { "day": 3, "activity": "Myeongdong street food and shopping experience" },
+            { "day": 4, "activity": "K-pop culture studio visit and Han River cruise" },
+            { "day": 5, "activity": "DMZ tour and return to Seoul" },
+            { "day": 6, "activity": "Free day with optional N Seoul Tower visit" },
+            { "day": 7, "activity": "Departure" }
+        ],
+        "inclusions": "Airport transfers, 3-star hotel accommodation, daily breakfast, local guide, DMZ tour, city transportation pass.",
+        "exclusions": "International airfare, travel insurance, personal expenses, Korea visa fees, optional activities.",
+        "notes": [
+            "Bring a valid passport with at least 6 months validity",
+            "Korea visa requirements may change; check before booking",
+            "Comfortable walking shoes are recommended"
+        ],
+        "destination": "South Korea",
+        "season": "spring",
+        "is_featured": true
+    },
+    {
+        "name": "Europe Grand Capitals",
+        "tag": "Small Group Tour",
+        "base_price": 265000.0,
+        "down_payment": 65000.0,
+        "duration": 10,
+        "selling_start_date": "2026-05-01",
+        "selling_end_date": "2026-11-15",
+        "description": "A 10-day grand tour through Paris, Amsterdam, and Berlin with guided city sightseeing, Seine cruise, and local culinary experiences.",
+        "highlights": "Eiffel Tower visit, Louvre museum walk, canal cruise in Amsterdam, Berlin Wall history tour, European breakfast buffet.",
+        "itineraries": [
+            { "day": 1, "activity": "Arrival in Paris and orientation walk" },
+            { "day": 2, "activity": "Paris city tour and Seine river cruise" },
+            { "day": 3, "activity": "Louvre visit and Montmartre exploration" },
+            { "day": 4, "activity": "Train to Amsterdam and canal cruise" },
+            { "day": 5, "activity": "Amsterdam city cycling tour" },
+            { "day": 6, "activity": "Travel to Berlin and evening walk" },
+            { "day": 7, "activity": "Berlin Wall memorial and museum island" },
+            { "day": 8, "activity": "Free day for optional local markets" },
+            { "day": 9, "activity": "Farewell dinner and review session" },
+            { "day": 10, "activity": "Departure" }
+        ],
+        "inclusions": "Hotel accommodation, daily breakfast, intercity train tickets, airport transfers, guided tours, museum entrance fees.",
+        "exclusions": "International airfare, Schengen visa fees, travel insurance, personal expenses, optional tours.",
+        "notes": [
+            "Schengen visa is required and should be applied for early",
+            "Pack a universal power adapter for European outlets",
+            "Weather can vary between cities; pack layers"
+        ],
+        "destination": "Europe",
+        "season": "spring",
+        "is_featured": false
+    },
+
+    {
+        "name": "Palawan Island Escape",
+        "tag": "Group Tour",
+        "base_price": 26999.0,
+        "down_payment": 10000.0,
+        "duration": 6,
+        "selling_start_date": "2026-06-01",
+        "selling_end_date": "2026-09-30",
+        "description": "A 6-day immersive tour of Palawan's top natural attractions, including island hopping, hidden lagoons, and cultural village visits.",
+        "highlights": "Honda Bay island hopping, Puerto Princesa Underground River, El Nido sunset cruise, local seafood feast.",
+        "itineraries": [
+            { "day": 1, "activity": "Arrival in Puerto Princesa and welcome dinner" },
+            { "day": 2, "activity": "Puerto Princesa Underground River tour and city orientation" },
+            { "day": 3, "activity": "Transfer to El Nido and sunset beach walk" },
+            { "day": 4, "activity": "El Nido island hopping tour A" },
+            { "day": 5, "activity": "Free morning and optional kayak rental" },
+            { "day": 6, "activity": "Departure after breakfast" }
+        ],
+        "inclusions": "Daily breakfast, airport transfers, accommodation, land transfers, guided tours, Puerto Princesa Underground River permit fees, El Nido island-hopping boat fees.",
+        "exclusions": "Round-trip airfare to Puerto Princesa, travel insurance, personal expenses, optional activities, government terminal fees.",
+        "notes": [
+            "Bring sunscreen and insect repellent",
+            "Permit fees are included, but extra fees may apply for drones or oversized luggage",
+            "Finish your snorkeling gear rental one day before the tour"
+        ],
+        "destination": "Palawan",
+        "season": "summer",
+        "is_featured": true
+    },
+    {
+        "name": "Boracay Beach & Culture Retreat",
+        "tag": "Family Tour",
+        "base_price": 26899.0,
+        "down_payment": 10000.0,
+        "duration": 5,
+        "selling_start_date": "2026-07-01",
+        "selling_end_date": "2026-10-15",
+        "description": "A 5-day Boracay experience with beach activities, local cuisine, and a cultural village visit designed for families and friends.",
+        "highlights": "White Beach sunset cruise, island hopping, traditional Filipino cooking demonstration, local market visit.",
+        "itineraries": [
+            { "day": 1, "activity": "Arrival in Boracay and beachfront welcome reception" },
+            { "day": 2, "activity": "Island hopping and snorkeling at Puka Shell Beach" },
+            { "day": 3, "activity": "Cultural cooking class and local market tour" },
+            { "day": 4, "activity": "Free day with optional parasailing or spa" },
+            { "day": 5, "activity": "Farewell breakfast and departure" }
+        ],
+        "inclusions": "Hotel accommodation, daily breakfast, airport transfers, island hopping tour, cooking class, local guide.",
+        "exclusions": "Airfare to Caticlan, terminal fees, personal expenses, optional adventure sports.",
+        "notes": [
+            "Bring swimwear and reef-safe sunscreen",
+            "Local market prices may vary seasonally",
+            "Book optional activities at least one day in advance"
+        ],
+        "destination": "Boracay",
+        "season": "summer",
+        "is_featured": false
+    }
+]
