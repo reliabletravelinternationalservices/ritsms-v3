@@ -1,0 +1,16 @@
+[
+    {
+        "title": "Ready To Go Travels",
+        "description": "Experience the beauty of Asia, Europe, and our very own islands. We bring the world’s most loved spots right to your feet",
+        "include_as_outbound": true,
+        "include_as_inbound": false,
+        "is_featured": true
+    },
+    {
+        "title": "RECOMMENDED BY TOURIST",
+        "description": "See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away",
+        "include_as_outbound": false,
+        "include_as_inbound": true,
+        "is_featured": true
+    }
+]
