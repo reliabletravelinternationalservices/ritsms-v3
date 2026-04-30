@@ -47,4 +47,6 @@ class Package extends Model
         return $this->hasMany(PackageSchedule::class, 'package_id');
     }
 
+    
+
 }
