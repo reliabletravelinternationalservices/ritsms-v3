@@ -25,7 +25,7 @@ class Package extends Model
         'notes',
         'destination',
         'season',
-        'is_featured',
+        'is_foreign_only',
     ];
 
     protected $casts = [
@@ -34,9 +34,19 @@ class Package extends Model
     ];
 
 
+    // Relationships
+    public function packageGroups()
+    {
+        return $this->belongsToMany(PackageGroup::class, 'package_groups_items', 'package_id', 'package_group_id')
+            ->withPivot('order_number')
+            ->orderBy('pivot_order_number');
+    }
+
     public function schedules()
     {
         return $this->hasMany(PackageSchedule::class, 'package_id');
     }
+
+    
 
 }
