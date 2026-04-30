@@ -42,4 +42,26 @@ class PackageGroupRepository
     {
         return collect($data)->map(fn (array $item) => $this->addGroupItem($item));
     }
+
+
+    
+    //GET INBOUND PACKAGES
+    public function getFirstFeaturedInboundGroupPackages(): Collection
+    {
+        $group = $this->model->where('include_as_inbound', true)
+            ->where('is_featured', true)
+            ->first();
+
+        return $group ? $group->packages->load(['primaryImage']) : collect();
+    }
+
+    //GET OUTBOUND PACKAGES
+    public function getFirstFeaturedOutboundGroupPackages(): Collection
+    {
+        $group = $this->model->where('include_as_outbound', true)
+            ->where('is_featured', true)
+            ->first();
+
+        return $group ? $group->packages->load(['primaryImage']) : collect();
+    }
 }
