@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
+import { Button } from '@/components/ui/button';
 </script>
 
 <template>
@@ -43,7 +44,7 @@ import { Icon } from '@iconify/vue'
                 </p>
 
                 <div class="pt-2">
-                    <Button 
+                    <Button
                         type="button" 
                         class="bg-[var(--tertiary-custom)] font-medium hover:bg-[var(--tertiary-hover-custom)] rounded-none font-roboto flex items-center justify-center px-12 py-3 w-full md:w-auto"
                     >

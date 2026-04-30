@@ -2,6 +2,7 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import CountryCarousel from '@/components/CountryCarousel.vue'
+import { Button } from '@/components/ui/button'
 
 
 interface Destination {
@@ -44,10 +45,10 @@ const images: Destination[] = [
       <div class="flex justify-start md:justify-end">
         <span class="border-b border-1 border-[var(--secondary--custom)] text-base md:text-md lg:text-lg font-roboto font-bold text-[var(--secondary-custom)] hover:text-[var(--tertiary-hover-custom)] duration-75">
           <a href="#">
-            <button class="flex items-center whitespace-nowrap">
+            <Button class="flex items-center whitespace-nowrap shadow-none">
               Explore More 
               <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-8 md:h-8" />
-            </button>
+            </Button>
           </a>
         </span>
       </div>
