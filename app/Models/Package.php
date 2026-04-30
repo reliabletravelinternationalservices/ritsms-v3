@@ -11,25 +11,25 @@ class Package extends Model
 
     protected $fillable = [
         'name',
+        'tag',
         'description',
         'base_price',
         'down_payment',
         'duration',
         'selling_start_date',
         'selling_end_date',
-        'description',
         'highlights',
         'itineraries',
         'inclusions',
         'exclusions',
         'notes',
-        'status',
+        'destination',
+        'season',
+        'is_featured',
     ];
 
     protected $casts = [
         'itineraries' => 'array',
-        'inclusions' => 'array',
-        'exclusions' => 'array',
         'notes' => 'array',
     ];
 
