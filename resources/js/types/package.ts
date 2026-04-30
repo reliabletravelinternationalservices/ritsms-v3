@@ -1,3 +1,21 @@
+export interface Media {
+    id: number;
+    mediable_id: number;
+    mediable_type: string;
+    file_name: string;
+    file_path: string;
+    url: string;
+    disk: string;
+    type: string;
+    mime_type: string;
+    size: number;
+    alt_text?: string;
+    order_number: number;
+    is_primary: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface Package {
     id: number;
     name: string;
@@ -19,6 +37,8 @@ export interface Package {
     destination: string;
     season: 'spring' | 'winter' | 'autumn' | 'summer';
     is_featured: boolean;
+    is_foreign_only?: boolean;
+    primary_image?: Media;
     created_at: string;
     updated_at: string;
 }
