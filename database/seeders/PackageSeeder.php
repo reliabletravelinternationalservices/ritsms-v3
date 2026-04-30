@@ -28,7 +28,7 @@ class PackageSeeder extends Seeder
     public function run(): void
     {
         $packages = $this->jsonHelper->convertToCollection($this->path::PACKAGES)->all();
-        $this->repository->createMany($packages);
+        $this->repository->createManyPackage($packages);
     }
 
 }
