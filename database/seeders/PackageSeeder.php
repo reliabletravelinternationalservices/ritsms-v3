@@ -19,9 +19,7 @@ class PackageSeeder extends Seeder
         protected PackageRepository $repository,
         protected JsonHelper $jsonHelper,
         protected SeederPath $path
-    )
-    {
-    }
+    ){}
 
 
     /**
