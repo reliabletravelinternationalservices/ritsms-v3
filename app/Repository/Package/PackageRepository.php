@@ -4,16 +4,21 @@ namespace App\Repository\Package;
 
 use App\Models\Package;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PackageRepository
 {
-    public function create(array $data): Package
+    public function __construct(protected Package $model){}
+
+    public function createPackage(array $data): Package
     {
-        return Package::create($data);
+        return DB::transaction(function () use ($data) {
+            return $this->model->create($data);
+        });
     }
 
-    public function createMany(array $data): Collection
+    public function createManyPackage(array $data): Collection
     {
-        return collect($data)->map(fn (array $item) => $this->create($item));
+        return collect($data)->map(fn (array $item) => $this->createPackage($item));
     }
 }
