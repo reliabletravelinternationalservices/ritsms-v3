@@ -5,7 +5,7 @@ use App\Models\Package;
 test('package model has correct fillable attributes', function () {
     $fillable = (new \ReflectionClass(Package::class))->getProperty('fillable')->getValue(new Package());
 
-    expect($fillable)->toContain('name', 'tag', 'description', 'base_price', 'down_payment', 'duration', 'selling_start_date', 'selling_end_date', 'highlights', 'itineraries', 'inclusions', 'exclusions', 'notes', 'destination', 'season', 'is_featured');
+    expect($fillable)->toContain('name', 'tag', 'description', 'base_price', 'down_payment', 'duration', 'selling_start_date', 'selling_end_date', 'highlights', 'itineraries', 'inclusions', 'exclusions', 'notes', 'destination', 'season', 'is_foreign_only');
 });
 
 test('package model casts itineraries and notes as arrays', function () {
