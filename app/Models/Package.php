@@ -25,7 +25,7 @@ class Package extends Model
         'notes',
         'destination',
         'season',
-        'is_featured',
+        'is_foreign_only',
     ];
 
     protected $casts = [
