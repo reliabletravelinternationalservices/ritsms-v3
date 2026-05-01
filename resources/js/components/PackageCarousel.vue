@@ -2,10 +2,11 @@
 import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils'
 import { Link } from '@inertiajs/vue3'
 import { Package } from '@/types/package'
+import { clamp } from 'node_modules/radix-vue/dist/shared'
 
 interface Props {
   isInbound: boolean
@@ -18,6 +19,26 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+
+const screenWidth = ref(0)
+
+onMounted(() => {
+  screenWidth.value = window.innerWidth
+  const updateWidth = () => {
+    screenWidth.value = window.innerWidth
+  }
+  window.addEventListener('resize', updateWidth)
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateWidth)
+  })
+})
+
+const showNavigation = computed(() => {
+  const len = props.packages.length
+  if (screenWidth.value < 768) return len > 1 // Mobile: show if more than 1 package
+  if (screenWidth.value < 1024) return len > 2 // Tablet: show if more than 2 packages
+  return len > 3 // Desktop: show if more than 3 packages
+})
 
 const carouselConfig = {
   itemsToShow: 1,
@@ -38,6 +59,7 @@ const carouselConfig = {
       itemsToShow: 3.1,
       itemsToScroll: 2,
       gap: 15,
+      clamp: false,
       mouseDrag: false,
     },
   },
@@ -45,10 +67,10 @@ const carouselConfig = {
 </script>
 
 <template>
-    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
+    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-fit">
       <Slide v-for="packageData in props.packages" :key="packageData.id">
         <Link href="#" class="carousel__item">
-            <div class=" h-auto md:h-[400px] w-full flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white">
+            <div class=" h-auto md:h-[400px] max-w-[340px] flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white">
               
               <div class="relative h-[180px] md:h-full">
                 <img 
@@ -63,8 +85,8 @@ const carouselConfig = {
                 >
                   <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
                 </div>
-                <span class="bg-black/50 flex items-center justify-center absolute top-0 left-0 py-1 px-4 text-[var(--primary-custom)] font-roboto m-2 text-[10px] md:text-xs">
-                  Group Tour
+                <span v-if="packageData.tag != null" class="bg-black/50 flex items-center justify-center absolute top-0 left-0 py-1 px-4 text-[var(--primary-custom)] font-roboto m-2 text-[10px] md:text-xs">
+                  {{ packageData.tag }}
                 </span>
               </div>
 
@@ -100,7 +122,7 @@ const carouselConfig = {
       </Slide>
 
       <template #addons>
-        <Navigation class="hidden md:block">
+        <Navigation v-if="showNavigation" class="hidden md:block ">
           <template #prev>
             <div class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
               <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" />
