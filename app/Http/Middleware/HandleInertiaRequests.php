@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -38,6 +39,11 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        // Load all settings with casted values
+        $settings = Setting::all()->mapWithKeys(function ($setting) {
+            return [$setting->key => $setting->casted_value];
+        })->toArray();
+
         return array_merge(parent::share($request), [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -45,6 +51,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'settings' => $settings,
         ]);
     }
 }
