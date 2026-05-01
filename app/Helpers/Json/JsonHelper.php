@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Helper\Json;
+namespace App\Helpers\Json;
+
 class JsonHelper
 {
     public function convertToCollection(string $filePath)
@@ -10,7 +11,7 @@ class JsonHelper
         foreach ($data as $item) {
             $collection->push($item);
         }
+
         return $collection;
     }
-
 }

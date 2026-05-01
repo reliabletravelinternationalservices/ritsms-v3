@@ -4,13 +4,15 @@ import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
 import { Button } from '@/components/ui/button'
 import { Package } from '@/types/package';
+import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 
 
 
 
-const props = withDefaults(defineProps<{ packages?: Package[] }>(), {
+const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForeign?: boolean }>(), {
   packages: () => [],
-})
+  validOnlyForForeign: false
+});
 
 </script>
 
@@ -31,6 +33,7 @@ const props = withDefaults(defineProps<{ packages?: Package[] }>(), {
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
               Experience the beauty of Asia, Europe, and our very own islands. We bring the world’s most loved spots right to your feet.
           </p>
+          <ValidToForeignBanner v-if="validOnlyForForeign" />
         </div>
       </div>
 

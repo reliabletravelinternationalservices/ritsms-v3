@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Helper\Json\JsonHelper;
-use App\Static\SeederPath;
+use App\Helpers\Json\JsonHelper;
 use App\Repository\Package\PackageGroupRepository;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Static\SeederPath;
 use Illuminate\Database\Seeder;
 
 class PackageGroupSeeder extends Seeder
 {
     public function __construct(private JsonHelper $jsonHelper, private SeederPath $path, private PackageGroupRepository $repository) {}
+
     /**
      * Run the database seeds.
      */
