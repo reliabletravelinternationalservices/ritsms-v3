@@ -6,10 +6,10 @@ import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Package } from '@/types/package'
 
-defineProps<{
-  packages: Package[]
-  validToForeign: boolean
-}>()
+const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForeign?: boolean }>(), {
+  packages: () => [],
+  validOnlyForForeign: false
+});
 
 </script>
 
@@ -30,7 +30,7 @@ defineProps<{
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
             See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away.
           </p>
-            <ValidToForeignBanner />
+            <ValidToForeignBanner v-if="validOnlyForForeign" />
         </div>
       </div>
 
