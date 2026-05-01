@@ -22,9 +22,7 @@ class PackageGroupRepository
         return collect($data)->map(fn (array $item) => $this->createGroup($item));
     }
 
-
-
-    //ADDING ITEMS(PACKAGE) TO GROUP
+    // ADDING ITEMS(PACKAGE) TO GROUP
     public function addGroupItem(array $data)
     {
         $groupID = $data['package_group_id'];
@@ -37,31 +35,8 @@ class PackageGroupRepository
         });
     }
 
-
     public function addManyGroupItem(array $data)
     {
         return collect($data)->map(fn (array $item) => $this->addGroupItem($item));
-    }
-
-
-    
-    //GET INBOUND PACKAGES
-    public function getFirstFeaturedInboundGroupPackages(): Collection
-    {
-        $group = $this->model->where('include_as_inbound', true)
-            ->where('is_featured', true)
-            ->first();
-
-        return $group ? $group->packages->load(['primaryImage']) : collect();
-    }
-
-    //GET OUTBOUND PACKAGES
-    public function getFirstFeaturedOutboundGroupPackages(): Collection
-    {
-        $group = $this->model->where('include_as_outbound', true)
-            ->where('is_featured', true)
-            ->first();
-
-        return $group ? $group->packages->load(['primaryImage']) : collect();
     }
 }
