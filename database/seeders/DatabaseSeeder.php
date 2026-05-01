@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PackageSeeder::class,
             PackageGroupSeeder::class,
-            PackageGroupItemSeeder::class
+            PackageGroupItemSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }
