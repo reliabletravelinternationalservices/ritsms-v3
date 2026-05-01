@@ -31,7 +31,7 @@
     },
     {
         "name": "Europe Grand Capitals",
-        "tag": "Small Group Tour",
+        "tag": "Group Tour",
         "base_price": 265000.0,
         "down_payment": 65000.0,
         "duration": 10,
@@ -94,7 +94,7 @@
     },
     {
         "name": "Boracay Beach & Culture Retreat",
-        "tag": "Family Tour",
+        "tag": "Group Tour",
         "base_price": 26899.0,
         "down_payment": 10000.0,
         "duration": 5,
