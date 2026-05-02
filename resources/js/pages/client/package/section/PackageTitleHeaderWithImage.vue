@@ -6,7 +6,7 @@ import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
 
-const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
+defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
 
 </script>
 

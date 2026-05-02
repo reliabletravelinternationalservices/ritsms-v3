@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import Button from '@/components/ui/button/Button.vue';
-import { formatCurrency, formatPackageDateRange, getPackageDurationLabel } from '@/lib/utils';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 
-const props = defineProps<{ package: Package }>();
+defineProps<{ package: Package }>();
 
 </script>
 

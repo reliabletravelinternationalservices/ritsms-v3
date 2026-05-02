@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ClientBreadcrumb from '@/components/ClientBreadcrumb.vue';
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import {  BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';

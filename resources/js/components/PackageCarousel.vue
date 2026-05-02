@@ -6,7 +6,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils'
 import { Link } from '@inertiajs/vue3'
 import { Package } from '@/types/package'
-import { clamp } from 'node_modules/radix-vue/dist/shared'
 
 interface Props {
   isInbound: boolean

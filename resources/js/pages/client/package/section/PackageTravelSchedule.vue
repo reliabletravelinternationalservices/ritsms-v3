@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import Banner from '@/components/Banner.vue';
-import ClientBreadcrumb from '@/components/ClientBreadcrumb.vue';
 import { formatCurrency } from '@/lib/utils';
 import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
-import { Icon } from '@iconify/vue';
-import { Link } from '@inertiajs/vue3';
 
 const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
 
