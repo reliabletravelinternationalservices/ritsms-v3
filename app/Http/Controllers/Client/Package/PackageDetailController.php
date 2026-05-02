@@ -11,6 +11,7 @@ class PackageDetailController extends Controller
 {
     public function index(Package $package)
     {
+        $package->load('schedules', 'images');
         return Inertia::render('client/package/PackageDetailPage', compact('package'));
     }
 }
