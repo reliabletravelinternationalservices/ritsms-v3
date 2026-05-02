@@ -11,7 +11,7 @@ const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[]
 </script>
 
 <template>
-  <section class="w-full h-auto min-h-[400px] relative overflow-hidden py-8">
+  <section class="w-full h-auto min-h-[400px] relative overflow-hidden">
         <div class="max-w-5xl m-auto w-full flex flex-col justify-start gap-4">
             <span class="h-12">
                 <ClientBreadcrumb :breadcrumbs="breadcrumbs" />
