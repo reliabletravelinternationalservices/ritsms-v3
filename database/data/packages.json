@@ -18,7 +18,7 @@
             { "day": 6, "activity": "Free day with optional N Seoul Tower visit" },
             { "day": 7, "activity": "Departure" }
         ],
-        "inclusions": ["Airport transfers", "3-star hotel accommodation", "daily breakfast", "local guide", "DMZ tour", "city transportation pass."],
+        "inclusions": "Airport transfers, 3-star hotel accommodation, daily breakfast, local guide, DMZ tour, city transportation pass.",
         "exclusions": "International airfare, travel insurance, personal expenses, Korea visa fees, optional activities.",
         "notes": [
             "Bring a valid passport with at least 6 months validity",
@@ -51,7 +51,7 @@
             { "day": 9, "activity": "Farewell dinner and review session" },
             { "day": 10, "activity": "Departure" }
         ],
-        "inclusions": ["Hotel accommodation", "daily breakfast", "intercity train tickets", "airport transfers", "guided tours", "museum entrance fees."],
+        "inclusions": "Hotel accommodation, daily breakfast, intercity train tickets, airport transfers, guided tours, museum entrance fees.",
         "exclusions": "International airfare, Schengen visa fees, travel insurance, personal expenses, optional tours.",
         "notes": [
             "Schengen visa is required and should be applied for early",
@@ -81,7 +81,7 @@
             { "day": 5, "activity": "Free morning and optional kayak rental" },
             { "day": 6, "activity": "Departure after breakfast" }
         ],
-        "inclusions": ["Daily breakfast", "airport transfers", "accommodation", "land transfers", "guided tours", "Puerto Princesa Underground River permit fees", "El Nido island-hopping boat fees."],
+        "inclusions": "Daily breakfast, airport transfers, accommodation, land transfers, guided tours, Puerto Princesa Underground River permit fees, El Nido island-hopping boat fees.",
         "exclusions": "Round-trip airfare to Puerto Princesa, travel insurance, personal expenses, optional activities, government terminal fees.",
         "notes": [
             "Bring sunscreen and insect repellent",
@@ -109,7 +109,7 @@
             { "day": 4, "activity": "Free day with optional parasailing or spa" },
             { "day": 5, "activity": "Farewell breakfast and departure" }
         ],
-        "inclusions": ["Hotel accommodation", "daily breakfast", "airport transfers", "island hopping tour", "cooking class", "local guide."],
+        "inclusions": "Hotel accommodation, daily breakfast, airport transfers, island hopping tour, cooking class, local guide.",
         "exclusions": "Airfare to Caticlan, terminal fees, personal expenses, optional adventure sports.",
         "notes": [
             "Bring swimwear and reef-safe sunscreen",
