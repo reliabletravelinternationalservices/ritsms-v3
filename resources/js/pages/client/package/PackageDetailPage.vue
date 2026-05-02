@@ -35,6 +35,6 @@ const breadcrumbs: BreadcrumbItemType[] = [
         <PackageTitleHeaderWithImage :package="props.package" :breadcrumbs="breadcrumbs" />
         <PackageRateAndSchedule :package="props.package" />
         <PackageIncludedServices :package="props.package" />
-        <PackageTravelSchedule v-if="true" :package="props.package" />
+        <PackageTravelSchedule :package="props.package" />
     </AppLayout>     
 </template>
