@@ -59,6 +59,8 @@ html {
         --primary-opacity-custom: #FAFAFA50;
         --inbound-opacity-custom: #00946a50;
         --outbound-opacity-custom: #b96c0050;
+        --outbound-opacity-custom-10: #b96c001e;
+        --inbound-opacity-custom-10: #00946a1e;
         --warning-custom: #CF0000;
         --tag-custom: #009ECA;
         --correct-custom: #009912;
