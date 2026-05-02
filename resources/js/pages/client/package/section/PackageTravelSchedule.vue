@@ -22,9 +22,9 @@ const visibleSchedules = computed(() => {
             <div class="w-full flex flex-col gap-2">
                 <transition-group name="list" tag="div" class="space-y-2">
                     <div v-for="schedule in visibleSchedules" :key="schedule.id" class="grid grid-cols-3 px-2 transition-all duration-100 ease-in">
-                        <h5 class="col-span-1 font-roboto font-bold">{{ new Date(schedule.departure_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}/<span class="text-sm italic text-[var(--warning-custom)] font-roboto" v-if="schedule.is_limited">Limited Slot Only!</span></h5>
+                        <h5 class="col-span-1 font-roboto font-bold">{{ new Date(schedule.departure_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}<span class="text-sm italic text-[var(--warning-custom)] font-roboto" v-if="schedule.is_limited">/Limited Slot Only!</span></h5>
                         <Banner class="col-span-1" :title="schedule.is_available ? 'Available' : 'Unavailable'" :class="schedule.is_available ? 'bg-[var(--correct-custom)]' : 'bg-red-500'" />
-                        <span class="col-span-1 font-roboto font-bold text-[var(--warning-custom)]">{{ formatCurrency(schedule.price, 'PHP') }}/pax</span>
+                        <span class="col-span-1 font-roboto font-bold text-[var(--warning-custom)] text-end">{{ formatCurrency(schedule.price, 'PHP') }}/pax</span>
                     </div>
                 </transition-group>
                 <span v-if="(props.package.schedules || []).length > 3" class="text-sm text-[var(--muted-custom)] font-medium underline italic cursor-pointer" @click="showAll = !showAll">{{ showAll ? 'Hide all' : 'Show more...' }}</span>
