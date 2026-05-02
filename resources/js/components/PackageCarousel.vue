@@ -69,7 +69,7 @@ const carouselConfig = {
 <template>
     <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-fit">
       <Slide v-for="packageData in props.packages" :key="packageData.id">
-        <Link href="#" class="carousel__item">
+        <Link :href="route('client.package.detail', { package: packageData })" class="carousel__item">
             <div class=" h-auto md:h-[400px] max-w-[320px] flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white">
               
               <div class="relative h-[180px] md:h-full">
