@@ -22,12 +22,12 @@ export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref
  * @param amount - The numeric value to format
  * @returns A formatted string (e.g., "$1,234.56")
  */
-export const formatCurrency = (amount: number, currency: string = 'PHP'): string => {
+export const formatCurrency = (amount: number, currency: string = 'PHP', fractions: number = 0): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency,
     // Optional: Use 'minimumFractionDigits: 0' if you don't want decimals for whole numbers
-    minimumFractionDigits: 0,
+    minimumFractionDigits: fractions,
     maximumFractionDigits: 2,
   }).format(amount);
 };
@@ -40,4 +40,37 @@ export const getPackageDurationLabel = (days: number): string => {
   } else {
     return `${days} day`;
   }
+};
+
+export const formatPackageDateRange = (startDate: string, endDate?: string): string => {
+  const start = new Date(startDate);
+  const end = endDate ? new Date(endDate) : start;
+
+  const singleFormat: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
+
+  const rangeStartFormat: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short'
+  };
+
+  const rangeEndFormat: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
+
+  const isSameDate =
+    start.getDate() === end.getDate() &&
+    start.getMonth() === end.getMonth() &&
+    start.getFullYear() === end.getFullYear();
+
+  if (!endDate || isSameDate) {
+    return start.toLocaleDateString('en-US', singleFormat);
+  }
+
+  return `${start.toLocaleDateString('en-US', rangeStartFormat)} - ${end.toLocaleDateString('en-US', rangeEndFormat)}`;
 };
