@@ -9,7 +9,7 @@ const props = defineProps<{ package: Package }>();
 </script>
 
 <template>
-    <section class="w-full relative overflow-hidden p-4">
+    <section class="w-full relative overflow-hidden px-4">
         <div class="max-w-5xl m-auto w-full flex items-center justify-between gap-4">
             <div class="flex items-center justify-between gap-2">
                 <div class="flex flex-col w-fit bg-[var(--tag-custom)] text-[var(--primary-custom)] px-3 py-1.5">
