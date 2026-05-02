@@ -7,6 +7,7 @@ import PackageTitleHeaderWithImage from './section/PackageTitleHeaderWithImage.v
 import PackageRateAndSchedule from './section/PackageRateAndPeriod.vue';
 import PackageIncludedServices from './section/PackageIncludedServices.vue';
 import PackageTravelSchedule from './section/PackageTravelSchedule.vue';
+import PackageDescription from './section/PackageDescription.vue';
 
 const props = defineProps<{ package: Package }>();
 
@@ -36,5 +37,6 @@ const breadcrumbs: BreadcrumbItemType[] = [
         <PackageRateAndSchedule :package="props.package" />
         <PackageIncludedServices :package="props.package" />
         <PackageTravelSchedule :package="props.package" />
+        <PackageDescription :package="props.package" />
     </AppLayout>     
 </template>
