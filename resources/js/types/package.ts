@@ -39,6 +39,7 @@ export interface Package {
     is_featured: boolean;
     is_foreign_only?: boolean;
     primary_image?: Media;
+    schedules: PackageSchedule[];
     created_at: string;
     updated_at: string;
 }
