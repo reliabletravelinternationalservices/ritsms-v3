@@ -7,6 +7,8 @@ use App\Models\PackageGroup;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+use function Termwind\parse;
+
 class PackageRepository
 {
     public function __construct(protected Package $model) {}
@@ -55,5 +57,11 @@ class PackageRepository
             'packages' => $packages,
             'is_foreign_only' => $isForeignOnly,
         ];
+    }
+
+
+    public function getPackageDetails(int $id): Package
+    {
+        return $this->model->with('schedules')->findOrFail($id);
     }
 }

@@ -11,4 +11,6 @@ class SeederPath
     public const PACKAGE_GROUP_ITEMS = __DIR__.'/../../database/data/package_group_items.json';
 
     public const SETTINGS = __DIR__.'/../../database/data/settings.json';
+
+    public const PACKAGE_SCHEDULES = __DIR__.'/../../database/data/package_schedules.json';
 }

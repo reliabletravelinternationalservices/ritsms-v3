@@ -1,0 +1,128 @@
+[
+    {
+        "package_id": 1,
+        "departure_date": "2026-05-01",
+        "price": 10000.00,
+        "is_available": true,
+        "is_limited": true
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-06-01",
+        "price": 12000.00,
+        "is_available": false,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-07-01",
+        "price": 13000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    },
+    {
+        "package_id": 1,
+        "departure_date": "2026-08-01",
+        "price": 12000.00,
+        "is_available": true,
+        "is_limited": false
+    }
+]
