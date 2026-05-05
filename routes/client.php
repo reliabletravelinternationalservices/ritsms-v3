@@ -14,15 +14,21 @@ Route::get('/destination', [DestinationPageController::class, 'index'])->name('c
 // OUTBOUND DESTINATIONS
 Route::prefix('outbound')->group(function () {
     Route::get('/', [OutboundDestinationController::class, 'index'])->name('client.outbound');
+
+    Route::prefix('package')->group(function () {
+        Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');
+    });
 });
 
 // INBOUND DESTINATIONS
 Route::prefix('inbound')->group(function () {
     Route::get('/', [InboundDestinationController::class, 'index'])->name('client.inbound');
+
+    Route::prefix('package')->group(function () {
+        Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.inbound.package.detail');
+    });
 });
 
-Route::prefix('package')->group(function () {
-    Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.package.detail');
-});
+
 
 Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
