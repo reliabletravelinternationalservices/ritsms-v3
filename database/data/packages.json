@@ -18,13 +18,13 @@
             "Optional N Seoul Tower visit at an additional cost"
         ],
         "itineraries": [
-            { "day": 1, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
-            { "day": 2, "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
-            { "day": 3, "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
-            { "day": 4, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
-            { "day": 5, "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
-            { "day": 6, "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
-            { "day": 7, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] }
+            { "day": 1, "title": "Arrival in Seoul and welcome dinner", "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
+            { "day": 2, "title": "Gyeongbokgung Palace visit and Korean BBQ dinner", "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
+            { "day": 3, "title": "Seoul city tour and Han River cruise", "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
+            { "day": 4, "title": "Arrival in Seoul and welcome dinner", "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
+            { "day": 5, "title": "Gyeongbokgung Palace visit and Korean BBQ dinner", "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
+            { "day": 6, "title": "Seoul city tour and Han River cruise", "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
+            { "day": 7, "title": "Arrival in Seoul and welcome dinner", "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] }
         ],
         "inclusions": [
             "Airport transfers",
@@ -67,16 +67,16 @@
             "International airfare, Schengen visa fees, travel insurance, personal expenses, optional tours."
         ],
         "itineraries": [
-            { "day": 1, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
-            { "day": 2, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
-            { "day": 3, "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
-            { "day": 4, "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
-            { "day": 5, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
-            { "day": 6, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
-            { "day": 7, "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
-            { "day": 8, "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
-            { "day": 9, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
-            { "day": 10, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] }
+            { "day": 1, "title": "Arrival in Paris and welcome dinner", "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 2, "title": "Louvre visit and Montmartre exploration", "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
+            { "day": 3, "title": "Train to Amsterdam and canal cruise", "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
+            { "day": 4, "title": "Arrival in Berlin and evening walk", "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
+            { "day": 5, "title": "Arrival in Paris and welcome dinner", "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 6, "title": "Louvre visit and Montmartre exploration", "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
+            { "day": 7, "title": "Train to Amsterdam and canal cruise", "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
+            { "day": 8, "title": "Arrival in Berlin and evening walk", "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
+            { "day": 9, "title": "Arrival in Paris and welcome dinner", "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 10, "title": "Louvre visit and Montmartre exploration", "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] }
         ],
         "inclusions": [
             "Airport transfers",
@@ -121,12 +121,12 @@
             "Departure after breakfast"
         ],
         "itineraries": [
-            { "day": 1, "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
-            { "day": 2, "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
-            { "day": 3, "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] },
-            { "day": 4, "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
-            { "day": 5, "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
-            { "day": 6, "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] }
+            { "day": 1, "title": "Arrival in Puerto Princesa and welcome dinner", "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
+            { "day": 2, "title": "Transfer to El Nido and sunset beach walk", "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
+            { "day": 3, "title": "Free morning and optional kayak rental", "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] },
+            { "day": 4, "title": "Arrival in Puerto Princesa and welcome dinner", "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
+            { "day": 5, "title": "Transfer to El Nido and sunset beach walk", "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
+            { "day": 6, "title": "Free morning and optional kayak rental", "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] }
         ],
         "inclusions": [
             "Airport transfers",
@@ -167,11 +167,11 @@
             "Farewell breakfast and departure"
         ],
         "itineraries": [
-            { "day": 1, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
-            { "day": 2, "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
-            { "day": 3, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
-            { "day": 4, "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
-            { "day": 5, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] }
+            { "day": 1, "title": "Arrival in Boracay", "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] }, { "day": 1, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
+            { "day": 2, "title": "Cultural Cooking Class and Local Market Tour", "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
+            { "day": 3, "title": "Island Hopping and Snorkeling at Puka Shell Beach", "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
+            { "day": 4, "title": "Free Day with Optional Parasailing or Spa", "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
+            { "day": 5, "title": "Farewell Breakfast and Departure", "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] }
         ],
         "inclusions": [
             "Airport transfers",

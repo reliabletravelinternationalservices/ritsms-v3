@@ -9,6 +9,7 @@ import PackageIncludedServices from './section/PackageIncludedServices.vue';
 import PackageTravelSchedule from './section/PackageTravelSchedule.vue';
 import PackageDescription from './section/PackageDescription.vue';
 import PackageHighlight from './section/PackageHighlight.vue';
+import PackageItinerary from './section/PackageItinerary.vue';
 
 const props = defineProps<{ package: Package }>();
 
@@ -40,5 +41,6 @@ const breadcrumbs: BreadcrumbItemType[] = [
         <PackageTravelSchedule :package="props.package" />
         <PackageDescription :package="props.package" />
         <PackageHighlight :package="props.package" />
+        <PackageItinerary :package="props.package" />
     </AppLayout>     
 </template>
