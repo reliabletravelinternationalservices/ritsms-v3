@@ -10,7 +10,7 @@ const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[]
   <section class="w-full h-auto relative overflow-hidden p-4">
     <div class="max-w-5xl m-auto w-full flex flex-col justify-start gap-2 p-4">
         <h4 class="font-bold font-roboto text-md md:text-lg uppercase">Inclusions</h4>
-        <div class="w-full flex flex-col gap-1 px-6">
+        <div class="w-full flex flex-col gap-1 px-4">
             <span 
                 v-for="(data, index) in props.package.inclusions_array" 
                 :key="index" 
