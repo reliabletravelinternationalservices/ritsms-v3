@@ -26,14 +26,14 @@ export interface Package {
     duration: number;
     selling_start_date: string;
     selling_end_date?: string;
-    highlights?: string;
-    itineraries: Array<{
+    highlights_array?: string[];
+    itineraries_array: Array<{
         day: number;
         activity: string;
     }>;
-    inclusions: string;
-    exclusions: string;
-    notes: string[];
+    inclusions_array: string[];
+    exclusions_array: string[];
+    notes_array: string[];
     destination: string;
     season: 'spring' | 'winter' | 'autumn' | 'summer';
     is_featured: boolean;
