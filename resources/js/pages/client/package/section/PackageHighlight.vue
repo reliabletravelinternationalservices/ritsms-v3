@@ -11,12 +11,12 @@ const showAll = ref(false);
 // Logic changed from schedules to highlights
 const visibleHighlights = computed(() => {
   const highlights = props.package.highlights_array || [];
-  return showAll.value ? highlights : highlights.slice(0, 4);
+  return showAll.value ? highlights : highlights.slice(0, 10);
 });
 
 // Only show the button if there are more than 5 items
 const hasMoreHighlights = computed(() => {
-  return (props.package.highlights_array?.length || 0) > 4;
+  return (props.package.highlights_array?.length || 0) > 10;
 });
 </script>
 
