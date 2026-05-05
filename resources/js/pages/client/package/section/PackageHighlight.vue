@@ -3,8 +3,9 @@ import { ref, computed } from 'vue';
 import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
+import { cn } from '@/lib/utils';
 
-const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
+const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[], isInbound: boolean }>();
 
 const showAll = ref(false);
 
@@ -22,7 +23,7 @@ const hasMoreHighlights = computed(() => {
 
 <template>
   <section class="w-full h-auto relative overflow-hidden p-4">
-    <div class="max-w-5xl m-auto w-full flex flex-col justify-start gap-2 p-4 border border-[var(--outbound-custom)]">
+    <div class="max-w-5xl m-auto w-full flex flex-col justify-start gap-2 p-4 border" :class="cn(isInbound ? 'border-[var(--inbound-custom)]' : 'border-[var(--outbound-custom)]')">
       <h4 class="font-bold font-roboto text-md md:text-lg uppercase">Highlights</h4>
       
       <div class="w-full flex flex-col gap-1">
@@ -32,7 +33,7 @@ const hasMoreHighlights = computed(() => {
             :key="index" 
             class="flex items-start gap-2 text-sm md:text-base"
           >
-            <Icon icon="material-symbols:check" class="text-xl md:text-2xl text-[var(--outbound-custom)] shrink-0" />
+            <Icon icon="material-symbols:check" class="text-xl md:text-2xl shrink-0" :class="cn(isInbound? 'text-[var(--inbound-custom)]' : 'text-[var(--outbound-custom)]')"/>
             <p class="whitespace-pre-line">{{ data }}</p>
           </span>
         </transition-group>

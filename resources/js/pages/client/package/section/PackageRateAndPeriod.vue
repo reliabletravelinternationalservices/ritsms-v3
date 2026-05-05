@@ -2,9 +2,13 @@
 import Button from '@/components/ui/button/Button.vue';
 import { formatCurrency, formatPackageDateRange, getPackageDurationLabel } from '@/lib/utils';
 import { Package } from '@/types/package';
+import { PackageInUSD } from '@/types/package-usd';
 import { Icon } from '@iconify/vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-const props = defineProps<{ package: Package }>();
+const props = defineProps<{ package: Package, isInbound: boolean, usdRate: number }>();
+
 
 </script>
 
@@ -20,7 +24,7 @@ const props = defineProps<{ package: Package }>();
                         </span>
                     </span>
                     <h4 class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--warning-custom)]">
-                        {{ formatCurrency(props.package.base_price,'PHP') }}/pax
+                        {{ formatCurrency(isInbound? (props.package.base_price/props.usdRate) : props.package.base_price, props.isInbound? 'USD' : 'PHP') }}/pax
                     </h4>
                 </div>
                 <div class="flex flex-col">
@@ -53,7 +57,7 @@ const props = defineProps<{ package: Package }>();
                         </span>
                     </span>
                     <h4 v-if="props.package.down_payment !== null" class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--correct-custom)]">
-                        {{ formatCurrency(props.package.down_payment,'PHP') }}/pax
+                        {{ formatCurrency(isInbound? (props.package.down_payment/props.usdRate) : props.package.down_payment, props.isInbound? 'USD' : 'PHP') }}/pax
                     </h4>
                 </div>
             </div>

@@ -10,8 +10,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { cn } from '@/lib/utils';
 
-const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
+const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[], isInbound: boolean }>();
 </script>
 
 <template>
@@ -37,7 +38,7 @@ const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[]
                     :key="aIndex" 
                     class="flex items-start gap-2"
                     >
-                        <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--outbound-custom)] shrink-0"></div>
+                        <div class="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" :class="cn(isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]')"></div>
                         <p class="text-sm md:text-base text-[var(--secondary-custom)] leading-relaxed">
                             {{ activity }}
                         </p>
