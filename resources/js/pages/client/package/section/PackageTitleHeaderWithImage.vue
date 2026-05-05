@@ -2,11 +2,16 @@
 import Banner from '@/components/Banner.vue';
 import ClientBreadcrumb from '@/components/ClientBreadcrumb.vue';
 import { BreadcrumbItemType } from '@/types';
-import { Package } from '@/types/package';
+import { Package } from '@/types/package';;
 import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
 
-defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
+const props = defineProps<{ 
+    package: Package, 
+    isInbound: boolean,
+    breadcrumbs?: BreadcrumbItemType[] 
+}>();
+
 
 </script>
 
@@ -18,22 +23,25 @@ defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[] }>();
             </span>
             <div class="flex flex-col gap-2">
                 <span class="flex items-center gap-2">
-                    <Banner title="Outbound" class="bg-[var(--outbound-custom)]"/>
-                    <Banner title="Valid FOR FOREIGN ONLY!" class="bg-[var(--warning-custom)]"/>
+                    <Banner 
+                        :title="props.isInbound ? 'Inbound' : 'Outbound'" 
+                        :class="props.isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
+                    />
+                    <Banner v-if="package.is_foreign_only" title="Valid FOR FOREIGN ONLY!" class="bg-[var(--warning-custom)]"/>
                 </span>
                 <h1 class="text-1xl md:text-2xl lg:text-3xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase">
                     {{ package.name }}
                 </h1>
                 <span class="flex items-center gap-4">
-                    <Link :href="route('client.package.detail', { package: package })" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    <Link href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
                         <Icon icon="tabler:message"  class="text-lg" />
                         <span>Message us</span>
                     </Link>
-                    <Link :href="route('client.package.detail', { package: package })" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    <Link  href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
                         <Icon icon="material-symbols:call-outline"  class="text-lg" />
                         <span>Call us</span>
                     </Link>
-                    <Link :href="route('client.package.detail', { package: package })" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    <Link  href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
                         <Icon icon="material-symbols:share-outline"  class="text-lg" />
                         <span>Share now</span>
                     </Link>
