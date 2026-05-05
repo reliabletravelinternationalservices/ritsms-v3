@@ -8,18 +8,38 @@
         "selling_start_date": "2026-05-15",
         "selling_end_date": "2026-12-31",
         "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex non saepe et veritatis dicta laboriosam tempora doloribus! Magni quia nobis fugiat tempora culpa? Animi odio laudantium praesentium natus, ea ab.\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores qui est aspernatur optio possimus hic magni non, illo veniam quae officiis quas temporibus rem, quam porro libero, dolor in accusantium.\nLorem ipsum dolor sit amet consectetur adipisicing elit. Quae veritatis obcaecati blanditiis, laudantium sed assumenda minus cupiditate quo hic dolore est id odit vel repellendus eius recusandae illum soluta quaerat!\nLorem ipsum dolor sit amet consectetur adipisicing elit. In dolor non error vel voluptate, modi aut. Minima aliquid atque numquam nihil. Iure numquam dolores, cumque explicabo ex obcaecati porro modi.\nLorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium necessitatibus iure laudantium nesciunt! Veniam, consequatur? Ea aperiam fuga odio neque, optio ex ullam sint id ipsam, aut itaque? Deleniti, odit.\nLorem ipsum dolor sit amet consectetur, adipisicing elit. Quod sequi inventore mollitia aliquid excepturi commodi maxime distinctio asperiores veritatis voluptate, harum, placeat aperiam odit eaque praesentium quis quasi qui nihil.",
-        "highlights": "Gyeongbokgung Palace, Myeongdong shopping, Korean BBQ dinner, K-pop studio visit, DMZ guided tour.",
-        "itineraries": [
-            { "day": 1, "activity": "Arrival in Seoul and welcome dinner" },
-            { "day": 2, "activity": "Gyeongbokgung Palace and Bukchon Hanok Village" },
-            { "day": 3, "activity": "Myeongdong street food and shopping experience" },
-            { "day": 4, "activity": "K-pop culture studio visit and Han River cruise" },
-            { "day": 5, "activity": "DMZ tour and return to Seoul" },
-            { "day": 6, "activity": "Free day with optional N Seoul Tower visit" },
-            { "day": 7, "activity": "Departure" }
+        "highlights": [
+            "Gyeongbokgung Palace, Myeongdong shopping, Korean BBQ dinner, K-pop studio visit, DMZ guided tour.",
+            "Seoul city tour, Han River cruise, N Seoul Tower visit.",
+            "Airport transfers, 3-star hotel accommodation, daily breakfast, local guide, DMZ tour, city transportation pass.",
+            "International airfare, travel insurance, personal expenses, Korea visa fees, optional activities.",
+            "Korea visa requirements may change; check before booking",
+            "Comfortable walking shoes are recommended",
+            "Optional N Seoul Tower visit at an additional cost"
         ],
-        "inclusions": "Airport transfers, 3-star hotel accommodation, daily breakfast, local guide, DMZ tour, city transportation pass.",
-        "exclusions": "International airfare, travel insurance, personal expenses, Korea visa fees, optional activities.",
+        "itineraries": [
+            { "day": 1, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
+            { "day": 2, "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
+            { "day": 3, "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
+            { "day": 4, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] },
+            { "day": 5, "activity": ["Gyeongbokgung Palace visit and Korean BBQ dinner", "K-pop culture studio visit"] },
+            { "day": 6, "activity": ["Seoul city tour and Han River cruise", "DMZ tour and return to Seoul"] },
+            { "day": 7, "activity": ["Arrival in Seoul and welcome dinner", "Seoul city tour and Han River cruise"] }
+        ],
+        "inclusions": [
+            "Airport transfers",
+            "3-star hotel accommodation",
+            "daily breakfast",
+            "local guide", 
+            "DMZ tour",
+            "city transportation pass."
+        ],
+        "exclusions": [
+            "Airfare to Seoul",
+            "Travel insurance",
+            "Personal expenses",
+            "Korea visa fees"
+        ],
         "notes": [
             "Bring a valid passport with at least 6 months validity",
             "Korea visa requirements may change; check before booking",
@@ -38,21 +58,41 @@
         "selling_start_date": "2026-05-01",
         "selling_end_date": "2026-11-15",
         "description": "A 10-day grand tour through Paris, Amsterdam, and Berlin with guided city sightseeing, Seine cruise, and local culinary experiences.",
-        "highlights": "Eiffel Tower visit, Louvre museum walk, canal cruise in Amsterdam, Berlin Wall history tour, European breakfast buffet.",
-        "itineraries": [
-            { "day": 1, "activity": "Arrival in Paris and orientation walk" },
-            { "day": 2, "activity": "Paris city tour and Seine river cruise" },
-            { "day": 3, "activity": "Louvre visit and Montmartre exploration" },
-            { "day": 4, "activity": "Train to Amsterdam and canal cruise" },
-            { "day": 5, "activity": "Amsterdam city cycling tour" },
-            { "day": 6, "activity": "Travel to Berlin and evening walk" },
-            { "day": 7, "activity": "Berlin Wall memorial and museum island" },
-            { "day": 8, "activity": "Free day for optional local markets" },
-            { "day": 9, "activity": "Farewell dinner and review session" },
-            { "day": 10, "activity": "Departure" }
+        "highlights": [
+            "Paris city tour, Seine river cruise, Louvre visit, Montmartre exploration.",
+            "Train to Amsterdam and canal cruise, Amsterdam city cycling tour.",
+            "Travel to Berlin and evening walk, Berlin Wall memorial, museum island.",
+            "Free day for optional local markets, farewell dinner, and review session.",
+            "Airport transfers, 3-star hotel accommodation, daily breakfast, intercity train tickets, airport transfers, guided tours, museum entrance fees.",
+            "International airfare, Schengen visa fees, travel insurance, personal expenses, optional tours."
         ],
-        "inclusions": "Hotel accommodation, daily breakfast, intercity train tickets, airport transfers, guided tours, museum entrance fees.",
-        "exclusions": "International airfare, Schengen visa fees, travel insurance, personal expenses, optional tours.",
+        "itineraries": [
+            { "day": 1, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 2, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
+            { "day": 3, "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
+            { "day": 4, "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
+            { "day": 5, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 6, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] },
+            { "day": 7, "activity": ["Arrival in Amsterdam and canal cruise", "Amsterdam city cycling tour"] },
+            { "day": 8, "activity": ["Arrival in Berlin and evening walk", "Berlin Wall memorial and museum island"] },
+            { "day": 9, "activity": ["Arrival in Paris and welcome dinner", "Paris city tour and Seine river cruise"] },
+            { "day": 10, "activity": ["Louvre visit and Montmartre exploration", "Paris city tour and Seine river cruise"] }
+        ],
+        "inclusions": [
+            "Airport transfers",
+            "3-star hotel accommodation",
+            "daily breakfast",
+            "intercity train tickets",
+            "airport transfers",
+            "guided tours",
+            "museum entrance fees"
+        ],
+        "exclusions": [
+            "Airfare to Paris, Amsterdam, and Berlin",
+            "Schengen visa fees",
+            "Travel insurance",
+            "Personal expenses"
+        ],
         "notes": [
             "Schengen visa is required and should be applied for early",
             "Pack a universal power adapter for European outlets",
@@ -72,17 +112,35 @@
         "selling_start_date": "2026-06-01",
         "selling_end_date": "2026-09-30",
         "description": "A 6-day immersive tour of Palawan's top natural attractions, including island hopping, hidden lagoons, and cultural village visits.",
-        "highlights": "Honda Bay island hopping, Puerto Princesa Underground River, El Nido sunset cruise, local seafood feast.",
-        "itineraries": [
-            { "day": 1, "activity": "Arrival in Puerto Princesa and welcome dinner" },
-            { "day": 2, "activity": "Puerto Princesa Underground River tour and city orientation" },
-            { "day": 3, "activity": "Transfer to El Nido and sunset beach walk" },
-            { "day": 4, "activity": "El Nido island hopping tour A" },
-            { "day": 5, "activity": "Free morning and optional kayak rental" },
-            { "day": 6, "activity": "Departure after breakfast" }
+        "highlights": [
+            "Arrival in Puerto Princesa and welcome dinner",
+            "Puerto Princesa Underground River tour and city orientation",
+            "Transfer to El Nido and sunset beach walk",
+            "El Nido island hopping tour A",
+            "Free morning and optional kayak rental",
+            "Departure after breakfast"
         ],
-        "inclusions": "Daily breakfast, airport transfers, accommodation, land transfers, guided tours, Puerto Princesa Underground River permit fees, El Nido island-hopping boat fees.",
-        "exclusions": "Round-trip airfare to Puerto Princesa, travel insurance, personal expenses, optional activities, government terminal fees.",
+        "itineraries": [
+            { "day": 1, "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
+            { "day": 2, "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
+            { "day": 3, "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] },
+            { "day": 4, "activity": ["Arrival in Puerto Princesa and welcome dinner", "Puerto Princesa Underground River tour and city orientation"] },
+            { "day": 5, "activity": ["Transfer to El Nido and sunset beach walk", "El Nido island hopping tour A"] },
+            { "day": 6, "activity": ["Free morning and optional kayak rental", "Departure after breakfast"] }
+        ],
+        "inclusions": [
+            "Airport transfers",
+            "3-star hotel accommodation",
+            "daily breakfast",
+            "local guide",
+            "kayak rental",
+            "optional kayak rental"
+        ],
+        "exclusions": [
+            "Airfare to Puerto Princesa",
+            "Travel insurance",
+            "Personal expenses"
+        ],
         "notes": [
             "Bring sunscreen and insect repellent",
             "Permit fees are included, but extra fees may apply for drones or oversized luggage",
@@ -101,16 +159,33 @@
         "selling_start_date": "2026-07-01",
         "selling_end_date": "2026-10-15",
         "description": "A 5-day Boracay experience with beach activities, local cuisine, and a cultural village visit designed for families and friends.",
-        "highlights": "White Beach sunset cruise, island hopping, traditional Filipino cooking demonstration, local market visit.",
-        "itineraries": [
-            { "day": 1, "activity": "Arrival in Boracay and beachfront welcome reception" },
-            { "day": 2, "activity": "Island hopping and snorkeling at Puka Shell Beach" },
-            { "day": 3, "activity": "Cultural cooking class and local market tour" },
-            { "day": 4, "activity": "Free day with optional parasailing or spa" },
-            { "day": 5, "activity": "Farewell breakfast and departure" }
+        "highlights": [
+            "Arrival in Boracay and beachfront welcome reception",
+            "Island hopping and snorkeling at Puka Shell Beach",
+            "Cultural cooking class and local market tour",
+            "Free day with optional parasailing or spa",
+            "Farewell breakfast and departure"
         ],
-        "inclusions": "Hotel accommodation, daily breakfast, airport transfers, island hopping tour, cooking class, local guide.",
-        "exclusions": "Airfare to Caticlan, terminal fees, personal expenses, optional adventure sports.",
+        "itineraries": [
+            { "day": 1, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
+            { "day": 2, "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
+            { "day": 3, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] },
+            { "day": 4, "activity": ["Cultural cooking class and local market tour", "Free day with optional parasailing or spa"] },
+            { "day": 5, "activity": ["Arrival in Boracay and beachfront welcome reception", "Island hopping and snorkeling at Puka Shell Beach"] }
+        ],
+        "inclusions": [
+            "Airport transfers",
+            "3-star hotel accommodation",
+            "daily breakfast",
+            "local guide",
+            "optional parasailing",
+            "optional spa"
+        ],
+        "exclusions": [
+            "Airfare to Boracay",
+            "Travel insurance",
+            "Personal expenses"
+        ],
         "notes": [
             "Bring swimwear and reef-safe sunscreen",
             "Local market prices may vary seasonally",
