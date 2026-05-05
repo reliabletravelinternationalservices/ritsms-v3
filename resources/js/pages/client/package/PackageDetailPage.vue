@@ -11,6 +11,7 @@ import PackageDescription from './section/PackageDescription.vue';
 import PackageHighlight from './section/PackageHighlight.vue';
 import PackageItinerary from './section/PackageItinerary.vue';
 import PackageInclusion from './section/PackageInclusion.vue';
+import PackageExclusion from './section/PackageExclusion.vue';
 
 const props = defineProps<{ package: Package }>();
 
@@ -44,5 +45,6 @@ const breadcrumbs: BreadcrumbItemType[] = [
         <PackageHighlight :package="props.package" />
         <PackageItinerary :package="props.package" />
         <PackageInclusion :package="props.package" />
+        <PackageExclusion :package="props.package" />
     </AppLayout>     
 </template>
