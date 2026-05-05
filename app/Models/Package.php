@@ -28,9 +28,12 @@ class Package extends Model
         'is_foreign_only',
     ];
 
-    protected $casts = [
-        'itineraries' => 'array',
-        'notes' => 'array',
+    protected $appends = [
+        'highlights_array',
+        'itineraries_array',
+        'inclusions_array',
+        'exclusions_array',
+        'notes_array',
     ];
 
 
@@ -52,9 +55,37 @@ class Package extends Model
         return $this->morphMany(Media::class, 'mediable');
     }
 
+
+
+    // SHORTCUTS
     public function primaryImage()
     {
         return $this->morphOne(Media::class, 'mediable')->where('is_primary', true);
+    }
+
+    public function getHighlightsArrayAttribute()
+    {
+        return parse_text_block($this->attributes['highlights'] ?? '');
+    }
+
+    public function getItinerariesArrayAttribute()
+    {
+        return parse_json_block($this->attributes['itineraries'] ?? '');
+    }
+
+    public function getInclusionsArrayAttribute()
+    {
+        return parse_text_block($this->attributes['inclusions'] ?? '');
+    }
+
+    public function getExclusionsArrayAttribute()
+    {
+        return parse_text_block($this->attributes['exclusions'] ?? '');
+    }
+
+    public function getNotesArrayAttribute()
+    {
+        return parse_text_block($this->attributes['notes'] ?? '');
     }
 
 }
