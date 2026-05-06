@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';

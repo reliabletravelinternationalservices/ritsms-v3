@@ -4,7 +4,7 @@ use App\Http\Controllers\Client\ContactPageController;
 use App\Http\Controllers\Client\DestinationPageController;
 use App\Http\Controllers\Client\InboundDestinationController;
 use App\Http\Controllers\Client\LandingPageController;
-use App\Http\Controllers\Client\OutboundDestinationController;
+use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +13,7 @@ Route::get('/destination', [DestinationPageController::class, 'index'])->name('c
 
 // OUTBOUND DESTINATIONS
 Route::prefix('outbound')->group(function () {
-    Route::get('/', [OutboundDestinationController::class, 'index'])->name('client.outbound');
+    Route::get('/', [OutboundPageController::class, 'index'])->name('client.outbound');
 
     Route::prefix('package')->group(function () {
         Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');

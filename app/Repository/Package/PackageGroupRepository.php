@@ -39,4 +39,19 @@ class PackageGroupRepository
     {
         return collect($data)->map(fn (array $item) => $this->addGroupItem($item));
     }
+
+
+    public function getPackageGroupByType(string $type = 'outbound', bool $isFeatured = false): Collection
+    {
+        // Determine which column to filter based on the type string
+        $column = ($type === 'inbound') ? 'include_as_inbound' : 'include_as_outbound';
+
+        return $this->model
+            ->where($column, true)
+            ->where('is_featured', $isFeatured)
+            ->with(['packages' => function($query) {
+                $query->with('primaryImage');
+            }])
+            ->get();
+    }
 }

@@ -6,7 +6,7 @@ import InboundPackageDisplay from './section/InboundPackageDisplay.vue';
 </script>
 
 <template>
-    <Head title="Explore International Destinations With Us" />
+    <Head title="Explore Local Spots Here in The Philippines" />
     <AppLayout>
         <InboundTitleHeader />
         <InboundPackageDisplay />

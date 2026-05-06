@@ -1,25 +1,17 @@
 <script setup lang="ts">
 import PackageCarousel from '@/components/PackageCarousel.vue';
+import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 
 
-interface Package {
-  id: number
-  name: string
-  price: number
-  description: string
-  duration: string
-  destination: string
-  image_path: string
-}
 
 
-defineProps<{
+const props = defineProps<{
     title: string
-    description: string
+    description?: string | null
     isFeatured: boolean
     isInbound: boolean
-    packages: Package[]
+    packages?: Package[] | null
 }>();
 
 
@@ -35,10 +27,13 @@ defineProps<{
                 <span class="font-bold font-roboto text-md md:text-lg uppercase">FEATURED TOURS</span>
             </span>
             <h1 class="font-bold font-montserrat text-xl md:text-2xl uppercase">{{ title }}</h1>
-            <p class="font-roboto text-sm md:text-base">{{ description }}</p>
+            <p v-if="description" class="font-roboto text-sm md:text-base">{{ description }}</p>
         </div>
         <div class="w-full">
-            <PackageCarousel :packages="packages" :is-inbound="isInbound" />
+            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound" />
+            <span v-else class="flex flex-col items-center justify-center gap-2 w-full h-10 bg-[var(--outbound-opacity-custom-10)]">
+                <p  class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">No packages found</p>
+            </span>
         </div>
     </div>
 </template>
