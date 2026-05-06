@@ -27,7 +27,7 @@ return new class extends Migration
             $table->text('exclusions');
             $table->text('notes')->nullable();
             $table->string('destination');
-            $table->enum('season', ['spring', 'winter', 'autumn', 'summer']);
+            $table->enum('season', ['spring', 'winter', 'autumn', 'summer', 'all_season'])->default('all_season');
             $table->boolean('is_foreign_only')->default(false);
             $table->timestamps();
         });
