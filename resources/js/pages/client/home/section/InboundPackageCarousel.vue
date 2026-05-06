@@ -5,6 +5,7 @@ import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Package } from '@/types/package'
+import { Link } from '@inertiajs/vue3'
 
 const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForeign?: boolean }>(), {
   packages: () => [],
@@ -36,7 +37,7 @@ const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForei
 
       <div class="flex justify-start md:justify-end">
         <span class="border-b border-1 border-[var(--secondary--custom)] text-base md:text-md lg:text-lg font-roboto font-bold text-[var(--secondary-custom)] hover:text-[var(--tertiary-hover-custom)] duration-75">
-          <a href="#">
+          <a :href="route('client.inbound')" target="_blank">
             <Button class="flex items-center whitespace-nowrap shadow-none rounded-none">
               Explore More 
               <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-8 md:h-8" />
