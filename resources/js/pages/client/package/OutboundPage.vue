@@ -3,7 +3,7 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
 import OutboundPackageDisplay from './section/OutboundPackageDisplay.vue';
-import { PackageGroup } from '@/types/package';
+import { PackageGroup } from '@/types/group-package';
 
 
 interface Props {
