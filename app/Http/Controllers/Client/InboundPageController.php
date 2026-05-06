@@ -12,8 +12,8 @@ class InboundPageController extends Controller
     public function __construct(protected PackageGroupRepository $repository){}
     public function index()
     {
-        $featuredGroupPackages = $this->repository->getPackageGroupByType('outbound', true);
-        $groupPackages = $this->repository->getPackageGroupByType('outbound', false);
+        $featuredGroupPackages = $this->repository->getPackageGroupByType('inbound', true);
+        $groupPackages = $this->repository->getPackageGroupByType('inbound', false);
 
         $groups = [
             'featured' => $featuredGroupPackages->toArray(),
