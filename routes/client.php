@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Client\ContactPageController;
 use App\Http\Controllers\Client\DestinationPageController;
-use App\Http\Controllers\Client\InboundDestinationController;
+use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\LandingPageController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
@@ -22,7 +22,7 @@ Route::prefix('outbound')->group(function () {
 
 // INBOUND DESTINATIONS
 Route::prefix('inbound')->group(function () {
-    Route::get('/', [InboundDestinationController::class, 'index'])->name('client.inbound');
+    Route::get('/', [InboundPageController::class, 'index'])->name('client.inbound');
 
     Route::prefix('package')->group(function () {
         Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.inbound.package.detail');

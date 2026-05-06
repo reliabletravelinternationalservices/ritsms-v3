@@ -3,13 +3,13 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Icon } from '@iconify/vue'
 import { cn } from '@/lib/utils'
+import { Link } from '@inertiajs/vue3'
 
 interface DropdownItem {
   label: string
@@ -93,9 +93,9 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                     closeDropdown();
                   "
                 >
-                  <a v-if="d.href" :href="d.href" class="block w-full">
+                  <Link v-if="d.href" :href="d.href" class="block w-full">
                     {{ d.label }}
-                  </a>
+                  </Link>
                   <span v-else>{{ d.label }}</span>
                 </div>
               </div>
@@ -110,9 +110,9 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
           <!-- NORMAL LINK -->
           <template v-else>
-            <BreadcrumbLink :href="item.href">
+            <Link :href="item.href?? '#'" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
               {{ item.label }}
-            </BreadcrumbLink>
+            </Link>
           </template>
 
         </BreadcrumbItem>
