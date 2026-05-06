@@ -10,6 +10,7 @@ import { Package } from '@/types/package'
 interface Props {
   isInbound: boolean
   packages?: Package[]
+  usdRate: number | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -66,7 +67,7 @@ const carouselConfig = {
 </script>
 
 <template>
-    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-fit">
+    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
       <Slide v-for="packageData in props.packages" :key="packageData.id">
         <Link :href="isInbound ? route('client.inbound.package.detail', { package: packageData.id }) : route('client.outbound.package.detail', { package: packageData.id })" class="carousel__item">
             <div class=" h-auto md:h-[400px] max-w-[320px] flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white">
@@ -110,7 +111,7 @@ const carouselConfig = {
                             {{ packageData.name }}
                           </h1>
                           <h4 class="font-medium font-roboto text-[10px] md:text-sm text-[var(--muted-custom)] mb-4">
-                            from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(packageData.base_price, isInbound? 'USD' : 'PHP') }}/pax</span>
+                            from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(usdRate? (packageData.base_price/usdRate) : packageData.base_price, isInbound? 'USD' : 'PHP') }}/pax</span>
                           </h4>
                           <p class="font-roboto text-[11px] md:text-sm line-clamp-2 text-gray-600">{{ packageData.description }}</p>
                       </div>

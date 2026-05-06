@@ -4,14 +4,13 @@ import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 
 
-
-
 const props = defineProps<{
     title: string
     description?: string | null
     isFeatured: boolean
     isInbound: boolean
     packages?: Package[] | null
+    usdRate: number | null
 }>();
 
 
@@ -30,7 +29,7 @@ const props = defineProps<{
             <p v-if="description" class="font-roboto text-sm md:text-base">{{ description }}</p>
         </div>
         <div class="w-full">
-            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound" />
+            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound" :usd-rate="usdRate" />
             <span v-else class="flex flex-col items-center justify-center gap-2 w-full h-10 bg-[var(--outbound-opacity-custom-10)]">
                 <p  class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">No packages found</p>
             </span>
