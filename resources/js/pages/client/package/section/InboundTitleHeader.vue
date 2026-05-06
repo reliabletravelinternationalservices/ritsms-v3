@@ -11,7 +11,6 @@ interface BreadcrumbItemType {
 
 const breadcrumbItems: BreadcrumbItemType[] = [
   { label: 'Home', href: '/' },
-  { label: 'Destinations', href: route('client.destination') },
   { label: 'Inbound', href: route('client.inbound'), dropdown: [
     { label: 'Outbound', action: () => { 
         router.get(route('client.outbound'), {}, {
