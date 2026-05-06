@@ -2,10 +2,7 @@
 import Button from '@/components/ui/button/Button.vue';
 import { formatCurrency, formatPackageDateRange, getPackageDurationLabel } from '@/lib/utils';
 import { Package } from '@/types/package';
-import { PackageInUSD } from '@/types/package-usd';
 import { Icon } from '@iconify/vue';
-import { usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
 
 const props = defineProps<{ package: Package, isInbound: boolean, usdRate: number }>();
 

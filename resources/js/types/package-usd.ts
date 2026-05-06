@@ -1,4 +1,4 @@
-import type { Package, PackageSchedule } from './package';
+import type { Package } from './package';
 
 export interface PackageInUSD extends Package {
     base_price: number; // USD price

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
-import { Icon } from '@iconify/vue';
 
 import {
   Accordion,
@@ -12,7 +9,7 @@ import {
 } from '@/components/ui/accordion'
 import { cn } from '@/lib/utils';
 
-const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[], isInbound: boolean }>();
+const props = defineProps<{ package: Package, isInbound: boolean }>();
 </script>
 
 <template>

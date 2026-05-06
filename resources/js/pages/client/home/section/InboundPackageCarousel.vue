@@ -5,7 +5,6 @@ import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Package } from '@/types/package'
-import { Link } from '@inertiajs/vue3'
 
 const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForeign?: boolean }>(), {
   packages: () => [],
