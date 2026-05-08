@@ -2,7 +2,7 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import CountryCarousel from '@/components/CountryCarousel.vue'
-import { Button } from '@/components/ui/button'
+import ExploreButton from '@/components/ExploreButton.vue'
 
 
 interface Destination {
@@ -43,14 +43,7 @@ const images: Destination[] = [
       </div>
 
       <div class="flex justify-start md:justify-end">
-        <span class="border-b border-1 border-[var(--secondary--custom)] text-base md:text-md lg:text-lg font-roboto font-bold text-[var(--secondary-custom)] hover:text-[var(--tertiary-hover-custom)] duration-75">
-          <a href="#">
-            <Button class="flex items-center whitespace-nowrap shadow-none">
-              Explore More 
-              <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-8 md:h-8" />
-            </Button>
-          </a>
-        </span>
+        <ExploreButton title="Explore More" :href="route('client.destination')" />
       </div>
     </div>
 

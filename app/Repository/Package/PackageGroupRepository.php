@@ -49,9 +49,14 @@ class PackageGroupRepository
         return $this->model
             ->where($column, true)
             ->where('is_featured', $isFeatured)
-            ->with(['packages' => function($query) {
-                $query->with('primaryImage');
-            }])
+            ->with(['packages.primaryImage'])
             ->get();
+    }
+
+    public function getPackageGroupByID(int $id): PackageGroup
+    {
+        return $this->model
+            ->with(['image', 'packages.primaryImage']) // Nested eager loading
+            ->findOrFail($id);
     }
 }

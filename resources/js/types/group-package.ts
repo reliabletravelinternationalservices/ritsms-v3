@@ -1,3 +1,4 @@
+import { Media } from "./media";
 import { Package } from "./package";
 
 export interface PackageGroup {
@@ -10,7 +11,7 @@ export interface PackageGroup {
     
     // Relationship
     packages?: Package[];
-    
+    image: Media;
     created_at: string;
     updated_at: string;
 }

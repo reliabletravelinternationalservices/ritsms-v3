@@ -20,6 +20,6 @@ class InboundPageController extends Controller
             'normal' => $groupPackages->toArray(),
         ];
 
-        return Inertia::render('client/package/InboundPage', compact('groups'));
+        return Inertia::render('client/inbound/InboundPage', compact('groups'));
     }
 }

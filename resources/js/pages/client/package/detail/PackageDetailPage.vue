@@ -15,42 +15,31 @@ import PackageExclusion from './section/PackageExclusion.vue';
 import PackageNote from './section/PackageNote.vue';
 import { computed } from 'vue';
 
+
+const props = defineProps<{ 
+    package: Package; 
+    isInbound: boolean; 
+}>();
+
 const page = usePage<Record<string, any>>();
-const props = defineProps<{ package: Package }>();
 
 const dynamicBreadcrumbs = computed((): BreadcrumbItemType[] => {
-    const path = window.location.pathname;
-    const segments = path.split('/').filter(Boolean);
     const crumbs: BreadcrumbItemType[] = [
-        {
-            title: 'Home',
-            href: route('client.landing'),
-        }
+        { title: 'Home', href: route('client.landing') }
     ];
-    if (segments.includes('outbound')) {
-        crumbs.push({
-            title: 'Outbound',
-            href: route('client.outbound'),
-        });
-    } else if (segments.includes('inbound')) {
-        crumbs.push({
-            title: 'Inbound',
-            href: route('client.inbound'),
-        });
+
+    if (props.isInbound) {
+        crumbs.push({ title: 'Inbound', href: route('client.inbound') });
+    } else {
+        crumbs.push({ title: 'Outbound', href: route('client.outbound') });
     }
-    crumbs.push({
-        title: props.package.name,
-        href: '',
-    });
+
+    crumbs.push({ title: props.package.name, href: '' });
+    
     return crumbs;
 });
 
-const isInbound = computed((): boolean => {
-    return dynamicBreadcrumbs.value.some(b => b.title === 'Inbound') ?? false;
-});
-
 const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
-
 </script>
 
 <template>

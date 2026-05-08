@@ -13,7 +13,9 @@ class PackageDetailController extends Controller
     public function __construct(protected PackageRepository $repository){}
     public function index(Package $package)
     {
+        $type  = request()->segment(1);
+        $isInbound = $type === 'inbound' ? true : false;
         $package = $this->repository->getPackageDetails($package->id);
-        return Inertia::render('client/package/PackageDetailPage', compact('package'));
+        return Inertia::render('client/package/detail/PackageDetailPage', compact('package', 'isInbound'));
     }
 }

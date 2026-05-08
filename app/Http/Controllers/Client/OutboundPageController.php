@@ -20,6 +20,6 @@ class OutboundPageController extends Controller
             'normal' => $groupPackages->toArray(),
         ];
 
-        return Inertia::render('client/package/OutboundPage', compact('groups'));
+        return Inertia::render('client/outbound/OutboundPage', compact('groups'));
     }
 }
