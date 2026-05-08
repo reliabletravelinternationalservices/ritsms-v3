@@ -13,6 +13,7 @@ const props = defineProps<{
     isInbound: boolean
     packages?: Package[] | null
     usdRate: number | null
+    href?: string
 }>();
 
 
@@ -31,8 +32,8 @@ const props = defineProps<{
                 <h1 class="font-bold font-montserrat text-xl md:text-2xl uppercase">{{ title }}</h1>
                 <p v-if="description" class="font-roboto text-sm md:text-base">{{ description }}</p>
             </div>
-            <span>
-                <ExploreButton title="Explore All" :href="route('client.' + (isInbound ? 'inbound' : 'outbound'))"/>
+            <span v-if="href">
+                <ExploreButton title="Explore All" :href="href"/>
             </span>
         </div>
         <div class="w-full">
