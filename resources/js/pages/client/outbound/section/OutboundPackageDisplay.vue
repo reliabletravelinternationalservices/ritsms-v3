@@ -35,6 +35,7 @@ const props = defineProps<{
                         :is-featured="false" 
                         :is-inbound="false"
                         :usd-rate="null"
+                        :href="route('client.outbound.package.group', { id: group.id })"
                     />
                 </span>
 

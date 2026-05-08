@@ -25,6 +25,7 @@ const usdRate: number = page.props.settings?.usd_to_php_rate?? null;
                 :is-featured="true" 
                 :is-inbound="true"
                 :usd-rate="usdRate"
+                :href="route('client.inbound.package.group', { id: group.id })"
             />
 
 
@@ -39,6 +40,7 @@ const usdRate: number = page.props.settings?.usd_to_php_rate?? null;
                         :is-featured="false" 
                         :is-inbound="true"
                         :usd-rate="usdRate"
+                        :href="route('client.inbound.package.group', { id: group.id })"
                     />
                 </span>
                 <span v-else class="flex flex-col items-center justify-center gap-2 w-full h-10 bg-[var(--inbound-opacity-custom-10)] mt-8">
