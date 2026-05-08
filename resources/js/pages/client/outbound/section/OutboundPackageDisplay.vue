@@ -21,6 +21,7 @@ const props = defineProps<{
                 :is-featured="true" 
                 :is-inbound="false"
                 :usd-rate="null"
+                :href="route('client.outbound.package.group', { id: group.id })"
             />
 
             <div class="w-full py-12 mt-4">
