@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExploreButton from '@/components/ExploreButton.vue';
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import { Icon } from '@iconify/vue';
@@ -72,14 +73,7 @@ const destinations: DestubationItem[] = [
                 </div>
 
                 <div class="flex justify-start md:justify-end">
-                    <span class="border-b border-1 border-[var(--primary-custom)] text-base md:text-md lg:text-lg font-roboto font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-hover-custom)] hover:border-[var(--tertiary-hover-custom)] duration-75">
-                        <a href="#">
-                            <button class="flex items-center whitespace-nowrap">
-                            Explore More 
-                            <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-8 md:h-8" />
-                            </button>
-                        </a>
-                    </span>
+                    <ExploreButton title="Explore More" href="#" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
                 </div>
             </div>
 
