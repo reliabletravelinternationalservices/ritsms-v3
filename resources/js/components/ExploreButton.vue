@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 
 interface Props {
     title: string;
     href: string;
+    class?: string;
 }
 
 defineProps<Props>();
 </script>
 
 <template>
-    <div class="border-b border-[var(--outbound-custom)] hover:border-[var(--tertiary-custom)] text-[var(--outbound-custom)] hover:text-[var(--tertiary-custom)] duration-75">
+    <div class="border-b border-[var(--outbound-custom)] hover:border-[var(--tertiary-custom)] text-[var(--outbound-custom)] hover:text-[var(--tertiary-custom)] duration-75"
+        :class="class">
         <a :href="href" target="_blank">
             <button type="button" class="flex items-center gap-2 font-roboto italic text-sm">
                 {{ title }}
