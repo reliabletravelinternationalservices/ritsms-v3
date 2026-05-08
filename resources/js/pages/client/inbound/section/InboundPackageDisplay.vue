@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import OutboundFilter from './OutboundFilter.vue';
-import GroupPackage from './GroupPackage.vue';
+import { usePage } from '@inertiajs/vue3';
+import GroupPackage from '@/components/GroupPackage.vue';
+import InboundFilter from './InboundFilter.vue'
 import { PackageGroup } from '@/types/group-package';
 
+const page = usePage<Record<string, any>>();
+
 const props = defineProps<{
-    featuredGroups: PackageGroup[];
-    normalGroups: PackageGroup[];
+  featuredGroups: PackageGroup[];
+  normalGroups: PackageGroup[];
 }>();
 
+const usdRate: number = page.props.settings?.usd_to_php_rate?? null;
 </script>
 
 <template>
@@ -19,11 +23,13 @@ const props = defineProps<{
                 :description="group.description" 
                 :packages="group.packages" 
                 :is-featured="true" 
-                :is-inbound="false"
+                :is-inbound="true"
+                :usd-rate="usdRate"
             />
 
+
             <div class="w-full py-12 mt-4">
-                <OutboundFilter />
+                <InboundFilter />
                 <span v-if="props.normalGroups.length > 0" >
                     <GroupPackage
                         v-for="(group, index) in props.normalGroups" :key="index"
@@ -31,11 +37,11 @@ const props = defineProps<{
                         :description="group.description" 
                         :packages="group.packages" 
                         :is-featured="false" 
-                        :is-inbound="false"
+                        :is-inbound="true"
+                        :usd-rate="usdRate"
                     />
                 </span>
-
-                <span v-else class="flex flex-col items-center justify-center gap-2 w-full h-10 bg-[var(--outbound-opacity-custom-10)] mt-8">
+                <span v-else class="flex flex-col items-center justify-center gap-2 w-full h-10 bg-[var(--inbound-opacity-custom-10)] mt-8">
                     <p  class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">No Group Packages found</p>
                 </span>
             </div>
