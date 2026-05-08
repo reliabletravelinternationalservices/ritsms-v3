@@ -31,4 +31,10 @@ class PackageGroup extends Model
             ->withPivot('order_number')
             ->orderBy('pivot_order_number');
     }
+
+
+    public function image()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
 }
