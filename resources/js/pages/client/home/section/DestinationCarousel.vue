@@ -2,7 +2,6 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import CountryCarousel from '@/components/CountryCarousel.vue'
-import { Button } from '@/components/ui/button'
 import ExploreButton from '@/components/ExploreButton.vue'
 
 

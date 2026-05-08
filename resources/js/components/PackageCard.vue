@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 import { Package } from '@/types/package';
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils';
 
-const props = defineProps<{
+defineProps<{
     package: Package,
     isInbound: boolean
     usdRate?: number | null

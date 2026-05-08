@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ExploreButton from '@/components/ExploreButton.vue';
 import PackageCarousel from '@/components/PackageCarousel.vue';
-import { Button } from '@/components/ui/button';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 

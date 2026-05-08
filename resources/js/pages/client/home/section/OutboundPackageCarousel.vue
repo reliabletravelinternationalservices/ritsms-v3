@@ -2,7 +2,6 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
-import { Button } from '@/components/ui/button'
 import { Package } from '@/types/package';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import ExploreButton from '@/components/ExploreButton.vue';
