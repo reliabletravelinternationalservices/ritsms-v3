@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
             PackageGroupSeeder::class,
             PackageGroupItemSeeder::class,
             SettingSeeder::class,
-            PackageScheduleSeeder::class
+            PackageScheduleSeeder::class,
+            DestinationSeeder::class,
+            DestinationLocationSeeder::class
         ]);
     }
 }

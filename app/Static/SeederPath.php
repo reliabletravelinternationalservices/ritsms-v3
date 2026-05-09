@@ -13,4 +13,7 @@ class SeederPath
     public const SETTINGS = __DIR__.'/../../database/data/settings.json';
 
     public const PACKAGE_SCHEDULES = __DIR__.'/../../database/data/package_schedules.json';
+    public const DESTINATIONS = __DIR__.'/../../database/data/destinations.json';
+
+    public const DESTINATION_LOCATIONS = __DIR__.'/../../database/data/destination_locations.json';
 }

@@ -1,0 +1,134 @@
+[
+  {
+    "destination_id": 1,
+    "name": "Hokkaido, Japan",
+    "description": "Known for its stunning natural landscapes, world-class ski resorts, and fresh seafood markets, offering a perfect escape for nature lovers and adventurers alike.",
+    "map_link": null
+  },
+  {
+    "destination_id": 1,
+    "name": "Tokyo, Japan",
+    "description": "A bustling metropolis where futuristic skyscrapers meet historic temples. Experience the world's busiest crossing at Shibuya and the traditional charm of Asakusa.",
+    "map_link": null
+  },
+  {
+    "destination_id": 1,
+    "name": "Kyoto, Japan",
+    "description": "The cultural heart of Japan, famous for its classical Buddhist temples, Shinto shrines, traditional wooden houses, and beautiful cherry blossom gardens.",
+    "map_link": null
+  },
+  {
+    "destination_id": 2,
+    "name": "Shanghai, China",
+    "description": "A global financial hub featuring the iconic Bund waterfront promenade and the futuristic skyline of the Lujiazui district.",
+    "map_link": null
+  },
+  {
+    "destination_id": 2,
+    "name": "Zhangjiajie, China",
+    "description": "Home to the 'Avatar' Hallelujah Mountains, this forest park features dramatic sandstone peaks and the world's longest glass bridge.",
+    "map_link": null
+  },
+  {
+    "destination_id": 3,
+    "name": "Seoul, South Korea",
+    "description": "A high-tech city where K-Pop culture thrives alongside ancient palaces like Gyeongbokgung and vibrant street markets like Myeongdong.",
+    "map_link": null
+  },
+  {
+    "destination_id": 3,
+    "name": "Nami Island, South Korea",
+    "description": "A picturesque half-moon shaped island famous for its beautiful tree-lined pathways, making it a top romantic destination for all seasons.",
+    "map_link": null
+  },
+  {
+    "destination_id": 4,
+    "name": "Ha Long Bay, Vietnam",
+    "description": "A UNESCO World Heritage site known for its emerald waters and thousands of towering limestone islands topped by rainforests.",
+    "map_link": null
+  },
+  {
+    "destination_id": 4,
+    "name": "Da Nang, Vietnam",
+    "description": "A coastal city famous for its sandy beaches, the Marble Mountains, and the iconic Golden Bridge held by giant stone hands.",
+    "map_link": null
+  },
+  {
+    "destination_id": 4,
+    "name": "Ho Chi Minh City, Vietnam",
+    "description": "A vibrant city known for its French colonial landmarks, war history museums, and bustling street-side food stalls.",
+    "map_link": null
+  },
+  {
+    "destination_id": 5,
+    "name": "Bangkok, Thailand",
+    "description": "A city of contrasts with ornate shrines, vibrant street life, and the famous floating markets that offer a taste of local tradition.",
+    "map_link": null
+  },
+  {
+    "destination_id": 5,
+    "name": "Phuket, Thailand",
+    "description": "Thailand's largest island, boasting some of the most popular beaches in the world and a lively nightlife in Patong.",
+    "map_link": null
+  },
+  {
+    "destination_id": 6,
+    "name": "Bali, Indonesia",
+    "description": "The Island of the Gods, renowned for its highly developed arts, volcanic mountains, iconic rice paddies, and coral reefs.",
+    "map_link": null
+  },
+  {
+    "destination_id": 7,
+    "name": "Paris, France",
+    "description": "The City of Light, offering world-famous landmarks like the Eiffel Tower, the Louvre Museum, and charming cafes along the Seine.",
+    "map_link": null
+  },
+  {
+    "destination_id": 7,
+    "name": "Rome, Italy",
+    "description": "Step back in time in the Eternal City, home to the Colosseum, the Roman Forum, and the spiritual grandeur of Vatican City.",
+    "map_link": null
+  },
+  {
+    "destination_id": 7,
+    "name": "Swiss Alps, Switzerland",
+    "description": "A breathtaking mountain range offering snow-capped peaks, crystal-clear lakes, and luxury alpine resorts for year-round travel.",
+    "map_link": null
+  },
+  {
+    "destination_id": 7,
+    "name": "Amsterdam, Netherlands",
+    "description": "Famous for its elaborate canal system, artistic heritage, and narrow houses with gabled facades.",
+    "map_link": null
+  },
+  {
+    "destination_id": 8,
+    "name": "Hong Kong Island",
+    "description": "A vertical city and major shopping destination featuring Victoria Peak, which offers panoramic views of the world-famous harbor.",
+    "map_link": null
+  },
+  {
+    "destination_id": 9,
+    "name": "El Nido, Philippines",
+    "description": "A tropical paradise in Palawan known for its white-sand beaches, coral reefs, and limestone karst cliffs rising from turquoise lagoons.",
+    "map_link": null
+  },
+  {
+    "destination_id": 9,
+    "name": "Boracay, Philippines",
+    "description": "A small island celebrated for its world-famous White Beach, vibrant sunset sails, and diverse water sports activities.",
+    "map_link": null
+  },
+  {
+    "destination_id": 9,
+    "name": "Siargao, Philippines",
+    "description": "The surfing capital of the Philippines, offering a laid-back island vibe, natural rock pools, and lush coconut palm forests.",
+    "map_link": null
+  },
+  {
+    "destination_id": 9,
+    "name": "Baguio City, Philippines",
+    "description": "The Summer Capital of the Philippines, known for its cool climate, pine trees, and artistic heritage in the Cordillera mountains.",
+    "map_link": null
+  }
+]
