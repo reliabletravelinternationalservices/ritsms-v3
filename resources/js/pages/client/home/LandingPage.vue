@@ -2,9 +2,7 @@
 import CarouselSection from '@/pages/client/home/section/ImageCarousel.vue';
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import type { Package } from '@/types/package';
-import type { PackageInUSD } from '@/types/package-usd';
 import DestinationCarousel from './section/DestinationCarousel.vue';
 import InboundPackageCarousel from './section/InboundPackageCarousel.vue';
 import OutboundPackageCarousel from './section/OutboundPackageCarousel.vue';

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Media } from '@/types/media';
-import { Icon } from '@iconify/vue';
 
 interface Props {
   title: string,

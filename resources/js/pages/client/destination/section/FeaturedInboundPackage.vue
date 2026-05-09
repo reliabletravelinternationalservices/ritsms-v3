@@ -38,7 +38,7 @@ const props = defineProps<Props>();
                 </div>
             </div>
 
-            <ImageDestinationCarousel :destinations="destinations" :is-philippines-only="true" />
+            <ImageDestinationCarousel :destinations="props.destinations" :is-philippines-only="true" />
         </div>
         
         <span class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10">

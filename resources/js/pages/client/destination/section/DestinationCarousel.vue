@@ -39,7 +39,7 @@ const props = defineProps<Props>();
     </div>
 
     <div class="w-full">
-      <CountryCarousel ref="carouselRef" :destinations="destinations"  />
+      <CountryCarousel ref="carouselRef" :destinations="props.destinations"  />
     </div>
   </section>
 </template>
