@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\ContactPageController;
+use App\Http\Controllers\Client\Country\ServiceCountryController;
 use App\Http\Controllers\Client\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\LandingPageController;
@@ -10,7 +11,10 @@ use App\Http\Controllers\Client\Package\PackageGroupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
-Route::get('/destination', [DestinationPageController::class, 'index'])->name('client.destination');
+Route::prefix('destination')->group(function () {
+    Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
+    Route::get('/country', [ServiceCountryController::class, 'index'])->name('client.destination.country');
+});
 
 // OUTBOUND DESTINATIONS
 Route::prefix('outbound')->group(function () {

@@ -43,7 +43,7 @@ const images: Destination[] = [
       </div>
 
       <div class="flex justify-start md:justify-end">
-        <ExploreButton title="Explore More" :href="route('client.destination')" />
+          <ExploreButton title="Explore More" :href="route('client.destination.country')" />
       </div>
     </div>
 
