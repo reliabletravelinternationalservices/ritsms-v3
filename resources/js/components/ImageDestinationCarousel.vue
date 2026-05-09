@@ -3,20 +3,32 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
+import { Destination } from '@/types/destination'
+import { computed } from 'vue'
 
-interface DestubationItem {
-  id: number
-  name: string
-  images: Array<string>
+
+type Props = {
+  destinations: Destination[]
+  isPhilippinesOnly: boolean
 }
 
-interface Props {
-  destinations?: DestubationItem[]
-}
 
 const props = withDefaults(defineProps<Props>(), {
-  destinations: () => []
+  destinations: () => [],
+  isPhilippinesOnly: false
 })
+
+
+// ✅ Filtered Destinations logic
+const filteredDestinations = computed(() => {
+  if (props.isPhilippinesOnly) {
+    return props.destinations.filter(
+      (dest) => dest.country.toLowerCase() === 'philippines'
+    )
+  }
+  return props.destinations
+})
+
 
 // ✅ active selected destination
 const selectedImage = ref(0)
@@ -69,15 +81,22 @@ const carouselConfig2 = {
     <!-- ✅ MAIN CAROUSEL -->
     <Carousel ref="carouselRef2" v-bind="carouselConfig2" class="w-full">
       <Slide
-        v-for="(destimage, index) in props.destinations[selectedImage]?.images"
+        v-for="(destLocation, index) in filteredDestinations[selectedImage]?.locations"
         :key="index"
       >
         <div class="h-[300px] md:h-[500px] w-full relative">
           <img
-            :src="destimage"
-            :alt="props.destinations[selectedImage]?.name"
+            v-if="destLocation.image?.url"
+            :src="destLocation.image.url"
+            :alt="props.destinations[selectedImage]?.image.alt_text"
             class="w-full h-full object-cover object-center"
           />
+          <div
+            v-else
+            class="w-full h-full bg-gray-200 flex items-center justify-center"
+          >
+            <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
+          </div>  
         </div>
       </Slide>
 
@@ -102,7 +121,7 @@ const carouselConfig2 = {
     <!-- ✅ THUMBNAIL CAROUSEL -->
     <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full mt-3">
       <Slide
-        v-for="(destination, index) in props.destinations"
+        v-for="(destination, index) in filteredDestinations"
         :key="destination.id"
       >
         <div
@@ -115,16 +134,23 @@ const carouselConfig2 = {
           <!-- overlay -->
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
             <span class="text-white text-xs md:text-sm font-bold uppercase border px-2 border-[var(--tertiary-custom)]">
-              {{ destination.name }}
+              {{ destination.country }}
             </span>
           </div>
 
           <!-- image -->
           <img
-            :src="destination.images[0]"
-            :alt="destination.name"
+            v-if="destination.image?.url"
+            :src="destination.image?.url"
+            :alt="destination.image.alt_text"
             class="w-full h-full object-cover"
           />
+          <div
+            v-else
+            class="w-full h-full bg-gray-200 flex items-center justify-center"
+          >
+            <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
+          </div>
         </div>
       </Slide>
 

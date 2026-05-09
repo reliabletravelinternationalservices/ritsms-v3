@@ -3,20 +3,14 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
-
-interface DestubationItem {
-  id: number
-  name: string
-  image_path: string
-}
+import CountryCard from './CountryCard.vue'
+import { Destination } from '@/types/destination'
 
 interface Props {
-  destinations?: DestubationItem[]
+  destinations: Destination[]
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  destinations: () => []
-})
+const props = defineProps<Props>();
 
 const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
 
@@ -49,24 +43,7 @@ const carouselConfig = {
 <template>
     <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
       <Slide v-for="destination in props.destinations" :key="destination.id">
-        <div class="carousel__item h-[400px] md:h-[500px] w-full relative">
-            <div class="h-full w-full absolute top-0 left-0 bg-black/40 flex items-end p-6 md:p-8">
-                <div class="border-l-4 border-[var(--tertiary-custom)] pl-2 text-left">
-                    <span class="flex items-end justify-start">
-                        <Icon icon="mdi:map-marker" width="22" height="22" class="text-[var(--tertiary-custom)] md:w-[26px] md:h-[26px]" />
-                        <h3 class="font-bold font-montserrat text-base md:text-lg text-[var(--tertiary-custom)]">{{ destination.name }}</h3>
-                    </span>
-                    <span class="flex items-end justify-start">
-                        <p class="text-[var(--primary-custom)] font-roboto text-sm md:text-base">4 Destinations</p>
-                    </span>
-                </div>
-            </div>
-          <img 
-            :src="destination.image_path" 
-            :alt="destination.name"
-            class="w-full h-full object-cover"
-          />
-        </div>
+        <CountryCard :destination="destination" :href="route('client.destination')" />
       </Slide>
 
       <template #addons>
