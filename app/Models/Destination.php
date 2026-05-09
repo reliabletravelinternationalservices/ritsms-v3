@@ -12,6 +12,7 @@ class Destination extends Model
         'title',
         'description',
         'country',
+        'tag',
     ];
 
 

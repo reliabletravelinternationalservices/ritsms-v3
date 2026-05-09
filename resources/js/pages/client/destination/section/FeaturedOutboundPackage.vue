@@ -1,53 +1,14 @@
 <script setup lang="ts">
 import ExploreButton from '@/components/ExploreButton.vue';
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue';
+import { Destination } from '@/types/destination';
 import { Icon } from '@iconify/vue';
 
-interface DestubationItem {
-  id: number
-  name: string
-  images: Array<string>
+interface Props {
+    destinations: Destination[]
 }
 
-
-const destinations: DestubationItem[] = [
-  { 
-    id: 1, 
-    name: 'Europe', 
-    images: [
-        'https://blog.dookinternational.com/images/post-media/ulQFe1712299016.jpg',
-        'https://i.ytimg.com/vi/BZLZyX3JdEM/maxresdefault.jpg',
-        'https://avkasholidays.wordpress.com/wp-content/uploads/2015/06/eiffel-tower-paris-france-01.jpg',
-    ] 
-  },
-  { 
-    id: 2, 
-    name: 'Japan', 
-    images: [
-        'https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/shutterstock601341215huge-1675509836757.jpg',
-        'https://ik.imagekit.io/tvlk/blog/2024/10/Screenshot-2024-10-08-at-15.40.25-1024x674.jpg?tr=q-70,c-at_max,w-1000,h-600',
-        'https://ik.imagekit.io/tvlk/blog/2024/04/shutterstock_2295299767.jpg?tr=q-70,c-at_max,w-1000,h-600',
-    ] 
-   },
-  { 
-    id: 3, 
-    name: 'South Korea', 
-    images: [
-        'https://ik.imagekit.io/tvlk/blog/2025/01/Screenshot-2025-01-07-at-00.24.37.jpg?tr=q-70,c-at_max,w-1000,h-600',
-        'https://www.onthegotours.com/repository/Gyeongbokgung-palace-in-autumn-Seoul--South-Korea--On-The-Go-Tours-324891477495442.jpg',
-        'https://d3hne3c382ip58.cloudfront.net/files/uploads/bookmundi/resized/cmsfeatured/things-to-do-in-south-korea-1533196984-785X440.jpg',
-    ] 
-  },
-  { 
-    id: 4, 
-    name: 'Vietnam', 
-    images: [
-        'https://media.viacation.com/blogs/ce6721c4cbae4110ae0c7.jpg',
-        'https://static.toiimg.com/photo/110640920.cms',
-        'https://www.crazysexyfuntraveler.com/wp-content/uploads/2018/11/The-magical-Halong-Bay.jpg',
-    ] 
-  },
-]
+const props = defineProps<Props>();
 
 </script>
 
@@ -75,7 +36,7 @@ const destinations: DestubationItem[] = [
                 </div>
             </div>
 
-            <ImageDestinationCarousel :destinations="destinations" />
+            <ImageDestinationCarousel :destinations="props.destinations" :is-philippines-only="false" />
         </div>
         
         <span class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10">

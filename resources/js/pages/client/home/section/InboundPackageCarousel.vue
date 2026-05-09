@@ -6,8 +6,14 @@ import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import { Package } from '@/types/package'
 import ExploreButton from '@/components/ExploreButton.vue'
 
-const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForeign?: boolean }>(), {
+interface Props {
+  packages?: Package[],
+  validOnlyForForeign?: boolean
+  usdRate?: number | null
+}
+const props = withDefaults(defineProps<Props>(), {
   packages: () => [],
+  usdRate: null,
   validOnlyForForeign: false
 });
 
@@ -40,7 +46,7 @@ const props = withDefaults(defineProps<{ packages?: Package[], validOnlyForForei
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="true"  :packages="props.packages" :usd-rate="null" />
+        <PackageCarousel :is-inbound="true"  :packages="props.packages" :usd-rate="props.usdRate" />
     </div>
   </section>
 </template>

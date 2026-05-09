@@ -6,6 +6,13 @@ import TitleHeader from './section/TitleHeader.vue';
 import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
 import FeaturedOutboundPackage from './section/FeaturedOutboundPackage.vue';
 import InquiryForm from '../home/section/InquiryForm.vue';
+import { Destination } from '@/types/destination';
+
+interface Props {
+    destinations: Destination[];
+}
+
+const props = defineProps<Props>();
 
 </script>
 
@@ -13,9 +20,9 @@ import InquiryForm from '../home/section/InquiryForm.vue';
     <Head title="Explore Most Popular Destinations" />
     <AppLayout>
         <TitleHeader />
-        <DestinationCarousel />
-        <FeaturedInboundPackage />
-        <FeaturedOutboundPackage />
+        <DestinationCarousel :destinations="props.destinations" />
+        <FeaturedInboundPackage :destinations="destinations" />
+        <FeaturedOutboundPackage :destinations="destinations" />
         <InquiryForm />
     </AppLayout>     
 </template>

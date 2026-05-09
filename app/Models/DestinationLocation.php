@@ -22,4 +22,9 @@ class DestinationLocation extends Model
     {
         return $this->belongsTo(Destination::class, 'destination_id');
     }
+
+    public function image()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
 }
