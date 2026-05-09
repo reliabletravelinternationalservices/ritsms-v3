@@ -2,53 +2,14 @@
 import ExploreButton from '@/components/ExploreButton.vue';
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
+import { Destination } from '@/types/destination';
 import { Icon } from '@iconify/vue';
 
-interface DestubationItem {
-  id: number
-  name: string
-  images: Array<string>
+interface Props {
+    destinations: Destination[]
 }
 
-
-const destinations: DestubationItem[] = [
-  { 
-    id: 1, 
-    name: 'Boracay', 
-    images: [
-        'https://www.travelandtourworld.com/wp-content/uploads/2025/07/Boracays-White-Beach.jpg',
-        'https://www.exploreshaw.com/wp-content/uploads/2019/04/DSCF9807.jpg',
-        'https://lh4.googleusercontent.com/YzSscGxPCL74oOAQTBFdjZor8jFPdn-XtVTuFwDJmKrTqsZxQ0DnNHFogWSBRquTv1bKkA_suLix8nw1qcTGJ_F4wvSIHK5E2780BMFSQ7Bml5NAWdMs-_3uF2wsEOO9KySm71dWLItbSVVPdQ',
-    ] 
-  },
-  { 
-    id: 2, 
-    name: 'Palawan', 
-    images: [
-        'https://philippinetourismusa.com/wp-content/uploads/2019/05/palawan-slider-min.jpg',
-        'https://thehappytrip.com/wp-content/uploads/2018/08/1024px-Puerto_Princesa_Subterranean_River_National_park_01.jpg',
-        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/cb/a6/63/re-discovering-my-fave.jpg?w=1200&h=700&s=1',
-    ] 
-   },
-  { 
-    id: 3, 
-    name: 'Batangas', 
-    images: [
-        'https://thehappytrip.com/wp-content/uploads/2019/03/taal-3259871_960_720.jpg',
-        'https://www.agoda.com/wp-content/uploads/2024/06/Featured-Tagaytay-Taal-Volcano-1244x700.jpg',
-        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0b/c3/1a/96/what-a-beautiful-sunny.jpg?w=500&h=-1&s=1',
-    ] 
-  },
-  { 
-    id: 4, 
-    name: 'Baguio', 
-    images: [
-        'https://thehappytrip.com/wp-content/uploads/2015/02/21034288_10154874698388017_8994094350056208787_n.jpg',
-        'https://static.tripzilla.ph/media/92692/conversions/free-tourist-spots-baguio-w1024.webp',
-        'https://www.brittany.com.ph/wp-content/uploads/2023/05/Igorot-Stone-Kingdom.jpg',
-    ] 
-  },
-]
+const props = defineProps<Props>();
 
 </script>
 
@@ -77,7 +38,7 @@ const destinations: DestubationItem[] = [
                 </div>
             </div>
 
-            <ImageDestinationCarousel :destinations="destinations" />
+            <ImageDestinationCarousel :destinations="destinations" :is-philippines-only="true" />
         </div>
         
         <span class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10">
