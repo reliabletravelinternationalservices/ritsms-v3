@@ -5,6 +5,7 @@ use App\Http\Controllers\Client\Country\ServiceCountryController;
 use App\Http\Controllers\Client\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\LandingPageController;
+use App\Http\Controllers\Client\Location\LocationController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
 use App\Http\Controllers\Client\Package\PackageGroupController;
@@ -13,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
 Route::prefix('destination')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
-    Route::get('/country', [ServiceCountryController::class, 'index'])->name('client.destination.country');
+    Route::prefix('country')->group(function () {
+        Route::get('/', [ServiceCountryController::class, 'index'])->name('client.destination.country');
+        Route::get('/{destination}', [LocationController::class, 'index'])->name('client.destination.country.destination');
+    });
 });
 
 // OUTBOUND DESTINATIONS

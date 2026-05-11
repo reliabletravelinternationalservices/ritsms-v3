@@ -43,7 +43,7 @@ const carouselConfig = {
 <template>
     <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
       <Slide v-for="destination in props.destinations" :key="destination.id">
-        <CountryCard :destination="destination" :href="route('client.destination')" />
+        <CountryCard :destination="destination" :href="route('client.destination.country.destination', { destination: destination.id})" />
       </Slide>
 
       <template #addons>
