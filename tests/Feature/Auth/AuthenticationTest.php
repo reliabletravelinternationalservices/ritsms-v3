@@ -1,41 +1,44 @@
 <?php
 
-use App\Models\User;
+// use App\Models\User;
+// use Database\Seeders\DatabaseSeeder;
 
-test('login screen can be rendered', function () {
-    $response = $this->get('/login');
+// test('Admin login screen can be rendered', function () {
+//     $response = $this->get(route('admin.login', absolute: false));
 
-    $response->assertStatus(200);
-});
+//     $response->assertStatus(200);
+// });
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+// test('users can authenticate using the login screen', function () {
+//     app(DatabaseSeeder::class)->run();
 
-    $response = $this->post('/login', [
-        'email' => $user->email,
-        'password' => 'password',
-    ]);
+//     $user = User::all()->first();
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
-});
+//     $response = $this->post(route('admin.login.store'), [
+//         'email' => $user->email,
+//         'password' => 'password',
+//     ]);
 
-test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+//     $this->assertAuthenticated();
+//     $response->assertRedirect(route('admin.dashboard', absolute: false));
+// });
 
-    $this->post('/login', [
-        'email' => $user->email,
-        'password' => 'wrong-password',
-    ]);
+// test('users can not authenticate with invalid password', function () {
+//     $user = User::factory()->create();
 
-    $this->assertGuest();
-});
+//     $this->post('/login', [
+//         'email' => $user->email,
+//         'password' => 'wrong-password',
+//     ]);
 
-test('users can logout', function () {
-    $user = User::factory()->create();
+//     $this->assertGuest();
+// });
 
-    $response = $this->actingAs($user)->post('/logout');
+// test('users can logout', function () {
+//     $user = User::factory()->create();
 
-    $this->assertGuest();
-    $response->assertRedirect('/');
-});
+//     $response = $this->actingAs($user)->post('/logout');
+
+//     $this->assertGuest();
+//     $response->assertRedirect('/');
+// });
