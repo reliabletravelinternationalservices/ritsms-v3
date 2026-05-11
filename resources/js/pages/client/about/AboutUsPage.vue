@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { Destination } from '@/types/destination';
 import TitleHeader from './section/TitleHeader.vue';
 import AgencyRating from './section/AgencyRating.vue';
 import AgencyVideo from './section/AgencyVideo.vue';
