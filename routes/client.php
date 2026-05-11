@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\About\AboutUsController;
 use App\Http\Controllers\Client\ContactPageController;
 use App\Http\Controllers\Client\Country\ServiceCountryController;
 use App\Http\Controllers\Client\DestinationPageController;
@@ -49,3 +50,4 @@ Route::prefix('inbound')->group(function () {
 
 
 Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
+Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');

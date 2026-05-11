@@ -6,11 +6,17 @@ import Input from '@/components/ui/input/Input.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Button from '@/components/ui/button/Button.vue';
 
+interface Props {
+    class?: string
+}
+
+const prop = defineProps<Props>();
 
 </script>
 
 <template>
-  <section class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center min-h-screen md:min-h-[800px] lg:min-h-[1100px] py-12 px-4 md:px-6">
+  <section class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center py-24 px-4 md:px-6"
+    :class="prop.class">
     
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div class="w-full md:w-3/4 space-y-2">

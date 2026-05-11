@@ -22,7 +22,7 @@ const isMobileMenuOpen = ref(false);
                     <Link :href="route('client.landing')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"><span>Home</span></Link>
                     <Link :href="route('client.destination')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"><span>Destinations</span></Link>
                     <Link :href="route('client.contact')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })"><span>Contact us</span></Link>
-                    <Link href="#" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })"><span>About us</span></Link>
+                    <Link :href="route('client.about')" :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })"><span>About us</span></Link>
                 </nav>
 
                 <div class="hidden md:flex items-center">
@@ -47,7 +47,7 @@ const isMobileMenuOpen = ref(false);
                     <Link :href="route('client.landing')" class="text-[var(--tertiary-custom)] font-bold">Home</Link>
                     <Link :href="route('client.destination')" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Destinations</Link>
                     <Link :href="route('client.contact')" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Contact us</Link>
-                    <Link href="#" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">About us</Link>
+                    <Link :href="route('client.about')" class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">About us</Link>
                     <hr class="border-[var(--shadow-custom)]" />
                     <Link href="#">
                         <Button class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]">

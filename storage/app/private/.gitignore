@@ -1,2 +1,5 @@
 *
+!upload/
+!upload/**
+
 !.gitignore
