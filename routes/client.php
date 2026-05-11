@@ -5,7 +5,7 @@ use App\Http\Controllers\Client\ContactPageController;
 use App\Http\Controllers\Client\Country\ServiceCountryController;
 use App\Http\Controllers\Client\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
-use App\Http\Controllers\Client\LandingPageController;
+use App\Http\Controllers\Client\Home\LandingPageController;
 use App\Http\Controllers\Client\Location\LocationController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
