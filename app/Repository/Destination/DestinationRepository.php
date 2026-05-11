@@ -23,7 +23,7 @@ class DestinationRepository
     public function getDestinationByID(int $id)
     {
         // This executes 1 query for destination + 2 queries for relations
-        return Destination::with(['locations', 'image'])->findOrFail($id);
+        return Destination::with(['locations', 'image', 'locations.image'])->findOrFail($id);
     }
 
     public function getAllDestinations()
