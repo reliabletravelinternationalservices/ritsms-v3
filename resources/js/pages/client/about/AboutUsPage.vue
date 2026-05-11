@@ -12,12 +12,6 @@ import InquiryForm from '../home/section/InquiryForm.vue';
 import SocialMedia from '../contact/section/SocialMedia.vue';
 import AgencyFaq from '../contact/section/AgencyFaq.vue';
 
-interface Props {
-    destinations: Destination[];
-}
-
-const props = defineProps<Props>();
-
 </script>
 
 <template>
