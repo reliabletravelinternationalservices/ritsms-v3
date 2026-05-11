@@ -11,7 +11,7 @@ const props = defineProps<Props>();
 <template>
     <section class="w-full">
         <div class="max-w-5xl m-auto py-8 flex flex-col gap-6">
-            <span v-for="location in props.locations" class="w-full h-[440px] flex flex-col gap-4" >
+            <span v-for="location in props.locations" :key="location.id" class="w-full h-[440px] flex flex-col gap-4" >
                 <img v-if="location.image && location.image?.url" :src="location.image.url" :alt="location.image.alt_text" class="w-full h-full object-cover shadow-md">
                 <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
                     <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
