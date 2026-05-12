@@ -7,25 +7,46 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { iconLoaded } from '@iconify/vue';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
+        href: route('admin.dashboard'),
+        icon: 'si:grid-duotone',
+    },
+    {
+        title: 'Packages',
+        href: route('admin.dashboard'),
+        icon: 'carbon:white-paper',
+    },
+    {
+        title: 'Bookings',
+        href: route('admin.dashboard'),
+        icon: 'ant-design:book-outlined',
+    },
+    {
+        title: 'Inquiries',
+        href: route('admin.dashboard'),
+        icon: 'ix:inquiry',
+    },
+    {
+        title: 'Logs',
+        href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
+        icon: 'streamline-sharp:reset-clock',
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
+        href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
+        icon: 'mdi:github',
     },
     {
         title: 'Documentation',
         href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        icon: 'tabler:book',
     },
 ];
 </script>
@@ -36,7 +57,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="route('dashboard')">
+                        <Link :href="route('admin.dashboard')">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
