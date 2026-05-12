@@ -7,7 +7,6 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
-import { iconLoaded } from '@iconify/vue';
 
 const mainNavItems: NavItem[] = [
     {
@@ -17,7 +16,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Packages',
-        href: route('admin.dashboard'),
+        href: route('admin.packages'),
         icon: 'carbon:white-paper',
     },
     {

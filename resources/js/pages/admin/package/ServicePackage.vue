@@ -9,6 +9,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Dashboard',
         href: route('admin.dashboard'),
     },
+    {
+        title: 'Packages',
+        href: route('admin.packages'),
+    },
 ];
 
 defineProps<{
