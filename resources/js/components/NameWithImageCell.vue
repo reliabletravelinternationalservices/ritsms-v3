@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { formatCurrency } from '@/lib/utils';
 import { Media } from '@/types/media';
 import { Icon } from '@iconify/vue';
 

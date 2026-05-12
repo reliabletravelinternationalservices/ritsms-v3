@@ -237,24 +237,29 @@ const columns = [
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                v-if="table.getRowModel().rows.length > 0"
-                                v-for="row in table.getRowModel().rows"
-                                :key="row.id"
-                            >
-                                <td
-                                    v-for="cell in row.getVisibleCells()"
-                                    :key="cell.id"
-                                    class="border px-4 py-2"
+                            <template v-if="table.getRowModel().rows.length > 0">
+                                <tr
+                                    v-for="row in table.getRowModel().rows"
+                                    :key="row.id"
                                 >
-                                    <FlexRender
-                                        :render="cell.column.columnDef.cell"
-                                        :props="cell.getContext()"
-                                    />
-                                </td>
-                            </tr>
+                                    <td
+                                        v-for="cell in row.getVisibleCells()"
+                                        :key="cell.id"
+                                        class="border px-4 py-2"
+                                    >
+                                        <FlexRender
+                                            :render="cell.column.columnDef.cell"
+                                            :props="cell.getContext()"
+                                        />
+                                    </td>
+                                </tr>
+                            </template>
+
                             <tr v-else>
-                                <td :colspan="columns.length" class="border px-4 py-2 text-center text-sm text-muted-foreground italic">
+                                <td
+                                    :colspan="columns.length"
+                                    class="border px-4 py-2 text-center text-sm text-muted-foreground italic"
+                                >
                                     No Package Found...
                                 </td>
                             </tr>

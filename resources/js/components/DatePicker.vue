@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DateFormatter, getLocalTimeZone, today } from '@internationalized/date'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { CalendarIcon } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { Button } from '@/components/ui/button'

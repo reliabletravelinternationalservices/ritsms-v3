@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { formatCurrency } from '@/lib/utils';
-import { Icon } from '@iconify/vue';
 
 interface Props {
     destination: string;
