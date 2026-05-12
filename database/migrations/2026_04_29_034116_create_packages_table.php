@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('base_price', 10, 2);
             $table->decimal('down_payment', 10, 2);
             $table->integer('duration');
-            $table->date('selling_start_date');
-            $table->date('selling_end_date')->nullable();
+            $table->date('selling_start_date')->nullable(); 
+            $table->date('selling_end_date');
             $table->text('description');
             $table->text('highlights')->nullable();
             $table->json('itineraries');
