@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-vue-next';
+
 
 export interface Auth {
     user: User;
@@ -12,7 +12,7 @@ export interface BreadcrumbItem {
 export interface NavItem {
     title: string;
     href: string;
-    icon?: LucideIcon;
+    icon?: string;
     isActive?: boolean;
 }
 
