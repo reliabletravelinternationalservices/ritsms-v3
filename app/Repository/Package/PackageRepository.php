@@ -64,4 +64,9 @@ class PackageRepository
     {
         return $this->model->with('schedules')->findOrFail($id);
     }
+
+    public function getPackages(): Collection
+    {
+        return $this->model->with('primaryImage', 'schedules', 'packageGroups')->get();
+    }
 }
