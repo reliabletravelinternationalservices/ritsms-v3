@@ -23,8 +23,7 @@ interface Props {
     packages: Package[];
 }
 
-
-const props = defineProps<Props>();
+defineProps<Props>();
 
 
 </script>

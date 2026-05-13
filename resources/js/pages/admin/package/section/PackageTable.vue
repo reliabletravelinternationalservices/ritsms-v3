@@ -5,7 +5,6 @@ import NameWithImageCell from '@/components/NameWithImageCell.vue';
 import PriceCell from '@/components/PriceCell.vue';
 import StatusIndicatorCell from '@/components/StatusIndicatorCell.vue';
 import { Input } from '@/components/ui/input';
-import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 
@@ -23,16 +22,6 @@ import DatePicker from '@/components/DatePicker.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Link } from '@inertiajs/vue3';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('admin.dashboard'),
-    },
-    {
-        title: 'Packages',
-        href: route('admin.packages'),
-    },
-];
 
 interface Props {
     packages: Package[];

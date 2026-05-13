@@ -3,18 +3,12 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
-
-import { Button } from '@/components/ui/button';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-
 import Label from '@/components/ui/label/Label.vue';
 import Input from '@/components/ui/input/Input.vue';
 import InputError from '@/components/InputError.vue';
-import { Icon } from '@iconify/vue';
 import CurrencyInput from '@/components/CurrencyInput.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
-import Tooltip from '@/components/ui/tooltip/Tooltip.vue';
-import TooltipContent from '@/components/ui/tooltip/TooltipContent.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
 import SwitchWithLabel from '@/components/SwitchWithLabel.vue';
 
