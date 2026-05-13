@@ -104,13 +104,13 @@ const submit = () => {
                         </div>
                         <div class="grid gap-6 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="tag">Base Price</Label>
+                                <Label for="base_price">Base Price</Label>
                                 <CurrencyInput id="base_price" class="mt-1 block w-full" :v-model="form.base_price" required autocomplete="base_price" placeholder="0.00" />
                                 <InputError class="mt-2" :message="form.errors.tag" />
                             </div>
                             <div class="grid gap-2">
-                                <Label for="tag">Down Payment <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
-                                <CurrencyInput id="base_price" class="mt-1 block w-full" :v-model="form.base_price" required autocomplete="base_price" placeholder="0.00" />
+                                <Label for="down_payment">Down Payment <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
+                                <CurrencyInput id="down_payment" class="mt-1 block w-full" :v-model="form.base_price" required autocomplete="down_payment" placeholder="0.00" />
                                 <InputError class="mt-2" :message="form.errors.tag" />
                             </div>
                         </div>
@@ -142,26 +142,26 @@ const submit = () => {
                         </div>
                         <div class="grid gap-2 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="tag">Selling Start Date <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
+                                <Label for="selling_start_date">Selling Start Date <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
                                 <Input
-                                    id="tag"
+                                    id="selling_start_date"
                                     type="date"
                                     class="mt-1 block w-full"
                                     :v-model="form.selling_start_date"
-                                    autocomplete="tag"
+                                    autocomplete="selling_start_date"
                                     required
                                     placeholder="e.g. Group tour"
                                 />
                                 <InputError class="mt-2" :message="form.errors.tag" />
                             </div>
                             <div class="grid gap-2">
-                                <Label for="tag">Selling End Date</Label>
+                                <Label for="selling_end_date">Selling End Date</Label>
                                 <Input
-                                    id="tag"
+                                    id="selling_end_date"
                                     type="date"
                                     class="mt-1 block w-full"
                                     :v-model="form.selling_end_date"
-                                    autocomplete="tag"
+                                    autocomplete="selling_end_date"
                                     required
                                     placeholder="e.g. Group tour"
                                 />
