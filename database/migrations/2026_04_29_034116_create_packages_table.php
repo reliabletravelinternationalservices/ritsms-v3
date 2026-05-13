@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('tag')->nullable(); //for label Group tour.. Individual tour.. etc
             $table->decimal('base_price', 10, 2);
-            $table->decimal('down_payment', 10, 2);
+            $table->decimal('down_payment', 10, 2)->nullable();
             $table->integer('duration');
             $table->date('selling_start_date')->nullable(); 
             $table->date('selling_end_date');
