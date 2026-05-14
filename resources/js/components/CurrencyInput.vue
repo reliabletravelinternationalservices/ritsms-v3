@@ -18,15 +18,26 @@ const emit = defineEmits<{
 
 const displayValue = computed({
     get() {
-        if (!props.modelValue) return '';
+        if (
+            props.modelValue === null ||
+            props.modelValue === undefined ||
+            props.modelValue === ''
+        ) {
+            return '';
+        }
 
         return Number(props.modelValue).toLocaleString('en-PH');
     },
 
     set(value: string) {
-        const numeric = Number(value.replace(/,/g, ''));
+        const cleaned = value.replace(/[^\d]/g, '');
 
-        emit('update:modelValue', isNaN(numeric) ? 0 : numeric);
+        const numeric = Number(cleaned);
+
+        emit(
+            'update:modelValue',
+            isNaN(numeric) ? 0 : numeric
+        );
     },
 });
 </script>
@@ -36,11 +47,16 @@ const displayValue = computed({
         <span
             class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
         >
-            <Icon icon="mdi:currency-php" class="text-xl" />
+            <Icon
+                icon="mdi:currency-php"
+                class="text-xl"
+            />
         </span>
 
         <Input
-            type="number"
+            v-bind="$attrs"
+            type="text"
+            inputmode="numeric"
             class="pl-10"
             v-model="displayValue"
             :placeholder="placeholder"
