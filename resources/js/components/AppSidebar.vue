@@ -15,8 +15,17 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Packages',
-        href: route('admin.packages'),
-        icon: 'carbon:white-paper',
+        icon: 'lucide:package',
+        children: [
+            {
+                title: 'All Packages',
+                href:  route('admin.packages'),
+            },
+            {
+                title: 'Groups',
+                href: route('admin.packages.groups'),
+            },
+        ],
     },
     {
         title: 'Bookings',
