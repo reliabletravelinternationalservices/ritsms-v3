@@ -21,11 +21,11 @@ return new class extends Migration
             $table->date('selling_start_date')->nullable(); 
             $table->date('selling_end_date');
             $table->text('description');
-            $table->text('highlights')->nullable();
+            $table->json('highlights');
             $table->json('itineraries');
             $table->text('inclusions');
             $table->text('exclusions');
-            $table->text('notes')->nullable();
+            $table->json('notes')->nullable();
             $table->string('destination');
             $table->string('season');
             $table->boolean('is_foreign_only')->default(false);

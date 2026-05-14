@@ -5,31 +5,27 @@ namespace Database\Seeders;
 use App\Helpers\Json\JsonHelper;
 use App\Repository\Package\PackageRepository;
 use App\Static\SeederPath;
+use Database\Data\PackageData;
 use Illuminate\Database\Seeder;
 
 class PackageSeeder extends Seeder
 {
-    public function __construct(
-        protected PackageRepository $repository,
-        protected JsonHelper $jsonHelper,
-        protected SeederPath $path
-    ) {}
+    public function __construct(protected PackageRepository $repository) {}
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $packages = $this->jsonHelper
-            ->convertToCollection($this->path::PACKAGES)
+        $packages = include database_path('data/packages.php');
+
+        $packages = collect($packages)
             ->map(function ($package) {
-
-                $package['highlights'] = build_text_block($package['highlights'] ?? []);
-                $package['inclusions'] = build_text_block($package['inclusions'] ?? []);
-                $package['exclusions'] = build_text_block($package['exclusions'] ?? []);
-                $package['notes'] = build_text_block($package['notes'] ?? []);
-                $package['itineraries'] = build_json_block($package['itineraries'] ?? []);
-
+                $package['highlights'] = parse_textarea($package['highlights']);
+                $package['inclusions'] = parse_textarea($package['inclusions']);
+                $package['exclusions'] = parse_textarea($package['exclusions']);
+                $package['notes'] = parse_textarea($package['notes']);
+                $package['itineraries'] = parse_itineraries($package['itineraries']);
                 return $package;
             })
             ->all();
