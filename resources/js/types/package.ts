@@ -21,7 +21,7 @@ export interface Package {
     exclusions_array: string[];
     notes_array: string[];
     destination: string;
-    season: 'spring' | 'winter' | 'autumn' | 'summer';
+    season: string
     is_featured: boolean;
     is_foreign_only?: boolean;
     primary_image?: Media;

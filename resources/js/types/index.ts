@@ -9,11 +9,19 @@ export interface BreadcrumbItem {
     href: string;
 }
 
-export interface NavItem {
+export interface NavChildItem {
     title: string;
     href: string;
+    isActive?: boolean;
+}
+
+export interface NavItem {
+    title: string;
+    href?: string;
     icon?: string;
     isActive?: boolean;
+
+    children?: NavChildItem[];
 }
 
 export interface SharedData {

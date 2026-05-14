@@ -73,8 +73,8 @@ const columns = [
         maxSize: 300,
         cell: (info: CellContext<Package, unknown>) =>
             h(PriceCell, {
-                price: info.row.original.base_price,
-                downPayment: info.row.original.down_payment,
+                price: Number(info.row.original.base_price),
+                downPayment: Number(info.row.original.down_payment),
             }),
     },
     {
