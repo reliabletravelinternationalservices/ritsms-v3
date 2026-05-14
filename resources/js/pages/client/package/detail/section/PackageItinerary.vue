@@ -24,7 +24,7 @@ const props = defineProps<{ package: Package, isInbound: boolean }>();
                 class="border border-[var(--shadow-custom)] px-6 mb-1"
             >
                 <AccordionTrigger class="hover:no-underline">
-                    <span class="font-bold text-[var(--secondary-custom)]">Day {{ item.day }} {{ item.title }}</span>
+                    <span class="font-bold text-[var(--secondary-custom)]">Day {{ item.day }}: {{ item.title }}</span>
                 </AccordionTrigger>
                 
                 <AccordionContent>
