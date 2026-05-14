@@ -52,6 +52,16 @@ class CreatePackageRequest extends FormRequest
         return $this->customErrorMessages();
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'highlights' => $this->highlights ? parse_textarea($this->highlights) : null,
+            'inclusions' => $this->inclusions ? parse_textarea($this->inclusions) : null,
+            'exclusions' => $this->exclusions ? parse_textarea($this->exclusions) : null,
+            'itineraries' => $this->itineraries ? parse_itineraries($this->itineraries) : null,
+            'notes' => $this->notes ? parse_textarea($this->notes) : null,
+        ]);
+    }
 
     protected function failedAuthorization()
     {
