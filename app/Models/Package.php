@@ -65,7 +65,7 @@ class Package extends Model
 
     public function getHighlightsArrayAttribute()
     {
-        return parse_text_block($this->attributes['highlights'] ?? '');
+        return parse_json_array($this->attributes['highlights'] ?? '');
     }
 
     public function getItinerariesArrayAttribute()
@@ -75,17 +75,17 @@ class Package extends Model
 
     public function getInclusionsArrayAttribute()
     {
-        return parse_text_block($this->attributes['inclusions'] ?? '');
+        return parse_json_array($this->attributes['inclusions'] ?? '');
     }
 
     public function getExclusionsArrayAttribute()
     {
-        return parse_text_block($this->attributes['exclusions'] ?? '');
+        return parse_json_array($this->attributes['exclusions'] ?? '');
     }
 
     public function getNotesArrayAttribute()
     {
-        return parse_text_block($this->attributes['notes'] ?? '');
+        return parse_json_array($this->attributes['notes'] ?? '');
     }
 
 }
