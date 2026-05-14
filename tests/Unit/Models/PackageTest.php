@@ -10,7 +10,7 @@ test('package model has correct fillable attributes', function () {
 
 test('package model provides array versions of itineraries and notes', function () {
     $package = new \App\Models\Package([
-        'notes' => 'Note 1|Note 2',
+        'notes' => json_encode(['Note 1', 'Note 2']),
         'itineraries' => json_encode([['day' => 1, 'activity' => ['Arrival']]])
     ]);
 
