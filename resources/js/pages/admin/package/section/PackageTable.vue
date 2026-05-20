@@ -21,6 +21,7 @@ import { h, ref } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Link } from '@inertiajs/vue3';
+import LinkCell from '@/components/LinkCell.vue';
 
 
 interface Props {
@@ -102,7 +103,11 @@ const columns = [
         accessorKey: 'actions',
         minSize: 100,
         maxSize: 300,
-        cell: () => h('a', { href: '#', class: 'italic underline text-sm' }, 'View Details'),
+        cell: (info: CellContext<Package, unknown>) => 
+            h(LinkCell, { 
+                href: route('admin.packages.details', { id: info.row.original.id }),
+                label: 'View Details'
+            }),
     },
 ];
 
