@@ -33,6 +33,16 @@ export const formatCurrency = (amount: number, currency: string = 'PHP', fractio
 };
 
 
+// Helper to format date strings
+export const formatDateString = (dateStr?: string) => {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+};
+
 
 export const getPackageDurationLabel = (days: number): string => {
   if (days > 1) {
@@ -73,4 +83,43 @@ export const formatPackageDateRange = (startDate: string, endDate?: string): str
   }
 
   return `${start.toLocaleDateString('en-US', rangeStartFormat)} - ${end.toLocaleDateString('en-US', rangeEndFormat)}`;
+};
+
+
+export const truncateText = (
+    text: string,
+    maxLength: number = 20
+): string => {
+    if (text.length <= maxLength) {
+        return text;
+    }
+
+    return `${text.slice(0, maxLength)}...`;
+};
+
+
+export const packageSellingStatus = (endDate: string): string => {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    return today > end ? 'ENDED' : 'SELLING';
+};
+
+export const getSeasonColor = (season: string): string => {
+    switch (season) {
+        case 'spring':
+            return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+
+        case 'summer':
+            return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
+
+        case 'autumn':
+            return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400';
+
+        case 'winter':
+            return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+
+        default:
+            return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+    }
 };

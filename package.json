@@ -23,6 +23,8 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.23",
+        "@iconify-vue/material-symbols": "^1.0.34",
+        "@iconify-vue/solar": "^1.0.4",
         "@inertiajs/vue3": "^2.0.0-beta.3",
         "@tailwindcss/forms": "^0.5.3",
         "@tanstack/vue-table": "^8.21.3",

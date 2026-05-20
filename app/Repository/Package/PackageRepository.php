@@ -62,7 +62,7 @@ class PackageRepository
 
     public function getPackageDetails(int $id): Package
     {
-        return $this->model->with('schedules')->findOrFail($id);
+        return $this->model->with('schedules', 'packageGroups', 'primaryImage', 'images')->findOrFail($id);
     }
 
     public function getPackages(): Collection
