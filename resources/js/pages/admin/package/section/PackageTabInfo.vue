@@ -20,7 +20,7 @@ interface Props {
     notes: string[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 // State for managing active tabs inside details
 const activeTab = ref<'itinerary' | 'inclusions' | 'schedules' | 'notes'>('itinerary');

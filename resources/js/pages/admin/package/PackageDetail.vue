@@ -1,18 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { formatCurrency, formatDateString, truncateText } from '@/lib/utils';
+import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
-import { 
-    Clock, 
-    MapPin, 
-    DollarSign, 
-    Star, 
-    CloudSun,
-    Pencil,
-} from 'lucide-vue-next'; // Optional: replace with your icon library of choice
 import PackageImagesAsset from './section/PackageImagesAsset.vue';
 import PackageDescriptionAndHighlight from './section/PackageDescriptionAndHighlight.vue';
 import PackageTabInfo from './section/PackageTabInfo.vue';

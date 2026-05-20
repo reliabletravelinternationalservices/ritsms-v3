@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import type { Package } from '@/types/package';
 
 defineProps<{ description: string, highlights_array?: string[] }>();
 </script>
