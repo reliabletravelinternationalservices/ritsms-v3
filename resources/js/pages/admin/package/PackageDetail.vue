@@ -58,6 +58,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Primary Image Block -->
                     <PackageImagesAsset
+                        :package-id="package.id"
                         :images="package.images"
                         :primary-image="package.primary_image"
                     />
