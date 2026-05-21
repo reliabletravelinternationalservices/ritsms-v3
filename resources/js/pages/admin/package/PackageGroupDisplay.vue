@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { PackageGroup } from '@/types/group-package';
@@ -78,9 +78,11 @@ const formatDate = (dateStr: string) => {
                         Manage your curated marketing bundles and package catalog collections.
                     </p>
                 </div>
-                <Button class="sm:w-auto w-full flex items-center gap-2 shadow-sm">
-                    <Plus class="w-4 h-4" /> New Package Group
-                </Button>
+                <Link :href="route('admin.packages.groups.create')">
+                    <Button class="sm:w-auto w-full flex items-center gap-2 shadow-sm">
+                        <Plus class="w-4 h-4" /> New Package Group
+                    </Button>
+                </Link>
             </div>
 
             <!-- SECTION 1: NEWLY CREATED OR UPDATED (Top Shelf Feature) -->

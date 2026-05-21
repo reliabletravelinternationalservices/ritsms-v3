@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
+use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
 use App\Http\Controllers\Admin\Package\PackageDetailsController;
 use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
@@ -16,7 +17,6 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/', [ServicePackageController::class, 'index'])->name('admin.packages');
 
         Route::get('/{id}/details', [PackageDetailsController::class, 'index'])->name('admin.packages.details');
-        Route::get('/groups', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
 
         Route::get('/create', [CreatePackageController::class, 'index'])->name('admin.packages.create');
         Route::post('/store', [CreatePackageController::class, 'store'])->name('admin.packages.store');
@@ -25,6 +25,13 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
             Route::post('/store/{id}', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
             Route::put('/update/{id}', [PackageImageController::class, 'update'])->name('admin.packages.images.update');
         });
+    });
+
+
+    Route::prefix('packageGroups')->group(function () {
+        Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
+        Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
+        Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
     });
 
 });
