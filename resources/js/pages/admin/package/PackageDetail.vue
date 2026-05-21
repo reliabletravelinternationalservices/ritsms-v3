@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
@@ -36,7 +36,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
+// Handles partial data reloading cleanly from the backend when raw uploads succeed
+const handleRefreshMediaData = () => {
+    router.reload({ 
+        
+        only: ['package'],
+    });
+};
 
 
 
@@ -61,6 +67,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                         :package-id="package.id"
                         :images="package.images"
                         :primary-image="package.primary_image"
+                        @refresh-data="handleRefreshMediaData"
                     />
 
                     <!-- Description & Highlights -->
@@ -79,7 +86,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <!-- Meta Side panel (Right 1 Column) -->
                 <div class="space-y-6">
                     <!-- Package Info Metadata Card -->
-                    <PackageAdditionalInfo :duration="package.duration" :season="package.season" :base_price="package.base_price" />
+                    <PackageAdditionalInfo :duration="Number(package.duration)" :season="package.season" :base_price="Number(package.base_price)" />
 
                     <!-- Selling Window Card -->
                     <PackageSellingPeriod :selling_start_date="package.selling_start_date" :selling_end_date="package.selling_end_date" />
