@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Image } from 'lucide-vue-next';
 import { Icon as Iconify } from '@iconify/vue'; 
 import { Button } from '@/components/ui/button';
-import PackageMediaModal from '@/components/PackageMediaModal.vue'; // Updated to match component name
+import PackageMediaModal from '@/components/PackageMediaModal.vue'; 
 import { Media } from '@/types/media';
 import { useForm } from '@inertiajs/vue3';
 
@@ -13,54 +13,63 @@ const props = defineProps<{
   images?: Media[]
 }>();
 
+const emit = defineEmits<{
+  (e: 'refresh-data'): void
+}>();
+
 const form = useForm({
-  // Kept intact if you plan to append new binary uploads using your Add button later
   images: [] as File[], 
   meta: [] as any[],
-  deleted_ids: [] as number[] // Added to track database image purges in Laravel
+  deleted_ids: [] as number[] 
 })
 
 const isModalOpen = ref(false)
 
-// We track the locally modified images right after a successful save layout sequence 
+// Track locally modified sequences immediately following a sorting/pin save action
 const localImagesOverride = ref<Media[] | null>(null)
 
-// Computed list that yields updated states immediately or defaults back to database properties
+// Reset the local override whenever the backend array prop genuinely updates
+watch(() => props.images, () => {
+  localImagesOverride.value = null
+}, { deep: true })
+
+// Yields current modifications immediately or falls back gracefully to database records
 const currentImagesList = computed(() => {
   return localImagesOverride.value ?? props.images ?? []
 })
 
 const handleImagesSaved = (payload: { updatedImages: Media[], deletedIds: number[] }) => {
-  // Update local component state representation instantly
   localImagesOverride.value = payload.updatedImages
 
-  // 1. Structure metadata payload reflecting reordering positions and primary assignments
   const metaPayload = payload.updatedImages.map((img, index) => ({
     id: img.id,
     is_primary: img.is_primary,
     order: index + 1,
   }))
 
-  // 2. Load the values directly onto our reactive Inertia dataset form instance
   form.meta = metaPayload
   form.deleted_ids = payload.deletedIds
 
-  // 3. Post data transformations using standard multi-part form payloads out to Laravel endpoint route
   form.post(route('admin.packages.images.store', { id: props.packageId }), {
     preserveScroll: true,
     forceFormData: true, 
     onSuccess: () => {
       isModalOpen.value = false
+      emit('refresh-data')
       console.log('Images package layout configuration synchronized successfully!')
     }
   })
 }
 
+// Catches hot-uploaded items from the nested modal, resets state overrides, and forces a backend reload
+const handleRefreshMediaData = () => {
+  localImagesOverride.value = null
+  emit('refresh-data')
+}
+
 const activePrimaryImage = computed(() => {
-  // Check our live updated checklist first
   if (currentImagesList.value.length > 0) {
     const localPrimary = currentImagesList.value.find(img => img.is_primary)
-    // Fallback safely to the first item if none is designated primary
     return localPrimary || currentImagesList.value[0]
   }
   
@@ -105,6 +114,8 @@ const activePrimaryImage = computed(() => {
   <PackageMediaModal
     v-model:open="isModalOpen"
     :images="currentImagesList"
+    :package-id="packageId"
     @save="handleImagesSaved"
+    @refresh-data="handleRefreshMediaData"
   />
 </template>
