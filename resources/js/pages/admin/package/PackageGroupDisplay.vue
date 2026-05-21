@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { PackageGroup } from '@/types/package-group';
+import { PackageGroup } from '@/types/group-package';
 
 // Shadcn Components
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -17,7 +17,6 @@ import {
     Plus, 
     MoreHorizontal, 
     Eye, 
-    Edit, 
     Trash2, 
     Layers, 
     Compass, 
@@ -32,92 +31,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Package Groups', href: route('admin.packages.groups') },
 ];
 
-// --- DUMMY DATA ---
-const dummyPackageGroups = ref<PackageGroup[]>([
-    {
-        id: 101,
-        title: "Premium Japan Autumn Escapes",
-        description: "Curated high-end multi-city tours focusing on the breathtaking fall foliage across Kyoto, Tokyo, and Hokkaido.",
-        include_as_outbound: true,
-        include_as_inbound: false,
-        is_featured: true,
-        created_at: "2026-05-20T10:00:00Z", 
-        updated_at: "2026-05-21T08:30:00Z", // Updated Today!
-        image: {
-            id: 1,
-            mediable_id: 101,
-            mediable_type: "PackageGroup",
-            file_name: "japan-autumn.jpg",
-            file_path: "groups/japan-autumn.jpg",
-            url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80",
-            disk: "cloudinary",
-            type: "image",
-            mime_type: "image/jpeg",
-            size: 204800,
-            alt_text: "Mt. Fuji framed by autumn red maple leaves",
-            order_number: 1,
-            is_primary: true
-        },
-        packages: [
-            { id: 1, name: "Tokyo & Kyoto Express", duration: 7, base_price: 2499, destination: "Japan", season: "autumn", is_featured: true, itineraries_array: [], inclusions_array: [], exclusions_array: [], notes_array: [], schedules: [], created_at: "", updated_at: "" },
-            { id: 2, name: "Hokkaido Hidden Gems", duration: 10, base_price: 3899, destination: "Japan", season: "autumn", is_featured: false, itineraries_array: [], inclusions_array: [], exclusions_array: [], notes_array: [], schedules: [], created_at: "", updated_at: "" }
-        ]
-    },
-    {
-        id: 102,
-        title: "Tropical Paradise Domestic Getaways",
-        description: "Affordable luxury packages showcasing local white-sand beaches, crystal clear waters, and heritage island hopping trails.",
-        include_as_outbound: false,
-        include_as_inbound: true,
-        is_featured: true,
-        created_at: "2026-05-21T01:15:00Z", // Created Today!
-        updated_at: "2026-05-21T01:15:00Z",
-        image: {
-            id: 2,
-            mediable_id: 102,
-            mediable_type: "PackageGroup",
-            file_name: "boracay.jpg",
-            file_path: "groups/boracay.jpg",
-            url: "https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?auto=format&fit=crop&w=600&q=80",
-            disk: "cloudinary",
-            type: "image",
-            mime_type: "image/jpeg",
-            size: 154000,
-            alt_text: "Clear turquoise water hitting tropical beach",
-            order_number: 1,
-            is_primary: true
-        },
-        packages: [
-            { id: 3, name: "Boracay Luxury 4D3N", duration: 4, base_price: 850, destination: "Philippines", season: "summer", is_featured: true, itineraries_array: [], inclusions_array: [], exclusions_array: [], notes_array: [], schedules: [], created_at: "", updated_at: "" }
-        ]
-    },
-    {
-        id: 103,
-        title: "Classic European Highlights",
-        description: "The definitive grand tour through Europe's cultural capitals including Paris, Rome, Amsterdam, and Swiss alpine peaks. Perfect for first timers.",
-        include_as_outbound: true,
-        include_as_inbound: true,
-        is_featured: false,
-        created_at: "2026-03-10T11:15:00Z",
-        updated_at: "2026-04-02T16:45:00Z", // Older entry
-        image: {
-            id: 3,
-            mediable_id: 103,
-            mediable_type: "PackageGroup",
-            file_name: "europe.jpg",
-            file_path: "groups/europe.jpg",
-            url: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80",
-            disk: "s3",
-            type: "image",
-            mime_type: "image/jpeg",
-            size: 312000,
-            alt_text: "Eiffel tower under clear sky",
-            order_number: 1,
-            is_primary: true
-        },
-        packages: []
-    }
-]);
+// Accept server-provided groups (Inertia prop) and fall back to empty array
+const props = defineProps<{ groups?: PackageGroup[] }>()
+
+const packageGroups = ref<PackageGroup[]>(props.groups ?? [])
 
 // --- FILTERING & SEPARATION LOGIC ---
 const fortyEightHoursAgo = new Date().getTime() - (48 * 60 * 60 * 1000);
@@ -128,14 +45,14 @@ const isRecent = (dateString: string) => {
 
 // Top shelf: newly created or updated items ordered by latest activity
 const recentGroups = computed(() => {
-    return dummyPackageGroups.value
+    return packageGroups.value
         .filter(g => isRecent(g.updated_at || g.created_at))
         .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 });
 
 // Regular shelf: standard catalog items
 const olderGroups = computed(() => {
-    return dummyPackageGroups.value
+    return packageGroups.value
         .filter(g => !isRecent(g.updated_at || g.created_at))
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 });
@@ -172,7 +89,7 @@ const formatDate = (dateStr: string) => {
                     <div class="p-1 rounded bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100 dark:border-indigo-900/40">
                         <Sparkles class="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Recently Active Groups</h2>
+                    <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Recently Edited Groups</h2>
                     <Badge variant="outline" class="text-[11px] bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-900/30">
                         Last 48 Hours
                     </Badge>
@@ -201,7 +118,7 @@ const formatDate = (dateStr: string) => {
                                 <!-- Floating Status Badges -->
                                 <div class="absolute top-3 left-3 flex flex-col gap-1.5 items-start max-w-[85%]">
                                     <span class="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-indigo-600 text-white shadow-sm">
-                                        <Sparkles class="w-2.5 h-2.5 fill-current" /> Active
+                                        <Sparkles class="w-2.5 h-2.5 fill-current" /> Foreign Only
                                     </span>
                                     <span v-if="group.is_featured" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500 text-white shadow-sm">
                                         <Star class="w-2.5 h-2.5 fill-current" /> Featured

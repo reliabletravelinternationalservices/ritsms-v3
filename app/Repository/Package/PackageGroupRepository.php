@@ -59,4 +59,16 @@ class PackageGroupRepository
             ->with(['image', 'packages.primaryImage']) // Nested eager loading
             ->findOrFail($id);
     }
+
+    /**
+     * Get all package groups with their representative image and packages.
+     * Returns a Collection of PackageGroup models ready for UI consumption.
+     */
+    public function getAllGroups(): Collection
+    {
+        return $this->model
+            ->with(['image', 'packages.primaryImage', 'packages.schedules'])
+            ->orderBy('updated_at', 'desc')
+            ->get();
+    }
 }
