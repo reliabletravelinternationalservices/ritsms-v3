@@ -2,10 +2,12 @@
 
 namespace App\Repository\Package;
 
+use App\Models\Media;
 use App\Models\Package;
 use App\Models\PackageGroup;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use function Termwind\parse;
 
@@ -68,5 +70,39 @@ class PackageRepository
     public function getPackages(): Collection
     {
         return $this->model->with('primaryImage', 'schedules', 'packageGroups')->get();
+    }
+
+
+    public function storePackageImage(int $id, array $data)
+    {
+        $package = Package::findOrFail($id);
+
+        $file = $data['image'];
+
+        $folderPath = "upload/package/{$id}";
+        $path = $file->store($folderPath, 'public');
+
+
+        $nextOrderNumber = Media::where('mediable_type', $package->getMorphClass())
+            ->where('mediable_id', $id)
+            ->max('order_number') + 1;
+
+
+        $media = Media::create([
+            'mediable_id' => $id,
+            'mediable_type' => $package->getMorphClass(),
+            'file_name' => $file->getClientOriginalName(),
+            'file_path' => $path,
+            'alt_text' => $file->getClientOriginalName(),
+            'url' => Storage::url($path), // Clean alternative that resolves IDE method errors
+            'disk' => 'local',
+            'type' => 'image',
+            'mime_type' => $file->getMimeType(),
+            'size' => $file->getSize(),
+            'order_number' => $nextOrderNumber,
+            'is_primary' => false,
+        ]);
+
+        return $media;
     }
 }

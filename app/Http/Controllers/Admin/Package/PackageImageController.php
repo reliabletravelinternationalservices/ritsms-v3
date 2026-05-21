@@ -3,53 +3,22 @@
 namespace App\Http\Controllers\Admin\Package;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Package\PackageImageRequest;
 use App\Models\Media;
 use App\Models\Package;
+use App\Repository\Package\PackageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PackageImageController extends Controller
 {
-    public function store(Request $request, int $id)
+    public function __construct(protected PackageRepository $repository) {}
+    public function store(PackageImageRequest $request, int $id)
     {
-        // 1. Validate that we are strictly receiving an image file
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp',
-        ]);
-
-        // Find the parent model instance to verify it exists
-        $package = Package::findOrFail($id);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-
-            // 2. Generate pathing and store file on the public disk
-            // This creates a directory structure like: storage/app/public/packages/{id}
-            $folderPath = "upload/package/{$id}";
-            $path = $file->store($folderPath, 'public');
-
-            // 3. Calculate next sequencing index number dynamically
-            $nextOrderNumber = Media::where('mediable_type', $package->getMorphClass())
-                ->where('mediable_id', $id)
-                ->max('order_number') + 1;
-
-            // 4. Create the Polymorphic Media DB Entry Row Record
-            $media = Media::create([
-                'mediable_id' => $id,
-                'mediable_type' => $package->getMorphClass(),
-                'file_name' => $file->getClientOriginalName(),
-                'file_path' => $path,
-                'alt_text' => $file->getClientOriginalName(),
-                'url' => Storage::url($path), // Clean alternative that resolves IDE method errors
-                'disk' => 'local',
-                'type' => 'image',
-                'mime_type' => $file->getMimeType(),
-                'size' => $file->getSize(),
-                'order_number' => $nextOrderNumber,
-                'is_primary' => false,
-            ]);
-
+            $media = $this->repository->storePackageImage($id, $request->validated());
             return response()->json([
                 'success' => true,
                 'message' => 'Image uploaded successfully.',
