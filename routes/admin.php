@@ -22,7 +22,8 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::post('/store', [CreatePackageController::class, 'store'])->name('admin.packages.store');
 
         Route::prefix('images')->group(function () {
-            Route::post('/store', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
+            Route::post('/store/{id}', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
+            Route::put('/update/{id}', [PackageImageController::class, 'update'])->name('admin.packages.images.update');
         });
     });
 
