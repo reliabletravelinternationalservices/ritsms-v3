@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { formatCurrency, getSeasonColor } from '@/lib/utils';
 import { Package } from '@/types/package';
-import { MapPin } from 'lucide-vue-next';
+import { MapPin, Star } from 'lucide-vue-next';
 
 interface Props {
     package: Package
@@ -38,11 +38,11 @@ defineProps<Props>();
         <div class="bg-zinc-50 p-4 rounded-xl border flex items-center gap-6 dark:bg-zinc-900 dark:border-zinc-800">
             <div>
                 <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Base Price</p>
-                <p class="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{{ formatCurrency(package.base_price, 'PHP', 2) }}</p>
+                <p class="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{{ formatCurrency(Number(package.base_price), 'PHP', 2) }}</p>
             </div>
             <div class="border-l pl-6 dark:border-zinc-800">
                 <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Down Payment</p>
-                <p class="text-lg font-semibold text-zinc-700 dark:text-zinc-300">{{ formatCurrency(package.down_payment, 'PHP', 2) }}</p>
+                <p class="text-lg font-semibold text-zinc-700 dark:text-zinc-300">{{ formatCurrency(Number(package.down_payment), 'PHP', 2) }}</p>
             </div>
         </div>
     </div>

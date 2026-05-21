@@ -18,3 +18,11 @@ export interface Media {
     // Optional: If you eager load the morph relationship
     mediable?: any; 
 }
+
+export interface UploadedImage {
+  id: string | number
+  url: string
+  file: File | null
+  isPrimary: boolean
+  isExistingMedia: boolean
+}
