@@ -5,6 +5,8 @@ use App\Models\Destination;
 use App\Models\Package;
 use App\Models\PackageGroup;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Response as InertiaResponse;
 
 beforeEach(function () {
@@ -158,4 +160,31 @@ test('admin create package route stores a new package', function () {
 
     $response->assertStatus(302);
     $this->assertDatabaseHas('packages', ['name' => 'New Package']);
+});
+
+test('admin package group update route saves changes and new cover image', function () {
+    Storage::fake('public');
+
+    $group = PackageGroup::create([
+        'title' => 'Original Group',
+        'description' => 'Original description',
+        'include_as_outbound' => false,
+        'include_as_inbound' => false,
+        'is_featured' => false,
+    ]);
+
+    $newImage = UploadedFile::fake()->image('group-new.jpg');
+
+    $response = $this->put(route('admin.packages.groups.update', ['id' => $group->id]), [
+        'title' => 'Updated Group',
+        'description' => 'Updated description',
+        'include_as_outbound' => true,
+        'include_as_inbound' => true,
+        'is_featured' => true,
+        'image' => $newImage,
+    ]);
+
+    $response->assertRedirect(route('admin.packages.groups.edit', ['id' => $group->id]));
+    $this->assertDatabaseHas('package_groups', ['id' => $group->id, 'title' => 'Updated Group', 'description' => 'Updated description']);
+    $this->assertDatabaseHas('media', ['mediable_type' => $group->getMorphClass(), 'mediable_id' => $group->id, 'file_name' => 'group-new.jpg']);
 });

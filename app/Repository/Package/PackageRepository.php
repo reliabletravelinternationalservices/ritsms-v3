@@ -9,8 +9,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-use function Termwind\parse;
-
 class PackageRepository
 {
     public function __construct(protected Package $model) {}
@@ -61,7 +59,6 @@ class PackageRepository
         ];
     }
 
-
     public function getPackageDetails(int $id): Package
     {
         return $this->model->with('schedules', 'packageGroups', 'primaryImage', 'images')->findOrFail($id);
@@ -72,7 +69,6 @@ class PackageRepository
         return $this->model->with('primaryImage', 'schedules', 'packageGroups')->get();
     }
 
-
     public function storePackageImage(int $id, array $data)
     {
         $package = Package::findOrFail($id);
@@ -82,11 +78,9 @@ class PackageRepository
         $folderPath = "upload/package/{$id}";
         $path = $file->store($folderPath, 'public');
 
-
         $nextOrderNumber = Media::where('mediable_type', $package->getMorphClass())
             ->where('mediable_id', $id)
             ->max('order_number') + 1;
-
 
         $media = Media::create([
             'mediable_id' => $id,
@@ -104,5 +98,40 @@ class PackageRepository
         ]);
 
         return $media;
+    }
+
+    public function deletePackageImages(int $id, array $mediaIds): void
+    {
+        $mediableType = (new Package)->getMorphClass();
+
+        DB::transaction(function () use ($id, $mediaIds, $mediableType) {
+            $mediaToDelete = Media::where('mediable_type', $mediableType)
+                ->where('mediable_id', $id)
+                ->whereIn('id', $mediaIds)
+                ->get();
+
+            foreach ($mediaToDelete as $file) {
+                if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+                    Storage::disk('public')->delete($file->file_path);
+                }
+            }
+        });
+    }
+
+    public function updatePackageImageMeta(int $id, array $meta): void
+    {
+        $mediableType = (new Package)->getMorphClass();
+
+        DB::transaction(function () use ($id, $meta, $mediableType) {
+            foreach ($meta as $item) {
+                Media::where('mediable_type', $mediableType)
+                    ->where('mediable_id', $id)
+                    ->where('id', $item['id'])
+                    ->update([
+                        'is_primary' => $item['is_primary'],
+                        'order_number' => $item['order'],
+                    ]);
+            }
+        });
     }
 }
