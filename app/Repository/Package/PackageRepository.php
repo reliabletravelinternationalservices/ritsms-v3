@@ -35,6 +35,20 @@ class PackageRepository
         });
     }
 
+
+    public function deletePackage(int $id): bool
+    {
+        return DB::transaction(function () use ($id) {
+
+            $package = $this->model->findOrFail($id);
+            $package->images()->delete();
+            Storage::disk('public')->deleteDirectory(
+                "upload/package/{$package->id}"
+            );
+            return $package->delete();
+        });
+    }
+
     // GET FEATURED INBOUND PACKAGES: get every package included in groups that display in inbound, distinct to avoid duplication
     public function getFeaturedInboundPackages(): array
     {
