@@ -86,7 +86,7 @@ class PackageRepository
 
     public function getPackages(): Collection
     {
-        return $this->model->with('primaryImage', 'schedules', 'packageGroups')->get();
+        return $this->model->with('primaryImage', 'schedules', 'packageGroups')->OrderBy('created_at', 'desc')->get();
     }
 
     public function storePackageImage(int $id, array $data)
