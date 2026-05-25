@@ -62,10 +62,10 @@ const formatDate = (dateStr: string) => {
 
         <div v-if="props.highlighted || props.group.is_featured" class="absolute top-3 left-3 flex flex-col gap-1.5 items-start max-w-[85%]">
           <span
-            v-if="props.highlighted"
-            class="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-indigo-600 text-white shadow-sm"
+            v-if="props.group.tag && props.group.tag !== null"
+            class="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-red-600 text-white shadow-sm"
           >
-            <Sparkles class="w-2.5 h-2.5 fill-current" /> Foreign Only
+            <Sparkles class="w-2.5 h-2.5 fill-current" /> {{ props.group.tag }}
           </span>
           <span
             v-if="props.group.is_featured"
@@ -110,10 +110,10 @@ const formatDate = (dateStr: string) => {
       <CardContent class="px-4 pb-3 pt-0 space-y-3">
         <div class="flex flex-wrap gap-1">
           <Badge v-if="props.group.include_as_outbound" variant="secondary" class="text-[10px] font-normal px-2 py-0">
-            <PlaneLanding class="w-2.5 h-2.5 mr-1 text-sky-500" /> Outbound
+            <PlaneTakeoff class="w-2.5 h-2.5 mr-1 text-sky-500" /> Outbound
           </Badge>
           <Badge v-if="props.group.include_as_inbound" variant="secondary" class="text-[10px] font-normal px-2 py-0">
-            <PlaneTakeoff class="w-2.5 h-2.5 mr-1 text-emerald-500" /> Inbound
+            <PlaneLanding class="w-2.5 h-2.5 mr-1 text-emerald-500" /> Inbound
           </Badge>
         </div>
         <Separator class="dark:bg-zinc-800" />
