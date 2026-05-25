@@ -20,6 +20,6 @@ class CreatePackageController extends Controller
     public function store(CreatePackageRequest $request)
     {
         $this->repository->createPackage($request->validated());
-        return redirect()->back()->with('success', 'Package created successfully');
+        return redirect()->route('admin.packages')->with('success', 'Package created successfully.');
     }
 }
