@@ -37,6 +37,7 @@ class PackageGroupPinController extends Controller
         ])->toArray();
 
         $group->packages()->sync($syncData);
+        $group->touch();
 
         return redirect()->route('admin.packages.groups.pin', ['id' => $id])->with('success', 'Pinned package order updated successfully.');
     }
