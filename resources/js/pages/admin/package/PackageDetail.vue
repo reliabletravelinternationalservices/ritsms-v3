@@ -4,6 +4,9 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
+import axios from 'axios';
+import { openDeleteDialog } from '@/stores/deleteDialog';
+import { toast } from 'vue-sonner';
 import PackageImagesAsset from './section/PackageImagesAsset.vue';
 import PackageDescriptionAndHighlight from './section/PackageDescriptionAndHighlight.vue';
 import PackageTabInfo from './section/PackageTabInfo.vue';
@@ -41,6 +44,25 @@ const handleRefreshMediaData = () => {
     router.reload({ 
         
         only: ['package'],
+    });
+};
+
+const onDelete = () => {
+    openDeleteDialog({
+        title: 'Delete package',
+        message: `Are you sure you want to delete "${props.package.name}"?`,
+        confirmText: 'Delete package',
+        cancelText: 'Cancel',
+        onConfirm: async () => {
+            try {
+                await axios.delete(`/admin/packages/${props.package.id}`);
+                toast.success('Package Deleted successfully');
+                router.visit(route('admin.packages'));
+            } catch (err) {
+                console.error(err);
+                toast.error('Failed to delete package');
+            }
+        }
     });
 };
 
@@ -98,12 +120,10 @@ const handleRefreshMediaData = () => {
                                 <span>Edit</span>
                             </Button>
                         </Link>
-                        <Link href = "#" class="w-full">
-                            <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase">
-                                <DeleteIcon class="w-4 h-4" />
-                                <span>Delete</span>
-                            </Button>
-                        </Link>
+                        <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase" @click="onDelete">
+                            <DeleteIcon class="w-4 h-4" />
+                            <span>Delete</span>
+                        </Button>
                     </div>
 
                     <!-- Admin System Timestamps -->
