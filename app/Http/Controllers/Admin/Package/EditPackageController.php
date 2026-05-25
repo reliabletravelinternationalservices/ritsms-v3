@@ -12,7 +12,7 @@ class EditPackageController extends Controller
 {
     public function __construct(protected PackageRepository $repository){}
     public function index(int $id)
-    {
+    { 
         $package = $this->repository->getPackageDetails($id);
         return Inertia::render('admin/package/EditPackage', compact('package'));
     }
