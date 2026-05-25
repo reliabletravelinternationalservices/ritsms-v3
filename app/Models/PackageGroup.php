@@ -21,6 +21,7 @@ class PackageGroup extends Model
     protected $casts = [
         'include_as_outbound' => 'boolean',
         'include_as_inbound' => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
 
