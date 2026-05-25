@@ -13,9 +13,6 @@ class PackageGroupDisplayController extends Controller
     public function index()
     {
         $groups = $this->repository->getAllGroups();
-
-        return Inertia::render('admin/package/PackageGroupDisplay', [
-            'groups' => $groups->toArray(),
-        ]);
+        return Inertia::render('admin/package/PackageGroupDisplay', compact('groups'));
     }
 }
