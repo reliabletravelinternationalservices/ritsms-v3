@@ -26,8 +26,11 @@ class EditPackageGroupController extends Controller
 
         if (! $request->hasFile('image')) {
             unset($validatedData['image']);
-            Storage::delete($this->repository->getPackageGroupByID($id)->image);
-            
+
+            $group = $this->repository->getPackageGroupByID($id);
+            if ($group->image?->file_path) {
+                Storage::delete($group->image->file_path);
+            }
         }
 
         $this->repository->updateGroup($id, $validatedData);
