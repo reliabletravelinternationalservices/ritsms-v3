@@ -23,7 +23,12 @@ class EditPackageGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'include_as_outbound' => ['nullable', 'boolean'],
+            'include_as_inbound' => ['nullable', 'boolean'],
+            'is_featured' => ['nullable', 'boolean'],
+            'image' => ['sometimes', 'nullable', 'image'],
         ];
     }
 }

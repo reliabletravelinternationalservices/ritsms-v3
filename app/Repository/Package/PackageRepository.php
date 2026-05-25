@@ -115,6 +115,11 @@ class PackageRepository
                     Storage::disk('public')->delete($file->file_path);
                 }
             }
+
+            Media::where('mediable_type', $mediableType)
+                ->where('mediable_id', $id)
+                ->whereIn('id', $mediaIds)
+                ->delete();
         });
     }
 
