@@ -4,7 +4,6 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
-import axios from 'axios';
 import { openDeleteDialog } from '@/stores/deleteDialog';
 import { toast } from 'vue-sonner';
 import PackageImagesAsset from './section/PackageImagesAsset.vue';
