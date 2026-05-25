@@ -53,19 +53,25 @@ const onDelete = () => {
         message: `Are you sure you want to delete "${props.package.name}"?`,
         confirmText: 'Delete package',
         cancelText: 'Cancel',
-        onConfirm: async () => {
-            try {
-                await axios.delete(`/admin/packages/${props.package.id}`);
-                toast.success('Package Deleted successfully');
-                router.visit(route('admin.packages'));
-            } catch (err) {
-                console.error(err);
-                toast.error('Failed to delete package');
-            }
-        }
+
+        onConfirm: () => {
+            router.delete(
+                route('admin.packages.destroy', {
+                    id: props.package.id
+                }),
+                {
+                    onSuccess: () => {
+                        toast.success('Package deleted successfully');
+                    },
+
+                    onError: () => {
+                        toast.error('Failed to delete package');
+                    },
+                }
+            );
+        },
     });
 };
-
 
 
 </script>
