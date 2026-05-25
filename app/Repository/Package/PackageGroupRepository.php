@@ -130,4 +130,21 @@ class PackageGroupRepository
             ]);
         });
     }
+
+
+
+    public function updateGroupPinnedPackages(int $id, array $pinnedPackages)
+    {
+        $group = $this->model->findOrFail($id);
+
+        return DB::transaction(function () use ($group, $pinnedPackages) {
+            $syncData = collect($pinnedPackages)->mapWithKeys(fn ($item) => [
+                $item['package_id'] => ['order_number' => $item['order_number']],
+            ])->toArray();
+
+            $group->packages()->sync($syncData);
+            $group->touch();
+            return $group->fresh('packages');
+        });
+    }
 }
