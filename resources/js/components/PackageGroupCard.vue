@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { type PackageGroup } from '@/types/group-package';
+import { openDeleteDialog } from '@/stores/deleteDialog';
+import { toast } from 'vue-sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +26,12 @@ import {
 const props = defineProps<{
   group: PackageGroup;
   highlighted?: boolean;
+  href: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'group-updated', group: PackageGroup): void;
+  (e: 'group-deleted', id: number): void;
 }>();
 
 const cardClasses = computed(() => {
@@ -44,6 +52,50 @@ const formatDate = (dateStr: string) => {
     year: 'numeric',
   });
 };
+
+const handleFeatureToggle = () => {
+  router.put(
+    route('admin.packages.groups.feature', { id: props.group.id }),
+    {},
+    {
+      onSuccess: () => {
+        const updatedGroup = {
+          ...props.group,
+          is_featured: !props.group.is_featured,
+          updated_at: new Date().toISOString(),
+        };
+
+        emit('group-updated', updatedGroup);
+        toast.success(
+          props.group.is_featured ? 'Featured label removed' : 'Package group marked featured'
+        );
+      },
+      onError: () => {
+        toast.error('Failed to update featured status');
+      },
+    }
+  );
+};
+
+const handleDelete = () => {
+  openDeleteDialog({
+    title: 'Delete package group',
+    message: `Are you sure you want to delete "${props.group.title}"?`,
+    confirmText: 'Delete group',
+    cancelText: 'Cancel',
+    onConfirm: () => {
+      router.delete(route('admin.packages.groups.destroy', { id: props.group.id }), {
+        onSuccess: () => {
+          emit('group-deleted', props.group.id);
+          toast.success('Package group deleted successfully');
+        },
+        onError: () => {
+          toast.error('Failed to delete package group');
+        },
+      });
+    },
+  });
+};
 </script>
 
 <template>
@@ -62,10 +114,10 @@ const formatDate = (dateStr: string) => {
 
         <div v-if="props.highlighted || props.group.is_featured" class="absolute top-3 left-3 flex flex-col gap-1.5 items-start max-w-[85%]">
           <span
-            v-if="props.highlighted"
-            class="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-indigo-600 text-white shadow-sm"
+            v-if="props.group.tag && props.group.tag !== null"
+            class="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-red-600 text-white shadow-sm"
           >
-            <Sparkles class="w-2.5 h-2.5 fill-current" /> Foreign Only
+            <Sparkles class="w-2.5 h-2.5 fill-current" /> {{ props.group.tag }}
           </span>
           <span
             v-if="props.group.is_featured"
@@ -88,7 +140,11 @@ const formatDate = (dateStr: string) => {
                   <Pencil class="w-4 h-4 text-zinc-400" /> Edit Details
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem class="gap-2 text-red-600 focus:text-red-600 dark:focus:bg-red-950/20 cursor-pointer">
+              <DropdownMenuItem @click="handleFeatureToggle" class="flex items-center gap-2">
+                <Star class="w-4 h-4 text-amber-500" />
+                {{ props.group.is_featured ? 'Unpin' : 'Feature' }}
+              </DropdownMenuItem>
+              <DropdownMenuItem @click="handleDelete" class="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <Trash2 class="w-4 h-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -110,10 +166,10 @@ const formatDate = (dateStr: string) => {
       <CardContent class="px-4 pb-3 pt-0 space-y-3">
         <div class="flex flex-wrap gap-1">
           <Badge v-if="props.group.include_as_outbound" variant="secondary" class="text-[10px] font-normal px-2 py-0">
-            <PlaneLanding class="w-2.5 h-2.5 mr-1 text-sky-500" /> Outbound
+            <PlaneTakeoff class="w-2.5 h-2.5 mr-1 text-sky-500" /> Outbound
           </Badge>
           <Badge v-if="props.group.include_as_inbound" variant="secondary" class="text-[10px] font-normal px-2 py-0">
-            <PlaneTakeoff class="w-2.5 h-2.5 mr-1 text-emerald-500" /> Inbound
+            <PlaneLanding class="w-2.5 h-2.5 mr-1 text-emerald-500" /> Inbound
           </Badge>
         </div>
         <Separator class="dark:bg-zinc-800" />
@@ -127,7 +183,7 @@ const formatDate = (dateStr: string) => {
 
       <CardFooter class="p-4 bg-zinc-50/50 dark:bg-zinc-900/30 border-t dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
         <span class="flex items-center gap-1"><Calendar class="w-3 h-3" /> Modified {{ formatDate(props.group.updated_at) }}</span>
-        <Link :href="route('admin.packages.groups.edit', { id: props.group.id })" class="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
+        <Link :href="props.href" class="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
           Manage <ArrowRight class="w-3 h-3" />
         </Link>
       </CardFooter>

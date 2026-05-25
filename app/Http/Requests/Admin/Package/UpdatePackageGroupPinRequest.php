@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin\Package;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditPackageGroupRequest extends FormRequest
+class UpdatePackageGroupPinRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,9 @@ class EditPackageGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'include_as_outbound' => ['required', 'boolean'],
-            'include_as_inbound' => ['required', 'boolean'],
-            'is_featured' => ['required', 'boolean'],
-            'image' => ['sometimes', 'nullable', 'image'],
+            'pinned_package_ids' => ['required', 'array'],
+            'pinned_package_ids.*.package_id' => ['required', 'integer', 'exists:packages,id'],
+            'pinned_package_ids.*.order_number' => ['required', 'integer'],
         ];
     }
 }

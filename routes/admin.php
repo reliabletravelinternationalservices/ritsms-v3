@@ -4,10 +4,13 @@ use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
 use App\Http\Controllers\Admin\Package\DeletePackageController;
+use App\Http\Controllers\Admin\Package\DeletePackageGroupController;
 use App\Http\Controllers\Admin\Package\EditPackageController;
 use App\Http\Controllers\Admin\Package\EditPackageGroupController;
+use App\Http\Controllers\Admin\Package\FeaturePackageGroupController;
 use App\Http\Controllers\Admin\Package\PackageDetailsController;
 use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
+use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use Illuminate\Support\Facades\Route;
@@ -39,8 +42,14 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
         Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
         Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
+        
         Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
         Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
+        Route::put('/feature/{id}', [FeaturePackageGroupController::class, 'toggle'])->name('admin.packages.groups.feature');
+        Route::delete('/destroy/{id}', [DeletePackageGroupController::class, 'destroy'])->name('admin.packages.groups.destroy');
+
+        Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])->name('admin.packages.groups.pin');
+        Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])->name('admin.packages.groups.pin.update');
     });
 
 });

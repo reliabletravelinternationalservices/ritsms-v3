@@ -9,9 +9,17 @@ import PackageGroupCard from '@/components/PackageGroupCard.vue';
 // Shadcn Components
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 // Icons
-import { Plus, Sparkles, Compass } from 'lucide-vue-next';
+import { Plus, Sparkles, Compass, Search, X } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('admin.dashboard') },
@@ -22,6 +30,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 const props = defineProps<{ groups?: PackageGroup[] }>()
 
 const packageGroups = ref<PackageGroup[]>(props.groups ?? [])
+
+// Search & Filter state
+const searchTerm = ref('')
+const appliedSearchTerm = ref('')
+const selectedType = ref('') // '', 'featured', 'inbound', 'outbound'
+
+const applySearch = () => {
+    appliedSearchTerm.value = (searchTerm.value ?? '').trim().toLowerCase()
+}
+
+const clearSearch = () => {
+    searchTerm.value = ''
+    appliedSearchTerm.value = ''
+}
+
+const setType = (type: string) => {
+    selectedType.value = type
+}
 
 // --- FILTERING & SEPARATION LOGIC ---
 const fortyEightHoursAgo = new Date().getTime() - (48 * 60 * 60 * 1000);
@@ -37,11 +63,36 @@ const recentGroups = computed(() => {
         .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 });
 
+const handleGroupUpdated = (updatedGroup: PackageGroup) => {
+    packageGroups.value = packageGroups.value.map((group) =>
+        group.id === updatedGroup.id ? updatedGroup : group
+    );
+};
+
+const handleGroupDeleted = (deletedGroupId: number) => {
+    packageGroups.value = packageGroups.value.filter((group) => group.id !== deletedGroupId);
+};
+
 // Regular shelf: standard catalog items
 const olderGroups = computed(() => {
-    return packageGroups.value
-        .filter(g => !isRecent(g.updated_at || g.created_at))
-        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    const list = packageGroups.value
+        .filter(g => !isRecent(g.updated_at || g.created_at));
+
+    // Type filter
+    const typeFiltered = list.filter(g => {
+        if (!selectedType.value) return true;
+        if (selectedType.value === 'featured') return !!g.is_featured;
+        if (selectedType.value === 'inbound') return !!g.include_as_inbound;
+        if (selectedType.value === 'outbound') return !!g.include_as_outbound;
+        return true;
+    });
+
+    // Search filter applies only when submitted (enter or click)
+    const searched = appliedSearchTerm.value
+        ? typeFiltered.filter(g => (g.title ?? '').toLowerCase().includes(appliedSearchTerm.value))
+        : typeFiltered;
+
+    return searched.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 });
 </script>
 
@@ -83,24 +134,75 @@ const olderGroups = computed(() => {
                         v-for="group in recentGroups"
                         :key="group.id"
                         :group="group"
+                        :href="route('admin.packages.groups.pin', { id: group.id })"
                         highlighted
+                        @group-updated="handleGroupUpdated"
+                        @group-deleted="handleGroupDeleted"
                     />
                 </div>
             </div>
 
             <!-- SECTION 2: REGULAR CATALOG LIST -->
             <div class="space-y-4 mt-2">
-                <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">All Collections</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">All Collections</h2>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <div class="flex items-center gap-2">
+                            <Label for="group-search" class="sr-only">Search groups</Label>
+                            <Input
+                                id="group-search"
+                                v-model="searchTerm"
+                                placeholder="Search collections by name"
+                                @keydown.enter="applySearch"
+                                class="w-56"
+                            />
+                            <Button variant="outline" size="sm" @click="applySearch" class="p-2">
+                                <Search class="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm" @click="clearSearch" class="p-2">
+                                <X class="w-4 h-4 text-zinc-400" />
+                            </Button>
+                        </div>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger as-child>
+                                <Button variant="outline" size="sm" class="ml-2">
+                                    <span v-if="!selectedType">All types</span>
+                                    <span v-else-if="selectedType === 'featured'">Featured</span>
+                                    <span v-else-if="selectedType === 'inbound'">Inbound</span>
+                                    <span v-else>Outbound</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem @click="setType('')">All types</DropdownMenuItem>
+                                <DropdownMenuItem @click="setType('featured')">Featured</DropdownMenuItem>
+                                <DropdownMenuItem @click="setType('inbound')">Inbound</DropdownMenuItem>
+                                <DropdownMenuItem @click="setType('outbound')">Outbound</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+
+                <div v-if="olderGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <PackageGroupCard
                         v-for="group in olderGroups"
                         :key="group.id"
                         :group="group"
+                        :href="route('admin.packages.groups.pin', { id: group.id })"
+                        @group-updated="handleGroupUpdated"
+                        @group-deleted="handleGroupDeleted"
                     />
                 </div>
-                
-                <!-- Empty State Fallback -->
+
+                <!-- Per-section empty label when there are recent groups but no older groups -->
+                <div v-else-if="recentGroups.length > 0 && olderGroups.length === 0" class="text-center py-8 rounded-xl border border-dashed dark:border-zinc-800">
+                    <Compass class="w-8 h-8 mx-auto text-zinc-400 stroke-[1.25] mb-2" />
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">No older collections</h3>
+                    <p class="text-xs text-zinc-500 mt-1">All recent edits are shown above — create more collections to populate this area.</p>
+                </div>
+
+                <!-- Global Empty State Fallback when there are no groups at all -->
                 <div v-if="olderGroups.length === 0 && recentGroups.length === 0" class="text-center py-12 border border-dashed rounded-xl dark:border-zinc-800">
                     <Compass class="w-10 h-10 mx-auto text-zinc-400 stroke-[1.25] mb-2" />
                     <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">No collections found</h3>

@@ -38,6 +38,24 @@ class PackageGroupRepository
         return $group->fresh('image');
     }
 
+    public function deleteGroup(int $groupID): void
+    {
+        $group = $this->model->findOrFail($groupID);
+
+        DB::transaction(function () use ($group) {
+            $this->deletePackageGroupImage($group->id);
+            $group->delete();
+        });
+    }
+
+    public function toggleGroupFeatured(int $groupID): PackageGroup
+    {
+        $group = $this->model->findOrFail($groupID);
+        $group->update(['is_featured' => ! $group->is_featured]);
+
+        return $group->fresh();
+    }
+
     public function deletePackageGroupImage(int $groupID): void
     {
         $morphClass = $this->model->getMorphClass();
@@ -128,6 +146,23 @@ class PackageGroupRepository
                 'order_number' => 1,
                 'is_primary' => true,
             ]);
+        });
+    }
+
+
+
+    public function updateGroupPinnedPackages(int $id, array $pinnedPackages)
+    {
+        $group = $this->model->findOrFail($id);
+
+        return DB::transaction(function () use ($group, $pinnedPackages) {
+            $syncData = collect($pinnedPackages)->mapWithKeys(fn ($item) => [
+                $item['package_id'] => ['order_number' => $item['order_number']],
+            ])->toArray();
+
+            $group->packages()->sync($syncData);
+            $group->touch();
+            return $group->fresh('packages');
         });
     }
 }

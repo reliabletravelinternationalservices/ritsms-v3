@@ -24,8 +24,10 @@ import {
     RefreshCcw
 } from 'lucide-vue-next';
 import { type PackageGroup } from '@/types/group-package';
+import { toast } from 'vue-sonner';
 
 const props = defineProps<{ group: PackageGroup }>();
+
 const originalImageUrl = props.group.image?.url ?? null;
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('admin.dashboard') },
@@ -33,12 +35,23 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Edit', href: route('admin.packages.groups.edit', { id: props.group.id }) },
 ];
 
-const form = useForm({
+type FormData = {
+    title: string;
+    description: string;
+    include_as_outbound: boolean;
+    include_as_inbound: boolean;
+    is_featured: boolean;
+    tag: string;
+    image: File | null;
+}
+
+const form = useForm<FormData>({
     title: props.group.title,
     description: props.group.description ?? '',
     include_as_outbound: props.group.include_as_outbound,
     include_as_inbound: props.group.include_as_inbound,
     is_featured: props.group.is_featured,
+    tag: props.group.tag ?? '',
     image: null as File | null,
 });
 
@@ -83,6 +96,7 @@ const resetForm = () => {
 };
 
 const submitForm = () => {
+    console.log(form);
     form.put(route('admin.packages.groups.update', { id: props.group.id }), {
         preserveScroll: true,
         onSuccess: () => {
@@ -90,6 +104,10 @@ const submitForm = () => {
                 imagePreview.value = originalImageUrl;
                 isBlobPreview.value = false;
             }
+            toast.success('Package group updated successfully');
+        },
+        onError: () => {
+            toast.error('Failed to update package group');
         },
     });
 };
@@ -135,7 +153,17 @@ const submitForm = () => {
                                     />
                                     <p v-if="form.errors.title" class="text-xs text-red-500 font-medium">{{ form.errors.title }}</p>
                                 </div>
-
+                                <div class="space-y-1.5">
+                                    <Label for="tag">Tag <span class="text-sm text-zinc-400">(Optional)</span></Label>
+                                    <Input 
+                                        id="tag" 
+                                        type="text" 
+                                        v-model="form.tag" 
+                                        placeholder="e.g., Hot Deals, Valid for Foreigners, Last Minute" 
+                                        :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.tag }"
+                                    />
+                                    <p v-if="form.errors.tag" class="text-xs text-red-500 font-medium">{{ form.errors.tag }}</p>
+                                </div>
                                 <!-- Description Input -->
                                 <div class="space-y-1.5">
                                     <Label for="description">Description Summary</Label>
@@ -210,7 +238,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Display on international travel directories.</p>
                                         </div>
                                     </div>
-                                    <Switch id="outbound" v-model:checked="form.include_as_outbound" />
+                                    <Switch id="outbound" v-model:modelValue="form.include_as_outbound" />
                                 </div>
 
                                 <!-- Toggle: Inbound -->
@@ -222,7 +250,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Display on localized domestic directories.</p>
                                         </div>
                                     </div>
-                                    <Switch id="inbound" v-model:checked="form.include_as_inbound" />
+                                    <Switch id="inbound" v-model:modelValue="form.include_as_inbound" />
                                 </div>
 
                                 <hr class="dark:border-zinc-800" />
@@ -236,7 +264,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Promote container on front hero banners.</p>
                                         </div>
                                     </div>
-                                    <Switch id="featured" v-model:checked="form.is_featured" />
+                                    <Switch id="featured" v-model:modelValue="form.is_featured" />
                                 </div>
 
                             </CardContent>
