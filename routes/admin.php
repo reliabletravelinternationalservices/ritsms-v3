@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Package\EditPackageController;
 use App\Http\Controllers\Admin\Package\EditPackageGroupController;
 use App\Http\Controllers\Admin\Package\PackageDetailsController;
 use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
+use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,9 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         
         Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
         Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
+
+        Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])->name('admin.packages.groups.pin');
+        Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])->name('admin.packages.groups.pin.update');
     });
 
 });
