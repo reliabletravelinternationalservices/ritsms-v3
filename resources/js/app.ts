@@ -8,6 +8,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { initializeTheme } from './composables/useAppearance';
 import { Toaster } from '@/components/ui/sonner';
+import DeleteDialog from '@/components/ui/DeleteDialog.vue';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -28,12 +29,13 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => [
+            createApp({ render: () => [
                     h(App, props),
                     h(Toaster, {
                         richColors: true,
                         position: 'top-right',
                     }),
+                    h(DeleteDialog),
                 ], })
             .use(plugin)
             .use(ZiggyVue)

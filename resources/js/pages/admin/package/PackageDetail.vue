@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
+import { openDeleteDialog } from '@/stores/deleteDialog';
+import { toast } from 'vue-sonner';
 import PackageImagesAsset from './section/PackageImagesAsset.vue';
 import PackageDescriptionAndHighlight from './section/PackageDescriptionAndHighlight.vue';
 import PackageTabInfo from './section/PackageTabInfo.vue';
@@ -44,6 +46,31 @@ const handleRefreshMediaData = () => {
     });
 };
 
+const onDelete = () => {
+    openDeleteDialog({
+        title: 'Delete package',
+        message: `Are you sure you want to delete "${props.package.name}"?`,
+        confirmText: 'Delete package',
+        cancelText: 'Cancel',
+
+        onConfirm: () => {
+            router.delete(
+                route('admin.packages.destroy', {
+                    id: props.package.id
+                }),
+                {
+                    onSuccess: () => {
+                        toast.success('Package deleted successfully');
+                    },
+
+                    onError: () => {
+                        toast.error('Failed to delete package');
+                    },
+                }
+            );
+        },
+    });
+};
 
 
 </script>
@@ -91,12 +118,14 @@ const handleRefreshMediaData = () => {
                     <!-- Selling Window Card -->
                     <PackageSellingPeriod :selling_start_date="package.selling_start_date" :selling_end_date="package.selling_end_date" />
 
-                    <div class="space-y-2">
-                        <Button variant="outline" size="sm" class="w-full text-center font-semibold uppercase text-zinc-900 dark:text-zinc-50">
-                            <EditIcon class="w-4 h-4" />
-                            <span>Edit</span>
-                        </Button>
-                        <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase">
+                    <div class="flex flex-col gap-2">
+                        <Link :href="route('admin.packages.edit', { id: package.id })" class="w-full">
+                            <Button variant="outline" size="sm" class="w-full text-center font-semibold uppercase text-zinc-900 dark:text-zinc-50">
+                                <EditIcon class="w-4 h-4" />
+                                <span>Edit</span>
+                            </Button>
+                        </Link>
+                        <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase" @click="onDelete">
                             <DeleteIcon class="w-4 h-4" />
                             <span>Delete</span>
                         </Button>

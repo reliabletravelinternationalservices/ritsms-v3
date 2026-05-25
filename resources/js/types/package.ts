@@ -15,7 +15,7 @@ export interface Package {
     itineraries_array: Array<{
         day: number;
         title: string;
-        activity: string;
+        activity: string[];
     }>;
     inclusions_array: string[];
     exclusions_array: string[];

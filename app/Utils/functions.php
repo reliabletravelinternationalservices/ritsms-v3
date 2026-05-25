@@ -72,7 +72,7 @@ if (!function_exists('parse_itineraries')) {
    function parse_itineraries(string $value): string
     {
         preg_match_all(
-            '/TITLE:\s*(.*?)\s*ACTIVITY:\s*(.*?)(?=TITLE:|$)/s',
+            '/TITLE:\s*(.*?)\s*ACTIVITIES:\s*(.*?)(?=TITLE:|$)/s',
             trim($value),
             $matches,
             PREG_SET_ORDER

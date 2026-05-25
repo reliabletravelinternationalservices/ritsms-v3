@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
+use App\Http\Controllers\Admin\Package\DeletePackageController;
+use App\Http\Controllers\Admin\Package\EditPackageController;
 use App\Http\Controllers\Admin\Package\EditPackageGroupController;
 use App\Http\Controllers\Admin\Package\PackageDetailsController;
 use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
@@ -21,6 +23,11 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 
         Route::get('/create', [CreatePackageController::class, 'index'])->name('admin.packages.create');
         Route::post('/store', [CreatePackageController::class, 'store'])->name('admin.packages.store');
+
+        Route::get('/edit/{id}', [EditPackageController::class, 'index'])->name('admin.packages.edit');
+        Route::put('/update/{id}', [EditPackageController::class, 'update'])->name('admin.packages.update');
+
+        Route::delete('/destroy/{id}', [DeletePackageController::class, 'destroy'])->name('admin.packages.destroy');
 
         Route::prefix('images')->group(function () {
             Route::post('/store/{id}', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
