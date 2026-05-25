@@ -34,6 +34,6 @@ class EditPackageGroupController extends Controller
 
         $this->repository->updateGroup($id, $validatedData);
 
-        return redirect()->route('admin.packages.groups')->with('success', 'Package group updated successfully.');
+        return redirect()->route('admin.packages.groups.edit', ['id' => $id])->with('success', 'Package group updated successfully.');
     }
 }
