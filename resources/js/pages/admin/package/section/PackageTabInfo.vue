@@ -12,7 +12,7 @@ interface Props {
     itineraries: Array<{
         day: number;
         title: string;
-        activity: string;
+        activity: string[];
     }>;
     inclusions: string[];
     exclusions: string[];
