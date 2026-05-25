@@ -3,6 +3,7 @@ import ExploreButton from '@/components/ExploreButton.vue';
 import PackageCarousel from '@/components/PackageCarousel.vue';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
+import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 
 
 const props = defineProps<{
@@ -12,6 +13,7 @@ const props = defineProps<{
     isInbound: boolean
     packages?: Package[] | null
     usdRate: number | null
+    tag?: string | null
     href?: string
 }>();
 
@@ -30,6 +32,7 @@ const props = defineProps<{
                 </span>
                 <h1 class="font-bold font-montserrat text-xl md:text-2xl uppercase">{{ title }}</h1>
                 <p v-if="description" class="font-roboto text-sm md:text-base">{{ description }}</p>
+                <ValidToForeignBanner v-if="tag" :tag="tag" />
             </div>
             <span v-if="href">
                 <ExploreButton title="Explore All" :href="href"/>

@@ -21,6 +21,7 @@ const props = defineProps<{
                 :is-featured="true" 
                 :is-inbound="false"
                 :usd-rate="null"
+                :tag="group.tag"
                 :href="route('client.outbound.package.group', { id: group.id })"
             />
 
@@ -35,6 +36,7 @@ const props = defineProps<{
                         :is-featured="false" 
                         :is-inbound="false"
                         :usd-rate="null"
+                        :tag="group.tag"
                         :href="route('client.outbound.package.group', { id: group.id })"
                     />
                 </span>

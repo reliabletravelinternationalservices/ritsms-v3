@@ -58,11 +58,9 @@ class PackageRepository
             ->get();
 
         $packages = $groups->pluck('packages')->flatten()->unique('id');
-        $isForeignOnly = $packages->every(fn ($package) => $package->is_foreign_only);
 
         return [
             'packages' => $packages,
-            'is_foreign_only' => $isForeignOnly,
         ];
     }
 
@@ -75,11 +73,9 @@ class PackageRepository
             ->get();
 
         $packages = $groups->pluck('packages')->flatten()->unique('id');
-        $isForeignOnly = $packages->every(fn ($package) => $package->is_foreign_only);
 
         return [
             'packages' => $packages,
-            'is_foreign_only' => $isForeignOnly,
         ];
     }
 

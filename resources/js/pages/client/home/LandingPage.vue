@@ -15,7 +15,6 @@ import { Destination } from '@/types/destination';
 
 interface PackageResult {
     packages: Package[];
-    is_foreign_only: boolean;
 }
 
 interface Props {
@@ -38,8 +37,8 @@ const props = defineProps<Props>();
     <AppLayout>
         <CarouselSection />
         <DestinationCarousel :destinations="destinations" />
-        <InboundPackageCarousel :packages="props.inbound.packages" :validOnlyForForeign="props.inbound.is_foreign_only" :usdRate="usdRate" />
-        <OutboundPackageCarousel :packages="props.outbound.packages" :validOnlyForForeign="props.outbound.is_foreign_only" :usdRate="null" />
+        <InboundPackageCarousel :packages="props.inbound.packages" tag="VALID FOR FOREIGN ONLY!" :usdRate="usdRate" />
+        <OutboundPackageCarousel :packages="props.outbound.packages" :tag="null" :usdRate="null" />
         <AgencyServices />
         <AboutAgency />
         <PartnerAgency />

@@ -8,13 +8,13 @@ import ExploreButton from '@/components/ExploreButton.vue'
 
 interface Props {
   packages?: Package[],
-  validOnlyForForeign?: boolean
+  tag?: string | null,
   usdRate?: number | null
 }
 const props = withDefaults(defineProps<Props>(), {
   packages: () => [],
   usdRate: null,
-  validOnlyForForeign: false
+  tag: null
 });
 
 </script>
@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
             See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away.
           </p>
-            <ValidToForeignBanner v-if="validOnlyForForeign" />
+            <ValidToForeignBanner v-if="props.tag && props.tag !==null" :tag="props.tag" />
         </div>
       </div>
 
