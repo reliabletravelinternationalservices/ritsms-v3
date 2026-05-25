@@ -63,6 +63,16 @@ const recentGroups = computed(() => {
         .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 });
 
+const handleGroupUpdated = (updatedGroup: PackageGroup) => {
+    packageGroups.value = packageGroups.value.map((group) =>
+        group.id === updatedGroup.id ? updatedGroup : group
+    );
+};
+
+const handleGroupDeleted = (deletedGroupId: number) => {
+    packageGroups.value = packageGroups.value.filter((group) => group.id !== deletedGroupId);
+};
+
 // Regular shelf: standard catalog items
 const olderGroups = computed(() => {
     const list = packageGroups.value
@@ -126,6 +136,8 @@ const olderGroups = computed(() => {
                         :group="group"
                         :href="route('admin.packages.groups.pin', { id: group.id })"
                         highlighted
+                        @group-updated="handleGroupUpdated"
+                        @group-deleted="handleGroupDeleted"
                     />
                 </div>
             </div>
@@ -178,6 +190,8 @@ const olderGroups = computed(() => {
                         :key="group.id"
                         :group="group"
                         :href="route('admin.packages.groups.pin', { id: group.id })"
+                        @group-updated="handleGroupUpdated"
+                        @group-deleted="handleGroupDeleted"
                     />
                 </div>
 
