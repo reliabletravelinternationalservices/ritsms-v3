@@ -197,7 +197,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Display on international travel directories.</p>
                                         </div>
                                     </div>
-                                    <Switch id="outbound" v-model:checked="form.include_as_outbound" />
+                                    <Switch id="outbound" v-model:modelValue="form.include_as_outbound" />
                                 </div>
 
                                 <!-- Toggle: Inbound -->
@@ -209,7 +209,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Display on localized domestic directories.</p>
                                         </div>
                                     </div>
-                                    <Switch id="inbound" v-model:checked="form.include_as_inbound" />
+                                    <Switch id="inbound" v-model:modelValue="form.include_as_inbound" />
                                 </div>
 
                                 <hr class="dark:border-zinc-800" />
@@ -223,7 +223,7 @@ const submitForm = () => {
                                             <p class="text-[11px] text-zinc-400 mt-0.5 leading-tight">Promote container on front hero banners.</p>
                                         </div>
                                     </div>
-                                    <Switch id="featured" v-model:checked="form.is_featured" />
+                                    <Switch id="featured" v-model:modelValue="form.is_featured" />
                                 </div>
 
                             </CardContent>
