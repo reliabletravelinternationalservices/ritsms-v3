@@ -124,6 +124,7 @@ const olderGroups = computed(() => {
                         v-for="group in recentGroups"
                         :key="group.id"
                         :group="group"
+                        :href="route('admin.packages.groups.pin', { id: group.id })"
                         highlighted
                     />
                 </div>
@@ -176,6 +177,7 @@ const olderGroups = computed(() => {
                         v-for="group in olderGroups"
                         :key="group.id"
                         :group="group"
+                        :href="route('admin.packages.groups.pin', { id: group.id })"
                     />
                 </div>
 

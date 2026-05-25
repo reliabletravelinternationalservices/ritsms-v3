@@ -24,6 +24,7 @@ import {
 const props = defineProps<{
   group: PackageGroup;
   highlighted?: boolean;
+  href: string;
 }>();
 
 const cardClasses = computed(() => {
@@ -127,7 +128,7 @@ const formatDate = (dateStr: string) => {
 
       <CardFooter class="p-4 bg-zinc-50/50 dark:bg-zinc-900/30 border-t dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
         <span class="flex items-center gap-1"><Calendar class="w-3 h-3" /> Modified {{ formatDate(props.group.updated_at) }}</span>
-        <Link :href="route('admin.packages.groups.edit', { id: props.group.id })" class="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
+        <Link :href="props.href" class="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
           Manage <ArrowRight class="w-3 h-3" />
         </Link>
       </CardFooter>
