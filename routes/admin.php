@@ -39,6 +39,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
         Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
         Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
+        
         Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
         Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
     });
