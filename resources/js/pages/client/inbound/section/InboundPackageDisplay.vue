@@ -25,6 +25,7 @@ const usdRate: number = page.props.settings?.usd_to_php_rate?? null;
                 :is-featured="true" 
                 :is-inbound="true"
                 :usd-rate="usdRate"
+                :tag="group.tag"
                 :href="route('client.inbound.package.group', { id: group.id })"
             />
 
@@ -40,6 +41,7 @@ const usdRate: number = page.props.settings?.usd_to_php_rate?? null;
                         :is-featured="false" 
                         :is-inbound="true"
                         :usd-rate="usdRate"
+                        :tag="group.tag"
                         :href="route('client.inbound.package.group', { id: group.id })"
                     />
                 </span>

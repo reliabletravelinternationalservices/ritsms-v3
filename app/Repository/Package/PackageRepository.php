@@ -58,11 +58,9 @@ class PackageRepository
             ->get();
 
         $packages = $groups->pluck('packages')->flatten()->unique('id');
-        $isForeignOnly = $packages->every(fn ($package) => $package->is_foreign_only);
 
         return [
             'packages' => $packages,
-            'is_foreign_only' => $isForeignOnly,
         ];
     }
 
@@ -75,11 +73,9 @@ class PackageRepository
             ->get();
 
         $packages = $groups->pluck('packages')->flatten()->unique('id');
-        $isForeignOnly = $packages->every(fn ($package) => $package->is_foreign_only);
 
         return [
             'packages' => $packages,
-            'is_foreign_only' => $isForeignOnly,
         ];
     }
 
@@ -90,7 +86,7 @@ class PackageRepository
 
     public function getPackages(): Collection
     {
-        return $this->model->with('primaryImage', 'schedules', 'packageGroups')->get();
+        return $this->model->with('primaryImage', 'schedules', 'packageGroups')->OrderBy('created_at', 'desc')->get();
     }
 
     public function storePackageImage(int $id, array $data)

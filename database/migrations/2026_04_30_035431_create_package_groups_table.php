@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('tag')->nullable();
             $table->boolean('include_as_outbound')->default(false);
             $table->boolean('include_as_inbound')->default(false);
             $table->boolean('is_featured')->default(false);

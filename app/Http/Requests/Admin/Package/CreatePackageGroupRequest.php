@@ -28,6 +28,7 @@ class CreatePackageGroupRequest extends FormRequest
             'include_as_outbound' => 'required|boolean',
             'include_as_inbound' => 'required|boolean',
             'is_featured' => 'required|boolean',
+            'tag' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
         ];
     }

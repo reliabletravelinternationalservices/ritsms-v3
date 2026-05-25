@@ -12,6 +12,7 @@ class PackageGroup extends Model
     protected $fillable = [
         'title',
         'description',
+        'tag',
         'include_as_outbound',
         'include_as_inbound',
         'is_featured',

@@ -36,6 +36,7 @@ const form = useForm({
     include_as_inbound: false,
     is_featured: false,
     image: null as File | null,
+    tag: '',
 });
 
 // Image Preview Handling
@@ -109,6 +110,17 @@ const submitForm = () => {
                                         :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.title }"
                                     />
                                     <p v-if="form.errors.title" class="text-xs text-red-500 font-medium">{{ form.errors.title }}</p>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <Label for="tag">Tag <span class="text-sm text-zinc-400">(Optional)</span></Label>
+                                    <Input 
+                                        id="tag" 
+                                        type="text" 
+                                        v-model="form.tag" 
+                                        placeholder="e.g., Hot Deals, Valid for Foreigners, Last Minute" 
+                                        :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.tag }"
+                                    />
+                                    <p v-if="form.errors.tag" class="text-xs text-red-500 font-medium">{{ form.errors.tag }}</p>
                                 </div>
 
                                 <!-- Description Input -->
