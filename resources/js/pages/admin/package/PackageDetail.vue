@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString, truncateText } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
@@ -91,15 +91,19 @@ const handleRefreshMediaData = () => {
                     <!-- Selling Window Card -->
                     <PackageSellingPeriod :selling_start_date="package.selling_start_date" :selling_end_date="package.selling_end_date" />
 
-                    <div class="space-y-2">
-                        <Button variant="outline" size="sm" class="w-full text-center font-semibold uppercase text-zinc-900 dark:text-zinc-50">
-                            <EditIcon class="w-4 h-4" />
-                            <span>Edit</span>
-                        </Button>
-                        <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase">
-                            <DeleteIcon class="w-4 h-4" />
-                            <span>Delete</span>
-                        </Button>
+                    <div class="flex flex-col gap-2">
+                        <Link :href="route('admin.packages.edit', { id: package.id })" class="w-full">
+                            <Button variant="outline" size="sm" class="w-full text-center font-semibold uppercase text-zinc-900 dark:text-zinc-50">
+                                <EditIcon class="w-4 h-4" />
+                                <span>Edit</span>
+                            </Button>
+                        </Link>
+                        <Link href = "#" class="w-full">
+                            <Button variant="destructive" size="sm" class="w-full text-center font-semibold uppercase">
+                                <DeleteIcon class="w-4 h-4" />
+                                <span>Delete</span>
+                            </Button>
+                        </Link>
                     </div>
 
                     <!-- Admin System Timestamps -->
