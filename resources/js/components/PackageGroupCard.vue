@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { type PackageGroup } from '@/types/group-package';
+import { openDeleteDialog } from '@/stores/deleteDialog';
+import { toast } from 'vue-sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +29,11 @@ const props = defineProps<{
   href: string;
 }>();
 
+const emit = defineEmits<{
+  (e: 'group-updated', group: PackageGroup): void;
+  (e: 'group-deleted', id: number): void;
+}>();
+
 const cardClasses = computed(() => {
   return [
     'overflow-hidden group flex flex-col justify-between shadow-sm',
@@ -43,6 +50,50 @@ const formatDate = (dateStr: string) => {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+  });
+};
+
+const handleFeatureToggle = () => {
+  router.put(
+    route('admin.packages.groups.feature', { id: props.group.id }),
+    {},
+    {
+      onSuccess: () => {
+        const updatedGroup = {
+          ...props.group,
+          is_featured: !props.group.is_featured,
+          updated_at: new Date().toISOString(),
+        };
+
+        emit('group-updated', updatedGroup);
+        toast.success(
+          props.group.is_featured ? 'Featured label removed' : 'Package group marked featured'
+        );
+      },
+      onError: () => {
+        toast.error('Failed to update featured status');
+      },
+    }
+  );
+};
+
+const handleDelete = () => {
+  openDeleteDialog({
+    title: 'Delete package group',
+    message: `Are you sure you want to delete "${props.group.title}"?`,
+    confirmText: 'Delete group',
+    cancelText: 'Cancel',
+    onConfirm: () => {
+      router.delete(route('admin.packages.groups.destroy', { id: props.group.id }), {
+        onSuccess: () => {
+          emit('group-deleted', props.group.id);
+          toast.success('Package group deleted successfully');
+        },
+        onError: () => {
+          toast.error('Failed to delete package group');
+        },
+      });
+    },
   });
 };
 </script>
@@ -89,7 +140,11 @@ const formatDate = (dateStr: string) => {
                   <Pencil class="w-4 h-4 text-zinc-400" /> Edit Details
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem class="gap-2 text-red-600 focus:text-red-600 dark:focus:bg-red-950/20 cursor-pointer">
+              <DropdownMenuItem @click="handleFeatureToggle" class="flex items-center gap-2">
+                <Star class="w-4 h-4 text-amber-500" />
+                {{ props.group.is_featured ? 'Unpin' : 'Feature' }}
+              </DropdownMenuItem>
+              <DropdownMenuItem @click="handleDelete" class="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <Trash2 class="w-4 h-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
