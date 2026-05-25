@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
+use App\Http\Controllers\Admin\Package\EditPackageGroupController;
 use App\Http\Controllers\Admin\Package\PackageDetailsController;
 use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
@@ -27,11 +28,12 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         });
     });
 
-
     Route::prefix('packageGroups')->group(function () {
         Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
         Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
         Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
+        Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
+        Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
     });
 
 });

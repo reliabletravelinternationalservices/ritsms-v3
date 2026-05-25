@@ -3,10 +3,14 @@
 use App\Http\Middleware\Admin\AuthAdmin;
 use App\Models\Media;
 use App\Models\Package;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 it('allows deleting all package images and removes storage files', function () {
     $this->withoutMiddleware(AuthAdmin::class);
+    $this->actingAs(User::factory()->create([
+        'display_name' => 'Test User',
+    ]));
 
     Storage::fake('public');
 
