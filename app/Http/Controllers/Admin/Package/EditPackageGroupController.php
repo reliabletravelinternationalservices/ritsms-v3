@@ -16,8 +16,7 @@ class EditPackageGroupController extends Controller
     public function index(int $id)
     {
         $group = $this->repository->getPackageGroupByID($id);
-
-        return Inertia::render('admin/package/EditPackageGroup', ['group' => $group]);
+        return Inertia::render('admin/package/EditPackageGroup', compact('group'));
     }
 
     public function update(EditPackageGroupRequest $request, int $id)
@@ -35,7 +34,6 @@ class EditPackageGroupController extends Controller
 
         $this->repository->updateGroup($id, $validatedData);
 
-        return redirect()->route('admin.packages.groups.edit', ['id' => $id])
-            ->with('success', 'Package group updated successfully.');
+        return redirect()->route('admin.packages.groups')->with('success', 'Package group updated successfully.');
     }
 }
