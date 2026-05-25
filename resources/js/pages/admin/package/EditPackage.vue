@@ -339,7 +339,7 @@ const submit = () => {
                                         Breakfast buffet
 
                                     TITLE: Tour Guide
-                                    ACTIVITY:
+                                    ACTIVITIES:
                                         English speaking tour guide
                                         Professional tour guide"
                                 />
