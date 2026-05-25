@@ -25,9 +25,9 @@ class EditPackageGroupRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'include_as_outbound' => ['nullable', 'boolean'],
-            'include_as_inbound' => ['nullable', 'boolean'],
-            'is_featured' => ['nullable', 'boolean'],
+            'include_as_outbound' => ['required', 'boolean'],
+            'include_as_inbound' => ['required', 'boolean'],
+            'is_featured' => ['required', 'boolean'],
             'image' => ['sometimes', 'nullable', 'image'],
         ];
     }
