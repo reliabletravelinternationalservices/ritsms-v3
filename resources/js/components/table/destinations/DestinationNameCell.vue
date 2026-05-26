@@ -14,7 +14,7 @@ const displayTitle = title.length > 70 ? `${title.slice(0, 70)}...` : title;
 
 <template>
     <div class="flex items-start gap-3 min-w-0">
-        <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100">
             <img
                 v-if="destination.image?.url"
                 :src="destination.image.url"

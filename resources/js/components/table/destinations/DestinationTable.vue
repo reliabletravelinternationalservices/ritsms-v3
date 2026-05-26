@@ -143,25 +143,6 @@ const table = useVueTable({
                         </Button>
                     </Link>
                 </span>
-                <!-- <span class="text-xs text-muted-foreground">
-                    Status
-                </span>
-
-                <select
-                    class="border rounded-sm px-3 py-2 h-10"
-                >
-                    <option value="">
-                        All Status
-                    </option>
-
-                    <option value="selling">
-                        Selling
-                    </option>
-
-                    <option value="ended">
-                        Ended
-                    </option>
-                </select> -->
             </div>
         </div>
 

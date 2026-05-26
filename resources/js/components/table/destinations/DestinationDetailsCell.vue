@@ -12,7 +12,7 @@ const props = defineProps<Props>();
     <div>
         <Link
             :href="route('admin.destinations.details', { id: props.destinationId })"
-            class="italic underline text-sm text-[var(--tertiary-custom)]"
+            class="italic underline text-sm hover:text-[var(--tertiary-custom)]"
         >
             View Details
         </Link>
