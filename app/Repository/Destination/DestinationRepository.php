@@ -2,7 +2,9 @@
 namespace App\Repository\Destination;
 
 use App\Models\Destination;
+use App\Models\Media;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DestinationRepository
 {
@@ -29,5 +31,34 @@ class DestinationRepository
     public function getAllDestinations()
     {
         return Destination::with(['locations', 'locations.image', 'image'])->get();
+    }
+
+
+
+    public function storeDestinationImage(array $data, int $id)
+    {
+        $destination = Destination::findOrFail($id);
+
+        $file = $data['image'];
+
+        $folderPath = "upload/destination/{$id}";
+        $path = $file->store($folderPath, 'public');
+
+        return DB::transaction(function () use ($destination, $path, $file, $id) {
+            return Media::create([
+                'mediable_id' => $id,
+                'mediable_type' => $destination->getMorphClass(),
+                'file_name' => $file->getClientOriginalName(),
+                'file_path' => $path,
+                'alt_text' => $file->getClientOriginalName(),
+                'url' => Storage::url($path),
+                'disk' => 'local',
+                'type' => 'image',
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+                'order_number' => 1,
+                'is_primary' => false,
+            ]);
+        });
     }
 }
