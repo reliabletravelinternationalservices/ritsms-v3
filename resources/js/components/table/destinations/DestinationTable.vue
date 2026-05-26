@@ -137,7 +137,7 @@ const table = useVueTable({
             
             <div class="flex flex-col gap-1">
                 <span>
-                    <Link :href="route('admin.packages.create')">
+                    <Link :href="route('admin.destinations.create')">
                         <Button type="button" variant="default">
                             Create
                         </Button>
