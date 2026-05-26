@@ -7,18 +7,18 @@ import { PackageGroup } from '@/types/group-package';
 
 interface Props {
     'groups': {
-        'featured' : PackageGroup[],
-        'normal' : PackageGroup[],
+        'featured': PackageGroup[],
+        'normal': PackageGroup[],
     }
 }
-
 const props = defineProps<Props>();
 </script>
 
 <template>
+
     <Head title="Explore Local Spots Here in The Philippines" />
     <AppLayout>
         <InboundTitleHeader />
         <InboundPackageDisplay :featuredGroups="props.groups.featured" :normalGroups="props.groups.normal" />
-    </AppLayout>     
+    </AppLayout>
 </template>
