@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { openDeleteDialog } from '@/stores/deleteDialog';
+import { toast } from 'vue-sonner';
 import { type BreadcrumbItem } from '@/types';
 import { type Destination } from '@/types/destination';
 import { truncateText } from '@/lib/utils';
@@ -32,10 +34,30 @@ interface Props {
 const props = defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '#' },
-    { title: 'Destinations', href: '#' },
-    { title: truncateText(props.destination.title, 20), href: '#' },
+    { title: 'Dashboard', href: route('admin.dashboard') },
+    { title: 'Destinations', href: route('admin.destinations') },
+    { title: truncateText(props.destination.title, 20), href: route('admin.destinations.details', { id: props.destination.id }) },
 ];
+
+const onDelete = () => {
+    openDeleteDialog({
+        title: 'Delete destination',
+        message: `Are you sure you want to delete "${props.destination.title}"? This action cannot be undone.`,
+        confirmText: 'Delete destination',
+        cancelText: 'Cancel',
+        onConfirm: () => {
+            router.delete(route('admin.destinations.destroy', { id: props.destination.id }), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.success('Destination deleted successfully');
+                },
+                onError: () => {
+                    toast.error('Failed to delete destination. Please try again.');
+                },
+            });
+        },
+    });
+};
 </script>
 
 <template>
@@ -66,10 +88,8 @@ const breadcrumbs: BreadcrumbItem[] = [
                             <ChevronLeft class="w-3.5 h-3.5 mr-1" /> Back
                         </Link>
                     </Button>
-                    <Button variant="ghost" size="sm" as-child class="h-9 text-xs gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30">
-                        <Link href="#">
-                            <Trash2 class="w-3.5 h-3.5" /> Delete
-                        </Link>
+                    <Button variant="ghost" size="sm" class="h-9 text-xs gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" @click="onDelete">
+                        <Trash2 class="w-3.5 h-3.5" /> Delete
                     </Button>
                     <Button size="sm" as-child class="h-9 text-xs gap-1.5 shadow-sm">
                         <Link :href="route('admin.destinations.edit', { id: destination.id })">
