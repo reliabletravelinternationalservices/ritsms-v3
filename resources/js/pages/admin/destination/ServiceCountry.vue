@@ -3,8 +3,9 @@
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Package } from '@/types/package';
+import { type Destination } from '@/types/destination';
 import { Head } from '@inertiajs/vue3';
+import DestinationTable from '@/components/table/destinations/DestinationTable.vue';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -19,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface Props {
-    packages: Package[];
+    destinations: Destination[];
 }
 
 defineProps<Props>();
@@ -44,7 +45,7 @@ defineProps<Props>();
                 </div>
             </div>
             <div class="relative min-h-[100vh] flex-1 rounded-smr md:min-h-min p-6 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                <PackageTable :packages="packages" />
+                <DestinationTable :destinations="destinations" />
             </div>
         </div>
     </AppLayout>
