@@ -11,7 +11,7 @@ const props = defineProps<Props>();
 <template>
     <div>
         <Link
-            :href="route('admin.destinations.show', { destination: props.destinationId })"
+            :href="route('admin.destinations.details', { id: props.destinationId })"
             class="italic underline text-sm text-[var(--tertiary-custom)]"
         >
             View Details
