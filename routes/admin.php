@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
+use App\Http\Controllers\Admin\Destination\DeleteDestinationController;
+use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
@@ -61,6 +63,11 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 
         Route::get('/create', [CreateDestinationController::class, 'index'])->name('admin.destinations.create');
         Route::post('/store', [CreateDestinationController::class, 'store'])->name('admin.destinations.store');
+
+        Route::get('/edit/{id}', [EditDestinationController::class, 'index'])->name('admin.destinations.edit');
+        Route::put('/update/{id}', [EditDestinationController::class, 'update'])->name('admin.destinations.update');
+
+        Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])->name('admin.destinations.destroy');
     });
 
 });

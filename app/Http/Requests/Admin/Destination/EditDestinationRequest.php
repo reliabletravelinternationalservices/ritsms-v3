@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin\Destination;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDestinationRequest extends FormRequest
+class EditDestinationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,7 @@ class CreateDestinationRequest extends FormRequest
             'description' => 'required|string',
             'image' => 'nullable|image',
             'tag' => 'nullable|string',
+            'remove_image' => 'nullable|boolean',
         ];
     }
 
