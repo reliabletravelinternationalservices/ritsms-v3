@@ -30,7 +30,7 @@ class DestinationRepository
 
     public function getAllDestinations()
     {
-        return Destination::with(['locations', 'locations.image', 'image'])->get();
+        return Destination::with(['locations', 'locations.image', 'image'])->orderBy('updated_at', 'desc')->get();
     }
 
 
