@@ -37,6 +37,11 @@ defineProps<{
 }>();
 
 const page = usePage<SharedData>();
+
+const isDropdownActive = (item: NavItem): boolean => {
+    if (!item.children) return false;
+    return item.children.some(child => child.href === page.url);
+};
 </script>
 
 <template>
@@ -67,7 +72,7 @@ const page = usePage<SharedData>();
                 <!-- DROPDOWN -->
                 <Collapsible
                     v-else
-                    default-open
+                    :default-open="isDropdownActive(item)"
                     class="group/collapsible"
                 >
                     <SidebarMenuItem>
