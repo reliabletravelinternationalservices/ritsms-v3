@@ -18,8 +18,22 @@ const mainNavItems: NavItem[] = [
         icon: 'lucide:package',
         children: [
             {
-                title: 'All Packages',
+                title: 'Packages List',
                 href:  route('admin.packages'),
+            },
+            {
+                title: 'Groups',
+                href: route('admin.packages.groups'),
+            },
+        ],
+    },
+    {
+        title: 'Destinations',
+        icon: 'lucide:map',
+        children: [
+            {
+                title: 'Countries List',
+                href:  route('admin.destinations'),
             },
             {
                 title: 'Groups',
