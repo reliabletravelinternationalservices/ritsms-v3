@@ -6,7 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
 import { Head } from '@inertiajs/vue3';
 
-import PackageTable from './section/PackageTable.vue';
+import PackageTable from '@/components/table/package/PackageTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

@@ -56,6 +56,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 
     Route::prefix('destinations')->group(function () {
         Route::get('/', [ServiceCountryController::class, 'index'])->name('admin.destinations');
+        Route::get('/{destination}', [ServiceCountryController::class, 'show'])->name('admin.destinations.show');
     });
 
 });

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import DestinationCell from '@/components/DestinationCell.vue';
-import DurationCell from '@/components/DurationCell.vue';
-import NameWithImageCell from '@/components/NameWithImageCell.vue';
-import PriceCell from '@/components/PriceCell.vue';
-import StatusIndicatorCell from '@/components/StatusIndicatorCell.vue';
+import DestinationCell from './DestinationCell.vue';
+import DurationCell from './DurationCell.vue';
+import NameWithImageCell from './NameWithImageCell.vue';
+import PriceCell from './PriceCell.vue';
+import StatusIndicatorCell from './StatusIndicatorCell.vue';
 import { Input } from '@/components/ui/input';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
@@ -21,7 +21,7 @@ import { h, ref } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Link } from '@inertiajs/vue3';
-import LinkCell from '@/components/LinkCell.vue';
+import LinkCell from '@/components/table/package/LinkCell.vue';
 
 
 interface Props {
