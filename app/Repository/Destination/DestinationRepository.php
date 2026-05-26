@@ -74,7 +74,7 @@ class DestinationRepository
                 'file_path' => $path,
                 'alt_text' => $file->getClientOriginalName(),
                 'url' => Storage::url($path),
-                'disk' => 'local',
+                'disk' => 'public',
                 'type' => 'image',
                 'mime_type' => $file->getMimeType(),
                 'size' => $file->getSize(),
@@ -96,21 +96,38 @@ class DestinationRepository
                 ->first();
 
             if ($media) {
-                Storage::disk('public')->delete($media->file_path);
+                Storage::disk($media->disk ?: 'public')->delete($media->file_path);
             }
 
             $folderPath = "upload/destination/{$id}";
             $path = $file->store($folderPath, 'public');
 
-            return $media->update([
+            if ($media) {
+                return $media->update([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'alt_text' => $file->getClientOriginalName(),
+                    'url' => Storage::url($path),
+                    'disk' => 'public',
+                    'type' => 'image',
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+
+            return Media::create([
+                'mediable_id' => $id,
+                'mediable_type' => $destination->getMorphClass(),
                 'file_name' => $file->getClientOriginalName(),
                 'file_path' => $path,
                 'alt_text' => $file->getClientOriginalName(),
                 'url' => Storage::url($path),
-                'disk' => 'local',
+                'disk' => 'public',
                 'type' => 'image',
                 'mime_type' => $file->getMimeType(),
                 'size' => $file->getSize(),
+                'order_number' => 1,
+                'is_primary' => false,
             ]);
         });
     }

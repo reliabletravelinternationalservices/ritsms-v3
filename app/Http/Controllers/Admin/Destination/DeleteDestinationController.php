@@ -13,7 +13,6 @@ class DeleteDestinationController extends Controller
     public function destroy(int $id)
     {
         $this->repository->deleteDestination($id);
-        $this->repository->deleteDestinationImage($id);
 
         return redirect()->route('admin.destinations')->with('success', 'Destination deleted successfully!');
     }
