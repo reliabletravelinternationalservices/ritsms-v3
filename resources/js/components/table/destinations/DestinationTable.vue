@@ -2,7 +2,9 @@
 import { Input } from '@/components/ui/input';
 import { Destination } from '@/types/destination';
 import { Icon } from '@iconify/vue';
-import { Link } from '@inertiajs/vue3';
+import DestinationNameCell from './DestinationNameCell.vue';
+import DestinationLocationsCell from './DestinationLocationsCell.vue';
+import DestinationDetailsCell from './DestinationDetailsCell.vue';
 import {
     useVueTable,
     FlexRender,
@@ -12,6 +14,8 @@ import {
     type CellContext,
 } from '@tanstack/vue-table';
 import { h, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/vue3';
 
 interface Props {
     destinations: Destination[];
@@ -32,40 +36,16 @@ const columns = [
         },
     },
     {
-        id: 'image',
-        header: 'Image',
-        accessorFn: (row: Destination) => row.image?.url || '',
-        minSize: 90,
-        maxSize: 120,
-        cell: (info: CellContext<Destination, unknown>) => {
-            const destination = info.row.original;
-            const url = destination.image?.url;
-            return h(
-                'div',
-                { class: 'flex items-center justify-center' },
-                url
-                    ? h('img', {
-                          src: url,
-                          alt: destination.image?.alt_text || destination.title,
-                          class: 'h-12 w-12 rounded-sm object-cover',
-                      })
-                    : h(
-                          'div',
-                          {
-                              class:
-                                  'flex h-12 w-12 items-center justify-center rounded-sm bg-slate-100 text-xs text-muted-foreground',
-                          },
-                          'No Image'
-                      )
-            );
-        },
-    },
-    {
-        accessorKey: 'title',
-        header: 'Title',
+        id: 'destination',
+        header: 'Destination',
+        accessorFn: (row: Destination) => row.title,
         enableSorting: true,
-        minSize: 220,
-        maxSize: 450,
+        minSize: 300,
+        maxSize: 520,
+        cell: (info: CellContext<Destination, unknown>) =>
+            h(DestinationNameCell, {
+                destination: info.row.original,
+            }),
     },
     {
         accessorKey: 'country',
@@ -83,34 +63,22 @@ const columns = [
     {
         id: 'locations',
         header: 'Locations',
-        accessorFn: (row: Destination) => row.locations.length,
+        accessorFn: (row: Destination) => row.locations,
         enableSorting: true,
-        minSize: 120,
+        minSize: 220,
         cell: (info: CellContext<Destination, unknown>) =>
-            String(info.getValue()),
+            h(DestinationLocationsCell, {
+                locations: info.row.original.locations,
+            }),
     },
     {
         id: 'details',
         header: 'Details',
         minSize: 140,
         cell: (info: CellContext<Destination, unknown>) =>
-            h(
-                Link,
-                {
-                    href: route('admin.destinations.show', {
-                        destination: info.row.original.id,
-                    }),
-                    class: 'italic underline text-sm text-[var(--tertiary-custom)]',
-                },
-                () => 'View Details'
-            ),
-    },
-    {
-        accessorKey: 'created_at',
-        header: 'Created',
-        minSize: 140,
-        cell: (info: CellContext<Destination, unknown>) =>
-            new Date(String(info.getValue())).toLocaleDateString(),
+            h(DestinationDetailsCell, {
+                destinationId: info.row.original.id,
+            }),
     },
 ];
 
@@ -125,7 +93,7 @@ const table = useVueTable({
     getFilteredRowModel: getFilteredRowModel(),
     initialState: {
         pagination: {
-            pageSize: 8,
+            pageSize: 5,
         },
         columnVisibility: {
             id: false,
@@ -147,7 +115,7 @@ const table = useVueTable({
 
 <template>
     <div class="space-y-4">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between lg:flex-row lg:items-center lg:justify-between">
             <div class="flex items-center gap-4">
                 <Input
                     v-model="search"
@@ -164,6 +132,36 @@ const table = useVueTable({
                 >
                     <Icon icon="iconoir:search" class="text-2xl" />
                 </button>
+            </div>
+
+            
+            <div class="flex flex-col gap-1">
+                <span>
+                    <Link :href="route('admin.packages.create')">
+                        <Button type="button" variant="default">
+                            Create
+                        </Button>
+                    </Link>
+                </span>
+                <!-- <span class="text-xs text-muted-foreground">
+                    Status
+                </span>
+
+                <select
+                    class="border rounded-sm px-3 py-2 h-10"
+                >
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="selling">
+                        Selling
+                    </option>
+
+                    <option value="ended">
+                        Ended
+                    </option>
+                </select> -->
             </div>
         </div>
 
