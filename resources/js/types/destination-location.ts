@@ -4,6 +4,7 @@ export interface DestinationLocation {
     name: string;
     description: string;
     destination_id?: number;
+    map_link?: string;
 
     image: Media;
     created_at: string;
