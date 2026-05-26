@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\Destination\ServiceCountryController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
 use App\Http\Controllers\Admin\Package\DeletePackageController;
@@ -50,6 +51,11 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 
         Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])->name('admin.packages.groups.pin');
         Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])->name('admin.packages.groups.pin.update');
+    });
+
+
+    Route::prefix('destinations')->group(function () {
+        Route::get('/', [ServiceCountryController::class, 'index'])->name('admin.destinations');
     });
 
 });
