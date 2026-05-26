@@ -27,7 +27,8 @@ class CreateDestinationRequest extends FormRequest
             'country' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image',
-            'tags' => 'nullable|string',
+            'tag' => 'nullable|string',
+            'remove_image' => 'nullable|boolean',
         ];
     }
 
@@ -38,7 +39,7 @@ class CreateDestinationRequest extends FormRequest
             'country.required' => 'The country field is required.',
             'description.required' => 'The description field is required.',
             'image.image' => 'The uploaded file must be an image.',
-            'tags.string' => 'The tags field must be a string.',
+            'tag.string' => 'The tag field must be a string.',
         ];
     }
 }
