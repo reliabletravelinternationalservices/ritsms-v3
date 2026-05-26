@@ -3,6 +3,8 @@ namespace App\Repository\Destination;
 
 use App\Models\Destination;
 use App\Models\Media;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,6 +17,26 @@ class DestinationRepository
         });
     }
 
+    public function updateDestination(int $id, array $data)
+    {
+        $destination = Destination::findOrFail($id);
+
+        return DB::transaction(function () use ($destination, $data) {
+            $destination->update($data);
+            return $destination->fresh(['locations', 'locations.image', 'image']);
+        });
+    }
+
+    public function deleteDestination(int $id)
+    {
+        $destination = Destination::findOrFail($id);
+
+        return DB::transaction(function () use ($destination) {
+            $this->deleteDestinationImage($destination->id);
+            return $destination->delete();
+            
+        });
+    }
 
     public function createManyDestination(array $destinations)
     {
@@ -61,4 +83,52 @@ class DestinationRepository
             ]);
         });
     }
+
+
+    public function updateDestinationImage(array $data, int $id)
+    {
+        $destination = Destination::findOrFail($id);
+        $file = $data['image'];
+
+        return DB::transaction(function () use ($destination, $file, $id) {
+            $media = Media::where('mediable_id', $id)
+                ->where('mediable_type', Destination::class)
+                ->first();
+
+            if ($media) {
+                Storage::disk('public')->delete($media->file_path);
+            }
+
+            $folderPath = "upload/destination/{$id}";
+            $path = $file->store($folderPath, 'public');
+
+            return $media->update([
+                'file_name' => $file->getClientOriginalName(),
+                'file_path' => $path,
+                'alt_text' => $file->getClientOriginalName(),
+                'url' => Storage::url($path),
+                'disk' => 'local',
+                'type' => 'image',
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+            ]);
+        });
+    }
+
+    public function deleteDestinationImage(int $id)
+    {
+        return DB::transaction(function () use ($id) {
+            $media = Media::where('mediable_id', $id)
+                ->where('mediable_type', Destination::class)
+                ->first();
+
+            if ($media) {
+                Storage::disk($media->disk)->delete($media->file_path);
+                return $media->delete();
+            }
+            
+            return false;
+        });
+    }
+
 }
