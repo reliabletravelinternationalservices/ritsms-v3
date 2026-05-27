@@ -153,7 +153,7 @@ const onDelete = () => {
                                 <CardDescription class="text-[11px] mt-0.5">Specific drop-off locations, historical landmarks, or hotel hubs tied to this region.</CardDescription>
                             </div>
                             <Button size="sm" variant="outline" as-child class="h-8 text-xs gap-1 bg-white dark:bg-zinc-950 dark:border-zinc-800">
-                                <Link href="#">
+                                <Link :href="route('admin.destinations.locations.create', {destID: destination.id})">
                                     <Plus class="w-3.5 h-3.5" /> Add Location
                                 </Link>
                             </Button>

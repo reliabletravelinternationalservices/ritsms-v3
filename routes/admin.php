@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
+use App\Http\Controllers\Admin\Destination\CreateLocationController;
 use App\Http\Controllers\Admin\Destination\DeleteDestinationController;
 use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
@@ -68,6 +69,11 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::put('/update/{id}', [EditDestinationController::class, 'update'])->name('admin.destinations.update');
 
         Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])->name('admin.destinations.destroy');
+
+        Route::prefix('{destID}/locations')->group(function () {
+            Route::get('/create', [CreateLocationController::class, 'index'])->name('admin.destinations.locations.create');
+            Route::post('/store', [CreateLocationController::class, 'store'])->name('admin.destinations.locations.store');
+        });
     });
 
 });
