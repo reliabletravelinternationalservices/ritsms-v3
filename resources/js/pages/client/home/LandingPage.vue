@@ -46,7 +46,7 @@ const props = defineProps<Props>();
         </MotionWrapper>
 
         <MotionWrapper :delay="0.1">
-            <InboundPackageCarousel :packages="props.inbound.packages" tag="VALID FOR FOREIGN ONLY!"
+            <InboundPackageCarousel :packages="props.inbound.packages" :tag="`VALID FOR FOREIGN ONLY!`"
                 :usdRate="usdRate" />
         </MotionWrapper>
 
