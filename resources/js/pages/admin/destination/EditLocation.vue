@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { type Destination } from '@/types/destination';
+import { truncateText } from '@/lib/utils';
 
 // Components & Shadcn Primitives
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -19,48 +20,55 @@ import {
     X,
     LoaderCircle,
     MapPin,
-    Globe,
-    Tag,
+    Map,
     ChevronLeft,
     Save,
-    RefreshCcw,
+    Compass,
+    RefreshCcw
 } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
+import { DestinationLocation } from '@/types/destination-location';
 
-const props = defineProps<{ destination: Destination }>();
+interface Props {
+    destination: Destination;
+    location: DestinationLocation;
+}
 
-const originalImageUrl = props.destination.image?.url ?? null;
+const props = defineProps<Props>();
+
+const originalImageUrl = props.location.image?.url ?? null;
+
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('admin.dashboard') },
     { title: 'Destinations', href: route('admin.destinations') },
-    { title: 'Edit', href: route('admin.destinations.edit', { id: props.destination.id }) },
+    { title: truncateText(props.destination.title, 20), href: route('admin.destinations.details', { id: props.destination.id }) },
+    { title: 'Edit Location', href: route('admin.destinations.locations.edit', { destID: props.destination.id, id: props.location.id }) },
 ];
 
 type FormData = {
-    title: string;
+    name: string;
     description: string;
-    country: string;
-    tag: string;
+    map_link: string;
     image: File | null;
     remove_image: boolean;
 };
 
+// --- INERTIA FORM CONFIGURATION ---
 const form = useForm<FormData>({
-    title: props.destination.title,
-    description: props.destination.description ?? '',
-    country: props.destination.country,
-    tag: props.destination.tag ?? '',
+    name: props.location.name,
+    description: props.location.description,
+    map_link: props.location.map_link ?? '',
     image: null,
     remove_image: false,
 });
 
+// Image Preview Lifecycle State
 const imagePreview = ref<string | null>(originalImageUrl);
 const isBlobPreview = ref(false);
 const removeImage = ref(false);
 
 const handleFileSelect = (event: Event) => {
     const target = event.target as HTMLInputElement;
-
     if (target.files && target.files[0]) {
         const file = target.files[0];
 
@@ -111,22 +119,19 @@ const submitForm = () => {
             ...data,
             _method: 'put',
         }))
-        .post(route('admin.destinations.update', {
-            id: props.destination.id,
+        .post(route('admin.destinations.locations.update', {
+            destID: props.destination.id,
+            id: props.location.id,
         }), {
             forceFormData: true,
-
+            preserveScroll: true,
 
             onSuccess: () => {
-                toast.success(
-                    'Destination updated successfully.'
-                );
+                toast.success('Location updated successfully!');
             },
 
             onError: () => {
-                toast.error(
-                    'Failed to update destination.'
-                );
+                toast.error('Failed to update location.');
             },
         });
 };
@@ -134,7 +139,7 @@ const submitForm = () => {
 
 <template>
 
-    <Head title="Edit Destination" />
+    <Head title="Edit Destination Location" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="p-6 mx-auto w-full space-y-6">
@@ -143,19 +148,18 @@ const submitForm = () => {
                 <div>
                     <h1
                         class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                        Edit Destination
+                        Edit Destination Location
                     </h1>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Update destination details, replace the
-                        cover image, or reset the form to the loaded values.</p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        Update the specific localized attraction parameters, details, or cover imagery asset rules.
+                    </p>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <Link :href="route('admin.destinations.details', { id: props.destination.id })">
-                        <Button variant="outline" size="sm"
-                            class="h-9 text-xs gap-1.5 bg-white dark:bg-zinc-950 dark:border-zinc-800">
-                            <ChevronLeft class="w-3.5 h-3.5" /> Back
-                        </Button>
+                <Button variant="outline" size="sm" as-child
+                    class="h-9 text-xs gap-1.5 bg-white dark:bg-zinc-950 dark:border-zinc-800">
+                    <Link :href="route('admin.destinations.details', { id: destination.id })">
+                        <ChevronLeft class="w-3.5 h-3.5" /> Back
                     </Link>
-                </div>
+                </Button>
             </div>
 
             <form @submit.prevent="submitForm">
@@ -164,69 +168,63 @@ const submitForm = () => {
                     <div class="md:col-span-7 space-y-4">
                         <Card class="dark:border-zinc-800 shadow-sm">
                             <CardHeader class="p-4 pb-2">
-                                <CardTitle class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Destination
-                                    Identity</CardTitle>
-                                <CardDescription class="text-xs">Update the destination title, region, and marketing
-                                    tag.</CardDescription>
+                                <CardTitle class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Location
+                                    Parameters</CardTitle>
+                                <CardDescription class="text-xs">Specify regional metadata configurations for this
+                                    sub-location entity.</CardDescription>
                             </CardHeader>
-                            <CardContent class="p-4 space-y-2">
+                            <CardContent class="p-4 pt-2 space-y-4">
 
                                 <div class="space-y-1.5">
-                                    <Label for="title" class="text-xs font-medium">Destination Title <span
+                                    <Label class="text-xs font-medium text-zinc-400">Parent Destination Context</Label>
+                                    <div
+                                        class="flex items-center gap-2 px-3 h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 text-zinc-600 dark:text-zinc-400 text-xs">
+                                        <Compass class="w-4 h-4 text-indigo-500 shrink-0" />
+                                        <span class="font-medium truncate">{{ destination.title }}</span>
+                                        <span class="text-[10px] text-zinc-400 font-normal">({{ destination.country
+                                            }})</span>
+                                    </div>
+                                    <div class="min-h-[0.5rem]" />
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <Label for="name" class="text-xs font-medium">Location Name <span
                                             class="text-red-500">*</span></Label>
                                     <div class="relative">
                                         <MapPin class="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
-                                        <Input id="title" type="text" v-model="form.title"
-                                            placeholder="e.g., Tokyo & Around"
+                                        <Input id="name" type="text" v-model="form.name"
+                                            placeholder="e.g., Shinjuku Gyoen National Garden"
                                             class="pl-9 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
-                                            :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.title }" />
+                                            :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.name }" />
                                     </div>
                                     <div class="min-h-[1.5rem]">
-                                        <InputError :message="form.errors.title" />
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div class="space-y-1.5">
-                                        <div class="flex justify-between items-center">
-                                            <Label for="country" class="text-xs font-medium">Country <span
-                                                    class="text-red-500">*</span></Label>
-                                        </div>
-                                        <div class="relative">
-                                            <Globe class="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
-                                            <Input id="country" type="text" v-model="form.country"
-                                                placeholder="e.g., Japan"
-                                                class="pl-9 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
-                                                :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.country }" />
-                                        </div>
-                                        <div class="min-h-[1.5rem]">
-                                            <InputError :message="form.errors.country" />
-                                        </div>
-                                    </div>
-
-                                    <div class="space-y-1.5">
-                                        <div class="flex justify-between items-center">
-                                            <Label for="tag" class="text-xs font-medium">Marketing Tag</Label>
-                                            <span class="text-[10px] text-zinc-400 font-normal italic">Optional</span>
-                                        </div>
-                                        <div class="relative">
-                                            <Tag class="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
-                                            <Input id="tag" type="text" v-model="form.tag"
-                                                placeholder="e.g., popular, trending"
-                                                class="pl-9 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
-                                                :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.tag }" />
-                                        </div>
-                                        <div class="min-h-[1.5rem]">
-                                            <InputError :message="form.errors.tag" />
-                                        </div>
+                                        <InputError :message="form.errors.name" />
                                     </div>
                                 </div>
 
                                 <div class="space-y-1.5">
-                                    <Label for="description" class="text-xs font-medium">Description Summary <span
+                                    <div class="flex justify-between items-center">
+                                        <Label for="map_link" class="text-xs font-medium">Google Maps URL /
+                                            Coordinates</Label>
+                                        <span class="text-[10px] text-zinc-400 font-normal italic">Optional</span>
+                                    </div>
+                                    <div class="relative">
+                                        <Map class="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
+                                        <Input id="map_link" type="url" v-model="form.map_link"
+                                            placeholder="e.g., https://maps.google.com/?q=..."
+                                            class="pl-9 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
+                                            :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.map_link }" />
+                                    </div>
+                                    <div class="min-h-[1.5rem]">
+                                        <InputError :message="form.errors.map_link" />
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <Label for="description" class="text-xs font-medium">Spot Overview Summary <span
                                             class="text-red-500">*</span></Label>
-                                    <Textarea id="description" v-model="form.description" rows="6"
-                                        placeholder="Write an engaging overview detailing climate, scenic structures..."
+                                    <Textarea id="description" v-model="form.description" rows="5"
+                                        placeholder="Detail entry rules, points of interest, coordinate guides..."
                                         class="text-xs dark:bg-zinc-950 dark:border-zinc-800 resize-none leading-relaxed"
                                         :class="{ 'border-red-500 focus-visible:ring-red-500': form.errors.description }" />
                                     <div class="min-h-[1.5rem]">
@@ -241,9 +239,9 @@ const submitForm = () => {
                     <div class="md:col-span-5 space-y-4">
                         <Card class="dark:border-zinc-800 shadow-sm overflow-hidden">
                             <CardHeader class="p-4 pb-2">
-                                <CardTitle class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Cover Image
-                                </CardTitle>
-                                <CardDescription class="text-xs">Upload exactly one showcase landscape image asset.
+                                <CardTitle class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Location
+                                    Thumbnail</CardTitle>
+                                <CardDescription class="text-xs">Upload an asset showcasing this specific local hub.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent class="p-4 pt-2">
@@ -251,7 +249,7 @@ const submitForm = () => {
                                 <div v-if="!imagePreview"
                                     class="relative group border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg hover:border-zinc-400 dark:hover:border-zinc-700 transition duration-150">
                                     <label
-                                        class="flex flex-col items-center justify-center p-6 text-center cursor-pointer min-h-[180px]">
+                                        class="flex flex-col items-center justify-center p-6 text-center cursor-pointer min-h-[190px]">
                                         <ImagePlus
                                             class="w-8 h-8 text-zinc-400 stroke-[1.25] mb-2 group-hover:scale-105 transition" />
                                         <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Select
@@ -264,7 +262,7 @@ const submitForm = () => {
 
                                 <div v-else
                                     class="relative aspect-[4/3] w-full rounded-lg overflow-hidden border bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-800 group">
-                                    <img :src="imagePreview" alt="Destination preview"
+                                    <img :src="imagePreview" alt="Sub-Location asset preview"
                                         class="w-full h-full object-cover" />
                                     <div
                                         class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition duration-150">
@@ -275,6 +273,7 @@ const submitForm = () => {
                                         </Button>
                                     </div>
                                 </div>
+
                                 <p v-if="removeImage" class="text-xs text-red-500 mt-2">Current image will be removed
                                     when you save.</p>
                                 <div class="min-h-[1.5rem] mt-2">

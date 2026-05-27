@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use Database\Factories\DestinationFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Destination extends Model
 {
+    /** @use HasFactory<DestinationFactory> */
+    use HasFactory;
+
     protected $table = 'destinations';
-    
+
     protected $fillable = [
         'title',
         'description',
@@ -15,8 +20,7 @@ class Destination extends Model
         'tag',
     ];
 
-
-    //Relationship
+    // Relationship
     public function image()
     {
         return $this->morphOne(Media::class, 'mediable');

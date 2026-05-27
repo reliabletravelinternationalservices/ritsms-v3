@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository\Destination;
 
 use App\Models\Destination;
@@ -34,13 +35,12 @@ class DestinationRepository
         return DB::transaction(function () use ($destination) {
             $this->deleteDestinationImage($destination->id);
             return $destination->delete();
-            
         });
     }
 
     public function createManyDestination(array $destinations)
     {
-        return collect($destinations)->map(fn (array $item) => $this->createDestination($item));
+        return collect($destinations)->map(fn(array $item) => $this->createDestination($item));
     }
 
 
@@ -143,9 +143,8 @@ class DestinationRepository
                 Storage::disk($media->disk)->delete($media->file_path);
                 return $media->delete();
             }
-            
+
             return false;
         });
     }
-
 }

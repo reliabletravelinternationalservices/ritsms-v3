@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
+use App\Http\Controllers\Admin\Destination\CreateLocationController;
 use App\Http\Controllers\Admin\Destination\DeleteDestinationController;
+use App\Http\Controllers\Admin\Destination\DeleteLocationController;
 use App\Http\Controllers\Admin\Destination\EditDestinationController;
+use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
@@ -46,7 +49,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
         Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
         Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
-        
+
         Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
         Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
         Route::put('/feature/{id}', [FeaturePackageGroupController::class, 'toggle'])->name('admin.packages.groups.feature');
@@ -68,6 +71,15 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::put('/update/{id}', [EditDestinationController::class, 'update'])->name('admin.destinations.update');
 
         Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])->name('admin.destinations.destroy');
-    });
 
+        Route::prefix('{destID}/locations')->group(function () {
+            Route::get('/create', [CreateLocationController::class, 'index'])->name('admin.destinations.locations.create');
+            Route::post('/store', [CreateLocationController::class, 'store'])->name('admin.destinations.locations.store');
+
+            Route::get('/edit/{id}', [EditLocationController::class, 'index'])->name('admin.destinations.locations.edit');
+            Route::put('/update/{id}', [EditLocationController::class, 'update'])->name('admin.destinations.locations.update');
+
+            Route::delete('/destroy/{id}', [DeleteLocationController::class, 'destroy'])->name('admin.destinations.locations.destroy');
+        });
+    });
 });
