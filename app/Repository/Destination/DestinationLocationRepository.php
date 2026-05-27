@@ -18,4 +18,11 @@ class DestinationLocationRepository
     {
         return collect($destinations)->map(fn (array $item) => $this->createDestinationLocation($item));
     }
+
+
+    public function createLocation(array $data, int $destID)
+    {
+        $data['destination_id'] = $destID;
+        return $this->createDestinationLocation($data);
+    }
 }
