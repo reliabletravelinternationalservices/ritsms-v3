@@ -1,12 +1,16 @@
 <script setup lang="ts">
-
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Package } from '@/types/package';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+import InquiryTable from '@/components/table/inquiry/InquiryTable.vue';
+import { Inquiry } from '@/types/inquiry';
 
-import PackageTable from '@/components/table/package/PackageTable.vue';
+interface Props {
+    inquiries: Inquiry[];
+}
+
+defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,39 +18,36 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.dashboard'),
     },
     {
-        title: 'Packages',
-        href: route('admin.packages'),
+        title: 'Inquiries',
+        href: route('admin.inquiries'),
     },
 ];
-
-interface Props {
-    packages: Package[];
-}
-
-defineProps<Props>();
-
-
 </script>
 
 <template>
-    <Head title="Service Packages" />
+    <Head title="Client Inquiries" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            
+            <!-- TOP STATS OVERVIEW CARDS -->
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
+                    <PlaceholderPattern class="absolute inset-0" />
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
+                    <PlaceholderPattern class="absolute inset-0" />
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
+                    <PlaceholderPattern class="absolute inset-0" />
                 </div>
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-smr md:min-h-min p-6 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                inquiries data
+            
+            <!-- MAIN DATATABLE CONTAINER -->
+            <div class="relative min-h-[400vh] flex-1 md:min-h-min p-6 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-card shadow-sm">
+                <InquiryTable :inquiries="inquiries"/>
             </div>
+
         </div>
     </AppLayout>
 </template>
