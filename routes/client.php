@@ -10,6 +10,7 @@ use App\Http\Controllers\Client\Location\LocationController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
 use App\Http\Controllers\Client\Package\PackageGroupController;
+use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
@@ -51,3 +52,4 @@ Route::prefix('inbound')->group(function () {
 
 Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
+Route::get('/inquiry/policy', [InquiryPolicyController::class, 'index'])->name('client.inquiry.policy');
