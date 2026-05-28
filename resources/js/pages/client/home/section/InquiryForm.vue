@@ -6,6 +6,8 @@ import Input from '@/components/ui/input/Input.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
+import InputError from '@/components/InputError.vue';
 
 interface Props {
     class?: string
@@ -21,7 +23,11 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('client.inquiry.store'));
+    form.post(route('client.inquiry.store'), {
+        onSuccess: () => {
+            form.reset();
+        },
+    });
 };
 </script>
 
@@ -128,6 +134,7 @@ const submit = () => {
               placeholder="Enter your full name"
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"
             />
+            <InputError  :message="form.errors.fullname" />
           </div>
 
           <div class="space-y-1">
@@ -141,6 +148,7 @@ const submit = () => {
               placeholder="Enter your email address"
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"
             />
+            <InputError  :message="form.errors.email" />
           </div>
 
           <div class="space-y-1">
@@ -154,6 +162,7 @@ const submit = () => {
               placeholder="Enter your phone number"
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"
             />
+            <InputError  :message="form.errors.phone" />
           </div>
 
           <div class="space-y-1">
@@ -167,6 +176,7 @@ const submit = () => {
               placeholder="Tell us about your concern..."
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"
             />
+            <InputError  :message="form.errors.message" />
           </div>
 
           <div>
@@ -183,6 +193,7 @@ const submit = () => {
               :disabled="form.processing"
               class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--tertiary-custom)] duration-75 ease-in rounded-none"
             >
+              <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
               Send Message
             </Button>
           </div>
