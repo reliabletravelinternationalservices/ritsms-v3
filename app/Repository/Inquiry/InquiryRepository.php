@@ -17,4 +17,17 @@ class InquiryRepository
             return Inquiry::create($inquiry);
         });
     }
+
+
+    public function getAllInquiries()
+    {
+        return Inquiry::latest()->orderBy('created_at', 'desc')->get();
+    }
+
+
+
+    public function getInquiryById(int $id)
+    {
+        return Inquiry::findOrFail($id);
+    }
 }
