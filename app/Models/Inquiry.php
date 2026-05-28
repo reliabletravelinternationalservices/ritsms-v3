@@ -14,6 +14,6 @@ class Inquiry extends Model
         'email',
         'phone',
         'message',
-        'staus'
+        'status'
     ];
 }
