@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
 use App\Http\Controllers\Admin\Inquiry\ClientsInquiryController;
+use App\Http\Controllers\Admin\Inquiry\InquiryDetailController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
 use App\Http\Controllers\Admin\Package\DeletePackageController;
@@ -86,5 +87,6 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 
     Route::prefix('inquiries')->group(function () {
         Route::get('/', [ClientsInquiryController::class, 'index'])->name('admin.inquiries');
+        Route::get('/{id}/details', [InquiryDetailController::class, 'index'])->name('admin.inquiries.details');
     });
 });
