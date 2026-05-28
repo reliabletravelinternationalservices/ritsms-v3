@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Inquiry;
 
 use App\Http\Controllers\Controller;
 use App\Repository\Inquiry\InquiryRepository;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class InquiryDetailController extends Controller
 {
@@ -13,6 +13,6 @@ class InquiryDetailController extends Controller
     {
         $inquiry = $this->repository->getInquiryById($id);
 
-        return inertia('admin/inquiry/InquiryDetail', compact('inquiry'));
+        return Inertia::render('admin/inquiry/InquiryDetail', compact('inquiry'));
     }
 }
