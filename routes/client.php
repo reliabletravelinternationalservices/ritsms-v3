@@ -7,6 +7,7 @@ use App\Http\Controllers\Client\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
 use App\Http\Controllers\Client\Location\LocationController;
+use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
 use App\Http\Controllers\Client\Package\PackageGroupController;
@@ -48,8 +49,15 @@ Route::prefix('inbound')->group(function () {
     });
 });
 
+Route::prefix('inquiry')->group(function () {
+    Route::post('/store', [InquiryResultController::class, 'store'])->name('client.inquiry.store')->middleware('throttle:5,10');
+    Route::get('/success', [InquiryResultController::class, 'index'])->name('client.inquiry.success');
+    Route::get('/policy', [InquiryPolicyController::class, 'index'])->name('client.inquiry.policy');
+});
+
+
 
 
 Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
-Route::get('/inquiry/policy', [InquiryPolicyController::class, 'index'])->name('client.inquiry.policy');
+
