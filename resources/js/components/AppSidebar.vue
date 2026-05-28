@@ -48,7 +48,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Inquiries',
-        href: route('admin.dashboard'),
+        href: route('admin.inquiries'),
         icon: 'ix:inquiry',
     },
     {
