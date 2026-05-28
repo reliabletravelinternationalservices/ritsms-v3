@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ClientAppLayout from '@/layouts/ClientAppLayout.vue';
 import { Icon } from '@iconify/vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>

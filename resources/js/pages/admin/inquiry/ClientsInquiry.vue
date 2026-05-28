@@ -2,7 +2,7 @@
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import InquiryTable from '@/components/table/inquiry/InquiryTable.vue';
 import { Inquiry } from '@/types/inquiry';
 

@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Icon } from '@iconify/vue';
 import type { Inquiry } from '@/types/inquiry';
 
-const props = defineProps<{
+defineProps<{
     status: Inquiry['status'];
 }>();
 

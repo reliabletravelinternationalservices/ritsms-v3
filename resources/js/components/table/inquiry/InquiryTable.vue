@@ -42,9 +42,6 @@ watch(() => props.inquiries, (newInquiries) => {
     data.value = newInquiries;
 }, { deep: true });
 
-const handleView = (id: number) => {
-    router.visit(route('admin.inquiries.details', { id }));
-};
 
 const handleStatusChange = (id: number, status: Inquiry['status']) => {
     router.patch(route('admin.inquiries.update', { id }), { status }, {

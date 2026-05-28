@@ -7,7 +7,7 @@ interface Props {
     destination: Destination
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 </script>
 
