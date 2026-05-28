@@ -5,6 +5,7 @@ import Label from '@/components/ui/label/Label.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Button from '@/components/ui/button/Button.vue';
+import { Link } from '@inertiajs/vue3';
 
 interface Props {
     class?: string
@@ -91,20 +92,27 @@ const prop = defineProps<Props>();
       <div class="w-full lg:w-3/4 border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
         <h3 class="font-bold font-roboto text-lg md:text-xl">Ask us About your Travel?</h3>
         <div class="space-y-1">
-          <Label for="name" class="font-roboto text-[var(--muted-custom)]">Fullname</Label>
+          <Label for="name" class="font-roboto text-[var(--muted-custom)]">Fullname <span class="text-[var(--warning-custom)]">*</span></Label>
           <Input type="text" id="name" placeholder="Enter your full name" class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
         </div>
         <div class="space-y-1">
-          <Label for="email" class="font-roboto text-[var(--muted-custom)]">Email</Label>
+          <Label for="email" class="font-roboto text-[var(--muted-custom)]">Email <span class="text-[var(--warning-custom)]">*</span></Label>
           <Input type="text" id="email" placeholder="Enter your email address" class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
         </div>
         <div class="space-y-1">
           <Label for="phone" class="font-roboto text-[var(--muted-custom)]">Phone number (Optional)</Label>
-          <Input type="text" id="phone" placeholder="Enter your email address" class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
+          <Input type="text" id="phone" placeholder="Enter your phone number" class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
         </div>
         <div class="space-y-1">
-          <Label for="message" class="font-roboto text-[var(--muted-custom)]">Message</Label>
+          <Label for="message" class="font-roboto text-[var(--muted-custom)]">Message <span class="text-[var(--warning-custom)]">*</span></Label>
           <Textarea id="message" rows="3" placeholder="Tell us about your concern..." class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none" />
+        </div>
+        <div>
+          <a :href="route('client.inquiry.policy')" target="_blank" class="flex items-center gap-1">
+            <span class="text-xs md:text-sm font-roboto text-[var(--tag-custom)] underline hover:text-[var(--tertiary-custom)] duration-75 ease-in italic">
+              Why do we need your information?
+            </span>
+          </a>
         </div>
         <div class="w-full flex justify-end">
           <Button type="submit" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] py-2 px-4 hover:bg-[var(--tertiary-custom)] duration-75 ease-in rounded-none">Send Message</Button>
