@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-    <Head title="Location" />
+    <Head :title="props.destination.title" />
     <AppLayout>
         <TitleHeader :title="props.destination.title" :description="props.destination.description"  />
         <LocationList :locations="props.destination.locations" />
