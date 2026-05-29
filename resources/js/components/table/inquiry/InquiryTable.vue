@@ -29,6 +29,7 @@ import type { Inquiry } from '@/types/inquiry';
 import CopiableCell from './CopiableCell.vue';
 import StatusCell from './StatusCell.vue';
 import ActionCell from './ActionCell.vue';
+import { toast } from 'vue-sonner';
 
 interface Props {
     inquiries: Inquiry[];
@@ -43,9 +44,16 @@ watch(() => props.inquiries, (newInquiries) => {
 }, { deep: true });
 
 
-const handleStatusChange = (id: number, status: Inquiry['status']) => {
-    router.patch(route('admin.inquiries.update', { id }), { status }, {
-        preserveScroll: true,
+const handleStatusChange = (id: number,  currentStatus: Inquiry['status'], newStatus: Inquiry['status'], name: string) => {
+    if (currentStatus === newStatus) return;
+    router.patch(route('admin.inquiries.status.update', { id }), { status: newStatus }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success( `${name}'s inquiry has been ${newStatus}.`);
+            },
+            onError: () => {
+                toast.error(`Failed to update status for ${name}'s inquiry. Please try again.`);
+            }
     });
 };
 
@@ -113,7 +121,7 @@ const columns = [
         cell: ({ row }: CellContext<Inquiry, any>) =>
             h(StatusCell, {
                 status: row.original.status,
-                onChange: (newStatus) => handleStatusChange(row.original.id, newStatus)
+                onChange: (newStatus) => handleStatusChange(row.original.id, row.original.status, newStatus, row.original.fullname),
             }),
         filterFn: (row: any, columnId: string, filterValue: string[]) => {
             if (!filterValue || filterValue.length === 0) return true;
@@ -129,7 +137,9 @@ const columns = [
             const date = new Date(row.original.created_at).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
-                year: 'numeric'
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
             });
             return h('span', { class: 'text-xs text-muted-foreground whitespace-nowrap' }, date);
         },
@@ -157,7 +167,7 @@ const table = useVueTable({
     getFilteredRowModel: getFilteredRowModel(),
 
     initialState: {
-        pagination: { pageSize: 10 },
+        pagination: { pageSize: 5 },
         columnVisibility: { id: false },
     },
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
 use App\Http\Controllers\Admin\Inquiry\ClientsInquiryController;
 use App\Http\Controllers\Admin\Inquiry\InquiryDetailController;
+use App\Http\Controllers\Admin\Log\ActivityLogController;
 use App\Http\Controllers\Admin\Package\CreatePackageController;
 use App\Http\Controllers\Admin\Package\CreatePackageGroupController;
 use App\Http\Controllers\Admin\Package\DeletePackageController;
@@ -88,5 +89,11 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
     Route::prefix('inquiries')->group(function () {
         Route::get('/', [ClientsInquiryController::class, 'index'])->name('admin.inquiries');
         Route::get('/{id}/details', [InquiryDetailController::class, 'index'])->name('admin.inquiries.details');
+        Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])->name('admin.inquiries.status.update');
+        Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])->name('admin.inquiries.destroy');
+    });
+
+    Route::prefix('logs')->group(function () {
+        Route::get('/', [ActivityLogController::class, 'index'])->name('admin.logs');
     });
 });

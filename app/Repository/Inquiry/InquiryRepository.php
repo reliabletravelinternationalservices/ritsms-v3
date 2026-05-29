@@ -18,10 +18,15 @@ class InquiryRepository
         });
     }
 
+    public function deleteInquiry(int $id)
+    {
+        $inquiry = Inquiry::findOrFail($id);
+        $inquiry->delete();
+    }
 
     public function getAllInquiries()
     {
-        return Inquiry::latest()->orderBy('created_at', 'desc')->get();
+        return Inquiry::orderBy('updated_at', 'desc')->get();
     }
 
 
@@ -29,5 +34,12 @@ class InquiryRepository
     public function getInquiryById(int $id)
     {
         return Inquiry::findOrFail($id);
+    }
+
+    public function toggleStatus(int $id, string $status)
+    {
+        $inquiry = Inquiry::findOrFail($id);
+        $inquiry->status = $status;
+        $inquiry->save();
     }
 }
