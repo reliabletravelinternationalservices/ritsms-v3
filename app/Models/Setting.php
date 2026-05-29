@@ -9,8 +9,6 @@ class Setting extends Model
 {
     protected $table = 'settings';
 
-    public $timestamps = false;
-
     protected $fillable = [
         'key',
         'value',
@@ -26,5 +24,10 @@ class Setting extends Model
             SettingType::JSON->value => json_decode($this->value, true),
             default => $this->value,
         };
+    }
+
+    public static function getValue(string $key)
+    {
+        return static::where('key', $key)->first()?->casted_value;
     }
 }

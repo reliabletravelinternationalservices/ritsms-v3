@@ -3,5 +3,10 @@
         "key": "usd_to_php_rate",
         "value": "61.4",
         "type": "number"
+    },
+    {
+        "key": "exchange_rate_auto_fetch",
+        "value": "true",
+        "type": "boolean"
     }
 ]
