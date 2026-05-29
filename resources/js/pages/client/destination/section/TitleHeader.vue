@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+
+const appUrl = import.meta.env.VITE_APP_URL;
+
 </script>
 
 <template>
   <section class="w-full h-[400px] md:h-[400px] lg:h-[500px] relative overflow-hidden">
     <div class="w-full h-full absolute top-0 left-0">
-      <img class="w-full h-full object-cover" src="https://ik.imgkit.net/3vlqs5axxjf/TP/ik-seo/images/99999999-9999-9999-9999-999999999999/5121cfbf-0d8c-46bc-9ef1-53bf7a989078/source/Young-female-traveler-enjoying-a-summer-vacation-o.jpeg?tr=w-684%2Cfo-auto" alt="Traveler">
+      <img class="w-full h-full object-cover" :src="`${appUrl}/storage/upload/agency/destination_image.png`" alt="Traveler">
       
       <span class="absolute inset-0 bg-gradient-to-t bg-black/80 flex items-center justify-center">
         <div class="max-w-3xl mx-auto flex flex-col items-center justify-center gap-8 p-6 md:p-8 text-[var(--primary-custom)]">
