@@ -34,16 +34,12 @@ const mainNavItems: NavItem[] = [
             {
                 title: 'Countries List',
                 href:  route('admin.destinations'),
-            },
-            {
-                title: 'Groups',
-                href: route('admin.packages.groups'),
-            },
+            }
         ],
     },
     {
         title: 'Bookings',
-        href: route('admin.dashboard'),
+        href: route('admin.bookings'),
         icon: 'ant-design:book-outlined',
     },
     {
