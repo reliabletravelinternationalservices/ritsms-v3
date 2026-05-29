@@ -50,7 +50,7 @@ const handleStatusChange = (newStatus: Inquiry['status']) => {
 };
 
 
-const handleDelete = (id: number) => {
+const handleDelete = () => {
     openDeleteDialog({
         title: 'Delete inquiry Permanently',
         message: `Are you sure you want to delete this inquiry? This action cannot be undone.`,
@@ -226,7 +226,7 @@ const formatLongDate = (dateString: string) => {
                             size="sm" 
                             variant="outline"
                             class="h-9 text-xs font-medium border-red-200 dark:border-red-800 text-red-400 hover:bg-red-50 dark:hover:bg-red-900"
-                            @click="handleDelete(inquiry.id)"
+                            @click="handleDelete()"
                         >
                             <Icon icon="material-symbols:delete" class="mr-1.5 text-red-400 dark:text-red-600 hover:text-red-50" />
                             Delete Permanently
