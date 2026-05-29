@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <section class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center min-h-screen md:min-h-[800px] lg:min-h-[1100px] py-12 px-4 md:px-6">
+  <section id="destinations" class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center min-h-screen md:min-h-[800px] lg:min-h-[1100px] py-12 px-4 md:px-6">
     
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
       

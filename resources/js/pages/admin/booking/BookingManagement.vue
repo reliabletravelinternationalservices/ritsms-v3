@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import InquiryTable from '@/components/table/inquiry/InquiryTable.vue';
 import { Inquiry } from '@/types/inquiry';
 import MaintenanceOverlay from '@/components/MaintenanceOverlay.vue';
 

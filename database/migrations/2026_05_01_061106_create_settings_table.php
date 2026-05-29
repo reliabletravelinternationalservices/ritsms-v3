@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('key')->unique(); // e.g. usd_to_php_rate
             $table->text('value')->nullable(); // store string/number/json
             $table->string('type')->default('string'); // string, number, json
+            $table->timestamps();
         });
     }
 

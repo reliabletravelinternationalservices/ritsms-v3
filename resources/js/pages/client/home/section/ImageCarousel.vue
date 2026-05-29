@@ -4,6 +4,7 @@ import { Carousel, Slide } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { Button } from '@/components/ui/button'
 import { ref } from 'vue'
+import { scrollToSection } from '@/lib/utils'
 
 /**
  * 1. Define the Interface for Hero Images
@@ -35,6 +36,8 @@ const images: HeroImage[] = [
     src: 'https://www.japanrailpass.com.au/wp-content/uploads/2012/07/Fujiyoshida-Japan-at-Chureito-Pagoda-and-Mt.-Fuji-in-the-spring-with-cherry-blossoms.jpg',
   }
 ]
+
+
 </script>
 
 <template>
@@ -52,6 +55,7 @@ const images: HeroImage[] = [
         <Button 
           type="button" 
           class="transition-transform duration-300 h-11 md:h-12 px-6 md:px-8 hover:scale-105 bg-[var(--tertiary-custom)] font-medium hover:bg-[var(--tertiary-hover-custom)] rounded-none font-roboto"
+          @click="scrollToSection('destinations')"
         >
             <span class="text-sm md:text-base">Explore More</span>
             <Icon icon="ep:arrow-right-bold" width="20" height="20" class="ml-2" />

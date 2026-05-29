@@ -11,6 +11,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const phID = props.destinations.find(dest => dest.country.toLowerCase() === 'philippines')?.id || null;
+
 </script>
 
 <template>
@@ -29,12 +31,12 @@ const props = defineProps<Props>();
                         <p class="font-roboto text-sm md:text-base text-[var(--primary-custom)]">
                             Crystal clear waters, majestic cliffs, and endless sunshine. Your ultimate Philippine adventure starts right here.
                         </p>
-                        <ValidToForeignBanner />
+                        <ValidToForeignBanner tag="VALID FOR FOREIGN ONLY!" />
                     </div>
                 </div>
 
                 <div class="flex justify-start md:justify-end">
-                    <ExploreButton title="Explore More" href="#" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
+                    <ExploreButton title="Explore More" :href="route('client.destination.country.destination', {destination: phID})" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
                 </div>
             </div>
 

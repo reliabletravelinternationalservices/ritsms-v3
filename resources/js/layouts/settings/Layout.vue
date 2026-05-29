@@ -15,6 +15,10 @@ const sidebarNavItems: NavItem[] = [
         href: '/settings/password',
     },
     {
+        title: 'Currency',
+        href: '/settings/currency',
+    },
+    {
         title: 'Appearance',
         href: '/settings/appearance',
     },
@@ -37,7 +41,7 @@ const currentPath = window.location.pathname;
                         :class="['w-full justify-start', { 'bg-muted': currentPath === item.href }]"
                         as-child
                     >
-                        <Link :href="item.href">
+                        <Link :href="item.href ?? '#'">
                             {{ item.title }}
                         </Link>
                     </Button>
