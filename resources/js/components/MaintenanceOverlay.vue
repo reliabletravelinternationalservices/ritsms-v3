@@ -22,21 +22,21 @@ const modeConfig = computed(() => {
     switch (props.mode) {
         case 'maintenance':
             return {
-                icon: 'iconoir:db-warning',
+                icon: 'wpf:maintenance',
                 badgeText: 'Critical Maintenance',
                 badgeStyle: 'bg-destructive/10 text-destructive border-destructive/20 dark:bg-destructive/20 dark:text-destructive-foreground',
                 iconColor: 'text-rose-500'
             };
         case 'optimization':
             return {
-                icon: 'iconoir:flash',
+                icon: 'mdi:flash',
                 badgeText: 'Performance Optimization',
                 badgeStyle: 'bg-amber-500/10 text-amber-700 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400',
                 iconColor: 'text-amber-500'
             };
         case 'features':
             return {
-                icon: 'iconoir:sparkles',
+                icon: 'mdi:sparkles',
                 badgeText: 'New Features Deploying',
                 badgeStyle: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400',
                 iconColor: 'text-emerald-500'

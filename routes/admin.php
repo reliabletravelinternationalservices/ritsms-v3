@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
 use App\Http\Controllers\Admin\Destination\CreateLocationController;
@@ -91,6 +92,10 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/{id}/details', [InquiryDetailController::class, 'index'])->name('admin.inquiries.details');
         Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])->name('admin.inquiries.status.update');
         Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])->name('admin.inquiries.destroy');
+    });
+
+    Route::prefix('bookings')->group(function () {
+        Route::get('/', [BookingManagementController::class, 'index'])->name('admin.bookings');
     });
 
     Route::prefix('logs')->group(function () {
