@@ -25,15 +25,20 @@ const carouselConfig = {
   slideEffect: 'fade' as const,
   touchDrag: true 
 }
+const appUrl = import.meta.env.VITE_APP_URL
 
 const images: HeroImage[] = [
   {
     id: 1,
-    src: 'https://png.pngtree.com/thumb_back/fw800/background/20250322/pngtree-boracay-white-beach-a-tropical-paradise-awaits-image_17131812.jpg',
+    src: appUrl + '/storage/upload/agency/carousel_1.png',
   },
   {
     id: 2,
-    src: 'https://www.japanrailpass.com.au/wp-content/uploads/2012/07/Fujiyoshida-Japan-at-Chureito-Pagoda-and-Mt.-Fuji-in-the-spring-with-cherry-blossoms.jpg',
+    src: appUrl + '/storage/upload/agency/carousel_2.png',
+  },
+  {
+    id: 3,
+    src: appUrl + '/storage/upload/agency/carousel_3.png',
   }
 ]
 
@@ -42,7 +47,7 @@ const images: HeroImage[] = [
 
 <template>
  <section class="relative group/main overflow-hidden w-full"> 
-    <div class="w-full h-full bg-black/60 absolute top-0 left-0 z-10 flex items-center justify-center flex-col gap-6 md:gap-8 px-4 text-center">
+    <div class="w-full h-full bg-black/70 absolute top-0 left-0 z-10 flex items-center justify-center flex-col gap-6 md:gap-8 px-4 text-center">
         <div class="space-y-3">
             <h1 class="text-3xl md:text-4xl lg:text-5xl text-[var(--primary-custom)] uppercase font-montserrat font-bold tracking-wider leading-tight">
                 DISCOVER THE <br class="block md:hidden" /> WORLD WITH US

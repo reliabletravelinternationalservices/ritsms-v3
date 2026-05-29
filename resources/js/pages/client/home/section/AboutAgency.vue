@@ -2,6 +2,59 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import { Button } from '@/components/ui/button';
+import type { Media } from '@/types/media';
+
+const appUrl =  import.meta.env.VITE_APP_URL;
+
+
+const agencyClientPic : Media[] = [
+     {
+        id: 1,
+        mediable_id: 1,
+        mediable_type: 'Sample',
+        file_name: 'clients_1.png',
+        file_path: '/storage/upload/agency/clients_1.png',
+        url: appUrl + '/storage/upload/agency/clients_1.png',
+        disk: 'public',
+        type: 'image',
+        mime_type: 'image/png',
+        size: null,
+        alt_text: 'client_1.png',
+        order_number: 1,
+        is_primary: false
+    },
+    {
+        id: 2,
+        mediable_id: 1,
+        mediable_type: 'Sample',
+        file_name: 'clients_2.png',
+        file_path: '/storage/upload/agency/clients_2.png',
+        url: appUrl + '/storage/upload/agency/clients_2.png',
+        disk: 'public',
+        type: 'image',
+        mime_type: 'image/png',
+        size: null,
+        alt_text: 'client_2.png',
+        order_number: 2,
+        is_primary: false
+    },
+    {
+        id: 3,
+        mediable_id: 1,
+        mediable_type: 'Sample',
+        file_name: 'clients_3.png',
+        file_path: '/storage/upload/agency/clients_3.png',
+        url: appUrl + '/storage/upload/agency/clients_3.png',
+        disk: 'public',
+        type: 'image',
+        mime_type: 'image/png',
+        size: null,
+        alt_text: 'client_3.png',
+        order_number: 3,
+        is_primary: false
+    }
+];
+
 </script>
 
 <template>
@@ -57,13 +110,13 @@ import { Button } from '@/components/ui/button';
 
         <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
             <div class="col-span-2">
-                <img src="http://127.0.0.1:8000/storage/upload/agency/clients_1.png" class="object-cover h-48 md:h-full w-full" alt="">
+                <img :src="agencyClientPic[0].url!" class="object-cover h-48 md:h-full w-full" :alt="agencyClientPic[0].alt_text" />
             </div>
             <div class="col-span-1">
-                <img src="http://127.0.0.1:8000/storage/upload/agency/clients_2.png" class="object-cover h-32 md:h-full w-full" alt="">
+                <img :src="agencyClientPic[1].url!" class="object-cover h-32 md:h-full w-full" :alt="agencyClientPic[1].alt_text" />
             </div>
             <div class="col-span-1">
-                <img src="http://127.0.0.1:8000/storage/upload/agency/clients_3.png" class="object-cover h-32 md:h-full w-full" alt="">
+                <img :src="agencyClientPic[2].url!" class="object-cover h-32 md:h-full w-full" :alt="agencyClientPic[2].alt_text" />
             </div>
         </div>
     </div>

@@ -37,9 +37,7 @@ const props = defineProps<Props>();
 
     <Head title="Discover The World With Us" />
     <AppLayout>
-        <MotionWrapper :delay="0">
-            <CarouselSection />
-        </MotionWrapper>
+        <CarouselSection />
 
         <MotionWrapper :delay="0.05">
             <DestinationCarousel :destinations="destinations" />
