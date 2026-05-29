@@ -123,3 +123,17 @@ export const getSeasonColor = (season: string): string => {
             return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
     }
 };
+
+
+
+
+export const scrollToSection = (id:string) => {
+    const element = document.getElementById(id);
+
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
+    }
+};
