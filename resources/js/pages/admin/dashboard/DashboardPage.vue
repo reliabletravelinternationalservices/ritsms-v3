@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import MaintenanceOverlay from '@/components/MaintenanceOverlay.vue';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';

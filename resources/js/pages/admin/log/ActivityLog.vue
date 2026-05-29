@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/vue3';
-import { Inquiry } from '@/types/inquiry';
-import { Icon } from '@iconify/vue';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { ref } from 'vue';
-import { toast } from 'vue-sonner';
-import { openDeleteDialog } from '@/stores/deleteDialog';
+import { Head } from '@inertiajs/vue3';
 import MaintenanceOverlay from '@/components/MaintenanceOverlay.vue';
 
 
