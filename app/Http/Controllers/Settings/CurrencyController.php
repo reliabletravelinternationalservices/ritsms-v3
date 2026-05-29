@@ -19,7 +19,7 @@ class CurrencyController extends Controller
         $validated = $request->validate([
             'key'   => ['required', 'string', 'in:usd_to_php_rate'],
             'value' => ['required', 'numeric', 'min:0.0001'],       
-            'type'  => ['required', 'string', 'in:currency'],
+            'type'  => ['required', 'string', 'in:number'],
         ]);
 
         Setting::updateOrCreate(

@@ -40,7 +40,7 @@ const initialUsdRate = page.props.settings?.usd_to_php_rate ?? '';
 const form = useForm({
     key: 'usd_to_php_rate',
     value: initialUsdRate.toString(),
-    type: 'currency',
+    type: 'number',
 });
 
 // Sync data reactively if backend state mutates during initialization frame
