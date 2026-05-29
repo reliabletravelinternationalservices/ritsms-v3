@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ref } from 'vue';
+import { toast } from 'vue-sonner';
+import { openDeleteDialog } from '@/stores/deleteDialog';
 
 interface Props {
     inquiry: Inquiry;
@@ -34,9 +36,37 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-const handleStatusChange = (status: Inquiry['status']) => {
-    router.patch(route('admin.inquiries.update', { id: props.inquiry.id }), { status }, {
+const handleStatusChange = (newStatus: Inquiry['status']) => {
+    if (props.inquiry.status === newStatus) return;
+    router.patch(route('admin.inquiries.status.update', { id: props.inquiry.id }), { status: newStatus }, {
         preserveScroll: true,
+        onSuccess: () => {
+            toast.success(`Inquiry status has been ${newStatus}.`);
+        },
+        onError: () => {
+            toast.error('Failed to update inquiry status.');
+        }
+    });
+};
+
+
+const handleDelete = (id: number) => {
+    openDeleteDialog({
+        title: 'Delete inquiry Permanently',
+        message: `Are you sure you want to delete this inquiry? This action cannot be undone.`,
+        confirmText: 'Delete inquiry',
+        cancelText: 'Cancel',
+        onConfirm: () => {
+            router.delete(route('admin.inquiries.destroy', { id: props.inquiry.id }), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.success('Inquiry deleted successfully');
+                },
+                onError: () => {
+                    toast.error('Failed to delete inquiry. Please try again.');
+                },
+            });
+        },
     });
 };
 
@@ -192,6 +222,15 @@ const formatLongDate = (dateString: string) => {
                             <Icon icon="iconoir:undo" class="mr-1.5 text-zinc-400" />
                             Reopen Inquiry
                         </Button>
+                         <Button 
+                            size="sm" 
+                            variant="outline"
+                            class="h-9 text-xs font-medium border-red-200 dark:border-red-800 text-red-400 hover:bg-red-50 dark:hover:bg-red-900"
+                            @click="handleDelete(inquiry.id)"
+                        >
+                            <Icon icon="material-symbols:delete" class="mr-1.5 text-red-400 dark:text-red-600 hover:text-red-50" />
+                            Delete Permanently
+                        </Button>
                     </template>
                 </div>
             </div>
@@ -204,7 +243,6 @@ const formatLongDate = (dateString: string) => {
                             <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                                 Client Message Plaintext
                             </span>
-                            <Icon icon="iconoir:chat-lines" class="text-zinc-400 text-base" />
                         </div>
                         <CardContent class="p-6 md:p-8">
                             <div class="text-sm md:text-base leading-relaxed text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap font-sans selection:bg-zinc-200 dark:selection:bg-zinc-800">
