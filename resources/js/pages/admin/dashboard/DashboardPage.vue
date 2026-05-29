@@ -23,9 +23,9 @@ defineProps<{
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 relative">
             <MaintenanceOverlay
-                title="Booking Management section is under update"
-                description="We are currently working on Booking Management section. We are making improvements and making the platform more reliable to become centralize booking for the agency."
-                mode="update"
+                title="Dashboard section is under update"
+                description="We are currently working on Dashboard section. We are making improvements and making the data has accurate and up-to-date information."
+                mode="features"
                 estimatedTime="N/A"
             />
             <!-- <div class="grid auto-rows-min gap-4 md:grid-cols-3">
