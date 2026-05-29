@@ -88,5 +88,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
     Route::prefix('inquiries')->group(function () {
         Route::get('/', [ClientsInquiryController::class, 'index'])->name('admin.inquiries');
         Route::get('/{id}/details', [InquiryDetailController::class, 'index'])->name('admin.inquiries.details');
+        Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])->name('admin.inquiries.status.update');
+        Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])->name('admin.inquiries.destroy');
     });
 });
