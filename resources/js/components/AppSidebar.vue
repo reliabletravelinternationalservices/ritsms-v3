@@ -53,7 +53,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Logs',
-        href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
+        href: route('admin.logs'),
         icon: 'streamline-sharp:reset-clock',
     },
 ];
