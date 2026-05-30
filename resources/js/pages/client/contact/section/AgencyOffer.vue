@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
+
+const apiUrl = import.meta.env.VITE_APP_URL;
 </script>
 
 <template>
@@ -76,7 +78,7 @@ import { Icon } from '@iconify/vue'
         </div>
 
         <div class="w-full h-full">
-            <img src="https://www.thehotelarundel.com/wp-content/uploads/2024/01/AdobeStock_169263909-scaled.jpeg" class="object-cover h-48 md:h-full w-full" alt="">
+            <img :src="`${apiUrl}/storage/upload/agency/services.png`" alt="Services image" class="object-cover h-48 md:h-full w-full">
         </div>
     </div>
   </section>
