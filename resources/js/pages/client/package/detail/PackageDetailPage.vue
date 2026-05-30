@@ -14,6 +14,7 @@ import PackageInclusion from './section/PackageInclusion.vue';
 import PackageExclusion from './section/PackageExclusion.vue';
 import PackageNote from './section/PackageNote.vue';
 import { computed } from 'vue';
+import InquiryForm from '../../home/section/InquiryForm.vue';
 
 
 const props = defineProps<{ 
@@ -65,5 +66,7 @@ const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
         <PackageInclusion :package="props.package" />
         <PackageExclusion :package="props.package" />
         <PackageNote :package="props.package" />
+        
+        <InquiryForm />
     </AppLayout>     
 </template>

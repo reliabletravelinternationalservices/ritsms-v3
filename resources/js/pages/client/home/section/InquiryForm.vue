@@ -33,6 +33,7 @@ const submit = () => {
 
 <template>
   <section
+    id="inquiry"
     class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center py-24 px-4 md:px-6"
     :class="prop.class"
   >
