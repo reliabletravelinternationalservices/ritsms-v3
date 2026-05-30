@@ -66,7 +66,7 @@ const submit = () => {
               <span class="bg-[var(--secondary-custom)] p-1">
                 <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
               </span>
-              <a target="_blank" href="#" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              <a target="_blank" href="https://maps.app.goo.gl/sTjrppGkWkyQxLVd6" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
                 JJSS Commercial Building Brgy Navarro General Trias, Cavite, Philippines
               </a>
             </span>
@@ -75,7 +75,7 @@ const submit = () => {
               <span class="bg-[var(--secondary-custom)] p-1">
                 <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
               </span>
-              <a target="_blank" href="#" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              <a target="_blank" href="https://maps.app.goo.gl/CtAbm3yECPD9qU78A" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
                 Nomangonan, San Manuel, Pangasinan
               </a>
             </span>
@@ -89,7 +89,7 @@ const submit = () => {
             <span class="bg-[var(--secondary-custom)] p-1">
               <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
             </span>
-            <a href="tel:+639085721338" class="font-roboto text-xs md:text-sm font-bold underline">
+            <a href="tel:09085721338" class="font-roboto text-xs md:text-sm font-bold underline">
               +63 908 572 1338
             </a>
           </span>
@@ -98,7 +98,7 @@ const submit = () => {
             <span class="bg-[var(--secondary-custom)] p-1">
               <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
             </span>
-            <a href="tel:+639279275207" class="font-roboto text-xs md:text-sm font-bold underline">
+            <a href="tel:09279275207" class="font-roboto text-xs md:text-sm font-bold underline">
               +63 927 927 5207
             </a>
           </span>
