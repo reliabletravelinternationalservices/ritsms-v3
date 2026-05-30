@@ -9,6 +9,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { initializeTheme } from './composables/useAppearance';
 import { Toaster } from '@/components/ui/sonner';
 import DeleteDialog from '@/components/ui/DeleteDialog.vue';
+import { imageViewer } from "@/lib/imageViewer"
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -23,7 +24,7 @@ declare module 'vite/client' {
     }
 }
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Reliable International Travel Services';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -37,6 +38,7 @@ createInertiaApp({
                     }),
                     h(DeleteDialog),
                 ], })
+            .use(imageViewer)
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);

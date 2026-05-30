@@ -25,14 +25,14 @@ const appUrl = import.meta.env.VITE_APP_URL;
           <span class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <a :href="route('client.outbound')" target="_blank">
               <button class="w-full sm:w-auto bg-[var(--outbound-custom)] text-[var(--primary-custom)] px-6 py-3 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-custom)] border-2 border-[var(--outbound-custom)] hover:border-[var(--tertiary-custom)] transition-all duration-200">
-                <span class="whitespace-nowrap">Outbound Destinations</span>
+                <span class="whitespace-nowrap">Outbound Packages</span>
                 <Icon icon="tabler:external-link" width="20" height="20" />
               </button>
             </a>
             
             <a :href="route('client.inbound')" target="_blank">
               <button class="w-full sm:w-auto bg-[var(--inbound-opacity-custom)] border-2 border-[var(--inbound-custom)] text-[var(--inbound-custom)] px-6 py-3 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--inbound-custom)] hover:text-[var(--primary-custom)] hover:border-[var(--inbound-custom)] transition-all duration-200">
-                <span class="whitespace-nowrap">Inbound Destinations</span>
+                <span class="whitespace-nowrap">Inbound Packages</span>
                 <Icon icon="tabler:external-link" width="20" height="20" />
               </button>
             </a>
