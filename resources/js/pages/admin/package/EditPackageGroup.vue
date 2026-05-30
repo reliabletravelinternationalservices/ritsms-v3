@@ -96,21 +96,34 @@ const resetForm = () => {
 };
 
 const submitForm = () => {
-    console.log(form);
-    form.put(route('admin.packages.groups.update', { id: props.group.id }), {
-        preserveScroll: true,
-        onSuccess: () => {
-            if (! form.image) {
-                imagePreview.value = originalImageUrl;
-                isBlobPreview.value = false;
-            }
-            toast.success('Package group updated successfully');
-        },
-        onError: () => {
-            toast.error('Failed to update package group');
-        },
-    });
+
+    form
+        .transform((data) => ({
+            ...data,
+            _method: 'put',
+        }))
+        .post(route('admin.packages.groups.update', {
+            id: props.group.id,
+        }), {
+            forceFormData: true,
+            onSuccess: () => {
+                if (! form.image) {
+                    imagePreview.value = originalImageUrl;
+                    isBlobPreview.value = false;
+                }
+                toast.success(
+                    'Package group updated successfully.'
+                );
+            },
+
+            onError: () => {
+                toast.error(
+                    'Failed to update package group.'
+                );
+            },
+        });
 };
+
 </script>
 
 <template>
