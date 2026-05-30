@@ -46,7 +46,7 @@ const processAndStagingFiles = (files: File[]) => {
 
   imageFiles.forEach(file => {
     const item: LocalUploadFile = ref({
-      id: crypto.randomUUID(),
+      id: Date.now() + Math.random().toString(16),
       file,
       previewUrl: URL.createObjectURL(file),
       localProgress: 0,

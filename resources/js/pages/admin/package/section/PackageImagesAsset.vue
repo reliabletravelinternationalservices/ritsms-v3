@@ -53,6 +53,7 @@ const handleImagesSaved = (payload: { updatedImages: Media[], deletedIds: number
   form.post(route('admin.packages.images.store', { id: props.packageId }), {
     preserveScroll: true,
     forceFormData: true, 
+
     onSuccess: () => {
       isModalOpen.value = false
       emit('refresh-data')
