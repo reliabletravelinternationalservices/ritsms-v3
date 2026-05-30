@@ -43,7 +43,7 @@ withDefaults(defineProps<Props>(), {
                     <span class="flex items-center justify-start gap-2">
                         <img :src="appUrl + '/storage/upload/agency/visa_logo.png'" alt="visa" class="w-12 h-8 object-cover" />
                         <img :src="appUrl + '/storage/upload/agency/paypal_logo.png'" alt="paypal" class="w-12 h-8 object-cover" />
-                        <img :src="appUrl + '/storage/upload/agency/gcash-logo.png'" alt="gcash" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/gcash_logo.png'" alt="gcash" class="w-12 h-8 object-cover" />
                     </span>
                 </div>
             </div>
