@@ -88,4 +88,32 @@ class Package extends Model
         return parse_json_array($this->attributes['notes'] ?? '');
     }
 
+    public static function getDashboardMetrics(): array
+    {
+        $currentMonthCount = static::query()
+            ->whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->count();
+
+        $previousMonthCount = static::query()
+            ->whereYear('created_at', now()->subMonth()->year)
+            ->whereMonth('created_at', now()->subMonth()->month)
+            ->count();
+
+        $trendPercentage = match (true) {
+            $previousMonthCount === 0 && $currentMonthCount > 0 => 100,
+            $previousMonthCount === 0 => 0,
+            default => round(
+                (($currentMonthCount - $previousMonthCount) / $previousMonthCount) * 100,
+                1
+            ),
+        };
+
+        return [
+            'total_packages' => static::count(),
+            'packages_trend' => $trendPercentage,
+            'average_price' => round(static::avg('base_price') ?? 0, 2),
+            'foreign_exclusive_count' => static::where('is_foreign_only', true)->count(),
+        ];
+    }
 }
