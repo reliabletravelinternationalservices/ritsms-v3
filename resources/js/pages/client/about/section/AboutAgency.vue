@@ -1,6 +1,22 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { imageViewer } from '@/lib/imageViewer';
+
 const appUrl = import.meta.env.VITE_APP_URL;
+
+const images = Array.from({ length: 15 }, (_, i) => {
+  const num = i + 1
+
+  return {
+    url: `${appUrl}/storage/upload/agency/client_${num}.png`,
+    alt_text: `clients ${num}`,
+  }
+})
+
+const openImageViewer = () => {
+    imageViewer.open(images);
+}
+
 </script>
 
 <template>
@@ -43,21 +59,23 @@ const appUrl = import.meta.env.VITE_APP_URL;
                 </div>
             </div>
 
-            <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
-                <div class="col-span-2">
-                    <img :src="`${appUrl}/storage/upload/agency/clients_1.png`" class="object-cover h-48 md:h-full w-full" alt="agency client 1">
+            <button @click="openImageViewer" type="button" class="flex items-center gap-2 font-roboto">
+                <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
+                    <div class="col-span-2">
+                        <img :src="images[0].url" class="object-cover h-48 md:h-full w-full" :alt="images[0].alt_text">
+                    </div>
+                    <div class="col-span-1">
+                        <img :src="images[1].url" class="object-cover h-32 md:h-full w-full" :alt="images[1].alt_text">
+                    </div>
+                    <div class="col-span-1 relative">
+                        <span class="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full text-[var(--primary-custom)]">
+                            <span class="border-b border-[var(--primary-custom)] italic">+{{ images.length - 3 }} images...</span>
+                        </span>
+                        <span class="absolute top-0 left-0 w-full h-full bg-[var(--secondary-custom)] opacity-60"></span>
+                        <img :src="images[2].url" class="object-cover h-32 md:h-full w-full" :alt="images[2].alt_text">
+                    </div>
                 </div>
-                <div class="col-span-1">
-                    <img :src="`${appUrl}/storage/upload/agency/clients_2.png`" class="object-cover h-32 md:h-full w-full" alt="agency client 2">
-                </div>
-                <div class="col-span-1 relative">
-                    <span class="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full text-[var(--primary-custom)]">
-                        <span class="border-b border-[var(--primary-custom)] italic">+4 images...</span>
-                    </span>
-                    <span class="absolute top-0 left-0 w-full h-full bg-[var(--secondary-custom)] opacity-60"></span>
-                    <img :src="`${appUrl}/storage/upload/agency/clients_3.png`" class="object-cover h-32 md:h-full w-full" alt="agency client 3">
-                </div>
-            </div>
+            </button>
         </div>
     </section>
 </template>

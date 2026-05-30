@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 
 const appUrl = import.meta.env.VITE_APP_URL;
@@ -10,14 +11,16 @@ interface Props {
     instagramLink?: string;
     facebookLink?: string;
     tiktokLink?: string;
+    youtubeLink?: string;
 }
 
 withDefaults(defineProps<Props>(), {
     email: 'reliabletravelinfo@gmail',
-    inquiryLink: '#',
-    instagramLink: '#',
-    facebookLink: '#',
-    tiktokLink: '#',
+    inquiryLink: route('client.contact'),
+    instagramLink: 'https://www.facebook.com/reliableinternationaltravelservices',
+    facebookLink: 'https://www.instagram.com/reliabletravelph/',
+    tiktokLink: 'https://www.tiktok.com/@reliabletravelph',
+    youtubeLink: 'https://www.youtube.com/@reliabletravelservices',
 });
 
 
@@ -30,7 +33,7 @@ withDefaults(defineProps<Props>(), {
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
                     <img :src="appUrl + '/storage/upload/agency/logo.png'" alt="Agency Logo" class="w-28 h-28 object-cover" />
-                    <button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Book Now</button>
+                    <Link :href="route('client.destination')"><button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Book Now</button></Link>
                 </div>
                 <div>
                     <h1 class="text-[var(--primary-custom)] font-normal font-roboto text-sm">
@@ -89,7 +92,7 @@ withDefaults(defineProps<Props>(), {
                             <Icon icon="mdi:location" width="20" height="20" class="text-[var(--tertiary-custom)]" />
                             <h4 class="font-bold font-roboto text-sm uppercase">CAVITE BRANCH</h4>
                         </span>
-                        <a href="#" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">JJSS Commercial Building Brgy Navarro General Trias, Cavite, Philippines</a>
+                        <a target="_blank" href="https://maps.app.goo.gl/sTjrppGkWkyQxLVd6" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">JJSS Commercial Building Brgy Navarro General Trias, Cavite, Philippines</a>
                     </span>
 
                     <span class="flex flex-col gap-1 text-[var(--primary-custom)] font-roboto text-xs">
@@ -97,7 +100,7 @@ withDefaults(defineProps<Props>(), {
                             <Icon icon="mdi:location" width="20" height="20" class="text-[var(--tertiary-custom)]" />
                             <h4 class="font-bold font-roboto text-sm uppercase">PANGASINAN BRANCH</h4>
                         </span>
-                        <a href="#" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">Nomangonan, San Manuel, Pangasinan</a>
+                        <a target="_blank" href="https://maps.app.goo.gl/3VPzYr8CHG1usV2d8" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">Nomangonan, San Manuel, Pangasinan</a>
                     </span>
                 </div>
             </div>
@@ -105,14 +108,17 @@ withDefaults(defineProps<Props>(), {
 
         <div class="max-w-5xl mx-auto py-8 border-t border-[var(--shadow-custom)] flex flex-col md:flex-row items-center justify-between gap-6">
             <span class="flex space-x-4 items-center font-roboto text-xs order-2 md:order-1">
-                <a :href="instagramLink">
+                <a :href="instagramLink" target="_blank">
                     <Icon icon="mdi:instagram" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="facebookLink">
+                <a :href="facebookLink" target="_blank">
                     <Icon icon="basil:facebook-solid" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="tiktokLink">
+                <a :href="tiktokLink" target="_blank">
                     <Icon icon="ic:baseline-tiktok" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+                <a :href="youtubeLink" target="_blank">
+                    <Icon icon="mdi:youtube" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
             </span>
             <span class="text-center md:text-right order-1 md:order-2">
