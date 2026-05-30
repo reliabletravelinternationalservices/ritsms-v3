@@ -5,7 +5,7 @@ export interface Media {
     file_name: string;
     file_path: string;
     url: string | null;
-    disk: 'local' | 'cloudinary' | 's3';
+    disk: 'local' | 'cloudinary' | 's3' | 'public';
     type: 'image' | 'video' | 'document' | 'audio';
     mime_type: string | null;
     size: number | null;

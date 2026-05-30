@@ -5,6 +5,7 @@ import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';;
 import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps<{ 
     package: Package, 
@@ -12,6 +13,10 @@ const props = defineProps<{
     breadcrumbs?: BreadcrumbItemType[] 
 }>();
 
+
+const previewImage = computed(() => {
+    return (props.package.images ?? []).flat().slice(0, 4);
+});
 
 </script>
 
@@ -48,21 +53,26 @@ const props = defineProps<{
                 </span>
             </div>
 
-            <div class="grid grid-cols-3 gap-1">
-                <span class="col-span-3 h-[280px] bg-[var(--shadow-custom)]">
-                    <img src="https://www.yourvietnamtravel.com/vietnam-holiday-packages/images/tour2/banner.jpg" alt="" class="object-cover h-full w-full">
+            <div v-if="previewImage.length > 0" class="grid grid-cols-3 gap-1">
+                <span class="col-span-3 h-[280px] relative flex items-center justify-center">
+                    <img v-if="previewImage[0] && previewImage[0].url" :src="previewImage[0].url" :alt="previewImage[0].alt_text" class="object-cover h-full w-full">
                 </span>
-                <span class="col-span-1 h-[180px] bg-[var(--shadow-custom)]">
-                    <img src="https://cdn.tourradar.com/s3/tour/750x400/240577_63df61665b564.jpg" alt="" class="object-cover h-full w-full">
+                <span class="col-span-1 h-[180px] relative flex items-center justify-center">
+                    <img v-if="previewImage[1] && previewImage[1].url" :src="previewImage[1].url" :alt="previewImage[1].alt_text" class="object-cover h-full w-full">
                 </span>
-                <span class="col-span-1 h-[180px] bg-[var(--shadow-custom)]">
-                    <img src="https://raksotravel.com/Content/img/TourPhoto2020/package_109712_1.jpg" alt="" class="object-cover h-full w-full">
+                <span class="col-span-1 h-[180px] relative flex items-center justify-center">
+                    <img v-if="previewImage[2] && previewImage[2].url" :src="previewImage[2].url" :alt="previewImage[2].alt_text" class="object-cover h-full w-full">
                 </span>
-                <span class="col-span-1 h-[180px] bg-[var(--shadow-custom)] relative">
-                    <img src="https://triphappy.ph/wp-content/uploads/2026/01/Kim-Son-Bao-Thang-Tu-Fansipan-Peak.webp" alt="" class="object-cover h-full w-full">
-                    <span class="absolute top-0 left-0 bg-black/60 h-full w-full flex items-center justify-center cursor-default">
-                        <span class="underline text-[var(--primary-custom)]">5 more images...</span>
+                <span class="col-span-1 h-[180px] relative flex items-center justify-center">
+                    <img v-if="previewImage[3] && previewImage[3].url" :src="previewImage[3].url" :alt="previewImage[3].alt_text" class="object-cover h-full w-full">
+                    <span v-if="props.package.images && props.package.images.length > 4" class="absolute top-0 left-0 bg-black/60 h-full w-full flex items-center justify-center cursor-default">
+                        <span class="underline text-[var(--primary-custom)]">{{ props.package.images.length - 4 }} more images...</span>
                     </span>
+                </span>
+            </div>
+            <div v-else class="relative">
+                <span class="flex items-center justify-center h-[360px] w-full bg-[var(--shadow-custom)]">
+                    <Icon icon="ic:baseline-image-not-supported" class="text-6xl text-[var(--muted-custom)]" />
                 </span>
             </div>
         </div>

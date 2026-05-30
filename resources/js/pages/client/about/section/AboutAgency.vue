@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-
+const appUrl = import.meta.env.VITE_APP_URL;
 </script>
 
 <template>
@@ -45,17 +45,17 @@ import { Icon } from '@iconify/vue';
 
             <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
                 <div class="col-span-2">
-                    <img src="http://127.0.0.1:8000/storage/upload/agency/clients_1.png" class="object-cover h-48 md:h-full w-full" alt="">
+                    <img :src="`${appUrl}/storage/upload/agency/clients_1.png`" class="object-cover h-48 md:h-full w-full" alt="agency client 1">
                 </div>
                 <div class="col-span-1">
-                    <img src="http://127.0.0.1:8000/storage/upload/agency/clients_2.png" class="object-cover h-32 md:h-full w-full" alt="">
+                    <img :src="`${appUrl}/storage/upload/agency/clients_2.png`" class="object-cover h-32 md:h-full w-full" alt="agency client 2">
                 </div>
                 <div class="col-span-1 relative">
                     <span class="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full text-[var(--primary-custom)]">
                         <span class="border-b border-[var(--primary-custom)] italic">+4 images...</span>
                     </span>
                     <span class="absolute top-0 left-0 w-full h-full bg-[var(--secondary-custom)] opacity-60"></span>
-                    <img src="http://127.0.0.1:8000/storage/upload/agency/clients_3.png" class="object-cover h-32 md:h-full w-full" alt="">
+                    <img :src="`${appUrl}/storage/upload/agency/clients_3.png`" class="object-cover h-32 md:h-full w-full" alt="agency client 3">
                 </div>
             </div>
         </div>

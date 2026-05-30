@@ -2,6 +2,8 @@
 import { Icon } from '@iconify/vue';
 import { route } from 'ziggy-js';
 
+const appUrl = import.meta.env.VITE_APP_URL;
+
 interface Props {
     email?: string;
     inquiryLink?: string;
@@ -27,7 +29,7 @@ withDefaults(defineProps<Props>(), {
             
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
-                    <img src="http://127.0.0.1:8000/storage/upload/agency/logo.png" alt="Logo" class="w-28 h-28 object-cover" />
+                    <img :src="appUrl + '/storage/upload/agency/logo.png'" alt="Agency Logo" class="w-28 h-28 object-cover" />
                     <button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Book Now</button>
                 </div>
                 <div>
@@ -39,9 +41,9 @@ withDefaults(defineProps<Props>(), {
                 <div class="flex flex-col gap-1">
                     <h3 class="text-[var(--primary-custom)] font-bold font-roboto text-sm">PAYMENT GATEWAYS</h3>
                     <span class="flex items-center justify-start gap-2">
-                        <img src="https://media.assettype.com/sunstar/2025-11-12/8w4ntbmy/visa-logo-800x450.webp?w=1200&h=675&auto=format%2Ccompress&fit=max&enlarge=true" alt="visa" class="w-12 h-8 object-cover" />
-                        <img src="https://assets.weforum.org/organization/image/GemGrF1XC3LnXx0EZyxkj-9HEzPpYqkIsjwF9MiDTo0.jpg" alt="mastercard" class="w-12 h-8 object-cover" />
-                        <img src="https://www.brodneil.com/wp-content/uploads/2022/05/gcash-logo-1.png" alt="gcash" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/visa_logo.png'" alt="visa" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/paypal_logo.png'" alt="paypal" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/gcash_logo.png'" alt="gcash" class="w-12 h-8 object-cover" />
                     </span>
                 </div>
             </div>
