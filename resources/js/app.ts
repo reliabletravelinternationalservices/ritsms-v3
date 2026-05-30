@@ -10,6 +10,7 @@ import { initializeTheme } from './composables/useAppearance';
 import { Toaster } from '@/components/ui/sonner';
 import DeleteDialog from '@/components/ui/DeleteDialog.vue';
 import { imageViewer } from "@/lib/imageViewer"
+import { appModal } from "@/lib/app-modal"
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -39,6 +40,7 @@ createInertiaApp({
                     h(DeleteDialog),
                 ], })
             .use(imageViewer)
+            .use(appModal)
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);
