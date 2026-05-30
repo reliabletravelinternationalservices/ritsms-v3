@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+
+const appUrl = import.meta.env.VITE_APP_URL;
 </script>
 
 <template>
@@ -18,7 +20,7 @@ import { Icon } from '@iconify/vue';
         </div>
       </span>
       <div class="w-[660px] m-auto">
-        <img class="w-full h-full object-contain" src="http://127.0.0.1:8000/storage/upload/agency/about_agency.png" alt="Traveler">
+        <img class="w-full h-full object-contain" :src="`${appUrl}/storage/upload/agency/about_agency.png`" alt="Agency Image">
       </div>
     </div>
     <span class="absolute top-5 left-8 z-0 pointer-events-none opacity-5">
