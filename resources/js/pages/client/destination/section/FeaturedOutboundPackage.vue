@@ -32,7 +32,7 @@ const props = defineProps<Props>();
                 </div>
 
                 <div class="flex justify-start md:justify-end">
-                    <ExploreButton title="Explore More" href="#" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
+                    <ExploreButton title="Explore More" :href="route('client.destination.country')" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
                 </div>
             </div>
 

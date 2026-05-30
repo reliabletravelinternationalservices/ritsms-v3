@@ -2,6 +2,7 @@
 import ClientFeedbackCarousel from '@/components/ClientFeedbackCarousel.vue';
 import { Icon } from '@iconify/vue'
 
+const appUrl = import.meta.env.VITE_APP_URL
 interface Feedback {
   id: number
   name: string
@@ -12,32 +13,32 @@ const feedbacks: Feedback[] = [
     {
         id: 1,
         name: 'John Doe',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_1.png',
+        image_path: appUrl + '/storage/upload/agency/review_1.png',
     },
     {
         id: 2,
         name: 'Jane Smith',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_2.png',
+        image_path: appUrl + '/storage/upload/agency/review_2.png',
     },
     {
         id: 3,
         name: 'Alice Johnson',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_3.png',
+        image_path: appUrl + '/storage/upload/agency/review_3.png',
     },
     {
         id: 4,
         name: 'Bob Williams',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_4.png',
+        image_path: appUrl + '/storage/upload/agency/review_4.png',
     },
     {
         id: 5,
         name: 'Eva Brown',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_5.png',
+        image_path: appUrl + '/storage/upload/agency/review_5.png',
     },
     {
         id: 6,
         name: 'Michael Davis',
-        image_path: 'http://127.0.0.1:8000/storage/upload/agency/review_6.png',
+        image_path: appUrl + '/storage/upload/agency/review_6.png',
     }
 
 ]
