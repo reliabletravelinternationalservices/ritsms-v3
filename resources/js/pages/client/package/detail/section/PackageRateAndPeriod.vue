@@ -43,7 +43,7 @@ const props = defineProps<{ package: Package, isInbound: boolean, usdRate: numbe
                         </span>
                     </span>
                     <h4 class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)]">
-                        {{ formatPackageDateRange(props.package.selling_start_date, props.package.selling_end_date) }}
+                        {{ formatPackageDateRange(props.package.selling_start_date!, props.package.selling_end_date) }}
                     </h4>
                 </div>
                 <div class="flex flex-col">
