@@ -53,7 +53,7 @@ const handleCheckAvailability = () => {
                         </span>
                     </span>
                     <h4 class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)]">
-                        {{ formatPackageDateRange(props.package.selling_start_date!, props.package.selling_end_date) }}
+                        {{ formatPackageDateRange(props.package.selling_start_date, props.package.selling_end_date) }}
                     </h4>
                 </div>
                 <div class="flex flex-col">
@@ -65,6 +65,9 @@ const handleCheckAvailability = () => {
                     </span>
                     <h4 v-if="props.package.down_payment !== null" class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--correct-custom)]">
                         {{ formatCurrency(isInbound? (props.package.down_payment/props.usdRate) : props.package.down_payment, props.isInbound? 'USD' : 'PHP') }}/pax
+                    </h4>
+                    <h4 v-else class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--muted-custom)]">
+                        N/A
                     </h4>
                 </div>
             </div>
