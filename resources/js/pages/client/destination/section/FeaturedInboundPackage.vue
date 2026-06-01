@@ -36,7 +36,7 @@ const phID = props.destinations.find(dest => dest.country.toLowerCase() === 'phi
                 </div>
 
                 <div class="flex justify-start md:justify-end">
-                    <ExploreButton title="Explore More" :href="route('client.destination.country.destination', {destination: phID})" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
+                    <ExploreButton title="Explore More" :href="phID ? route('client.destination.country.destination', {destination: phID}) : '#'" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
                 </div>
             </div>
 
