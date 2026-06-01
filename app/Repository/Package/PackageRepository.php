@@ -5,6 +5,7 @@ namespace App\Repository\Package;
 use App\Models\Media;
 use App\Models\Package;
 use App\Models\PackageGroup;
+use App\Models\PackageSchedule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -25,16 +26,41 @@ class PackageRepository
         return collect($data)->map(fn (array $item) => $this->createPackage($item));
     }
 
-
     public function updatePackage(int $id, array $data): Package
     {
         return DB::transaction(function () use ($id, $data) {
             $package = $this->model->findOrFail($id);
             $package->update($data);
+
             return $package;
         });
     }
 
+    public function createPackageSchedule(int $packageId, array $data): PackageSchedule
+    {
+        return DB::transaction(function () use ($packageId, $data) {
+            return PackageSchedule::create(array_merge($data, ['package_id' => $packageId]));
+        });
+    }
+
+    public function updatePackageSchedule(int $packageId, int $scheduleId, array $data): PackageSchedule
+    {
+        return DB::transaction(function () use ($packageId, $scheduleId, $data) {
+            $schedule = PackageSchedule::where('package_id', $packageId)->findOrFail($scheduleId);
+            $schedule->update($data);
+
+            return $schedule;
+        });
+    }
+
+    public function deletePackageSchedule(int $packageId, int $scheduleId): bool
+    {
+        return DB::transaction(function () use ($packageId, $scheduleId) {
+            $schedule = PackageSchedule::where('package_id', $packageId)->findOrFail($scheduleId);
+
+            return $schedule->delete();
+        });
+    }
 
     public function deletePackage(int $id): bool
     {
@@ -45,6 +71,7 @@ class PackageRepository
             Storage::disk('public')->deleteDirectory(
                 "upload/package/{$package->id}"
             );
+
             return $package->delete();
         });
     }
@@ -159,8 +186,6 @@ class PackageRepository
             }
         });
     }
-
-
 
     public function getPackagesStatisticData()
     {
