@@ -22,7 +22,17 @@ const breadcrumbs: BreadcrumbItem[] = [
   { title: 'New Batch', href: route('admin.packages.batches.create', { id: props.package.id }) },
 ];
 
-const form = useForm({
+
+
+type FormData = {
+  departure_date: string;
+  return_date: string;
+  price: string;
+  is_available: boolean;
+  is_limited: boolean;
+}
+
+const form = useForm<FormData>({
   departure_date: '',
   return_date: '',
   price: '',
