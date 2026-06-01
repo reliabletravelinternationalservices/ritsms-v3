@@ -102,6 +102,7 @@ const onDelete = () => {
 
                     <!-- Tabbed Dynamic Content Section -->
                     <PackageTabInfo 
+                        :package-id="package.id"
                         :itineraries="package.itineraries_array" 
                         :inclusions="package.inclusions_array" 
                         :exclusions="package.exclusions_array"
