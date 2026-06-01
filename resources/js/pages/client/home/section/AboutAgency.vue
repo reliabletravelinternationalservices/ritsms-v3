@@ -3,57 +3,19 @@ import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import { Button } from '@/components/ui/button';
 import type { Media } from '@/types/media';
+import { Link } from '@inertiajs/vue3';
 
 const appUrl =  import.meta.env.VITE_APP_URL;
 
 
-const agencyClientPic : Media[] = [
-     {
-        id: 1,
-        mediable_id: 1,
-        mediable_type: 'Sample',
-        file_name: 'clients_1.png',
-        file_path: '/storage/upload/agency/clients_1.png',
-        url: appUrl + '/storage/upload/agency/clients_1.png',
-        disk: 'public',
-        type: 'image',
-        mime_type: 'image/png',
-        size: null,
-        alt_text: 'client_1.png',
-        order_number: 1,
-        is_primary: false
-    },
-    {
-        id: 2,
-        mediable_id: 1,
-        mediable_type: 'Sample',
-        file_name: 'clients_2.png',
-        file_path: '/storage/upload/agency/clients_2.png',
-        url: appUrl + '/storage/upload/agency/clients_2.png',
-        disk: 'public',
-        type: 'image',
-        mime_type: 'image/png',
-        size: null,
-        alt_text: 'client_2.png',
-        order_number: 2,
-        is_primary: false
-    },
-    {
-        id: 3,
-        mediable_id: 1,
-        mediable_type: 'Sample',
-        file_name: 'clients_3.png',
-        file_path: '/storage/upload/agency/clients_3.png',
-        url: appUrl + '/storage/upload/agency/clients_3.png',
-        disk: 'public',
-        type: 'image',
-        mime_type: 'image/png',
-        size: null,
-        alt_text: 'client_3.png',
-        order_number: 3,
-        is_primary: false
-    }
-];
+const images = Array.from({ length: 15 }, (_, i) => {
+  const num = i + 1
+
+  return {
+    url: `${appUrl}/storage/upload/agency/client_${num}.png`,
+    alt_text: `clients ${num}`,
+  }
+})
 
 </script>
 
@@ -97,26 +59,28 @@ const agencyClientPic : Media[] = [
                 </p>
 
                 <div class="pt-2">
-                    <Button
-                        type="button" 
-                        class="bg-[var(--tertiary-custom)] font-medium hover:bg-[var(--tertiary-hover-custom)] rounded-none font-roboto flex items-center justify-center px-12 py-3 w-full md:w-auto"
-                    >
-                        <span class="text-sm md:text-base">Read More</span>
-                        <Icon icon="ep:arrow-right-bold" width="18" height="18" class="ml-2" />
-                    </Button>
+                    <Link :href="route('client.about')" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
+                        <Button
+                            type="button" 
+                            class="bg-[var(--tertiary-custom)] font-medium hover:bg-[var(--tertiary-hover-custom)] rounded-none font-roboto flex items-center justify-center px-12 py-3 w-full md:w-auto"
+                        >
+                            <span class="text-sm md:text-base">Read More</span>
+                            <Icon icon="ep:arrow-right-bold" width="18" height="18" class="ml-2" />
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>
 
         <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
             <div class="col-span-2">
-                <img :src="agencyClientPic[0].url!" class="object-cover h-48 md:h-full w-full" :alt="agencyClientPic[0].alt_text" />
+                <img :src="images[0].url!" class="object-cover h-48 md:h-full w-full" :alt="images[0].alt_text" />
             </div>
             <div class="col-span-1">
-                <img :src="agencyClientPic[1].url!" class="object-cover h-32 md:h-full w-full" :alt="agencyClientPic[1].alt_text" />
+                <img :src="images[1].url!" class="object-cover h-32 md:h-full w-full" :alt="images[1].alt_text" />
             </div>
             <div class="col-span-1">
-                <img :src="agencyClientPic[2].url!" class="object-cover h-32 md:h-full w-full" :alt="agencyClientPic[2].alt_text" />
+                <img :src="images[2].url!" class="object-cover h-32 md:h-full w-full" :alt="images[2].alt_text" />
             </div>
         </div>
     </div>

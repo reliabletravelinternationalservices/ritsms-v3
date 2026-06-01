@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
-import { formatCurrency, formatPackageDateRange, getPackageDurationLabel } from '@/lib/utils';
+import { formatCurrency, formatPackageDateRange, getPackageDurationLabel, scrollToSection } from '@/lib/utils';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
-
+import { appModal } from '@/lib/app-modal';
 const props = defineProps<{ package: Package, isInbound: boolean, usdRate: number }>();
 
-
+const handleCheckAvailability = () => {
+  appModal.open({
+    title: "Request Booking Availability is under update",
+    description: "We are currently improving this feature. For a meantime send your request to inquiry.",
+    confirmText: "Send Inquiry",
+    onConfirm() {
+      appModal.close();
+      scrollToSection('inquiry');
+    },
+  })
+}
 </script>
 
 <template>
@@ -59,7 +69,7 @@ const props = defineProps<{ package: Package, isInbound: boolean, usdRate: numbe
                 </div>
             </div>
             <div>
-                <Button size="lg" variant="outline" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] rounded-none">
+                <Button @click="handleCheckAvailability" size="lg" variant="outline" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] rounded-none">
                     <span>Check Availability</span>
                     <Icon icon="line-md:arrow-right" class="text-2xl"/>
                 </Button>

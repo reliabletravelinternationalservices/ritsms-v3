@@ -12,6 +12,7 @@ class ServicePackageController extends Controller
     public function index()
     {
         $packages = $this->repository->getPackages();
-        return inertia('admin/package/ServicePackage', compact('packages'));
+        $metrics = $this->repository->getPackagesStatisticData();
+        return inertia('admin/package/ServicePackage', compact('packages', 'metrics'));
     }
 }

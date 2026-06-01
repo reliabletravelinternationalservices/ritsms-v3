@@ -159,4 +159,11 @@ class PackageRepository
             }
         });
     }
+
+
+
+    public function getPackagesStatisticData()
+    {
+        return Package::getDashboardMetrics();
+    }
 }
