@@ -71,20 +71,20 @@ const form = useForm<Props>({
 });
 
 const submit = () => {
-    console.log(form);
+    // console.log(form);
     form.post(route('admin.packages.store'), {
         onFinish: () => {
-            console.log('Submitted');
+            // console.log('Submitted');
         },
         
         onSuccess: () => {
             form.reset();
-            console.log('Success');
+            // console.log('Success');
             toast.success('Saved successfully')
         },
 
         onError: (err) => {
-            console.log(err);
+            // console.log(err);
             toast.error('Something went wrong')
         }
     });
@@ -248,7 +248,7 @@ const submit = () => {
                             <Label for="description">Description</Label>
                             <Textarea id="description" rows="4" class="mt-1 block w-full" v-model="form.description" autocomplete="description" placeholder="Tell us about this package?" />
                             <div class="min-h-[1.5rem]">
-                                <InputError  :message="form.errors.tag" />
+                                <InputError  :message="form.errors.description" />
                             </div>
                         </div>
                         
