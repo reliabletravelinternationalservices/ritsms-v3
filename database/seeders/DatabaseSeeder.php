@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            PackageSeeder::class,
-            PackageGroupSeeder::class,
-            PackageGroupItemSeeder::class,
+            // PackageSeeder::class,
+            // PackageGroupSeeder::class,
+            // PackageGroupItemSeeder::class,
             SettingSeeder::class,
-            PackageScheduleSeeder::class,
-            DestinationSeeder::class,
-            DestinationLocationSeeder::class
+            // PackageScheduleSeeder::class,
+            // DestinationSeeder::class,
+            // DestinationLocationSeeder::class
         ]);
     }
 }

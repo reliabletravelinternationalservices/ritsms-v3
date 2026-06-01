@@ -49,7 +49,7 @@ const handleRefreshMediaData = () => {
 const onDelete = () => {
     openDeleteDialog({
         title: 'Delete package',
-        message: `Are you sure you want to delete "${props.package.name}"?`,
+        message: `Are you sure you want to delete "${props.package.name}"? This will also remove all related batch schedules for this package.`,
         confirmText: 'Delete package',
         cancelText: 'Cancel',
 
