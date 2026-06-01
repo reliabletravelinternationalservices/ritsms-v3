@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Package\PackageGroupDisplayController;
 use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
+use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
@@ -47,6 +48,14 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
             Route::post('/store/{id}', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
             Route::put('/update/{id}', [PackageImageController::class, 'update'])->name('admin.packages.images.update');
         });
+
+        Route::prefix('{id}/travelBatches')->group(function () {
+            Route::get('/create', [UpdateTravelBatchController::class, 'create'])->name('admin.packages.batches.create');
+            Route::post('/store', [UpdateTravelBatchController::class, 'store'])->name('admin.packages.batches.store');
+            Route::get('/{scheduleId}/edit', [UpdateTravelBatchController::class, 'edit'])->name('admin.packages.batches.edit');
+            Route::put('/{scheduleId}', [UpdateTravelBatchController::class, 'update'])->name('admin.packages.batches.update');
+            Route::delete('/{scheduleId}', [UpdateTravelBatchController::class, 'destroy'])->name('admin.packages.batches.destroy');
+        });
     });
 
     Route::prefix('packageGroups')->group(function () {
@@ -62,7 +71,6 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])->name('admin.packages.groups.pin');
         Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])->name('admin.packages.groups.pin.update');
     });
-
 
     Route::prefix('destinations')->group(function () {
         Route::get('/', [ServiceCountryController::class, 'index'])->name('admin.destinations');
