@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('package_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('package_id')->constrained('packages')->restrictOnDelete();
+            $table->foreignId('package_id')->constrained('packages')->cascadeOnDelete();
             $table->date('departure_date');
             $table->date('return_date')->nullable();
             $table->decimal('price', 10, 2);
