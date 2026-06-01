@@ -145,3 +145,29 @@ export const scrollToSection = (id:string) => {
         });
     }
 };
+
+
+export const formatItinerariesForEdit = (
+    itineraries: Array<{
+        day: number;
+        title: string;
+        activity: string[];
+    }>,
+    unescapeJsonString: (val: string) => string
+): string => {
+    if (!Array.isArray(itineraries) || itineraries.length === 0) {
+        return '';
+    }
+
+    return itineraries
+        .map((item) => {
+            const title = unescapeJsonString(item.title ?? '');
+
+            const activities = Array.isArray(item.activity)
+                ? item.activity.map(unescapeJsonString).join('\n')
+                : unescapeJsonString(item.activity ?? '');
+
+            return `${title}\n${activities}`;
+        })
+        .join('\n\n');
+};
