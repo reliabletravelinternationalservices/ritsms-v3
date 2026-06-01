@@ -52,37 +52,45 @@ export const getPackageDurationLabel = (days: number): string => {
   }
 };
 
-export const formatPackageDateRange = (startDate: string, endDate?: string): string => {
-  const start = new Date(startDate);
-  const end = endDate ? new Date(endDate) : start;
+export const formatPackageDateRange = (
+    startDate?: string | null,
+    endDate?: string | null
+): string => {
+    const singleFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    };
 
-  const singleFormat: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  };
+    const rangeStartFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+    };
 
-  const rangeStartFormat: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'short'
-  };
+    const rangeEndFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    };
 
-  const rangeEndFormat: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  };
+    // No start date → show only end date
+    if (!startDate && endDate) {
+        return `Ends at ${new Date(endDate).toLocaleDateString('en-US', singleFormat)}`;
+    }
 
-  const isSameDate =
-    start.getDate() === end.getDate() &&
-    start.getMonth() === end.getMonth() &&
-    start.getFullYear() === end.getFullYear();
+    const start = new Date(startDate!);
+    const end = endDate ? new Date(endDate) : start;
 
-  if (!endDate || isSameDate) {
-    return start.toLocaleDateString('en-US', singleFormat);
-  }
+    const isSameDate =
+        start.getDate() === end.getDate() &&
+        start.getMonth() === end.getMonth() &&
+        start.getFullYear() === end.getFullYear();
 
-  return `${start.toLocaleDateString('en-US', rangeStartFormat)} - ${end.toLocaleDateString('en-US', rangeEndFormat)}`;
+    if (!endDate || isSameDate) {
+        return start.toLocaleDateString('en-US', singleFormat);
+    }
+
+    return `${start.toLocaleDateString('en-US', rangeStartFormat)} - ${end.toLocaleDateString('en-US', rangeEndFormat)}`;
 };
 
 
