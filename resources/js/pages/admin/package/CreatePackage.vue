@@ -334,17 +334,21 @@ const submit = () => {
                             <Label for="itineraries" class="flex items-center gap-2">
                                 Itineraries
                                 <InfoTooltip
-                                    content="Use this format to each itineraries group.
+                                    content="Each itinerary group must follow this format:
 
-                                    TITLE: Hotel accommodation
-                                    ACTIVITIES:
-                                        4 to 5 stars hotel
-                                        Breakfast buffet
+                                Title of itinerary (first line)
+                                Activity details (next lines)
 
-                                    TITLE: Tour Guide
-                                    ACTIVITY:
-                                        English speaking tour guide
-                                        Professional tour guide"
+                                Example:
+
+                                Manila to Sydney | Arrival & Free Time
+                                Depart Manila via flight...
+                                Meals included...
+
+                                Sydney City Tour & Harbour Cruise
+                                Visit Sydney Opera House
+                                Explore Bondi Beach
+                                Lunch cruise experience"
                                 />
                             </Label>
 
