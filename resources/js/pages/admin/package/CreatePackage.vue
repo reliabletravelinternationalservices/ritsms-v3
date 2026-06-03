@@ -71,20 +71,20 @@ const form = useForm<Props>({
 });
 
 const submit = () => {
-    console.log(form);
+    // console.log(form);
     form.post(route('admin.packages.store'), {
         onFinish: () => {
-            console.log('Submitted');
+            // console.log('Submitted');
         },
         
         onSuccess: () => {
             form.reset();
-            console.log('Success');
+            // console.log('Success');
             toast.success('Saved successfully')
         },
 
-        onError: (err) => {
-            console.log(err);
+        onError: () => {
+            // console.log(err);
             toast.error('Something went wrong')
         }
     });
@@ -248,7 +248,7 @@ const submit = () => {
                             <Label for="description">Description</Label>
                             <Textarea id="description" rows="4" class="mt-1 block w-full" v-model="form.description" autocomplete="description" placeholder="Tell us about this package?" />
                             <div class="min-h-[1.5rem]">
-                                <InputError  :message="form.errors.tag" />
+                                <InputError  :message="form.errors.description" />
                             </div>
                         </div>
                         
@@ -334,17 +334,21 @@ const submit = () => {
                             <Label for="itineraries" class="flex items-center gap-2">
                                 Itineraries
                                 <InfoTooltip
-                                    content="Use this format to each itineraries group.
+                                    content="Each itinerary group must follow this format:
 
-                                    TITLE: Hotel accommodation
-                                    ACTIVITIES:
-                                        4 to 5 stars hotel
-                                        Breakfast buffet
+                                Title of itinerary (first line)
+                                Activity details (next lines)
 
-                                    TITLE: Tour Guide
-                                    ACTIVITY:
-                                        English speaking tour guide
-                                        Professional tour guide"
+                                Example:
+
+                                Manila to Sydney | Arrival & Free Time
+                                Depart Manila via flight...
+                                Meals included...
+
+                                Sydney City Tour & Harbour Cruise
+                                Visit Sydney Opera House
+                                Explore Bondi Beach
+                                Lunch cruise experience"
                                 />
                             </Label>
 

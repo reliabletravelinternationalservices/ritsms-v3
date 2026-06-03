@@ -2,7 +2,6 @@
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import { Button } from '@/components/ui/button';
-import type { Media } from '@/types/media';
 import { Link } from '@inertiajs/vue3';
 
 const appUrl =  import.meta.env.VITE_APP_URL;

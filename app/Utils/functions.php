@@ -67,38 +67,48 @@ if (!function_exists('convert_textarea_to_array')) {
 
 
 
-if (!function_exists('parse_itineraries')) {
+function parse_itineraries(string $value): string
+{
+    $lines = preg_split('/\r\n|\r|\n/', trim($value));
 
-   function parse_itineraries(string $value): string
-    {
-        preg_match_all(
-            '/TITLE:\s*(.*?)\s*ACTIVITIES:\s*(.*?)(?=TITLE:|$)/s',
-            trim($value),
-            $matches,
-            PREG_SET_ORDER
-        );
+    $itineraries = [];
+    $current = [];
 
-        $itineraries = collect($matches)->map(function ($match, $index) {
+    foreach ($lines as $line) {
 
-            $title = trim($match[1]);
+        $line = trim($line);
 
-            $activities = collect(
-                preg_split('/\n\s*\n|\n/', trim($match[2]))
-            )
-                ->map(fn ($activity) => trim($activity))
-                ->filter()
-                ->values()
-                ->toArray();
+        // treat empty line OR image marker line as separator
+        if ($line === '' || str_starts_with(strtolower($line), 'image')) {
 
-            return [
-                'day' => $index + 1,
-                'title' => $title,
-                'activity' => $activities,
-            ];
-        })->toArray();
+            if (!empty($current)) {
+                $itineraries[] = $current;
+                $current = [];
+            }
 
-        return json_encode($itineraries);
+            continue;
+        }
+
+        $current[] = $line;
     }
+
+    // push last block
+    if (!empty($current)) {
+        $itineraries[] = $current;
+    }
+
+    $result = collect($itineraries)->map(function ($block, $index) {
+
+        $title = array_shift($block); // first line = title
+
+        return [
+            'day' => $index + 1,
+            'title' => $title,
+            'activity' => array_values(array_filter($block)),
+        ];
+    })->values()->toArray();
+
+    return json_encode($result);
 }
 
 
@@ -111,7 +121,12 @@ if (!function_exists('parse_textarea')) {
 
 
 if (!function_exists('parse_json_array')) {
-    function parse_json_array(string $value) {
-        return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+    function parse_json_array(?string $value): array
+    {
+        try {
+            return json_decode($value ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return [];
+        }
     }
 }

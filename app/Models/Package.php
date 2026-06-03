@@ -52,7 +52,8 @@ class Package extends Model
 
     public function images()
     {
-        return $this->morphMany(Media::class, 'mediable');
+        return $this->morphMany(Media::class, 'mediable')
+            ->orderBy('order_number', 'asc');
     }
 
 

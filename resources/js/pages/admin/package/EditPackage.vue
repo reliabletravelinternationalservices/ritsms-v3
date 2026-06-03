@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner'
 import { Package } from '@/types/package';
+import { formatItinerariesForEdit } from '@/lib/utils';
 
 const unescapeJsonString = (value?: string | null): string => {
     if (!value) {
@@ -84,7 +85,12 @@ const form = useForm<Props>({
     exclusions: normalizeBlockWithEmptyLines(props.package.exclusions_array),
     highlights: normalizeBlock(props.package.highlights_array),
     destination: unescapeJsonString(props.package.destination ?? ''),
-    itineraries: props.package.itineraries_array ? props.package.itineraries_array.map(i => `TITLE: ${unescapeJsonString(i.title)}\nACTIVITIES:\n${Array.isArray(i.activity) ? i.activity.map(unescapeJsonString).join('\n') : unescapeJsonString(i.activity)}`).join('\n\n') : '',
+    itineraries: props.package.itineraries_array
+    ? formatItinerariesForEdit(
+          props.package.itineraries_array,
+          unescapeJsonString
+      )
+    : '',
     selling_start_date: props.package.selling_start_date ?? '',
     selling_end_date: props.package.selling_end_date ?? '',
     season: unescapeJsonString(props.package.season ?? ''),
@@ -109,6 +115,7 @@ const submit = () => {
         }
     });
 };
+
 
 
 </script>
