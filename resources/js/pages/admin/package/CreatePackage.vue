@@ -83,7 +83,7 @@ const submit = () => {
             toast.success('Saved successfully')
         },
 
-        onError: (err) => {
+        onError: () => {
             // console.log(err);
             toast.error('Something went wrong')
         }
