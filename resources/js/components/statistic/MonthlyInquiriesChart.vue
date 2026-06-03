@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import apexchart from 'vue3-apexcharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import DateRangePickerInput, { type DateRangePayload } from '@/components/DateRangePicker.vue'; // Ensure the path matches your filename
+import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 import type { ApexOptions } from 'apexcharts';
 
-// Strict definitions for chart items data mapping
 export interface ChartDataPoint {
     month: string;
     count: number;
-    dateKey?: string;
+    dateKey?: string; 
 }
+
+const props = withDefaults(defineProps<ComponentProps>(), {
+    title: 'Monthly inquiries',
+    description: 'Track inquiry volume over time.',
+    data: () => [
+        { month: 'Jan', count: 80, dateKey: '2026' },
+        { month: 'Feb', count: 95, dateKey: '2026' },
+        { month: 'Mar', count: 120, dateKey: '2026' },
+        { month: 'Apr', count: 110, dateKey: '2026' },
+        { month: 'May', count: 155, dateKey: '2026' },
+        { month: 'Jun', count: 178, dateKey: '2026' },
+        { month: 'Jan', count: 45, dateKey: '2025' },
+        { month: 'Feb', count: 60, dateKey: '2025' },
+    ]
+});
 
 interface ComponentProps {
     title?: string;
@@ -19,57 +33,25 @@ interface ComponentProps {
     data: ChartDataPoint[];
 }
 
-// Explicitly typed compiler definitions configuration blocks
-const props = withDefaults(defineProps<ComponentProps>(), {
-    title: 'Monthly inquiries',
-    description: 'Track inquiry volume over time.',
-    data: () => [
-        { month: 'Jan', count: 80 },
-        { month: 'Feb', count: 95 },
-        { month: 'Mar', count: 120 },
-        { month: 'Apr', count: 110 },
-        { month: 'May', count: 155 },
-        { month: 'Jun', count: 178 },
-    ]
-});
-
-// Explicit structure configuration emitted parameters
 interface FilterPayload {
     year: string;
-    startDate: string;
-    endDate: string;
 }
 
 const emit = defineEmits<{
     (e: 'filterChange', payload: FilterPayload): void;
 }>();
 
-// Baseline Initialization using regular JS strings
 const currentYear = ref<string>(new Date().getFullYear().toString());
-
-// Standard Date Formats Helper Setup (YYYY-MM-DD)
-const getTodayString = (): string => new Date().toISOString().split('T')[0];
-const getSixMonthsAgoString = (): string => {
-    const d: Date = new Date();
-    d.setMonth(d.getMonth() - 6);
-    return d.toISOString().split('T')[0];
-};
-
-// Range Object State matching your compound wrapper requirement
-const rangeFilters = ref<DateRangePayload>({
-    startDate: getSixMonthsAgoString(),
-    endDate: getTodayString()
-});
-
 const availableYears: string[] = ['2024', '2025', '2026', '2027'];
 
-// Centralized emission handler fired cleanly whenever 'Done' or 'Clear' processes execute
+const filteredData = computed<ChartDataPoint[]>(() => {
+    return props.data.filter((d: ChartDataPoint) => d.dateKey === currentYear.value);
+});
+
+const hasData = computed<boolean>(() => filteredData.value.length > 0);
+
 const handleFiltersUpdated = (): void => {
-    emit('filterChange', {
-        year: currentYear.value,
-        startDate: rangeFilters.value.startDate,
-        endDate: rangeFilters.value.endDate
-    });
+    emit('filterChange', { year: currentYear.value });
 };
 
 interface ApexChartSeriesItem {
@@ -80,7 +62,7 @@ interface ApexChartSeriesItem {
 const chartSeries = computed<ApexChartSeriesItem[]>((): ApexChartSeriesItem[] => [
     {
         name: 'Inquiries',
-        data: props.data.map((d: ChartDataPoint): number => d.count)
+        data: hasData.value ? filteredData.value.map((d: ChartDataPoint): number => d.count) : []
     }
 ]);
 
@@ -99,6 +81,9 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
     chart: {
         type: 'area',
         height: '100%',
+        width: '100%', // 1. Tells Apex to target parent dimensions directly
+        redrawOnParentResize: true, // 2. Forces recalculation when parent layout layout resolves
+        redrawOnWindowResize: true,
         toolbar: { show: false },
         zoom: { enabled: false },
         background: 'transparent',
@@ -122,31 +107,47 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
         size: 0,
         hover: { size: 5, sizeOffset: 3 }
     },
+    noData: {
+        text: `No inquiries recorded for ${currentYear.value}`,
+        align: 'center',
+        verticalAlign: 'middle',
+        style: {
+            color: '#a1a1aa',
+            fontSize: '14px',
+            fontFamily: 'sans-serif'
+        }
+    },
     grid: {
         borderColor: '#18181b',
         strokeDashArray: 4,
         xaxis: { lines: { show: false } },
-        yaxis: { lines: { show: true } },
-        padding: { top: 10, right: 20, bottom: 0, left: 10 }
+        yaxis: { lines: { show: hasData.value } },
+        padding: { top: 10, right: 10, bottom: 0, left: 10 }
     },
     xaxis: {
-        categories: props.data.map((d: ChartDataPoint): string => d.month),
+        categories: hasData.value ? filteredData.value.map((d: ChartDataPoint): string => d.month) : [],
         axisBorder: { show: false },
         axisTicks: { show: false },
-        tooltip: { enabled: false }
+        tooltip: { enabled: false },
+        labels: { 
+            show: hasData.value,
+            style: { fontSize: '11px' }
+        }
     },
     yaxis: {
         min: 0,
-        max: Math.max(...props.data.map((d: ChartDataPoint): number => d.count), 200) + 20,
+        max: hasData.value ? Math.max(...filteredData.value.map((d: ChartDataPoint): number => d.count), 200) + 20 : 100,
         tickAmount: 4,
         labels: {
+            show: hasData.value,
             style: {
                 colors: ['#52525b'],
-                fontSize: '12px',
+                fontSize: '11px',
             }
         }
     },
     tooltip: {
+        enabled: hasData.value,
         theme: 'dark',
         custom: function({ series, seriesIndex, dataPointIndex, w }: ApexCustomTooltipParams): string {
             const currentMonth: string = w.globals.categoryLabels[dataPointIndex];
@@ -167,47 +168,42 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
 </script>
 
 <template>
-    <Card class="bg-zinc-950 border border-zinc-900 text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-2">
-        <CardHeader class="flex flex-col xl:flex-row items-start xl:items-center justify-between space-y-4 xl:space-y-0 pb-6 border-b border-zinc-900/50 mb-4">
-            <div class="space-y-1">
-                <CardTitle class="text-lg font-bold tracking-tight text-zinc-100">
-                    {{ props.title }}
-                </CardTitle>
-                <CardDescription class="text-xs text-zinc-400">
-                    {{ props.description }}
-                </CardDescription>
-            </div>
+    <MotionWrapper :delay="0.2">
+        <Card class="w-full bg-zinc-950 border border-zinc-900 text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-4 sm:p-6">
+            <CardHeader class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 pb-6 border-b border-zinc-900/50 mb-6 p-0">
+                <div class="space-y-1">
+                    <CardTitle class="text-xl font-bold tracking-tight text-zinc-100">
+                        {{ props.title }}
+                    </CardTitle>
+                    <CardDescription class="text-xs text-zinc-400">
+                        {{ props.description }}
+                    </CardDescription>
+                </div>
 
-            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
-                
-                <Select v-model="currentYear" @update:model-value="handleFiltersUpdated">
-                    <SelectTrigger class="w-[110px] h-9 bg-zinc-900 border-zinc-800 text-zinc-200 focus:ring-sky-600">
-                        <SelectValue placeholder="Year" />
-                    </SelectTrigger>
-                    <SelectContent class="bg-zinc-900 border-zinc-800 text-zinc-200">
-                        <SelectItem v-for="year in availableYears" :key="year" :value="year">
-                            {{ year }}
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
-
-                <DateRangePickerInput 
-                    v-model="rangeFilters" 
-                    @change="handleFiltersUpdated"
-                />
-
-            </div>
-        </CardHeader>
-        
-        <CardContent class="pb-2">
-            <div class="h-[280px] w-full">
-                <apexchart
-                    width="100%"
-                    height="100%"
-                    :options="chartOptions"
-                    :series="chartSeries"
-                />
-            </div>
-        </CardContent>
-    </Card>
+                <div class="w-full sm:w-auto flex items-center justify-start sm:justify-end">
+                    <Select v-model="currentYear" @update:model-value="handleFiltersUpdated">
+                        <SelectTrigger class="w-full sm:w-[120px] h-9 bg-zinc-900 border-zinc-800 text-zinc-200 focus:ring-sky-600">
+                            <SelectValue placeholder="Year" />
+                        </SelectTrigger>
+                        <SelectContent class="bg-zinc-900 border-zinc-800 text-zinc-200">
+                            <SelectItem v-for="year in availableYears" :key="year" :value="year">
+                                {{ year }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </CardHeader>
+            
+            <CardContent class="p-0 w-full">
+                <div class="h-[240px] sm:h-[300px] w-full block block-items relative transition-all [&>div]:!w-full [&>.apexcharts-container]:!w-full">
+                    <apexchart
+                        width="100%"
+                        height="100%"
+                        :options="chartOptions"
+                        :series="chartSeries"
+                    />
+                </div>
+            </CardContent>
+        </Card>
+    </MotionWrapper>
 </template>
