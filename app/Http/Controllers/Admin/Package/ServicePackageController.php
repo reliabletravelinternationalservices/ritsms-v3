@@ -13,6 +13,7 @@ class ServicePackageController extends Controller
     {
         $packages = $this->repository->getPackages();
         $metrics = $this->repository->getPackagesStatisticData();
-        return inertia('admin/package/ServicePackage', compact('packages', 'metrics'));
+        $countries = $this->repository->getDistinctCountries();
+        return inertia('admin/package/ServicePackage', compact('packages', 'metrics', 'countries'));
     }
 }
