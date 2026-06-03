@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained('bookings')->cascadeOnDelete();
             $table->decimal('amount', 10, 2)->default(0);
-            $table->enum('payment_type', ['down_payment', 'fullpayment'])->default('full_payment');
+            $table->enum('payment_type', ['down_payment', 'fullpayment'])->default('fullpayment');
             $table->enum('method', ['paypal', 'cash', 'gcash', 'card', 'bank_transfer', 'other'])->default('other');
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('reference_number')->nullable();
