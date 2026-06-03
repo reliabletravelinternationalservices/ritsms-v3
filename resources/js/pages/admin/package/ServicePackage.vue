@@ -65,6 +65,7 @@ const packageTrendType = computed(() => {
                         icon="iconoir:package"
                         :trend-value="`${metrics.packages_trend}%`"
                         :trend-type="packageTrendType"
+                        :delay="0.05"
                     />
                 </div>
                 <div class="relative h-auto">

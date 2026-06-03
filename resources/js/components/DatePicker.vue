@@ -1,58 +1,44 @@
 <script setup lang="ts">
-import { getLocalTimeZone, today } from '@internationalized/date'
-import { CalendarIcon } from 'lucide-vue-next'
-import { computed } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
+import { ref, watch } from 'vue';
+import { Input } from '@/components/ui/input';
 
-interface Props {
-  modelValue?: Date
-  placeholder?: string
+interface ComponentProps {
+    modelValue?: string; // Expects a 'YYYY-MM-DD' formatted string
+    placeholder?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'Pick a date'
-})
+const props = withDefaults(defineProps<ComponentProps>(), {
+    modelValue: () => new Date().toISOString().split('T')[0],
+    placeholder: 'Select Date'
+});
 
 const emit = defineEmits<{
-  'update:modelValue': [date?: Date]
-}>()
+    (e: 'update:modelValue', value: string): void;
+    (e: 'change', value: string): void;
+}>();
 
-const date = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+// Sync internal state with the incoming prop value
+const selectedDate = ref<string>(props.modelValue);
 
-const defaultPlaceholder = today(getLocalTimeZone())
+// Watch for internal selection changes to notify the parent container
+watch(selectedDate, (newValue: string): void => {
+    emit('update:modelValue', newValue);
+    emit('change', newValue);
+});
+
+// Watch for external prop changes (e.g. if reset from outside)
+watch(() => props.modelValue, (newValue: string): void => {
+    selectedDate.value = newValue;
+});
 </script>
 
 <template>
-  <Popover>
-    <PopoverTrigger as-child>
-      <Button
-        variant="outline"
-        :class="cn(
-          'w-[280px] justify-start text-left font-normal',
-          !date && 'text-muted-foreground',
-        )"
-      >
-        <CalendarIcon class="mr-2 h-4 w-4" />
-        {{ date ? date.toDateString() : placeholder }}
-      </Button>
-    </PopoverTrigger>
-    <PopoverContent class="w-auto p-0">
-      <Calendar
-        v-model="date"
-        :initial-focus="true"
-        :default-placeholder="defaultPlaceholder"
-        layout="month-and-year"
-      />
-    </PopoverContent>
-  </Popover>
+    <div class="relative flex items-center bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-lg shadow-inner group w-full sm:w-[160px]">
+        <Input 
+            type="date" 
+            v-model="selectedDate"
+            :placeholder="props.placeholder"
+            class="h-7 w-full border-none bg-transparent p-0 text-xs text-zinc-200 font-medium focus-visible:ring-0 focus-visible:ring-offset-0 cursor-pointer dark:[color-scheme:dark]"
+        />
+    </div>
 </template>
