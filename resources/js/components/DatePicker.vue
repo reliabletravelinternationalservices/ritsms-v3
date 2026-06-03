@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { CalendarIcon } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -11,7 +11,24 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 
-const date = ref<Date>()
+interface Props {
+  modelValue?: Date
+  placeholder?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: 'Pick a date'
+})
+
+const emit = defineEmits<{
+  'update:modelValue': [date?: Date]
+}>()
+
+const date = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
+
 const defaultPlaceholder = today(getLocalTimeZone())
 </script>
 
@@ -26,12 +43,12 @@ const defaultPlaceholder = today(getLocalTimeZone())
         )"
       >
         <CalendarIcon class="mr-2 h-4 w-4" />
-        {{ date ? date.toDateString() : "Pick a date" }}
+        {{ date ? date.toDateString() : placeholder }}
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <Calendar
-        :v-model="date"
+        v-model="date"
         :initial-focus="true"
         :default-placeholder="defaultPlaceholder"
         layout="month-and-year"

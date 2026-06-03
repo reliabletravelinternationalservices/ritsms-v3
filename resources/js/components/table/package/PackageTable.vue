@@ -17,21 +17,33 @@ import {
     getFilteredRowModel  
 } from '@tanstack/vue-table';
 
-import { h, ref } from 'vue';
-import DatePicker from '@/components/DatePicker.vue';
+import { h, ref, computed } from 'vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Link } from '@inertiajs/vue3';
 import LinkCell from '@/components/table/package/LinkCell.vue';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
 
 interface Props {
     packages: Package[];
+    countries: string[];
 }
 
 
 const props = defineProps<Props>();
 
 const data = ref<Package[]>(props.packages);
+const destinationFilter = ref<string>('');
+const search = ref<string>('');
+
+// Custom filter function for destination
+const filteredByDestination = computed(() => {
+    if (!destinationFilter.value) return data.value;
+    
+    return data.value.filter(pkg => {
+        return pkg.destination === destinationFilter.value;
+    });
+});
 
 const columns = [
     {
@@ -113,10 +125,9 @@ const columns = [
 
 
 const globalFilter = ref<string>('');
-const search = ref<string>('');
 
 const table = useVueTable({
-        data,
+        data: filteredByDestination,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -167,13 +178,29 @@ const table = useVueTable({
                 </button>
             </div>
 
-            <div class="flex flex-wrap items-center gap-4">
+            <div class="flex flex-wrap items-end gap-4">
                 
                 <div class="flex flex-col gap-1">
-                    <DatePicker
-                        placeholder="Pick a date"
-                        class="border rounded-sm px-3 py-2 h-10"
-                    />
+                    <label class="text-xs font-semibold text-muted-foreground">
+                        Destination Country
+                    </label>
+                    <Select v-model="destinationFilter">
+                        <SelectTrigger class="w-[200px] border rounded-sm px-3 py-2 h-10">
+                            <SelectValue :placeholder="destinationFilter ? destinationFilter : 'All Countries'" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="">
+                                All Countries
+                            </SelectItem>
+                            <SelectItem
+                                v-for="country in countries"
+                                :key="country"
+                                :value="country"
+                            >
+                                {{ country }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 <div class="flex flex-col gap-1">
@@ -184,25 +211,6 @@ const table = useVueTable({
                             </Button>
                         </Link>
                     </span>
-                    <!-- <span class="text-xs text-muted-foreground">
-                        Status
-                    </span>
-
-                    <select
-                        class="border rounded-sm px-3 py-2 h-10"
-                    >
-                        <option value="">
-                            All Status
-                        </option>
-
-                        <option value="selling">
-                            Selling
-                        </option>
-
-                        <option value="ended">
-                            Ended
-                        </option>
-                    </select> -->
                 </div>
 
             </div>

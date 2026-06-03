@@ -191,4 +191,12 @@ class PackageRepository
     {
         return Package::getDashboardMetrics();
     }
+
+    public function getDistinctCountries(): Collection
+    {
+        return \App\Models\Destination::select('country')
+            ->distinct()
+            ->orderBy('country')
+            ->pluck('country');
+    }
 }

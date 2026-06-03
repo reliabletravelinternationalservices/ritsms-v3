@@ -23,6 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface CombinedPageProps {
     packages: Package[];
+    countries: string[];
     metrics: {
         total_packages: number;
         packages_trend: number;
@@ -34,6 +35,7 @@ interface CombinedPageProps {
 // 3. Fire defineProps exactly ONCE using withDefaults for fallback states
 const props = withDefaults(defineProps<CombinedPageProps>(), {
     packages: () => [],
+    countries: () => [],
     metrics: () => ({
         total_packages: 0,
         packages_trend: 0,
@@ -73,7 +75,7 @@ const packageTrendType = computed(() => {
                 </div>
             </div>
             <div class="relative min-h-[100vh] flex-1 rounded-smr md:min-h-min p-6 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                <PackageTable :packages="packages" />
+                <PackageTable :packages="packages" :countries="props.countries" />
             </div>
         </div>
     </AppLayout>
