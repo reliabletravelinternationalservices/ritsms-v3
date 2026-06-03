@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 import InquiryTable from '@/components/table/inquiry/InquiryTable.vue';
 import { Inquiry } from '@/types/inquiry';
 import SummaryCard from '@/components/statistic/SummaryCard.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 
 interface Props {
@@ -15,6 +15,10 @@ interface Props {
 const props = defineProps<Props>();
 
 const filteredInquiries = ref(props.inquiries);
+
+watch(() => props.inquiries, (newInquiries) => {
+    filteredInquiries.value = newInquiries;
+}, { deep: true });
 
 const totalInquiries = computed(() => filteredInquiries.value.length);
 
