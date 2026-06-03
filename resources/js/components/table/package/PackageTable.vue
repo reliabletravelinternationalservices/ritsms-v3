@@ -181,9 +181,6 @@ const table = useVueTable({
             <div class="flex flex-wrap items-end gap-4">
                 
                 <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-muted-foreground">
-                        Destination Country
-                    </label>
                     <Select v-model="destinationFilter">
                         <SelectTrigger class="w-[200px] border rounded-sm px-3 py-2 h-10">
                             <SelectValue :placeholder="destinationFilter ? destinationFilter : 'All Countries'" />
