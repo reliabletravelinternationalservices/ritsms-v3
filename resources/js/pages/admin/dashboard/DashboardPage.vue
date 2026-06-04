@@ -18,30 +18,21 @@ interface Props {
         inquiries_count: number;
         collections_count: number;
         bookings_count: number;
+        monthly_inquiries: ChartDataPoint[];
     }
 }
 
 const props = withDefaults(defineProps<Props>(), {
     dashboardData: () => ({
-        packages_count: 143,
-        destinations_count: 58,
-        inquiries_count: 895,
-        collections_count: 12,
-        bookings_count: 0
+        packages_count: 0,
+        destinations_count: 0,
+        inquiries_count: 0,
+        collections_count: 0,
+        bookings_count: 0,
+        monthly_inquiries: () => []
     })
 });
 
-
-const dummyInquiries: ChartDataPoint[] = [
-        { month: 'Jan', count: 80, dateKey: '2026' },
-        { month: 'Feb', count: 95, dateKey: '2026' },
-        { month: 'Mar', count: 120, dateKey: '2026' },
-        { month: 'Apr', count: 110, dateKey: '2026' },
-        { month: 'May', count: 155, dateKey: '2026' },
-        { month: 'Jun', count: 178, dateKey: '2026' },
-        { month: 'Jan', count: 45, dateKey: '2025' },
-        { month: 'Feb', count: 60, dateKey: '2025' },
-];
 </script>
 
 <template>
@@ -102,7 +93,7 @@ const dummyInquiries: ChartDataPoint[] = [
                 </div>
             </div>
             <div class="relative">
-                <MonthlyInquiriesChart :data="dummyInquiries" />
+                <MonthlyInquiriesChart :data="props.dashboardData.monthly_inquiries" />
             </div>
         </div>
     </AppLayout>
