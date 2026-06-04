@@ -7,22 +7,152 @@ use App\Models\Destination;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\PackageGroup;
+use Carbon\Carbon;
 
 class DashboardRepository
 {
     /**
-     * Get dashboard data with counts and monthly inquiry statistics
+     * Get dashboard data with counts, trends and monthly inquiry statistics
      */
     public function getDashboardData(): array
     {
         return [
-            'packages_count' => Package::count(),
-            'destinations_count' => Destination::count(),
-            'inquiries_count' => Inquiry::count(),
-            'collections_count' => PackageGroup::count(),
-            'bookings_count' => Booking::count(),
+            'packages' => $this->getPackagesTrend(),
+            'destinations' => $this->getDestinationsTrend(),
+            'inquiries' => $this->getInquiriesTrend(),
+            'collections' => $this->getCollectionsTrend(),
+            'bookings' => $this->getBookingsTrend(),
             'monthly_inquiries' => $this->getMonthlyInquiries(),
         ];
+    }
+
+    /**
+     * Calculate trend data (current count, trend percentage, trend type)
+     */
+    private function calculateTrend($currentCount, $previousCount): array
+    {
+        $trendValue = 0;
+        $trendType = 'neutral';
+
+        if ($previousCount > 0) {
+            $trendValue = (($currentCount - $previousCount) / $previousCount) * 100;
+            $trendType = $trendValue > 0 ? 'up' : ($trendValue < 0 ? 'down' : 'neutral');
+            $trendValue = abs(round($trendValue, 1));
+        } elseif ($currentCount > 0) {
+            $trendValue = 100;
+            $trendType = 'up';
+        }
+
+        return [
+            'count' => $currentCount,
+            'trend_value' => $trendValue,
+            'trend_type' => $trendType,
+        ];
+    }
+
+    /**
+     * Get packages count with trend comparison to previous month
+     */
+    private function getPackagesTrend(): array
+    {
+        $currentMonth = now()->startOfMonth();
+        $previousMonth = now()->subMonth()->startOfMonth();
+
+        $currentCount = Package::whereBetween('created_at', [
+            $currentMonth,
+            $currentMonth->copy()->endOfMonth(),
+        ])->count();
+
+        $previousCount = Package::whereBetween('created_at', [
+            $previousMonth,
+            $previousMonth->copy()->endOfMonth(),
+        ])->count();
+
+        return $this->calculateTrend($currentCount, $previousCount);
+    }
+
+    /**
+     * Get destinations count with trend comparison to previous month
+     */
+    private function getDestinationsTrend(): array
+    {
+        $currentMonth = now()->startOfMonth();
+        $previousMonth = now()->subMonth()->startOfMonth();
+
+        $currentCount = Destination::whereBetween('created_at', [
+            $currentMonth,
+            $currentMonth->copy()->endOfMonth(),
+        ])->count();
+
+        $previousCount = Destination::whereBetween('created_at', [
+            $previousMonth,
+            $previousMonth->copy()->endOfMonth(),
+        ])->count();
+
+        return $this->calculateTrend($currentCount, $previousCount);
+    }
+
+    /**
+     * Get inquiries count with trend comparison to previous month
+     */
+    private function getInquiriesTrend(): array
+    {
+        $currentMonth = now()->startOfMonth();
+        $previousMonth = now()->subMonth()->startOfMonth();
+
+        $currentCount = Inquiry::whereBetween('created_at', [
+            $currentMonth,
+            $currentMonth->copy()->endOfMonth(),
+        ])->count();
+
+        $previousCount = Inquiry::whereBetween('created_at', [
+            $previousMonth,
+            $previousMonth->copy()->endOfMonth(),
+        ])->count();
+
+        return $this->calculateTrend($currentCount, $previousCount);
+    }
+
+    /**
+     * Get collections count with trend comparison to previous month
+     */
+    private function getCollectionsTrend(): array
+    {
+        $currentMonth = now()->startOfMonth();
+        $previousMonth = now()->subMonth()->startOfMonth();
+
+        $currentCount = PackageGroup::whereBetween('created_at', [
+            $currentMonth,
+            $currentMonth->copy()->endOfMonth(),
+        ])->count();
+
+        $previousCount = PackageGroup::whereBetween('created_at', [
+            $previousMonth,
+            $previousMonth->copy()->endOfMonth(),
+        ])->count();
+
+        return $this->calculateTrend($currentCount, $previousCount);
+    }
+
+    /**
+     * Get bookings count with trend comparison to previous month
+     */
+    private function getBookingsTrend(): array
+    {
+        $currentMonth = now()->startOfMonth();
+        $previousMonth = now()->subMonth()->startOfMonth();
+
+        $currentCount = Booking::whereBetween('created_at', [
+            $currentMonth,
+            $currentMonth->copy()->endOfMonth(),
+        ])->count();
+
+        $previousCount = Booking::whereBetween('created_at', [
+            $previousMonth,
+            $previousMonth->copy()->endOfMonth(),
+        ])->count();
+
+        return $this->calculateTrend($currentCount, $previousCount);
     }
 
     /**

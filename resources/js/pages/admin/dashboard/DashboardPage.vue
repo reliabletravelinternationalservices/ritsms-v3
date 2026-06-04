@@ -11,24 +11,30 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface TrendData {
+    count: number;
+    trend_value: number;
+    trend_type: 'up' | 'down' | 'neutral';
+}
+
 interface Props {
     dashboardData: {
-        packages_count: number;
-        destinations_count: number;
-        inquiries_count: number;
-        collections_count: number;
-        bookings_count: number;
+        packages: TrendData;
+        destinations: TrendData;
+        inquiries: TrendData;
+        collections: TrendData;
+        bookings: TrendData;
         monthly_inquiries: ChartDataPoint[];
     }
 }
 
 const props = withDefaults(defineProps<Props>(), {
     dashboardData: () => ({
-        packages_count: 0,
-        destinations_count: 0,
-        inquiries_count: 0,
-        collections_count: 0,
-        bookings_count: 0,
+        packages: { count: 0, trend_value: 0, trend_type: 'neutral' },
+        destinations: { count: 0, trend_value: 0, trend_type: 'neutral' },
+        inquiries: { count: 0, trend_value: 0, trend_type: 'neutral' },
+        collections: { count: 0, trend_value: 0, trend_type: 'neutral' },
+        bookings: { count: 0, trend_value: 0, trend_type: 'neutral' },
         monthly_inquiries: () => []
     })
 });
@@ -44,50 +50,50 @@ const props = withDefaults(defineProps<Props>(), {
                 <div class="relative">
                     <SummaryCard
                         title="Packages"
-                        :value="props.dashboardData.packages_count"
+                        :value="props.dashboardData.packages.count"
                         icon="iconoir:package"
-                        trend-value="12%"
-                        trend-type="up"
+                        :trend-value="`${props.dashboardData.packages.trend_value}%`"
+                        :trend-type="props.dashboardData.packages.trend_type"
                         :delay="0.05"
                     />
                 </div>
                 <div class="relative">
                     <SummaryCard 
                         title="Destinations"
-                        :value="props.dashboardData.destinations_count"
+                        :value="props.dashboardData.destinations.count"
                         icon="iconoir:maps-arrow"
-                        trend-value="4%"
-                        trend-type="up"
+                        :trend-value="`${props.dashboardData.destinations.trend_value}%`"
+                        :trend-type="props.dashboardData.destinations.trend_type"
                         :delay="0.1"
                     />
                 </div>
                 <div class="relative">
                     <SummaryCard 
                         title="Inquiries"
-                        :value="props.dashboardData.inquiries_count"
+                        :value="props.dashboardData.inquiries.count"
                         icon="iconoir:mail"
-                        trend-value="2%"
-                        trend-type="up"
+                        :trend-value="`${props.dashboardData.inquiries.trend_value}%`"
+                        :trend-type="props.dashboardData.inquiries.trend_type"
                         :delay="0.15"
                     />
                 </div>
                 <div class="relative">
                     <SummaryCard 
                         title="Collections"
-                        :value="props.dashboardData.collections_count"
+                        :value="props.dashboardData.collections.count"
                         icon="heroicons-outline:collection"
-                        trend-value="5%"
-                        trend-type="up"
+                        :trend-value="`${props.dashboardData.collections.trend_value}%`"
+                        :trend-type="props.dashboardData.collections.trend_type"
                         :delay="0.2"
                     />
                 </div>
                 <div class="relative">
                     <SummaryCard 
                         title="Bookings"
-                        :value="props.dashboardData.bookings_count"
+                        :value="props.dashboardData.bookings.count"
                         icon="iconoir:book"
-                        trend-value="0%"
-                        trend-type="neutral"
+                        :trend-value="`${props.dashboardData.bookings.trend_value}%`"
+                        :trend-type="props.dashboardData.bookings.trend_type"
                         :delay="0.25"
                     />
                 </div>
