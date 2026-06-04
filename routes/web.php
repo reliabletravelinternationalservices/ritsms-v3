@@ -15,3 +15,9 @@ require __DIR__.'/client.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+Route::fallback(function () {
+    return Inertia::render('error/RouteFallbackError', [
+        'code' => '404',
+    ]);
+});
