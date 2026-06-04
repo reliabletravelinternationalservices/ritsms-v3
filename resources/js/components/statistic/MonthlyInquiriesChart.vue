@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import type { ChartDataPoint } from '@/types/statistics';
 import apexchart from 'vue3-apexcharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 import type { ApexOptions } from 'apexcharts';
-
-export interface ChartDataPoint {
-    month: string;
-    count: number;
-    dateKey?: string; 
-}
 
 const props = withDefaults(defineProps<ComponentProps>(), {
     title: 'Monthly inquiries',
@@ -41,8 +36,35 @@ const emit = defineEmits<{
     (e: 'filterChange', payload: FilterPayload): void;
 }>();
 
-const currentYear = ref<string>(new Date().getFullYear().toString());
-const availableYears: string[] = ['2024', '2025', '2026', '2027'];
+
+
+const computedAvailableYears = computed<string[]>(() => {
+    // gather unique year keys from provided data
+    const years = Array.from(new Set(props.data.map((d: ChartDataPoint) => d.dateKey).filter(Boolean))) as string[];
+    if (years.length) {
+        // sort newest -> oldest
+        return years.sort((a, b) => Number(b) - Number(a));
+    }
+
+    // fallback: current year and previous 3 years
+    const current = new Date().getFullYear();
+    return Array.from({ length: 4 }, (_, i) => String(current - i));
+});
+
+const currentYear = ref<string>(computedAvailableYears.value[0] ?? new Date().getFullYear().toString());
+const availableYears = computedAvailableYears;
+
+// keep currentYear in sync if available years change (e.g., new data arrives)
+watch(computedAvailableYears, (val) => {
+    if (!val.includes(currentYear.value)) {
+        currentYear.value = val[0];
+    }
+}, { immediate: true });
+
+// emit filter change whenever year selection updates
+watch(currentYear, () => {
+    handleFiltersUpdated();
+});
 
 const filteredData = computed<ChartDataPoint[]>(() => {
     return props.data.filter((d: ChartDataPoint) => d.dateKey === currentYear.value);
@@ -129,7 +151,7 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
         axisBorder: { show: false },
         axisTicks: { show: false },
         tooltip: { enabled: false },
-        labels: { 
+        labels: {
             show: hasData.value,
             style: { fontSize: '11px' }
         }
@@ -149,7 +171,7 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
     tooltip: {
         enabled: hasData.value,
         theme: 'dark',
-        custom: function({ series, seriesIndex, dataPointIndex, w }: ApexCustomTooltipParams): string {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: ApexCustomTooltipParams): string {
             const currentMonth: string = w.globals.categoryLabels[dataPointIndex];
             const currentValue: number = series[seriesIndex][dataPointIndex];
             return `
@@ -169,8 +191,10 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
 
 <template>
     <MotionWrapper :delay="0.2">
-        <Card class="w-full bg-zinc-950 border border-zinc-900 text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-4 sm:p-6">
-            <CardHeader class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 pb-6 border-b border-zinc-900/50 mb-6 p-0">
+        <Card
+            class="w-full bg-zinc-950 border border-zinc-900 text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-4 sm:p-6">
+            <CardHeader
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 pb-6 border-b border-zinc-900/50 mb-6 p-0">
                 <div class="space-y-1">
                     <CardTitle class="text-xl font-bold tracking-tight text-zinc-100">
                         {{ props.title }}
@@ -181,8 +205,9 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
                 </div>
 
                 <div class="w-full sm:w-auto flex items-center justify-start sm:justify-end">
-                    <Select v-model="currentYear" @update:model-value="handleFiltersUpdated">
-                        <SelectTrigger class="w-full sm:w-[120px] h-9 bg-zinc-900 border-zinc-800 text-zinc-200 focus:ring-sky-600">
+                    <Select v-model="currentYear">
+                        <SelectTrigger
+                            class="w-full sm:w-[120px] h-9 bg-zinc-900 border-zinc-800 text-zinc-200 focus:ring-sky-600">
                             <SelectValue placeholder="Year" />
                         </SelectTrigger>
                         <SelectContent class="bg-zinc-900 border-zinc-800 text-zinc-200">
@@ -193,15 +218,11 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
                     </Select>
                 </div>
             </CardHeader>
-            
+
             <CardContent class="p-0 w-full">
-                <div class="h-[240px] sm:h-[300px] w-full block block-items relative transition-all [&>div]:!w-full [&>.apexcharts-container]:!w-full">
-                    <apexchart
-                        width="100%"
-                        height="100%"
-                        :options="chartOptions"
-                        :series="chartSeries"
-                    />
+                <div
+                    class="h-[240px] sm:h-[300px] w-full block block-items relative transition-all [&>div]:!w-full [&>.apexcharts-container]:!w-full">
+                    <apexchart width="100%" height="100%" :options="chartOptions" :series="chartSeries" />
                 </div>
             </CardContent>
         </Card>
