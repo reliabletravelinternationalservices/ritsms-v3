@@ -1,16 +1,39 @@
 <script setup lang="ts">
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import InquiryTable from '@/components/table/inquiry/InquiryTable.vue';
 import { Inquiry } from '@/types/inquiry';
+import SummaryCard from '@/components/statistic/SummaryCard.vue';
+import { ref, computed, watch } from 'vue';
+
 
 interface Props {
     inquiries: Inquiry[];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const filteredInquiries = ref(props.inquiries);
+
+watch(() => props.inquiries, (newInquiries) => {
+    filteredInquiries.value = newInquiries;
+}, { deep: true });
+
+const totalInquiries = computed(() => filteredInquiries.value.length);
+
+const pendingCount = computed(() =>
+    filteredInquiries.value.filter(i => i.status === 'pending').length
+);
+
+const resolvedCount = computed(() =>
+    filteredInquiries.value.filter(i => i.status === 'resolved').length
+);
+
+const dismissedCount = computed(() =>
+    filteredInquiries.value.filter(i => i.status === 'dismissed').length
+);
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,15 +54,38 @@ const breadcrumbs: BreadcrumbItem[] = [
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             
             <!-- TOP STATS OVERVIEW CARDS -->
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
-                    <PlaceholderPattern class="absolute inset-0" />
+            <div class="grid auto-rows-min gap-4 md:grid-cols-4">
+                <div class="relative">
+                    <SummaryCard
+                        title="Total Inquiries"
+                        :value="totalInquiries"
+                        icon="iconoir:mail"
+                        trend-value="12%"
+                        trend-type="up"
+                    />
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
-                    <PlaceholderPattern class="absolute inset-0" />
+                <div class="relative">
+                    <SummaryCard
+                        title="Pending"
+                        :value="pendingCount"
+                        icon="mdi:email-sent-outline"
+                    />
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6 flex flex-col justify-between bg-card text-card-foreground shadow-sm">
-                    <PlaceholderPattern class="absolute inset-0" />
+
+                <div class="relative">
+                    <SummaryCard
+                        title="Resolved"
+                        :value="resolvedCount"
+                        icon="mynaui:check"
+                    />
+                </div>
+
+                <div class="relative">
+                    <SummaryCard
+                        title="Dismissed"
+                        :value="dismissedCount"
+                        icon="line-md:remove"
+                    />
                 </div>
             </div>
             
