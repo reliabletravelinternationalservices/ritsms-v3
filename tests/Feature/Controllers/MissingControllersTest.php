@@ -89,8 +89,8 @@ test('outbound and inbound package detail routes render successfully', function 
         'is_foreign_only' => false,
     ]);
 
-    $outboundResponse = $this->get(route('client.outbound.package.detail', ['package' => $package->id]));
-    $inboundResponse = $this->get(route('client.inbound.package.detail', ['package' => $package->id]));
+    $outboundResponse = $this->get(route('client.outbound.package.detail', ['slug' => $package->slug]));
+    $inboundResponse = $this->get(route('client.inbound.package.detail', ['slug' => $package->slug]));
 
     $outboundResponse->assertStatus(200);
     $inboundResponse->assertStatus(200);
