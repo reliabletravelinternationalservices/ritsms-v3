@@ -2,30 +2,30 @@
 
 namespace App\Concerns\Package;
 
-    //         'base_price' => ['required', 'numeric'],
-    //         'down_payment' => ['nullable', 'numeric'],
-    //         'duration' => ['required', 'integer'],
-    //         'selling_start_date' => ['nullable', 'date'],
-    //         'selling_end_date' => ['required', 'date'],
-    //         'description' => ['required', 'string'],
-    //         'highlights' => ['nullable', 'string'],
-    //         'itineraries' => ['required', 'array'],
-    //         'inclusions' => ['required', 'string'],
-    //         'exclusions' => ['required', 'string'],
-    //         'notes' => ['nullable', 'string'],
-    //         'destination' => ['required', 'string'],
-    //         'season' => ['required', 'string'],
-    //         'is_foreign_only' => ['required', 'boolean'],
+//         'base_price' => ['required', 'numeric'],
+//         'down_payment' => ['nullable', 'numeric'],
+//         'duration' => ['required', 'integer'],
+//         'selling_start_date' => ['nullable', 'date'],
+//         'selling_end_date' => ['required', 'date'],
+//         'description' => ['required', 'string'],
+//         'highlights' => ['nullable', 'string'],
+//         'itineraries' => ['required', 'array'],
+//         'inclusions' => ['required', 'string'],
+//         'exclusions' => ['required', 'string'],
+//         'notes' => ['nullable', 'string'],
+//         'destination' => ['required', 'string'],
+//         'season' => ['required', 'string'],
+//         'is_foreign_only' => ['required', 'boolean'],
 trait CreatePackageValidationRules
 {
     protected function nameRules(): array
     {
-        return ['required', 'string'];
+        return ['required', 'string', 'max:255'];
     }
 
     protected function tagRules(): array
     {
-        return ['string', 'nullable'];
+        return ['string', 'nullable', 'max:155'];
     }
 
     protected function basePriceRules(): array
@@ -60,7 +60,7 @@ trait CreatePackageValidationRules
 
     protected function highlightsRules(): array
     {
-        return ['nullable', 'string'];
+        return ['required', 'string'];
     }
 
     protected function itinerariesRules(): array
@@ -97,7 +97,7 @@ trait CreatePackageValidationRules
     {
         return ['required', 'boolean'];
     }
-    
+
 
     protected function customErrorMessages(): array
     {
@@ -134,5 +134,4 @@ trait CreatePackageValidationRules
     {
         return auth()->guard('web')->check();
     }
-
 }
