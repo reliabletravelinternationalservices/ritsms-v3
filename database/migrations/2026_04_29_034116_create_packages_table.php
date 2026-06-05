@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('tag')->nullable(); //for label Group tour.. Individual tour.. etc
+            $table->string('name', 255);
+            $table->string('tag', 155)->nullable(); //for label Group tour.. Individual tour.. etc
             $table->decimal('base_price', 10, 2);
             $table->decimal('down_payment', 10, 2)->nullable();
             $table->integer('duration');
-            $table->date('selling_start_date')->nullable(); 
+            $table->date('selling_start_date')->nullable();
             $table->date('selling_end_date');
             $table->text('description');
             $table->json('highlights');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('destination');
             $table->string('season');
             $table->boolean('is_foreign_only')->default(false);
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

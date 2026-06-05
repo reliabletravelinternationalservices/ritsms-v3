@@ -32,7 +32,7 @@ Route::prefix('outbound')->group(function () {
     });
 
     Route::prefix('package')->group(function () {
-        Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');
+        Route::get('/{slug}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');
     });
 });
 
@@ -45,7 +45,7 @@ Route::prefix('inbound')->group(function () {
     });
 
     Route::prefix('package')->group(function () {
-        Route::get('/{package}', [PackageDetailController::class, 'index'])->name('client.inbound.package.detail');
+        Route::get('/{slug}', [PackageDetailController::class, 'index'])->name('client.inbound.package.detail');
     });
 });
 
@@ -60,4 +60,3 @@ Route::prefix('inquiry')->group(function () {
 
 Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
-
