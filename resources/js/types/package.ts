@@ -27,6 +27,7 @@ export interface Package {
     primary_image?: Media;
     images?: Media[];
     schedules: PackageSchedule[];
+    slug: string;
     created_at: string;
     updated_at: string;
 }

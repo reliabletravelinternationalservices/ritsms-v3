@@ -7,21 +7,22 @@ import { appModal } from '@/lib/app-modal';
 const props = defineProps<{ package: Package, isInbound: boolean, usdRate: number }>();
 
 const handleCheckAvailability = () => {
-  appModal.open({
-    title: "Request Booking Availability is under update",
-    description: "We are currently improving this feature. For a meantime send your request to inquiry.",
-    confirmText: "Send Inquiry",
-    onConfirm() {
-      appModal.close();
-      scrollToSection('inquiry');
-    },
-  })
+    appModal.open({
+        title: "Request Booking Availability is under update",
+        description: "We are currently improving this feature. For a meantime send your request to inquiry.",
+        confirmText: "Send Inquiry",
+        onConfirm() {
+            appModal.close();
+            scrollToSection('inquiry');
+        },
+    })
 }
 </script>
 
 <template>
     <section class="w-full relative overflow-hidden p-4">
-        <div class="max-w-5xl m-auto w-full flex items-center justify-between gap-4 border-b border-[var(--shadow-custom)] p-2">
+        <div
+            class="max-w-5xl m-auto w-full flex items-center justify-between gap-4 border-b border-[var(--shadow-custom)] p-2">
             <div class="flex items-center justify-between gap-11">
                 <div class="flex flex-col">
                     <span class="flex items-center text-xs md:text-sm font-roboto gap-1 font-medium">
@@ -31,7 +32,8 @@ const handleCheckAvailability = () => {
                         </span>
                     </span>
                     <h4 class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--warning-custom)]">
-                        {{ formatCurrency(isInbound? (props.package.base_price/props.usdRate) : props.package.base_price, props.isInbound? 'USD' : 'PHP') }}/pax
+                        {{ formatCurrency(isInbound ? (props.package.base_price / props.usdRate) :
+                            props.package.base_price, props.isInbound ? 'USD' : 'PHP') }}/pax
                     </h4>
                 </div>
                 <div class="flex flex-col">
@@ -63,8 +65,10 @@ const handleCheckAvailability = () => {
                             Down Payment
                         </span>
                     </span>
-                    <h4 v-if="props.package.down_payment !== null" class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--correct-custom)]">
-                        {{ formatCurrency(isInbound? (props.package.down_payment/props.usdRate) : props.package.down_payment, props.isInbound? 'USD' : 'PHP') }}/pax
+                    <h4 v-if="props.package.down_payment !== null && props.package.down_payment > 0"
+                        class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--correct-custom)]">
+                        {{ formatCurrency(isInbound ? (props.package.down_payment / props.usdRate) :
+                            props.package.down_payment, props.isInbound ? 'USD' : 'PHP') }}/pax
                     </h4>
                     <h4 v-else class="text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--muted-custom)]">
                         N/A
@@ -72,9 +76,10 @@ const handleCheckAvailability = () => {
                 </div>
             </div>
             <div>
-                <Button @click="handleCheckAvailability" size="lg" variant="outline" class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] rounded-none">
+                <Button @click="handleCheckAvailability" size="lg" variant="outline"
+                    class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] rounded-none">
                     <span>Check Availability</span>
-                    <Icon icon="line-md:arrow-right" class="text-2xl"/>
+                    <Icon icon="line-md:arrow-right" class="text-2xl" />
                 </Button>
             </div>
         </div>

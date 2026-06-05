@@ -66,26 +66,28 @@ const carouselConfig = {
 </script>
 
 <template>
-    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
-      <Slide v-for="packageData in props.packages" :key="packageData.id">
-        <PackageCard :package="packageData" :isInbound="props.isInbound" :usdRate="props.usdRate" />
-      </Slide>
+  <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
+    <Slide v-for="packageData in props.packages" :key="packageData.id">
+      <PackageCard :package="packageData" :isInbound="props.isInbound" :usdRate="props.usdRate" />
+    </Slide>
 
-      <template #addons>
-        <Navigation v-if="showNavigation" class="hidden md:block ">
-          <template #prev>
-            <div class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
-              <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" />
-            </div>
-          </template>
-          <template #next>
-            <div class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
-              <Icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="text-white" />
-            </div>
-          </template>
-        </Navigation>
-      </template>
-    </Carousel>
+    <template #addons>
+      <Navigation v-if="showNavigation" class="hidden md:block ">
+        <template #prev>
+          <div
+            class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
+            <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" />
+          </div>
+        </template>
+        <template #next>
+          <div
+            class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
+            <Icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="text-white" />
+          </div>
+        </template>
+      </Navigation>
+    </template>
+  </Carousel>
 </template>
 
 <style scoped>
@@ -94,7 +96,8 @@ const carouselConfig = {
 }
 
 :deep(.carousel__slide) {
-  padding: 5px; /* Adds space between cards */
+  padding: 5px;
+  /* Adds space between cards */
 }
 
 /* Ensure navigation arrows are visible but don't break layout */
