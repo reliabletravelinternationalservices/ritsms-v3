@@ -17,9 +17,9 @@ import { computed } from 'vue';
 import InquiryForm from '../../home/section/InquiryForm.vue';
 
 
-const props = defineProps<{ 
-    package: Package; 
-    isInbound: boolean; 
+const props = defineProps<{
+    package: Package;
+    isInbound: boolean;
 }>();
 
 const page = usePage<Record<string, any>>();
@@ -36,7 +36,7 @@ const dynamicBreadcrumbs = computed((): BreadcrumbItemType[] => {
     }
 
     crumbs.push({ title: props.package.name, href: '' });
-    
+
     return crumbs;
 });
 
@@ -44,20 +44,14 @@ const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
 </script>
 
 <template>
+
     <Head :title="props.package.name" />
     <AppLayout>
         <!-- Pass the computed dynamicBreadcrumbs here -->
-        <PackageTitleHeaderWithImage 
-            :package="props.package" 
-            :isInbound="isInbound"
-            :breadcrumbs="dynamicBreadcrumbs" 
-        />
-        
-        <PackageRateAndSchedule 
-            :package="props.package"
-            :isInbound="isInbound"
-            :usdRate="usdRate"
-        />
+        <PackageTitleHeaderWithImage :package="props.package" :isInbound="isInbound"
+            :breadcrumbs="dynamicBreadcrumbs" />
+
+        <PackageRateAndSchedule :package="props.package" :isInbound="isInbound" :usdRate="usdRate" />
         <PackageIncludedServices :package="props.package" />
         <PackageTravelSchedule :package="props.package" :isInbound="isInbound" :usdRate="usdRate" />
         <PackageDescription :package="props.package" />
@@ -65,8 +59,9 @@ const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
         <PackageItinerary :package="props.package" :isInbound="isInbound" />
         <PackageInclusion :package="props.package" />
         <PackageExclusion :package="props.package" />
-        <PackageNote :package="props.package" />
-        
+        <PackageNote v-if="props.package.notes_array && props.package.notes_array.length > 0"
+            :package="props.package" />
+
         <InquiryForm />
-    </AppLayout>     
+    </AppLayout>
 </template>
