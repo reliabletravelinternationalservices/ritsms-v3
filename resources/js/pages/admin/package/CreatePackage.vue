@@ -347,8 +347,10 @@ const submit = () => {
 
 
                         <div class="flex w-full justify-start">
-                            <SwitchWithLabel :is-checked="form.is_foreign_only" @change="form.is_foreign_only = $event"
-                                label="Make Package For Foreign Only" />
+                            <div class="flex items-center space-x-2">
+                                <Switch id="foreign-only"  v-model:modelValue="form.is_foreign_only"  />
+                                <Label for="foreign-only">Make Package For Foreign Only</Label>
+                            </div>
                         </div>
                         <div class="flex w-full justify-end">
 

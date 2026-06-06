@@ -39,6 +39,10 @@ class Package extends Model
         'notes_array',
     ];
 
+    protected $casts = [
+        'is_foreign_only' => 'boolean',
+    ];
+
 
     // Relationships
     public function packageGroups()
