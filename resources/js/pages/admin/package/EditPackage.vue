@@ -98,7 +98,6 @@ const form = useForm<Props>({
     is_foreign_only: props.package.is_foreign_only ?? false
 });
 
-console.log('Initial form data:', form.is_foreign_only);
 const submit = () => {
     form.put(route('admin.packages.update', { id: props.package.id }), {
         onFinish: () => {
