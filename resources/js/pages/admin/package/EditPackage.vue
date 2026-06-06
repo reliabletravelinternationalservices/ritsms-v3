@@ -10,12 +10,12 @@ import InputError from '@/components/InputError.vue';
 import CurrencyInput from '@/components/CurrencyInput.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
-import SwitchWithLabel from '@/components/SwitchWithLabel.vue';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner'
 import { Package } from '@/types/package';
 import { formatItinerariesForEdit } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
 
 const unescapeJsonString = (value?: string | null): string => {
     if (!value) {
@@ -34,7 +34,7 @@ const normalizeBlock = (items?: string[]): string => {
     return items ? items.map(unescapeJsonString).join('\n') : '';
 };
 const normalizeBlockWithEmptyLines = (items?: string[]): string => {
-    return items ? items.map(unescapeJsonString).join('\n\n') : '';
+    return items ? items.map(unescapeJsonString).join('\n') : '';
 };
 
 const props = defineProps<{package: Package}>();
@@ -98,6 +98,7 @@ const form = useForm<Props>({
     is_foreign_only: props.package.is_foreign_only ?? false
 });
 
+console.log('Initial form data:', form.is_foreign_only);
 const submit = () => {
     form.put(route('admin.packages.update', { id: props.package.id }), {
         onFinish: () => {
@@ -132,7 +133,9 @@ const submit = () => {
                     <form @submit.prevent="submit" class="flex flex-col gap-2">
                         <div class="grid gap-6 md:grid-cols-2">
                             <div class="">
-                                <Label for="name">Name</Label>
+                                <Label for="name">
+                                    Name <span class="text-[var(--warning-custom)]">*</span>
+                                </Label>
                                 <Input id="name" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="e.g. Premium Boracay Package" />
                                 <div class="min-h-[1.5rem]">
                                     <InputError  :message="form.errors.name" />
@@ -140,7 +143,9 @@ const submit = () => {
                             </div>
 
                             <div class="grid gap-2">
-                                <Label for="duration">Duration</Label>
+                                 <Label for="duration">
+                                    Duration <span class="text-[var(--warning-custom)]">*</span>
+                                </Label>
                                 <Input
                                     id="duration"
                                     type="number"
@@ -157,14 +162,18 @@ const submit = () => {
                         </div>
                         <div class="grid gap-6 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="base_price">Base Price</Label>
+                                <Label for="base_price">
+                                    Base Price <span class="text-[var(--warning-custom)]">*</span>
+                                </Label>
                                 <CurrencyInput id="base_price" class="mt-1 block w-full" v-model="form.base_price"  autocomplete="base_price" placeholder="0.00" />
                                 <div class="min-h-[1.5rem]">
                                     <InputError  :message="form.errors.base_price" />
                                 </div>
                             </div>
                             <div class="grid gap-2">
-                                <Label for="down_payment">Down Payment <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
+                                <Label for="down_payment">
+                                    Down Payment <span class="text-[var(--muted-custom)]">(Optional)</span>
+                                </Label>
                                 <CurrencyInput id="down_payment" class="mt-1 block w-full" v-model="form.down_payment" autocomplete="down_payment" placeholder="0.00" />
                                 <div class="min-h-[1.5rem]">
                                     <InputError  :message="form.errors.down_payment" />
@@ -174,7 +183,9 @@ const submit = () => {
 
                         <div class="grid gap-6 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="destination">Destination</Label>
+                                <Label for="destination">
+                                    Destination <span class="text-[var(--warning-custom)]">*</span>
+                                </Label>
                                 <Input id="destination" class="mt-1 block w-full" v-model="form.destination" autocomplete="destinations" placeholder="e.g. Boracay, Philippines" />
                                 <div class="min-h-[1.5rem]">
                                     <InputError  :message="form.errors.destination" />
@@ -182,11 +193,10 @@ const submit = () => {
                             </div>
 
                             <div class="grid gap-2">
-                                <Label for="season" class="flex items-center gap-2">
-                                    Season
+                                <Label for="season" class="flex items-center gap-1">
                                     <InfoTooltip
-                                        content="Value must only: 'All Seasons', 'Winter', 'Spring', 'Summer', 'Autumn'"
-                                    />
+                                        content="Value must only: 'All Seasons', 'Winter', 'Spring', 'Summer', 'Autumn'" />
+                                    Season <span class="text-[var(--warning-custom)]">*</span>
                                 </Label>
                                 <Input
                                     id="season"
@@ -204,7 +214,9 @@ const submit = () => {
 
                         <div class="grid gap-2 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="selling_start_date">Selling Start Date <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
+                                <Label for="selling_start_date">
+                                    Selling Start Date <span class="text-[var(--muted-custom)]">(Optional)</span>
+                                </Label>
                                 <Input
                                     id="selling_start_date"
                                     type="date"
@@ -218,7 +230,9 @@ const submit = () => {
                                 </div>
                             </div>
                             <div class="grid gap-2">
-                                <Label for="selling_end_date">Selling End Date</Label>
+                                <Label for="selling_end_date">
+                                    Selling End Date <span class="text-[var(--warning-custom)]">*</span>
+                                </Label>
                                 <Input
                                     id="selling_end_date"
                                     type="date"
@@ -234,7 +248,9 @@ const submit = () => {
                         </div>
                         <div class="grid gap-2 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="tag">Tag <span class="text-[var(--muted-custom)]">(Optional)</span></Label>
+                                <Label for="tag">
+                                    Tag <span class="text-[var(--muted-custom)]">(Optional)</span>
+                                </Label>
                                 <Input
                                     id="tag"
                                     type="text"
@@ -250,25 +266,26 @@ const submit = () => {
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="description">Description</Label>
-                            <Textarea id="description" rows="4" class="mt-1 block w-full" v-model="form.description" autocomplete="description" placeholder="Tell us about this package?" />
+                             <Label for="description">
+                                Description <span class="text-[var(--warning-custom)]">*</span>
+                            </Label>
+                            <Textarea id="description" rows="8" class="mt-1 block w-full" v-model="form.description" autocomplete="description" placeholder="Tell us about this package?" />
                             <div class="min-h-[1.5rem]">
-                                <InputError  :message="form.errors.tag" />
+                                <InputError  :message="form.errors.description" />
                             </div>
                         </div>
                         
                         <div class="grid gap-6 md:grid-cols-2">
                             <div class="grid gap-2">
-                                <Label for="inclusions" class="flex items-center gap-2">
-                                    Inclusions
-                                    <InfoTooltip
-                                        content="Separate each inclusion group using an empty line.
+                                 <Label for="inclusions" class="flex items-center gap-1">
+                                    <InfoTooltip content="Separate each inclusion group using an empty line.
 
                                     Hotel accommodation
                                     Tour Guide
                                     English speaking tour guide
-                                    Professional tour guide"
-                                    />
+                                    Professional tour guide" />
+                                    Inclusions <span class="text-[var(--warning-custom)]">*</span>
+
                                 </Label>
                                 <Textarea 
                                     id="inclusions" 
@@ -283,16 +300,14 @@ const submit = () => {
                                 </div>
                             </div>
                             <div class="grid gap-2">
-                               <Label for="exclusions" class="flex items-center gap-2">
-                                    Exclusions
-                                    <InfoTooltip
-                                        content="Separate each exclusion group using an empty line.
+                                <Label for="exclusions" class="flex items-center gap-1">
+                                    <InfoTooltip content="Separate each exclusion group using an empty line.
 
                                     Hotel accommodation
                                     Tour Guide
                                     English speaking tour guide
-                                    Professional tour guide"
-                                    />
+                                    Professional tour guide" />
+                                    Exclusions <span class="text-[var(--warning-custom)]">*</span>
                                 </Label>
 
                                 <Textarea
@@ -310,16 +325,14 @@ const submit = () => {
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="highlights" class="flex items-center gap-2">
-                                Highlights
-                                <InfoTooltip
-                                    content="Separate each highlight group using a new line.
+                             <Label for="highlights" class="flex items-center gap-1">
+                                <InfoTooltip content="Separate each highlight group using a new line.
 
                                     Hotel accommodation
                                     Tour Guide
                                     English speaking tour guide
-                                    Professional tour guide"
-                                />
+                                    Professional tour guide" />
+                                Highlights <span class="text-[var(--warning-custom)]">*</span>
                             </Label>
 
                             <Textarea
@@ -335,21 +348,23 @@ const submit = () => {
                             </div>
                         </div>
                         <div class="grid gap-2">
-                            <Label for="itineraries" class="flex items-center gap-2">
-                                Itineraries
-                                <InfoTooltip
-                                    content="Use this format to each itineraries group.
+                            <Label for="itineraries" class="flex items-center gap-1">
+                                <InfoTooltip content="Each itinerary group must follow this format:
 
-                                    TITLE: Hotel accommodation
-                                    ACTIVITIES:
-                                        4 to 5 stars hotel
-                                        Breakfast buffet
+                                Title of itinerary (first line)
+                                Activity details (next lines)
 
-                                    TITLE: Tour Guide
-                                    ACTIVITIES:
-                                        English speaking tour guide
-                                        Professional tour guide"
-                                />
+                                Example:
+
+                                Manila to Sydney | Arrival & Free Time
+                                Depart Manila via flight...
+                                Meals included...
+
+                                Sydney City Tour & Harbour Cruise
+                                Visit Sydney Opera House
+                                Explore Bondi Beach
+                                Lunch cruise experience" />
+                                Itineraries <span class="text-[var(--warning-custom)]">*</span>
                             </Label>
 
                             <Textarea
@@ -365,20 +380,18 @@ const submit = () => {
                             </div>
                         </div>
                         <div class="grid gap-2">
-                            <Label for="notes" class="flex items-center gap-2">
-                                Notes
-                                <InfoTooltip
-                                    content="Use this format to each notes group.
+                            <Label for="notes" class="flex items-center gap-1">
+                                <InfoTooltip content="Use this format to each notes group.
 
                                     Note 1.
                                     Note 2.
-                                    Note 3."
-                                />
+                                    Note 3." />
+                                Notes <span class="text-[var(--muted-custom)]">(Optional)</span>
                             </Label>
 
                             <Textarea
                                 id="notes"
-                                rows="10"
+                                rows="4"
                                 class="mt-1 block w-full"
                                 v-model="form.notes"
                                 autocomplete="notes"
@@ -391,7 +404,10 @@ const submit = () => {
                         
                         
                         <div class="flex w-full justify-start">
-                            <SwitchWithLabel :is-checked="form.is_foreign_only" @change="form.is_foreign_only = $event" label="Make Package For Foreign Only" />
+                              <div class="flex items-center space-x-2">
+                                    <Switch id="foreign-only"  v-model:modelValue="form.is_foreign_only"  />
+                                    <Label for="foreign-only">Make Package For Foreign Only</Label>
+                                </div>
                         </div>
                         <div class="flex w-full justify-end">
                       
