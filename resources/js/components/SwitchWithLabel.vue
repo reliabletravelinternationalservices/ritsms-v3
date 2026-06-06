@@ -14,7 +14,7 @@ const props = defineProps<Props>()
 
 <template>
   <div class="flex items-center space-x-2">
-    <Switch id="airplane-mode"  v-model:modelValue="props.isChecked" @change="props.onChange" />
+    <Switch id="airplane-mode"  v-model:modelValue="isChecked" @change="props.onChange" />
     <Label for="airplane-mode">{{ label }}</Label>
   </div>
 </template>
