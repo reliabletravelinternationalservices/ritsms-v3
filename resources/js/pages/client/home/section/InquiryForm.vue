@@ -24,6 +24,7 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('client.inquiry.store'), {
+        preserveScroll: true,
         onSuccess: () => {
             form.reset();
         },

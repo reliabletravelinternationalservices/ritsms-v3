@@ -8,6 +8,7 @@ use App\Repository\Inquiry\InquiryRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Mail\Inquiry\InquiryMail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class InquiryResultController extends Controller
@@ -25,13 +26,23 @@ class InquiryResultController extends Controller
     public function store(InquiryRequest $request)
     {
         $validatedData = $request->validated();
+
         $inquiry = $this->repository->createClientInquiry($validatedData);
 
         $validatedData['inquiry_id'] = $inquiry->id;
-        // send to gmail
-        Mail::to('reliabletravelinfo@gmail.com')
-        ->send(new InquiryMail($validatedData));
 
-        return redirect()->route('client.inquiry.success')->with('isInquired', true);
+        try {
+            Mail::to('reliabletravelinfo@gmail.com')
+                ->send(new InquiryMail($validatedData));
+        } catch (\Exception $e) {
+            Log::error('Failed to send inquiry email.', [
+                'message' => $e->getMessage(),
+                'inquiry_id' => $inquiry->id,
+            ]);
+        }
+
+        return redirect()
+            ->route('client.inquiry.success')
+            ->with('isInquired', true);
     }
 }
