@@ -10,6 +10,7 @@ import { Link } from '@inertiajs/vue3';
 
 
 const isMobileMenuOpen = ref(false);
+const isMobilePackagesOpen = ref(false);
 </script>
 
 <template>
@@ -71,7 +72,7 @@ const isMobileMenuOpen = ref(false);
                 </Link>
             </div>
 
-            <button @click="isMobileMenuOpen = !isMobileMenuOpen"
+            <button @click="isMobileMenuOpen = !isMobileMenuOpen; if (!isMobileMenuOpen) isMobilePackagesOpen = false"
                 class="md:hidden p-2 text-[var(--muted-custom)] transition-transform duration-200 active:scale-90">
                 <Icon :icon="isMobileMenuOpen ? 'material-symbols:close' : 'material-symbols:menu'" width="32"
                     height="32" class="size-8" />
@@ -85,13 +86,26 @@ const isMobileMenuOpen = ref(false);
                 <Link :href="route('client.destination')"
                     class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Destinations</Link>
                 <div class="pt-2">
-                    <div class="font-medium text-[var(--muted-custom)]">Packages</div>
-                    <Link :href="route('client.inbound')"
-                        class="pl-2 text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Inbound Packages
-                    </Link>
-                    <Link :href="route('client.outbound')"
-                        class="pl-2 text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Outbound Packages
-                    </Link>
+                    <button type="button" @click="isMobilePackagesOpen = !isMobilePackagesOpen"
+                        class="flex w-full items-center justify-between text-left font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] transition-colors duration-150">
+                        <span>Packages</span>
+                        <Icon
+                            :icon="isMobilePackagesOpen ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"
+                            width="20" height="20" class="transition-transform duration-150" />
+                    </button>
+
+                    <Transition name="fade-slide">
+                        <div v-if="isMobilePackagesOpen" class="mt-2 space-y-2 pl-4">
+                            <Link :href="route('client.inbound')"
+                                class="block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">
+                                Inbound Packages
+                            </Link>
+                            <Link :href="route('client.outbound')"
+                                class="block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">
+                                Outbound Packages
+                            </Link>
+                        </div>
+                    </Transition>
                 </div>
                 <Link :href="route('client.contact')"
                     class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Contact us</Link>
