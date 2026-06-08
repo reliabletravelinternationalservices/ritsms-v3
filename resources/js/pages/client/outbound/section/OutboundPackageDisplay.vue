@@ -141,8 +141,16 @@ const isFilteringActive = computed(() => {
     );
 });
 
-const hasAnyPackage = computed(() => {
-    return allGroups.value.some((group) => (group.packages?.length ?? 0) > 0);
+const noResultsHeading = computed(() => {
+    return isFilteringActive.value
+        ? 'No packages matched your selected filters'
+        : 'No packages are currently available';
+});
+
+const noResultsMessage = computed(() => {
+    return isFilteringActive.value
+        ? 'We couldn’t find any packages matching your selected filters. Clear one or more filters to broaden your search.'
+        : 'There are no packages available right now. Please check back later or try a different search.';
 });
 
 const noResults = computed(() => filteredFeaturedGroups.value.length === 0 && filteredNormalGroups.value.length === 0);
@@ -183,17 +191,10 @@ const search = (nextFilters: FilterState) => {
                         </svg>
                     </span>
                     <p class="font-bold uppercase text-sm tracking-[0.15em] text-[var(--primary-custom)]">
-                        {{ isFilteringActive ? "No packages matched your selected filters" :
-                            "No packages are currently available" }}
+                        {{ noResultsHeading }}
                     </p>
                     <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)] text-center max-w-xl">
-                        {{ isFilteringActive
-                            ?
-                            "We couldn’t find any packages matching your selected filters. Clear one or more filters to
-                        broaden your search."
-                        :
-                        "There are no packages available right now. Please check back later or try a different search."
-                        }}
+                        {{ noResultsMessage }}
                     </p>
                 </span>
             </div>
