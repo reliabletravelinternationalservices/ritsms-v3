@@ -65,7 +65,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:map-pinned" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Destination</label>
                     </span>
-                    <DropdownField v-model="form.value.destination" placeholder="All Destination"
+                    <DropdownField v-model="form.destination" placeholder="All Destination"
                         :options="props.destinationOptions" />
                 </div>
 
@@ -74,8 +74,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:calendar" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Season</label>
                     </span>
-                    <DropdownField v-model="form.value.season" placeholder="All Season"
-                        :options="props.seasonOptions" />
+                    <DropdownField v-model="form.season" placeholder="All Season" :options="props.seasonOptions" />
                 </div>
 
                 <div class="space-y-2 sm:col-span-2 md:col-span-1">
@@ -83,7 +82,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:clock-4" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Duration</label>
                     </span>
-                    <DropdownField v-model="form.value.duration" placeholder="All Duration"
+                    <DropdownField v-model="form.duration" placeholder="All Duration"
                         :options="props.durationOptions" />
                 </div>
             </div>
