@@ -27,9 +27,10 @@ const isMobileMenuOpen = ref(false);
                 </Link>
                 <Menu as="div" class="relative">
                     <MenuButton
-                        class="flex items-center gap-2 font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75">
+                        class="menu-button flex items-center gap-2 font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75">
                         <span>Packages</span>
-                        <Icon icon="material-symbols:keyboard-arrow-down" width="18" height="18" />
+                        <Icon class="rotate-icon transition-transform duration-150"
+                            icon="material-symbols:keyboard-arrow-down" width="18" height="18" />
                     </MenuButton>
 
                     <MenuItems
@@ -120,5 +121,9 @@ const isMobileMenuOpen = ref(false);
 .fade-slide-leave-to {
     opacity: 0;
     transform: translateY(-10px);
+}
+
+.menu-button[aria-expanded="true"] .rotate-icon {
+    transform: rotate(180deg);
 }
 </style>
