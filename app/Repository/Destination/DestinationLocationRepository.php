@@ -49,6 +49,15 @@ class DestinationLocationRepository
         return DestinationLocation::with(['image', 'destination'])->findOrFail($locationID);
     }
 
+    public function getDistinctLocationNames(): array
+    {
+        return DestinationLocation::query()
+            ->select('name')
+            ->distinct()
+            ->orderBy('name')
+            ->pluck('name')
+            ->toArray();
+    }
 
     public function createLocationImage(DestinationLocation $location, object $image)
     {
