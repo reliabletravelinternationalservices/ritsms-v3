@@ -167,7 +167,7 @@ const search = (nextFilters: FilterState) => {
 </script>
 
 <template>
-    <section class="w-full">
+    <section id="outbound-package-display" class="w-full">
         <div class="max-w-5xl m-auto py-8">
             <GroupPackage v-for="(group, index) in filteredFeaturedGroups" :key="`featured-${group.id}-${index}`"
                 :title="group.title" :description="group.description" :packages="group.packages" :is-featured="true"
