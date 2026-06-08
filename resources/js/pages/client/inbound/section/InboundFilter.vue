@@ -49,7 +49,7 @@ const locationOptions: Option[] = [
                 <div class="space-y-2">
                     <span class="flex items-end text-[var(--secondary-custom)]">
                         <Icon icon="lucide:map-pinned" width="20" height="20" />
-                        <label class="ml-2 text-sm font-bold uppercase tracking-wider">Country</label>
+                        <label class="ml-2 text-sm font-bold uppercase tracking-wider">Destination</label>
                     </span>
                     <DropdownField 
                         v-model="form.Location"
