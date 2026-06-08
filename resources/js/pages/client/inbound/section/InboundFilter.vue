@@ -18,23 +18,33 @@ const props = defineProps<{
     destinationOptions: Option[];
     seasonOptions: Option[];
     durationOptions: Option[];
-    initialFilters: FilterState;
+    initialFilters?: FilterState;
 }>();
 
 const emit = defineEmits<{
     (e: 'search', filters: FilterState): void;
 }>();
 
+const defaultFilters: FilterState = {
+    destination: '',
+    season: '',
+    duration: null,
+};
+
 const form = ref<FilterState>({
-    destination: props.initialFilters.destination,
-    season: props.initialFilters.season,
-    duration: props.initialFilters.duration,
+    destination: props.initialFilters?.destination ?? defaultFilters.destination,
+    season: props.initialFilters?.season ?? defaultFilters.season,
+    duration: props.initialFilters?.duration ?? defaultFilters.duration,
 });
 
 watch(
     () => props.initialFilters,
     (next) => {
-        form.value = { ...next };
+        form.value = {
+            destination: next?.destination ?? defaultFilters.destination,
+            season: next?.season ?? defaultFilters.season,
+            duration: next?.duration ?? defaultFilters.duration,
+        };
     },
     { deep: true }
 );

@@ -51,8 +51,10 @@ const toTitleCase = (value: string) => {
 };
 
 const countryOptions = computed<Option[]>(() => {
-    return Array.from(new Set(allPackages.value.map((pkg) => extractCountry(pkg.destination)).filter(Boolean)))
-        .sort((a, b) => a.localeCompare(b))
+    return Array.from(new Set(allPackages.value
+        .map((pkg) => extractCountry(pkg.destination))
+        .filter((country) => Boolean(country))))
+        .sort((a, b) => String(a).localeCompare(String(b)))
         .map((country) => ({ label: toTitleCase(country), value: country }));
 });
 
@@ -65,7 +67,9 @@ const seasonOptions: Option[] = [
 ];
 
 const durationOptions = computed<Option[]>(() => {
-    return Array.from(new Set(allPackages.value.map((pkg) => pkg.duration)))
+    return Array.from(new Set(allPackages.value
+        .map((pkg) => pkg.duration)
+        .filter((duration): duration is number => duration !== null && duration !== undefined)))
         .sort((a, b) => a - b)
         .map((duration) => ({ label: `${duration} Days`, value: duration }));
 });

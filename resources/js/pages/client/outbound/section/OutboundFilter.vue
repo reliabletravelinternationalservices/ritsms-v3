@@ -18,23 +18,33 @@ const props = defineProps<{
     countryOptions: Option[];
     seasonOptions: Option[];
     durationOptions: Option[];
-    initialFilters: FilterState;
+    initialFilters?: FilterState;
 }>();
 
 const emit = defineEmits<{
     (e: 'search', filters: FilterState): void;
 }>();
 
+const defaultFilters: FilterState = {
+    country: '',
+    season: '',
+    duration: null,
+};
+
 const form = ref<FilterState>({
-    country: props.initialFilters.country,
-    season: props.initialFilters.season,
-    duration: props.initialFilters.duration,
+    country: props.initialFilters?.country ?? defaultFilters.country,
+    season: props.initialFilters?.season ?? defaultFilters.season,
+    duration: props.initialFilters?.duration ?? defaultFilters.duration,
 });
 
 watch(
     () => props.initialFilters,
     (next) => {
-        form.value = { ...next };
+        form.value = {
+            country: next?.country ?? defaultFilters.country,
+            season: next?.season ?? defaultFilters.season,
+            duration: next?.duration ?? defaultFilters.duration,
+        };
     },
     { deep: true }
 );
@@ -55,8 +65,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:map-pinned" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Country</label>
                     </span>
-                    <DropdownField v-model="form.value.country" placeholder="All Country"
-                        :options="props.countryOptions" />
+                    <DropdownField v-model="form.country" placeholder="All Country" :options="props.countryOptions" />
                 </div>
 
                 <div class="space-y-2">
@@ -64,8 +73,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:calendar" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Season</label>
                     </span>
-                    <DropdownField v-model="form.value.season" placeholder="All Season"
-                        :options="props.seasonOptions" />
+                    <DropdownField v-model="form.season" placeholder="All Season" :options="props.seasonOptions" />
                 </div>
 
                 <div class="space-y-2 sm:col-span-2 md:col-span-1">
@@ -73,7 +81,7 @@ const searchPackages = () => {
                         <Icon icon="lucide:clock-4" width="20" height="20" />
                         <label class="ml-2 text-sm font-bold uppercase tracking-wider">Duration</label>
                     </span>
-                    <DropdownField v-model="form.value.duration" placeholder="All Duration"
+                    <DropdownField v-model="form.duration" placeholder="All Duration"
                         :options="props.durationOptions" />
                 </div>
             </div>

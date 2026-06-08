@@ -38,9 +38,10 @@ const normalizeText = (value: string | undefined | null) => value?.trim().toLowe
 const destinationOptions = computed<Option[]>(() => {
     return props.destinationLocations
         .map((destination) => ({
-            label: destination,
-            value: normalizeText(destination),
+            label: destination ?? '',
+            value: normalizeText(destination ?? ''),
         }))
+        .filter((option) => Boolean(option.label))
         .sort((a, b) => String(a.label).localeCompare(String(b.label)));
 });
 
@@ -53,7 +54,9 @@ const seasonOptions: Option[] = [
 ];
 
 const durationOptions = computed<Option[]>(() => {
-    return Array.from(new Set(allPackages.value.map((pkg) => pkg.duration)))
+    return Array.from(new Set(allPackages.value
+        .map((pkg) => pkg.duration)
+        .filter((duration): duration is number => duration !== null && duration !== undefined)))
         .sort((a, b) => a - b)
         .map((duration) => ({ label: `${duration} Days`, value: duration }));
 });
