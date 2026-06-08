@@ -28,6 +28,7 @@ class Destination extends Model
 
     public function locations()
     {
-        return $this->hasMany(DestinationLocation::class, 'destination_id');
+        return $this->hasMany(DestinationLocation::class, 'destination_id')
+            ->orderBy('updated_at', 'desc');
     }
 }
