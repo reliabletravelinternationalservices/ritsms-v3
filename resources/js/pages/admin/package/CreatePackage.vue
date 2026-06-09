@@ -10,7 +10,6 @@ import InputError from '@/components/InputError.vue';
 import CurrencyInput from '@/components/CurrencyInput.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
-import SwitchWithLabel from '@/components/SwitchWithLabel.vue';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner'
