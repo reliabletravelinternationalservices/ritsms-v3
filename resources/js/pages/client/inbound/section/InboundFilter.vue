@@ -63,9 +63,9 @@ const searchPackages = () => {
                 <div class="space-y-2">
                     <span class="flex items-end text-[var(--secondary-custom)]">
                         <Icon icon="lucide:map-pinned" width="20" height="20" />
-                        <label class="ml-2 text-sm font-bold uppercase tracking-wider">Destination</label>
+                        <label class="ml-2 text-sm font-bold uppercase tracking-wider">Location</label>
                     </span>
-                    <DropdownField v-model="form.destination" placeholder="All Destination"
+                    <DropdownField v-model="form.destination" placeholder="All Location"
                         :options="props.destinationOptions" />
                 </div>
 
