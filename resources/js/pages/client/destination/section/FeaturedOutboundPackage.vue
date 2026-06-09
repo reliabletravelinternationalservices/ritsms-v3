@@ -1,50 +1,114 @@
 <script setup lang="ts">
-import ExploreButton from '@/components/ExploreButton.vue';
-import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue';
-import { Destination } from '@/types/destination';
-import { Icon } from '@iconify/vue';
+import ExploreButton from '@/components/ExploreButton.vue'
+import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
+import { Destination } from '@/types/destination'
+import { Icon } from '@iconify/vue'
 
 interface Props {
-    destinations: Destination[]
+  destinations: Destination[]
 }
 
-const props = defineProps<Props>();
-
+const props = defineProps<Props>()
 </script>
 
 <template>
-    <section  class="relative flex overflow-hidden flex-col gap-4 items-center justify-center min-h-screen md:min-h-[700px] lg:min-h-[900px] py-12 px-4 md:px-6 bg-[var(--outbound-custom)]">
-        <div class="max-w-5xl mx-auto relative z-10 flex flex-col gap-4 items-center justify-center py-16">
-            <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="w-full md:w-2/3 space-y-2">
-                    <div class="flex items-end gap-1 text-[var(--tertiary-custom)]">
-                        <Icon icon="fa7-solid:plane-departure" width="28" height="28" class="md:w-7 md:h-7" />
-                        <h2 class="font-bold font-roboto text-lg md:text-xl">OUTBOUND DESTINATIONS</h2>
-                    </div>
-                    <div class="space-y-3">
-                        <h1 class="text-2xl md:text-3xl lg:text-4xl text-[var(--primary-custom)] uppercase font-montserrat font-bold">
-                            EXPLORE INTERNATIONAL DESTINATIONS WITH US
-                        </h1>
-                        <p class="font-roboto text-sm md:text-base text-[var(--primary-custom)]">
-                            Cross borders and create memories. Experience seamless international travel to the world's most sought-after hidden gems and vibrant cities.
-                        </p>
-                    </div>
-                </div>
+  <section
+    class="relative flex overflow-hidden flex-col gap-4 items-center justify-center
+           min-h-[100vh] md:min-h-[700px] lg:min-h-[900px]
+           py-10 md:py-12 px-4 md:px-6
+           bg-[var(--outbound-custom)]"
+  >
+    <div
+      class="w-full max-w-5xl mx-auto relative z-10
+             flex flex-col gap-6 md:gap-4
+             items-center justify-center
+             py-10 md:py-16"
+    >
+      <!-- HEADER -->
+      <div
+        class="w-full flex flex-col md:flex-row
+               md:items-end justify-between gap-6 md:gap-6"
+      >
+        <!-- TEXT -->
+        <div class="w-full md:w-2/3 space-y-3 md:space-y-2">
+          <div class="flex items-end gap-1 text-[var(--tertiary-custom)]">
+            <Icon
+              icon="fa7-solid:plane-departure"
+              width="26"
+              height="26"
+              class="md:w-7 md:h-7"
+            />
 
-                <div class="flex justify-start md:justify-end">
-                    <ExploreButton title="Explore More" :href="route('client.destination.country')" class="font-bold text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] border-[var(--primary-custom)] hover:border-[var(--tertiary-custom)]" />
-                </div>
-            </div>
+            <h2
+              class="font-bold font-roboto
+                     text-base sm:text-lg md:text-xl
+                     leading-tight"
+            >
+              OUTBOUND DESTINATIONS
+            </h2>
+          </div>
 
-            <ImageDestinationCarousel :destinations="props.destinations" :is-philippines-only="false" />
+          <div class="space-y-3">
+            <h1
+              class="text-xl sm:text-2xl md:text-3xl lg:text-4xl
+                     text-[var(--primary-custom)]
+                     uppercase font-montserrat font-bold
+                     leading-snug md:leading-tight"
+            >
+              EXPLORE INTERNATIONAL DESTINATIONS WITH US
+            </h1>
+
+            <p
+              class="font-roboto
+                     text-sm md:text-base
+                     text-[var(--primary-custom)]
+                     leading-relaxed"
+            >
+              Cross borders and create memories. Experience seamless international travel to the world's most sought-after hidden gems and vibrant cities.
+            </p>
+          </div>
         </div>
-        
-        <span class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10">
-            <Icon icon="mdi:location" class="w-32 h-32 md:w-96 md:h-96 text-[var(--shadow-custom)]" />
-        </span>
 
-        <span class="absolute -bottom-20 -right-20 -rotate-45 z-0 pointer-events-none opacity-10">
-            <Icon icon="material-symbols-light:globe" class="w-32 h-32 md:w-96 md:h-96 text-[var(--shadow-custom)]" />
-        </span>
-    </section>
+        <!-- BUTTON -->
+        <div
+          class="flex justify-start md:justify-end
+                 w-full md:w-auto"
+        >
+          <ExploreButton
+            title="Explore More"
+            :href="route('client.destination.country')"
+            class="font-bold text-[var(--primary-custom)]
+                   hover:text-[var(--tertiary-custom)]
+                   border-[var(--primary-custom)]
+                   hover:border-[var(--tertiary-custom)]"
+          />
+        </div>
+      </div>
+
+      <!-- CAROUSEL -->
+      <ImageDestinationCarousel
+        :destinations="props.destinations"
+        :is-philippines-only="false"
+      />
+    </div>
+
+    <!-- DECOR ICONS -->
+    <span
+      class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10"
+    >
+      <Icon
+        icon="mdi:location"
+        class="w-24 h-24 sm:w-40 sm:h-40 md:w-96 md:h-96 text-[var(--shadow-custom)]"
+      />
+    </span>
+
+    <span
+      class="absolute -bottom-20 -right-20 -rotate-45 z-0 pointer-events-none opacity-10"
+    >
+      <Icon
+        icon="material-symbols-light:globe"
+        class="w-24 h-24 sm:w-40 sm:h-40 md:w-96 md:h-96 text-[var(--shadow-custom)]"
+      />
+    </span>
+  </section>
 </template>
