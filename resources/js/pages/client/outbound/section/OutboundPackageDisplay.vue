@@ -135,7 +135,6 @@ const filterGroups = (groups: PackageGroup[]) => {
         .filter((group) => (group.packages?.length ?? 0) > 0);
 };
 
-const filteredFeaturedGroups = computed(() => filterGroups(props.featuredGroups));
 const filteredNormalGroups = computed(() => filterGroups(props.normalGroups));
 const isFilteringActive = computed(() => {
     return Boolean(
@@ -157,7 +156,7 @@ const noResultsMessage = computed(() => {
         : 'There are no packages available right now. Please check back later or try a different search.';
 });
 
-const noResults = computed(() => filteredFeaturedGroups.value.length === 0 && filteredNormalGroups.value.length === 0);
+const noResults = computed(() => filteredNormalGroups.value.length === 0);
 
 const search = (nextFilters: FilterState) => {
     appliedFilters.value = { ...nextFilters };
@@ -169,7 +168,7 @@ const search = (nextFilters: FilterState) => {
 <template>
     <section id="outbound-package-display" class="w-full">
         <div class="max-w-5xl m-auto py-8">
-            <GroupPackage v-for="(group, index) in filteredFeaturedGroups" :key="`featured-${group.id}-${index}`"
+            <GroupPackage v-for="(group, index) in props.featuredGroups" :key="`featured-${group.id}-${index}`"
                 :title="group.title" :description="group.description" :packages="group.packages" :is-featured="true"
                 :is-inbound="false" :usd-rate="null" :tag="group.tag"
                 :href="route('client.outbound.package.group', { id: group.id })" />
