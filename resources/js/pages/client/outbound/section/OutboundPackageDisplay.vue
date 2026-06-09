@@ -59,7 +59,6 @@ const countryOptions = computed<Option[]>(() => {
 });
 
 const seasonOptions: Option[] = [
-    { label: 'All Season', value: '' },
     { label: 'Winter', value: 'winter' },
     { label: 'Summer', value: 'summer' },
     { label: 'Autumn', value: 'autumn' },
