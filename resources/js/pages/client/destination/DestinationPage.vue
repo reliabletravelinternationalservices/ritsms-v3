@@ -7,6 +7,7 @@ import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
 import FeaturedOutboundPackage from './section/FeaturedOutboundPackage.vue';
 import InquiryForm from '../home/section/InquiryForm.vue';
 import { Destination } from '@/types/destination';
+import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 
 interface Props {
     destinations: Destination[];
@@ -20,9 +21,21 @@ const props = defineProps<Props>();
     <Head title="Explore Most Popular Destinations" />
     <AppLayout>
         <TitleHeader />
-        <DestinationCarousel :destinations="props.destinations" />
-        <FeaturedInboundPackage :destinations="destinations" />
-        <FeaturedOutboundPackage :destinations="destinations" />
-        <InquiryForm />
+
+        <MotionWrapper :delay="0.2">
+            <DestinationCarousel :destinations="destinations" />
+        </MotionWrapper>
+
+        <MotionWrapper :delay="0.1">
+            <FeaturedInboundPackage :destinations="destinations" />
+        </MotionWrapper>
+
+        <MotionWrapper :delay="0.1">
+            <FeaturedOutboundPackage :destinations="destinations" />
+        </MotionWrapper>
+
+        <MotionWrapper :delay="0.15">
+            <InquiryForm />
+        </MotionWrapper>
     </AppLayout>     
 </template>

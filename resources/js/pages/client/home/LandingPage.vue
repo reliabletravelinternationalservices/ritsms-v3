@@ -3,7 +3,7 @@ import CarouselSection from '@/pages/client/home/section/ImageCarousel.vue';
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import type { Package } from '@/types/package';
-import DestinationCarousel from './section/DestinationCarousel.vue';
+import  DestinationCarousel from './section/DestinationCarousel.vue';
 import InboundPackageCarousel from './section/InboundPackageCarousel.vue';
 import OutboundPackageCarousel from './section/OutboundPackageCarousel.vue';
 import AgencyServices from './section/AgencyServices.vue';
