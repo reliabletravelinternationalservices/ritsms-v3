@@ -12,8 +12,7 @@ import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 interface Props {
     destinations: Destination[];
 }
-
-const props = defineProps<Props>();
+defineProps<Props>();
 
 </script>
 
