@@ -19,7 +19,7 @@ const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Packages List',
-                href:  route('admin.packages'),
+                href: route('admin.packages'),
             },
             {
                 title: 'Groups',
@@ -33,7 +33,7 @@ const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Countries List',
-                href:  route('admin.destinations'),
+                href: route('admin.destinations'),
             }
         ],
     },
@@ -46,6 +46,20 @@ const mainNavItems: NavItem[] = [
         title: 'Inquiries',
         href: route('admin.inquiries'),
         icon: 'ix:inquiry',
+    },
+    {
+        title: 'Users',
+        icon: 'lucide:users',
+        children: [
+            {
+                title: 'Admins',
+                href: route('admin.users.admins'),
+            },
+            {
+                title: 'Clients',
+                href: route('admin.users.clients'),
+            }
+        ],
     },
     {
         title: 'Logs',
