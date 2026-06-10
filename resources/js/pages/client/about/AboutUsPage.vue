@@ -17,13 +17,29 @@ import AgencyFaq from '../contact/section/AgencyFaq.vue';
     <Head title="About Us" />
     <AppLayout>
         <TitleHeader />
-        <AgencyRating />
-        <AgencyVideo />
-        <AboutAgency />
-        <PartnerAgency />
-        <AgencyOffer />
-        <InquiryForm />
-        <SocialMedia />
-        <AgencyFaq />
+        <MotionWrapper :delay="0.05">
+            <AgencyRating />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.1">
+            <AgencyVideo />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.15">
+            <AboutAgency />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.2">
+            <PartnerAgency />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.25">
+            <AgencyOffer />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.3">
+            <InquiryForm />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.35">
+            <SocialMedia />
+        </MotionWrapper>
+        <MotionWrapper :delay="0.4">
+            <AgencyFaq />
+        </MotionWrapper>
     </AppLayout>     
 </template>
