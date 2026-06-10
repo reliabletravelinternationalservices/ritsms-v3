@@ -16,15 +16,37 @@ const fullDescription = computed(() => props.package.description || '');
 </script>
 
 <template>
-  <section class="w-full h-auto relative overflow-hidden p-4">
-        <div class="max-w-5xl m-auto w-full flex flex-col justify-start gap-1 p-4">
-            <h4 class="font-bold font-roboto text-md md:text-lg">ABOUT THIS PACKAGE</h4>
+  <section class="w-full h-auto relative overflow-hidden p-2 sm:p-4">
+        <div class="max-w-5xl mx-auto w-full flex flex-col justify-start gap-1 p-2 sm:p-4">
+            <h4 class="font-bold font-roboto text-sm md:text-lg uppercase tracking-wide">ABOUT THIS PACKAGE</h4>
+            
             <div class="w-full flex flex-col gap-2">
                 <transition name="expand" mode="out-in">
-                    <p v-if="!showAll" :key="'truncated'" class="whitespace-pre-line">{{ truncatedDescription }}</p>
-                    <p v-else :key="'full'" class="whitespace-pre-line">{{ fullDescription }}</p>
+                    <p 
+                      v-if="!showAll" 
+                      :key="'truncated'" 
+                      class="whitespace-pre-line break-words w-full text-xs sm:text-sm md:text-base text-justify leading-relaxed"
+                    >
+                      {{ truncatedDescription }}
+                    </p>
+                    <p 
+                      v-else 
+                      :key="'full'" 
+                      class="whitespace-pre-line break-words w-full text-xs sm:text-sm md:text-base text-justify leading-relaxed"
+                    >
+                      {{ fullDescription }}
+                    </p>
                 </transition>
-                <span v-if="fullDescription.length > 400" class="text-sm text-[var(--muted-custom)] font-medium underline italic cursor-pointer" @click="showAll = !showAll">{{ showAll ? 'Show less' : 'Show more...' }}</span>
+                
+                <div class="pt-1">
+                  <span 
+                    v-if="fullDescription.length > 400" 
+                    class="text-sm text-[var(--muted-custom)] font-medium underline italic cursor-pointer select-none inline-block" 
+                    @click="showAll = !showAll"
+                  >
+                    {{ showAll ? 'Show less' : 'Show more...' }}
+                  </span>
+                </div>
             </div>
         </div>
   </section>
