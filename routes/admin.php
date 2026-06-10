@@ -25,6 +25,8 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
+use App\Http\Controllers\Admin\User\AdminManagementController;
+use App\Http\Controllers\Admin\User\ClientManagementController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
@@ -104,6 +106,18 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])->name('admin.inquiries.status.update');
         Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])->name('admin.inquiries.destroy');
     });
+
+    Route::prefix('users')->group(function () {
+        Route::prefix('admins')->group(function () {
+            Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
+        });
+
+
+        Route::prefix('clients')->group(function () {
+            Route::get('/', [ClientManagementController::class, 'index'])->name('admin.users.clients');
+        });
+    });
+
 
     Route::prefix('bookings')->group(function () {
         Route::get('/', [BookingManagementController::class, 'index'])->name('admin.bookings');
