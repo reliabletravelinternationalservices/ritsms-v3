@@ -11,6 +11,7 @@ import { Toaster } from '@/components/ui/sonner';
 import DeleteDialog from '@/components/ui/DeleteDialog.vue';
 import { imageViewer } from "@/lib/imageViewer"
 import { appModal } from "@/lib/app-modal"
+import ShareModal from './components/ShareModal.vue';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -38,6 +39,7 @@ createInertiaApp({
                         position: 'top-right',
                     }),
                     h(DeleteDialog),
+                    h(ShareModal),
                 ], })
             .use(imageViewer)
             .use(appModal)
