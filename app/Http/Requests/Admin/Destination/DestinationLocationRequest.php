@@ -26,7 +26,7 @@ class DestinationLocationRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'map_link' => ['nullable', 'url'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp'],
         ];
     }
 
@@ -41,7 +41,6 @@ class DestinationLocationRequest extends FormRequest
             'map_link.url' => 'The map link must be a valid URL.',
             'image.image' => 'The image must be a valid image file.',
             'image.mimes' => 'The image must be a JPEG, PNG, JPG, or WEBP file.',
-            'image.max' => 'The image may not be greater than 5MB.',
         ];
     }
 }

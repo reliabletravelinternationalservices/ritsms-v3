@@ -125,19 +125,19 @@ test('validates image file type', function () {
     $response->assertInvalid(['image']);
 });
 
-test('validates image file size', function () {
-    Storage::fake('public');
+// test('validates image file size', function () {
+//     Storage::fake('public');
 
-    $largeFile = UploadedFile::fake()->image('large.jpg')->size(6000);
+//     $largeFile = UploadedFile::fake()->image('large.jpg')->size(6000);
 
-    $response = $this->actingAs($this->user)->post(
-        route('admin.destinations.locations.store', ['destID' => $this->destination->id]),
-        [
-            'name' => 'Test Location',
-            'description' => 'Test Description',
-            'image' => $largeFile,
-        ]
-    );
+//     $response = $this->actingAs($this->user)->post(
+//         route('admin.destinations.locations.store', ['destID' => $this->destination->id]),
+//         [
+//             'name' => 'Test Location',
+//             'description' => 'Test Description',
+//             'image' => $largeFile,
+//         ]
+//     );
 
-    $response->assertInvalid(['image']);
-});
+//     $response->assertInvalid(['image']);
+// });
