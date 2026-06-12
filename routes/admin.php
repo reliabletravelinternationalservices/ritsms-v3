@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
 Route::prefix('admin')->middleware('adminAuth')->group(function () {
-    Route::redirect('/dashboard', '/admin/dashboard');
-    Route::redirect('/admin', '/admin/dashboard');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
