@@ -15,7 +15,7 @@ const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[]
             <div 
                 v-for="(data, index) in props.package.inclusions_array" 
                 :key="index" 
-                class="flex items-start gap-2 text-xs sm:text-sm md:text-base text-neutral-800 dark:text-neutral-200 min-w-0"
+                class="flex items-start gap-2 text-xs sm:text-sm md:text-base text-neutral-800 min-w-0"
             >
                 <Icon icon="material-symbols:check" class="text-xl md:text-2xl text-[var(--correct-custom)] shrink-0 mt-0.5" />
                 

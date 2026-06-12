@@ -19,7 +19,7 @@ const props = defineProps<{ package: Package, breadcrumbs?: BreadcrumbItemType[]
           <div 
             v-for="(data, index) in props.package.notes_array" 
             :key="index" 
-            class="flex items-start gap-2 text-xs sm:text-sm md:text-base text-neutral-700 dark:text-neutral-300 min-w-0"
+            class="flex items-start gap-2 text-xs sm:text-sm md:text-base text-neutral-700 min-w-0"
           >
             <div class="mt-1.5 sm:mt-2 w-1.5 h-1.5 rounded-full bg-[var(--secondary-custom)] shrink-0"></div>
             

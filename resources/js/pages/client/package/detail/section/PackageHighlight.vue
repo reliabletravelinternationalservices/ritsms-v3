@@ -12,12 +12,12 @@ const showAll = ref(false);
 // Logic changed from schedules to highlights
 const visibleHighlights = computed(() => {
   const highlights = props.package.highlights_array || [];
-  return showAll.value ? highlights : highlights.slice(0, 8);
+  return showAll.value ? highlights : highlights.slice(0, 5);
 });
 
-// Only show the button if there are more than 8 items
+// Only show the button if there are more than 5 items
 const hasMoreHighlights = computed(() => {
-  return (props.package.highlights_array?.length || 0) > 8;
+  return (props.package.highlights_array?.length || 0) > 5;
 });
 </script>
 
@@ -34,7 +34,7 @@ const hasMoreHighlights = computed(() => {
             <Icon icon="material-symbols:check" class="text-xl md:text-2xl shrink-0 mt-0.5"
               :class="cn(isInbound ? 'text-[var(--inbound-custom)]' : 'text-[var(--outbound-custom)]')" />
             
-            <p class="whitespace-pre-line break-words leading-relaxed w-full text-neutral-800 dark:text-neutral-200">{{ data }}</p>
+            <p class="whitespace-pre-line break-words leading-relaxed w-full text-neutral-800">{{ data }}</p>
           </div>
         </transition-group>
 
