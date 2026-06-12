@@ -26,7 +26,7 @@ class EditLocationRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'map_link' => 'nullable|url',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image',
             'remove_image' => 'boolean',
         ];
     }
