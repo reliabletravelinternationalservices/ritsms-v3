@@ -16,7 +16,7 @@ defineProps<Props>();
     
     <div class="absolute inset-0 w-full h-full z-0">
       <img 
-        v-if="image?.url" 
+        v-if="image && image.url" 
         :src="image.url" 
         :alt="image.alt_text || title" 
         class="w-full h-full object-cover object-center"
