@@ -15,6 +15,7 @@
         
         @if (!request()->is('admin*'))
             @include('partials.adsense')
+            @include('partials.google-ads')
         @endif
         
         @routes
