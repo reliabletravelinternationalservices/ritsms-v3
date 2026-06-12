@@ -21,7 +21,7 @@ const usdRate = page.props.settings?.usd_to_php_rate?? null;
 <template>
     <Head :title="props.group.title" />
     <AppLayout>
-        <TitleHeader :title="props.group.title" :description="props.group.description" :image="props.group.image" :isInbound="props.isInbound" />
+        <TitleHeader  :title="props.group.title" :description="props.group.description" :image="props.group.image" :isInbound="props.isInbound" :id="props.group.id" />
         <PackageList :packages="props.group.packages?? []" :isInbound="props.isInbound" :usdRate="usdRate" />
     </AppLayout>     
 </template>

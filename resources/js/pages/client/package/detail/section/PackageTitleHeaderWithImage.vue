@@ -7,7 +7,9 @@ import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { imageViewer } from "@/lib/imageViewer"
+import { useShareModal } from '@/stores/shareModal';
 
+const share = useShareModal();
 const props = defineProps<{ 
     package: Package, 
     isInbound: boolean,
@@ -33,6 +35,15 @@ const images = computed<ImageItem[]>(() => {
 const openImageViewer = () => {
     imageViewer.open(images.value);
 }
+
+
+const openMessenger = () => {
+    window.open(
+        'https://www.facebook.com/messages/t/reliableinternationaltravelservices',
+        '_blank',
+        'width=900,height=500'
+    );
+};
 </script>
 
 <template>
@@ -57,18 +68,27 @@ const openImageViewer = () => {
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <Link href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    <button @click="openMessenger" type="button" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
                         <Icon icon="tabler:message" class="text-lg" />
                         <span>Message us</span>
-                    </Link>
-                    <Link href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    </button>
+                    <a href="tel:09085721338" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
                         <Icon icon="material-symbols:call-outline" class="text-lg" />
                         <span>Call us</span>
-                    </Link>
-                    <Link href="#" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                    </a>
+                    <button
+                        @click="share.open(
+                            route(
+                                `client.${props.isInbound ? 'inbound' : 'outbound'}.package.detail`,
+                                { slug: package.slug }
+                            )
+                        )"
+                        type="button"
+                        class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in"
+                    >
                         <Icon icon="material-symbols:share-outline" class="text-lg" />
                         <span>Share now</span>
-                    </Link>
+                    </button>
                 </div>
             </div>
 
