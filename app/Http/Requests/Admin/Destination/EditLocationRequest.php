@@ -41,7 +41,6 @@ class EditLocationRequest extends FormRequest
             'description.string' => 'The description must be a string.',
             'map_link.url' => 'The map link must be a valid URL.',
             'image.image' => 'The image must be a valid image file.',
-            'image.max' => 'The image may not be greater than 2MB.',
         ];
     }
 }
