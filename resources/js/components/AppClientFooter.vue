@@ -15,10 +15,10 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-    email: 'reliabletravelinfo@gmail',
+    email: 'inquiry@reliabletravelph.com',
     inquiryLink: route('client.contact'),
-    instagramLink: 'https://www.facebook.com/reliableinternationaltravelservices',
-    facebookLink: 'https://www.instagram.com/reliabletravelph/',
+    facebookLink: 'https://www.facebook.com/reliableinternationaltravelservices',
+    instagramLink: 'https://www.instagram.com/reliabletravelph/',
     tiktokLink: 'https://www.tiktok.com/@reliabletravelph',
     youtubeLink: 'https://www.youtube.com/@reliabletravelservices',
 });
@@ -33,7 +33,7 @@ withDefaults(defineProps<Props>(), {
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
                     <img :src="appUrl + '/storage/upload/agency/logo.png'" alt="Agency Logo" class="w-28 h-28 object-cover" />
-                    <Link :href="route('client.destination')"><button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Book Now</button></Link>
+                    <Link :href="route('client.contact')"><button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Inquire Now</button></Link>
                 </div>
                 <div>
                     <h1 class="text-[var(--primary-custom)] font-normal font-roboto text-sm">
@@ -67,11 +67,11 @@ withDefaults(defineProps<Props>(), {
                     <span class="flex flex-col gap-2 w-full">
                         <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
                             <Icon icon="material-symbols:call" width="20" height="20" class="text-[var(--tertiary-custom)]" />
-                            <a href="tel:+639123456789" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 912 345 6789</a>
+                            <a href="tel:09085721338" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 908 572 1338</a>
                         </span>
                         <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
                             <Icon icon="material-symbols:call" width="20" height="20" class="text-[var(--tertiary-custom)]" />
-                            <a href="tel:+639123456789" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 912 345 6789</a>
+                            <a href="tel:09279275207" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 927 927 5207</a>
                         </span>
                     </span>
                 </div>
@@ -79,6 +79,10 @@ withDefaults(defineProps<Props>(), {
                 <div class="flex flex-col gap-4">
                     <h2 class="text-[var(--primary-custom)] font-bold font-roboto text-sm uppercase">SEND US EMAIL</h2>
                     <span class="flex flex-col gap-2">
+                        <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
+                            <Icon icon="ic:baseline-email" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <a href="mailto:inquiry@reliabletravelph.com" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">{{ email }}</a>
+                        </span>
                         <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
                             <Icon icon="ic:baseline-email" width="20" height="20" class="text-[var(--tertiary-custom)]" />
                             <a href="mailto:reliabletravelinfo@gmail.com" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">reliabletravelinfo@gmail.com</a>
