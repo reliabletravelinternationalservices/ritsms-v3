@@ -13,6 +13,10 @@
         <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ asset('storage/upload/agency/rits_icon.ico') }}">
         <link rel="icon" type="image/x-icon" sizes="180x180" href="{{ asset('storage/upload/agency/rits_icon.ico') }}">
         
+        @if (!request()->is('admin*'))
+            @include('partials.adsense')
+        @endif
+        
         @routes
         @vite(['resources/js/app.ts'])
         @inertiaHead
