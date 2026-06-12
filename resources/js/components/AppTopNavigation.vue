@@ -8,15 +8,18 @@ interface Props {
     instagramLink?: string;
     facebookLink?: string;
     tiktokLink?: string;
+    youtubeLink?: string;
 }
 
 withDefaults(defineProps<Props>(), {
-    email: 'reliabletravelinfo@gmail',
-    inquiryLink: '#',
-    instagramLink: '#',
-    facebookLink: '#',
-    tiktokLink: '#',
+    email: 'inquiry@reliabletravelph.com',
+    inquiryLink: route('client.contact'),
+    instagramLink: 'https://www.instagram.com/reliabletravelph/',
+    facebookLink: 'https://www.facebook.com/reliableinternationaltravelservices',
+    tiktokLink: 'https://www.tiktok.com/@reliabletravelph',
+    youtubeLink: 'https://www.youtube.com/@reliabletravelservices',
 });
+
 </script>
 
 <template>
@@ -25,7 +28,7 @@ withDefaults(defineProps<Props>(), {
             <div class="hidden md:flex space-x-2 items-end justify-start">
                 <Icon icon="ic:baseline-email" width="24" height="24" class="text-[var(--tertiary-custom)]" />
                 <a :href="`mailto:${email}`" rel="noopener noreferrer">
-                    <span class="text-[var(--primary-custom)] font-medium text-sm hover:underline cursor-pointer hover:text-[var(--tertiary-custom)] duration-75">reliabletravelinfo@gmail.com</span>
+                    <span class="text-[var(--primary-custom)] font-medium text-sm hover:underline cursor-pointer hover:text-[var(--tertiary-custom)] duration-75">{{ email }}</span>
                 </a>
             </div>
             <div class="flex space-x-2 items-center justify-center">
@@ -36,14 +39,17 @@ withDefaults(defineProps<Props>(), {
             </div>
 
             <div class="hidden md:flex space-x-2 items-end justify-end">
-                <a :href="instagramLink">
+                <a :href="instagramLink" target="_blank">
                     <Icon icon="mdi:instagram" width="24" height="24" class="text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="facebookLink">
+                <a :href="facebookLink" target="_blank">
                     <Icon icon="basil:facebook-solid" width="24" height="24" class="text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="tiktokLink">
+                <a :href="tiktokLink" target="_blank">
                     <Icon icon="ic:baseline-tiktok" width="24" height="24" class="text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+                <a :href="youtubeLink" target="_blank">
+                    <Icon icon="mdi:youtube" width="24" height="24" class="text-[var(--primary-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
             </div>
         </div>
