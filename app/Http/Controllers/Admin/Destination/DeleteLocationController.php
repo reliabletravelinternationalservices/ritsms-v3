@@ -15,4 +15,5 @@ class DeleteLocationController extends Controller
         $this->repository->deleteLocationImage($id);
         return redirect()->route('admin.destinations.details', $destID)->with('success', 'Location deleted successfully.');
     }
+    
 }
