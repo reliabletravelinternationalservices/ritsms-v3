@@ -4,7 +4,6 @@ import ClientBreadcrumb from '@/components/ClientBreadcrumb.vue';
 import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
-import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { imageViewer } from "@/lib/imageViewer"
 import { useShareModal } from '@/stores/shareModal';

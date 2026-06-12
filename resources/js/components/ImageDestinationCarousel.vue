@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'vue3-carousel/carousel.css'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref, computed, watch } from 'vue'
 import { Destination } from '@/types/destination'
