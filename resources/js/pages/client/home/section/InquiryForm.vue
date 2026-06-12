@@ -90,7 +90,7 @@ const submit = () => {
             <span class="bg-[var(--secondary-custom)] p-1">
               <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
             </span>
-            <a href="tel:09085721338" class="font-roboto text-xs md:text-sm font-bold underline">
+            <a href="tel:09085721338" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               +63 908 572 1338
             </a>
           </span>
@@ -99,7 +99,7 @@ const submit = () => {
             <span class="bg-[var(--secondary-custom)] p-1">
               <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
             </span>
-            <a href="tel:09279275207" class="font-roboto text-xs md:text-sm font-bold underline">
+            <a href="tel:09279275207" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               +63 927 927 5207
             </a>
           </span>
@@ -107,12 +107,20 @@ const submit = () => {
 
         <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
           <h3 class="font-bold font-roboto text-lg md:text-xl">Email Address</h3>
-
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
               <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
             </span>
-            <a href="mailto:reliabletravelinfo@gmail.com" class="font-roboto text-xs md:text-sm font-bold underline">
+              <a href="mailto:inquiry@reliabletravelph.com" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              inquiry@reliabletravelph.com
+            </a>
+          </span>
+          
+          <span class="flex items-center justify-start gap-2">
+            <span class="bg-[var(--secondary-custom)] p-1">
+              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+            </span>
+            <a href="mailto:reliabletravelinfo@gmail.com" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               reliabletravelinfo@gmail.com
             </a>
           </span>
