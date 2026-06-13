@@ -4,6 +4,8 @@ import { scrollToSection } from '@/lib/utils';
 import { Icon } from '@iconify/vue';
 import { router } from '@inertiajs/vue3';
 
+const appUrl = import.meta.env.VITE_APP_URL
+
 interface BreadcrumbItemType {
   label: string
   href?: string
@@ -33,7 +35,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
   <section class="w-full h-auto min-h-[400px] md:h-[400px] lg:h-[500px] relative overflow-hidden flex">
     <div class="w-full h-full absolute top-0 left-0">
       <img class="w-full h-full object-cover"
-        src="https://cdn.sanity.io/images/nxpteyfv/goguides/e3aa344049e8f48f8bd038baad9d88ddd9732fdc-1600x1066.jpg"
+        :src="`${appUrl}/storage/upload/agency/inbound_image.png`"
         alt="Traveler">
 
       <span class="absolute inset-0 bg-gradient-to-t bg-black/60 flex items-end justify-start">

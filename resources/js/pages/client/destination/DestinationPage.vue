@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
-import { Head } from '@inertiajs/vue3';
 import DestinationCarousel from './section/DestinationCarousel.vue';
 import TitleHeader from './section/TitleHeader.vue';
 import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
@@ -8,6 +7,7 @@ import FeaturedOutboundPackage from './section/FeaturedOutboundPackage.vue';
 import InquiryForm from '../home/section/InquiryForm.vue';
 import { Destination } from '@/types/destination';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
+import HeadContent from '@/components/HeadContent.vue';
 
 interface Props {
     destinations: Destination[];
@@ -17,7 +17,11 @@ defineProps<Props>();
 </script>
 
 <template>
-    <Head title="Explore Most Popular Destinations" />
+    <HeadContent
+        title="Explore Most Popular Destinations"
+        description="Discover the most popular destinations for your next adventure!"
+        :url="route('client.destination')"
+    />
     <AppLayout>
         <TitleHeader />
 
