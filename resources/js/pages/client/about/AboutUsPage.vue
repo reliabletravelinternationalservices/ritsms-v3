@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
-import { Head } from '@inertiajs/vue3';
 import TitleHeader from './section/TitleHeader.vue';
 import AgencyRating from './section/AgencyRating.vue';
 import AgencyVideo from './section/AgencyVideo.vue';
@@ -10,11 +9,16 @@ import AgencyOffer from '../contact/section/AgencyOffer.vue';
 import InquiryForm from '../home/section/InquiryForm.vue';
 import SocialMedia from '../contact/section/SocialMedia.vue';
 import AgencyFaq from '../contact/section/AgencyFaq.vue';
+import HeadContent from '@/components/HeadContent.vue';
 
 </script>
 
 <template>
-    <Head title="About Us" />
+    <HeadContent
+        title="About Us"
+        description="Learn more about our agency and services we provide."
+        :url="route('client.about')"
+    />
     <AppLayout>
         <TitleHeader />
         <MotionWrapper :delay="0.05">
