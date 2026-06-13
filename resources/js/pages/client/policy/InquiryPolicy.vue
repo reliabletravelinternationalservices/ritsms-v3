@@ -2,7 +2,6 @@
 import HeadContent from '@/components/HeadContent.vue';
 import ClientAppLayout from '@/layouts/ClientAppLayout.vue';
 import { Icon } from '@iconify/vue';
-import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
