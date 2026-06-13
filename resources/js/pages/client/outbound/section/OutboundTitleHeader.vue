@@ -4,6 +4,7 @@ import { scrollToSection } from '@/lib/utils';
 import { Icon } from '@iconify/vue';
 import { router } from '@inertiajs/vue3';
 
+const apiUrl = import.meta.env.VITE_APP_URL as string
 interface BreadcrumbItemType {
   label: string
   href?: string
@@ -32,7 +33,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
   <section class="w-full h-auto min-h-[400px] md:h-[400px] lg:h-[500px] relative overflow-hidden flex">
     <div class="w-full h-full absolute top-0 left-0">
       <img class="w-full h-full object-cover"
-        src="https://media.cnn.com/api/v1/images/stellar/prod/220922155226-japan-tourism-lifting-covid-restrictions.jpg?c=16x9&q=h_833,w_1480,c_fill"
+        :src="`${apiUrl}/storage/upload/agency/outbound_image.png`"
         alt="Traveler">
 
       <span class="absolute inset-0 bg-gradient-to-t bg-black/60 flex items-end justify-start">
