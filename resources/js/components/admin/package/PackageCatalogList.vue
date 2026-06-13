@@ -35,6 +35,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'update:searchQuery', value: string): void;
+  (event: 'search'): void; // Added search trigger event
   (event: 'update:showFilters', value: boolean): void;
   (event: 'update:filterSeason', value: string): void;
   (event: 'update:filterDestination', value: string): void;
@@ -74,9 +75,18 @@ const filterDateRange = computed({
           type="text"
           placeholder="Quick search catalog..."
           :value="props.searchQuery"
-          @input="event => emit('update:searchQuery', event.target.value)"
-          class="pl-8 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
+          @input="(event: { target: { value: string } }) => emit('update:searchQuery', event.target.value)"
+          @keyup.enter="emit('search')" 
+          class="pl-8 pr-16 h-9 text-xs dark:bg-zinc-950 dark:border-zinc-800"
         />
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          class="absolute right-0 top-0 h-9 px-3 text-xs"
+          @click="emit('search')"
+        >
+          Search
+        </Button>
       </div>
 
       <Button
@@ -123,11 +133,7 @@ const filterDateRange = computed({
 
       <div class="space-y-1">
         <Label class="text-[11px] font-medium text-zinc-400 flex items-center gap-1"><Calendar class="w-3 h-3" /> Active Date</Label>
-        <Input
-          type="date"
-          v-model="filterDateRange"
-          class="h-8 text-xs dark:bg-zinc-950 dark:border-zinc-800"
-        />
+        <Input type="date" v-model="filterDateRange" class="h-8 text-xs dark:bg-zinc-950 dark:border-zinc-800" />
       </div>
     </div>
 
@@ -149,7 +155,7 @@ const filterDateRange = computed({
         </div>
       </div>
 
-      <div class="max-h-[550px] overflow-y-auto divided-y dark:divide-zinc-800">
+      <div class="max-h-[550px] overflow-y-auto divide-y dark:divide-zinc-800">
         <div
           v-for="pkg in props.paginatedCatalog"
           :key="pkg.id"
@@ -160,7 +166,6 @@ const filterDateRange = computed({
               <img v-if="pkg.primary_image?.url" :src="pkg.primary_image.url" class="w-full h-full object-cover" />
               <Compass v-else class="w-4 h-4 m-2 text-zinc-400" />
             </div>
-
             <div class="min-w-0 flex-1">
               <h3 class="text-xs font-semibold text-zinc-900 dark:text-zinc-50 truncate leading-snug">{{ pkg.name }}</h3>
               <div class="flex items-center gap-2 mt-0.5 text-[11px] text-zinc-400 whitespace-nowrap overflow-hidden">
@@ -172,7 +177,6 @@ const filterDateRange = computed({
               </div>
             </div>
           </div>
-
           <Button
             @click="() => emit('pin', pkg)"
             variant="secondary"
@@ -182,7 +186,6 @@ const filterDateRange = computed({
             <Plus class="w-3 h-3" /> Pin
           </Button>
         </div>
-
         <div v-if="props.sortedCatalogPoolLength === 0" class="text-center py-16 text-zinc-400 text-xs">
           <Compass class="w-6 h-6 mx-auto opacity-30 mb-2" />
           <p class="font-medium">No match found inside catalog</p>
