@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import HeadContent from '@/components/HeadContent.vue';
 import ClientAppLayout from '@/layouts/ClientAppLayout.vue';
 import { Icon } from '@iconify/vue';
 import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Why Do We Need Your Information?" />
+    <HeadContent
+        title="Why We Ask for Your Information?"
+        description="We keep our process transparent. Here is exactly why your details are necessary when you send us a message."
+        :url="route('client.inquiry.policy')"
+    />
     <ClientAppLayout>
         <div class="max-w-3xl mx-auto px-4 py-12 text-zinc-800 dark:text-zinc-200">
             
