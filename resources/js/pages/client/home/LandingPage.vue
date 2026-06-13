@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CarouselSection from '@/pages/client/home/section/ImageCarousel.vue';
 import AppLayout from '@/layouts/ClientAppLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import type { Package } from '@/types/package';
 import  DestinationCarousel from './section/DestinationCarousel.vue';
 import InboundPackageCarousel from './section/InboundPackageCarousel.vue';
@@ -13,6 +13,7 @@ import InquiryForm from './section/InquiryForm.vue';
 import ClientFeedback from './section/ClientFeedback.vue';
 import { Destination } from '@/types/destination';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
+import HeadContent from '@/components/HeadContent.vue';
 
 interface PackageResult {
     packages: Package[];
@@ -35,7 +36,7 @@ const props = defineProps<Props>();
 
 <template>
 
-    <Head title="Discover The World With Us" />
+    <HeadContent title="Discover The World With Us" :url="route('client.landing')" />
     <AppLayout>
         <CarouselSection />
 
