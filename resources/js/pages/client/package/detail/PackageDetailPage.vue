@@ -15,6 +15,7 @@ import PackageExclusion from './section/PackageExclusion.vue';
 import PackageNote from './section/PackageNote.vue';
 import { computed } from 'vue';
 import InquiryForm from '../../home/section/InquiryForm.vue';
+import HeadContent from '@/components/HeadContent.vue';
 
 
 const props = defineProps<{
@@ -41,11 +42,25 @@ const dynamicBreadcrumbs = computed((): BreadcrumbItemType[] => {
 });
 
 const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
+
+const url = computed(() => {
+    const routeName = props.isInbound
+        ? 'client.inbound.package.detail'
+        : 'client.outbound.package.detail';
+
+    return route(routeName, { slug: props.package.slug });
+});
 </script>
 
 <template>
 
-    <Head :title="props.package.name" />
+    <HeadContent 
+        :title="props.package.name"
+        :description="props.package.description"
+        :imageUrl="props.package.primary_image?.url || undefined"
+        :url="url"
+    />
+
     <AppLayout>
         <!-- Pass the computed dynamicBreadcrumbs here -->
         <PackageTitleHeaderWithImage :package="props.package" :isInbound="isInbound"
