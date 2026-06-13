@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
-import { Head } from '@inertiajs/vue3';
 import InboundTitleHeader from './section/InboundTitleHeader.vue';
 import InboundPackageDisplay from './section/InboundPackageDisplay.vue';
 import { PackageGroup } from '@/types/group-package';

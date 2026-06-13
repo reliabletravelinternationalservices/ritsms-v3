@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { BreadcrumbItemType } from '@/types';
 import { Package } from '@/types/package';
-import { Head, usePage } from '@inertiajs/vue3';
+import {  usePage } from '@inertiajs/vue3';
 import PackageTitleHeaderWithImage from './section/PackageTitleHeaderWithImage.vue';
 import PackageRateAndSchedule from './section/PackageRateAndPeriod.vue';
 import PackageIncludedServices from './section/PackageIncludedServices.vue';
