@@ -6,11 +6,15 @@ import AgencyOffer from './section/AgencyOffer.vue';
 import SocialMedia from './section/SocialMedia.vue';
 import AgencyFaq from './section/AgencyFaq.vue';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
-
+import HeadContent from '@/components/HeadContent.vue';
 </script>
 
 <template>
-    <Head title="Contact Us for More Information" />
+    <HeadContent
+        title="Contact Us"
+        description="Contact us for any inquiries, bookings, or general information. We'd love to hear from you!"
+        :url="route('client.contact')"
+    />
     <AppLayout>
         <MotionWrapper :delay="0.05">
             <AgencyOffer />
