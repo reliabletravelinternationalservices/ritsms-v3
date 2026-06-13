@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { truncateText } from '@/lib/utils';
 import type { BreadcrumbItemType } from '@/types';
 
 defineProps<{
@@ -18,11 +19,11 @@ defineProps<{
                       <template v-for="(item, index) in breadcrumbs" :key="index">
                           <BreadcrumbItem class="text-[var(--secondary-custom)] font-roboto">
                               <template v-if="index === breadcrumbs.length - 1">
-                                  <BreadcrumbPage class="text-[var(--muted-custom)] font-roboto">{{ item.title }}</BreadcrumbPage>
+                                  <BreadcrumbPage class="text-[var(--muted-custom)] font-roboto">{{ truncateText(item.title, 20) }}</BreadcrumbPage>
                               </template>
                               <template v-else>
                                   <BreadcrumbLink :href="item.href" class=" hover:text-[var(--muted-custom)] hover:underline">
-                                      {{ item.title }}
+                                      {{ truncateText(item.title, 20) }}
                                   </BreadcrumbLink>
                               </template>
                           </BreadcrumbItem>

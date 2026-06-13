@@ -2,15 +2,27 @@
 import { Media } from '@/types/media';
 import { Icon } from '@iconify/vue';
 import { Image } from 'lucide-vue-next';
+import { useShareModal } from '@/stores/shareModal';
+
+const share = useShareModal();
 
 interface Props {
+  id: number
   title: string,
   description?: string | null,
   image?: Media
   isInbound: boolean
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const openMessenger = () => {
+    window.open(
+        'https://www.facebook.com/messages/t/reliableinternationaltravelservices',
+        '_blank',
+        'width=900,height=500'
+    );
+};
 </script>
 
 <template>
@@ -37,28 +49,32 @@ defineProps<Props>();
           </span>
 
           <span class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            <a href="#" target="_blank">
               <button
+                @click="openMessenger"
                 class="w-full sm:w-auto bg-[var(--outbound-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200"
                 :class="{ 'bg-[var(--inbound-custom)]': isInbound }">
                 <Icon icon="tabler:message" class="text-xl" />
                 <span class="whitespace-nowrap">Message us</span>
               </button>
-            </a>
-            <a href="#" target="_blank">
+            <a href="tel:9085721338" target="_blank">
               <button
                 class="w-full sm:w-auto bg-[var(--tag-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200">
                 <Icon icon="material-symbols:call-outline" class="text-xl" />
                 <span class="whitespace-nowrap">Call us</span>
               </button>
             </a>
-            <a href="#" target="_blank">
               <button
+                @click="share.open(
+                            route(
+                                `client.${props.isInbound ? 'inbound' : 'outbound'}.package.group`,
+                                { id: props.id }
+                            )
+                        )"
+                type="button"
                 class="w-full sm:w-auto bg-[var(--tertiary-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200">
                 <Icon icon="material-symbols:share-outline" class="text-xl" />
                 <span class="whitespace-nowrap">Share now</span>
               </button>
-            </a>
           </span>
 
         </div>

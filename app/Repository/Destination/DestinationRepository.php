@@ -57,6 +57,16 @@ class DestinationRepository
 
 
 
+    public function getDestinationDistinctByCountry()
+    {
+        return Destination::with(['locations', 'locations.image', 'image'])
+        ->orderBy('updated_at', 'desc')
+        ->get()
+        ->unique('country')
+        ->values();
+    }
+
+
     public function storeDestinationImage(array $data, int $id)
     {
         $destination = Destination::findOrFail($id);
