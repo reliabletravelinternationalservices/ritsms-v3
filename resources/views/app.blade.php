@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        @if (!request()->is('admin*'))
+            @include('partials.google-tag-manager-head')
+        @endif
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,6 +26,9 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
+        @if (!request()->is('admin*'))
+            @include('partials.google-tag-manager-body')
+        @endif
         @inertia
     </body>
 </html>
