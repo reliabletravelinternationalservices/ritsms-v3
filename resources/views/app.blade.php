@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+                
         @if (!request()->is('admin*'))
-            @include('partials.google-tag-manager-head')
+            @include('partials.google-tag-manager-head')    
+            @include('partials.adsense')
+            @include('partials.google-ads')
         @endif
+        
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,12 +19,7 @@
         <link rel="icon" type="image/x-icon" sizes="16x16" href="{{ asset('storage/upload/agency/rits_icon.ico') }}">
         <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ asset('storage/upload/agency/rits_icon.ico') }}">
         <link rel="icon" type="image/x-icon" sizes="180x180" href="{{ asset('storage/upload/agency/rits_icon.ico') }}">
-        
-        @if (!request()->is('admin*'))
-            @include('partials.adsense')
-            @include('partials.google-ads')
-        @endif
-        
+
         @routes
         @vite(['resources/js/app.ts'])
         @inertiaHead
