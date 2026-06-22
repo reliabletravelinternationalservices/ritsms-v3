@@ -8,7 +8,7 @@ interface Props {
     verifiedDate?: string | null;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 </script>
 

@@ -6,7 +6,7 @@ import { User, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 
 
-const props = defineProps<{ admins: User[] }>();
+defineProps<{ admins: User[] }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useClipboard } from '@vueuse/core';
-import { SharedData, User } from '@/types';
+import { SharedData } from '@/types';
 import { Icon } from '@iconify/vue';
 import { usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
@@ -17,10 +16,9 @@ interface Props {
   phone?: string | null;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
-const page = usePage<SharedData>();
-const currentUser = page.props.auth.user as User;
+usePage<SharedData>();
 
 // Set up clipboard functionality
 const { copy, copied } = useClipboard();

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { SharedData, User } from '@/types';
-import { Media } from '@/types/media';
 import { Icon } from '@iconify/vue';
 import { usePage } from '@inertiajs/vue3';
 
