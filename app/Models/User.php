@@ -24,6 +24,8 @@ class User extends Authenticatable
         'display_name',
         'phone',
         'role',
+        'avatar',
+        'status',
     ];
 
     /**
@@ -48,4 +50,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }

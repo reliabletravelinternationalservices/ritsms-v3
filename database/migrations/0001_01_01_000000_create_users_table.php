@@ -20,6 +20,8 @@ return new class extends Migration
             $table->enum('role', ['admin', 'agent'])->default('agent');
             $table->string('phone')->nullable();
             $table->string('display_name');
+            $table->string('avatar')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->rememberToken();
             $table->timestamps();
         });

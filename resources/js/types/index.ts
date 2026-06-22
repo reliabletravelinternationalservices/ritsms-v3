@@ -43,7 +43,11 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    display_name: string;
+    phone: string | null;
+    role: 'admin' | 'agent';
     email_verified_at: string | null;
+    status: 'active' | 'inactive';
     created_at: string;
     updated_at: string;
 }
