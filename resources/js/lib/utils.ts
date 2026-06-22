@@ -34,12 +34,13 @@ export const formatCurrency = (amount: number, currency: string = 'PHP', fractio
 
 
 // Helper to format date strings
-export const formatDateString = (dateStr?: string) => {
+export const formatDateString = (dateStr?: string, includeTime: boolean = false) => {
     if (!dateStr) return 'N/A';
     return new Date(dateStr).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
+        ...(includeTime && { hour: 'numeric', minute: 'numeric' }),
     });
 };
 
