@@ -110,6 +110,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
         Route::prefix('admins')->group(function () {
             Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
             Route::get('/create', [CreateAdminAccountController::class, 'index'])->name('admin.users.admins.create');
+            Route::post('/store', [CreateAdminAccountController::class, 'store'])->name('admin.users.admins.store');
         });
 
 
