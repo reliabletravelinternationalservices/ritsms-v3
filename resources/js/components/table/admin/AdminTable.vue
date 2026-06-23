@@ -271,7 +271,7 @@ const isShowingAllRoles = (roles: User['role'][]) => roles.length === roleOption
         </DropdownMenu>
       </div>
 
-      <Link :href="route('admin.packages.create')" class="self-start sm:self-auto">
+      <Link :href="route('admin.users.admins.create')" class="self-start sm:self-auto">
         <Button type="button" variant="default"> Create </Button>
       </Link>
     </div>
