@@ -2,7 +2,6 @@
 
 interface Props {
     createdAt: string;
-    updatedAt: string;
 }
 
 defineProps<Props>();
@@ -11,10 +10,7 @@ defineProps<Props>();
 <template>
     <div class="flex flex-col">
         <span class="text-xs text-muted-foreground">
-            Create at: {{ createdAt }}
-        </span>
-        <span class="text-xs text-muted-foreground">
-            Update at: {{ updatedAt }}
+           {{ createdAt }}
         </span>
     </div>
 </template>

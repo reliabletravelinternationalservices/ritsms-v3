@@ -30,7 +30,7 @@ const handleCopy = (text: string) => {
 
 <template>
   <div class="flex items-center gap-3 group">
-    <div class="flex flex-col">
+    <div class="flex flex-col text-sm">
       <span class="line-clamp-2">
         {{ email }}
       </span>

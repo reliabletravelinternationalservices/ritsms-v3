@@ -4,9 +4,10 @@ import AdminTable from '@/components/table/admin/AdminTable.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 
-defineProps<{ admins: User[] }>();
+const props = defineProps<{ admins: User[] }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,6 +19,22 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.users.admins'),
     },
 ];
+
+const adminCountsByStatus = computed(() => {
+    let activeCount = 0;
+    let inactiveCount = 0;
+
+    props.admins.forEach((admin) => {
+        if (admin.status === 'active') activeCount++;
+        if (admin.status === 'inactive') inactiveCount++;
+    });
+
+    return {
+        active: activeCount,
+        inactive: inactiveCount,
+        total: props.admins.length
+    };
+    });
 </script>
 
 <template>
@@ -30,7 +47,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="relative h-auto">
                      <StatsCard
                         title="Total Admin Accounts"
-                        :value="10"
+                        :value="adminCountsByStatus.total"
                         icon="solar:user-outline"
                         :delay="0.05"
                     />
@@ -38,7 +55,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="relative h-auto">
                     <StatsCard
                         title="Total Active"
-                        :value="8"
+                        :value="adminCountsByStatus.active"
                         icon="tabler:user-key"
                         :delay="0.05"
                     />
@@ -46,7 +63,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="relative h-auto">
                     <StatsCard
                         title="Total Inactive"
-                        :value="2"
+                        :value="adminCountsByStatus.inactive"
                         icon="boxicons:user-x"
                         :delay="0.05"
                     />

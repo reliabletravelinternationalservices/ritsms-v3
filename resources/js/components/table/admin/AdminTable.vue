@@ -26,7 +26,7 @@ import {
 import { formatDateString } from '@/lib/utils.js';
 import type { User } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { h, ref, watch } from 'vue';
+import { computed, h, ref, watch } from 'vue';
 import ContactCell from './ContactCell.vue';
 import DateRecordCell from './DateRecordCell.vue';
 import LinkCell from './LinkCell.vue';
@@ -44,6 +44,7 @@ const globalFilter = ref<string>('');
 const search = ref<string>('');
 const columnFilters = ref<ColumnFiltersState>([]);
 const selectedRoles = ref<User['role'][]>(['admin', 'agent']);
+const selectedStatuses = ref<User['status'][]>(['active', 'inactive']);
 
 watch(
     () => props.users,
@@ -53,18 +54,20 @@ watch(
     { deep: true },
 );
 
-watch(
-    selectedRoles,
-    (roles) => {
-        columnFilters.value = [
-            {
-                id: 'role',
-                value: roles,
-            },
-        ];
-    },
-    { deep: true, immediate: true },
-);
+const syncColumnFilters = () => {
+    columnFilters.value = [
+        {
+            id: 'role',
+            value: selectedRoles.value,
+        },
+        {
+            id: 'status',
+            value: selectedStatuses.value,
+        },
+    ];
+};
+
+watch([selectedRoles, selectedStatuses], syncColumnFilters, { deep: true, immediate: true });
 
 const columns: ColumnDef<User>[] = [
     {
@@ -100,7 +103,7 @@ const columns: ColumnDef<User>[] = [
     {
         header: 'Contacts',
         accessorKey: 'email',
-        minSize: 200,
+        minSize: 150,
         maxSize: 300,
         cell: (info: CellContext<User, unknown>) =>
             h(ContactCell, {
@@ -118,9 +121,13 @@ const columns: ColumnDef<User>[] = [
                 status: info.row.original.status,
                 verifiedDate: info.row.original.email_verified_at,
             }),
+        filterFn: (row: Row<User>, columnId: string, filterValue: User['status'][]) => {
+            if (!filterValue || filterValue.length === 0) return false;
+            return filterValue.includes(row.getValue(columnId) as User['status']);
+        },
     },
     {
-        header: 'Role',
+        header: 'Access Level',
         accessorKey: 'role',
         minSize: 120,
         maxSize: 180,
@@ -131,14 +138,13 @@ const columns: ColumnDef<User>[] = [
         },
     },
     {
-        header: 'Date Registered',
+        header: 'Date Created',
         accessorKey: 'created_at',
         minSize: 200,
         maxSize: 300,
         cell: (info: CellContext<User, unknown>) =>
             h(DateRecordCell, {
-                createdAt: formatDateString(info.row.original.created_at, true),
-                updatedAt: formatDateString(info.row.original.updated_at, true),
+                createdAt: formatDateString(info.row.original.created_at)
             }),
     },
     {
@@ -190,6 +196,11 @@ const roleOptions: { label: string; value: User['role'] }[] = [
     { label: 'Agent', value: 'agent' },
 ];
 
+const statusOptions: { label: string; value: User['status'] }[] = [
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' },
+];
+
 const toggleRoleFilter = (role: User['role']) => {
     if (selectedRoles.value.includes(role)) {
         selectedRoles.value = selectedRoles.value.filter((selectedRole) => selectedRole !== role);
@@ -197,6 +208,15 @@ const toggleRoleFilter = (role: User['role']) => {
     }
 
     selectedRoles.value = [...selectedRoles.value, role];
+};
+
+const toggleStatusFilter = (status: User['status']) => {
+    if (selectedStatuses.value.includes(status)) {
+        selectedStatuses.value = selectedStatuses.value.filter((selectedStatus) => selectedStatus !== status);
+        return;
+    }
+
+    selectedStatuses.value = [...selectedStatuses.value, status];
 };
 
 const submitSearch = () => {
@@ -210,13 +230,28 @@ const handleSearchInput = () => {
 };
 
 const isShowingAllRoles = (roles: User['role'][]) => roles.length === roleOptions.length;
+const isShowingAllStatuses = (statuses: User['status'][]) => statuses.length === statusOptions.length;
+const hasActiveFilters = computed(
+    () =>
+        Boolean(search.value.trim() || globalFilter.value) ||
+        !isShowingAllRoles(selectedRoles.value) ||
+        !isShowingAllStatuses(selectedStatuses.value),
+);
+
+const resetFilters = () => {
+    search.value = '';
+    table.setGlobalFilter('');
+    selectedRoles.value = roleOptions.map((option) => option.value);
+    selectedStatuses.value = statusOptions.map((option) => option.value);
+    table.setPageIndex(0);
+};
 </script>
 
 <template>
   <div class="space-y-4">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex w-full flex-col gap-2 sm:max-w-xl sm:flex-row sm:items-center">
-        <div class="relative w-full sm:max-w-md">
+        <div class="relative min-w-[300px] w-full sm:max-w-md ">
           <Input
             v-model="search"
             type="text"
@@ -269,6 +304,53 @@ const isShowingAllRoles = (roles: User['role'][]) => roles.length === roleOption
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="outline" size="sm" class="h-10 gap-2 border-dashed">
+              <Icon icon="iconoir:filter-list" class="text-sm" />
+              Status
+              <span
+                v-if="!isShowingAllStatuses(selectedStatuses)"
+                class="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground"
+              >
+                {{ selectedStatuses.length }}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="start" class="w-44">
+            <DropdownMenuLabel class="text-xs font-semibold">
+              Filter by Status
+            </DropdownMenuLabel>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuCheckboxItem
+              v-for="option in statusOptions"
+              :key="option.value"
+              class="cursor-pointer text-xs"
+              :checked="selectedStatuses.includes(option.value)"
+              @select="(event) => event.preventDefault()"
+              @update:checked="toggleStatusFilter(option.value)"
+            >
+              {{ option.label }}
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          class="h-10 gap-2"
+          v-if="hasActiveFilters"
+          :disabled="!hasActiveFilters"
+          @click="resetFilters"
+        >
+          <Icon icon="iconoir:cancel" class="text-sm" />
+          Reset
+        </Button>
       </div>
 
       <Link :href="route('admin.users.admins.create')" class="self-start sm:self-auto">

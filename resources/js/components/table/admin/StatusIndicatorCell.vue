@@ -25,7 +25,7 @@ defineProps<Props>();
             <Icon icon="lets-icons:check-fill" width="16" height="16" class="text-green-500" /> Verified at {{ formatDateString(verifiedDate) }}
         </span>
         <span v-else class="text-xs font-light text-muted-foreground flex items-center">
-            <Icon icon="material-symbols:close-rounded" width="16" height="16" class="text-red-500" /> Not verified yet
+            <Icon icon="lets-icons:close-round-fill" width="14" height="14" class="text-red-500" /> Not verified yet
         </span>
     </div>
 </template>

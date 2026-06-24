@@ -5,9 +5,10 @@ import { usePage } from '@inertiajs/vue3';
 
 const page = usePage<SharedData>();
 const currentUser = page.props.auth.user as User;
+const envUrl = import.meta.env.VITE_APP_URL;
 interface Props {
     id: number;
-    avatar?: string;
+    avatar?: string | null;
     name: string;
     display_name?: string;
 }
@@ -18,7 +19,7 @@ defineProps<Props>();
 <template>
     <div class="flex items-center gap-2">
         <span class="flex items-center justify-center">
-            <img v-if="avatar" class="w-32 h-10 object-cover rounded-xs" :src="avatar" :alt="name">
+            <img v-if="avatar" class="w-10 h-10 object-cover rounded-sm" :src="`${envUrl}/storage/${avatar}`" :alt="name">
             <div v-else class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded-sm">
                 <Icon icon="mdi:image-off" width="24" height="24" class="text-gray-400" />
             </div>
