@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
+use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\ClientManagementController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
@@ -111,6 +112,8 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
             Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
             Route::get('/create', [CreateAdminAccountController::class, 'index'])->name('admin.users.admins.create');
             Route::post('/store', [CreateAdminAccountController::class, 'store'])->name('admin.users.admins.store');
+            
+            Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
         });
 
 
