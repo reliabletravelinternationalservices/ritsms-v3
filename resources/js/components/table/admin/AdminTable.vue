@@ -154,7 +154,7 @@ const columns: ColumnDef<User>[] = [
         maxSize: 300,
         cell: (info: CellContext<User, unknown>) =>
             h(LinkCell, {
-                href: route('admin.packages.details', { id: info.row.original.id }),
+                href: route('admin.users.admins.details', { id: info.row.original.id }),
                 label: 'View Details',
             }),
     },
