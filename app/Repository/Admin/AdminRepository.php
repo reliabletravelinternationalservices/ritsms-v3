@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class AdminRepository
 {
+    public function getAdminAccountById(int $id)
+    {
+        return User::findOrFail($id);
+    }
+
     public function getAllAdminAccount()
     {
         return User::orderBy('updated_at', 'desc')->get();
