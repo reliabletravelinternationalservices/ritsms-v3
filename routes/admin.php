@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\ClientManagementController;
+use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
@@ -108,6 +109,8 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
     Route::prefix('users')->group(function () {
         Route::prefix('admins')->group(function () {
             Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
+            Route::get('/create', [CreateAdminAccountController::class, 'index'])->name('admin.users.admins.create');
+            Route::post('/store', [CreateAdminAccountController::class, 'store'])->name('admin.users.admins.store');
         });
 
 
