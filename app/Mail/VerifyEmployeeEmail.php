@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Mail\Inquiry;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,18 +11,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InquiryMail extends Mailable implements ShouldQueue
+class VerifyEmployeeEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-    public array $data;
-
     /**
      * Create a new message instance.
      */
-    public function __construct(array $data)
-    {
-        $this->data = $data;
+    public string $name;
+    public string $verificationUrl;
+
+    public function __construct(
+        string $name,
+        string $verificationUrl
+    ) {
+        $this->name = $name;
+        $this->verificationUrl = $verificationUrl;
     }
 
     /**
@@ -30,7 +34,7 @@ class InquiryMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reliable International Travel Service Official Website',
+            subject: 'Verify Reliable International Travel Service Account',
         );
     }
 
@@ -40,10 +44,11 @@ class InquiryMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'mail.inquiry',
+            view: 'mail.verify',
             with: [
-                'data' => $this->data,
-            ],
+                'name' => $this->name,
+                'verificationUrl' => $this->verificationUrl
+            ]
         );
     }
 

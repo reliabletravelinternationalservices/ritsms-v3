@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\ClientManagementController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
+use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
@@ -112,16 +113,14 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
             Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
             Route::get('/create', [CreateAdminAccountController::class, 'index'])->name('admin.users.admins.create');
             Route::post('/store', [CreateAdminAccountController::class, 'store'])->name('admin.users.admins.store');
-            
+
             Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
         });
-
 
         Route::prefix('clients')->group(function () {
             Route::get('/', [ClientManagementController::class, 'index'])->name('admin.users.clients');
         });
     });
-
 
     Route::prefix('bookings')->group(function () {
         Route::get('/', [BookingManagementController::class, 'index'])->name('admin.bookings');
@@ -130,4 +129,12 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
     Route::prefix('logs')->group(function () {
         Route::get('/', [ActivityLogController::class, 'index'])->name('admin.logs');
     });
+
+    Route::post('/verify/email', [VerifyAdminEmailController::class, 'send'])
+        ->name('admin.verify.email.send');
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('/verify/{id}/{hash}', [VerifyAdminEmailController::class, 'verify'])
+        ->name('admin.verification.verify');
 });
