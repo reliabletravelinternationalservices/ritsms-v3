@@ -32,8 +32,8 @@ class InquiryResultController extends Controller
         $validatedData['inquiry_id'] = $inquiry->id;
 
         try {
-            Mail::to('reliabletravelinfo@gmail.com')
-                ->send(new InquiryMail($validatedData));
+            Mail::to('inquiry@reliabletravelph.com')
+                ->queue(new InquiryMail($validatedData));
         } catch (\Exception $e) {
             Log::error('Failed to send inquiry email.', [
                 'message' => $e->getMessage(),
