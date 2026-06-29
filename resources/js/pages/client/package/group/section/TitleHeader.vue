@@ -26,7 +26,7 @@ const openMessenger = () => {
 </script>
 
 <template>
-  <section class="w-full h-[200px] md:h-[200px] lg:h-[300px] relative overflow-hidden">
+  <section class="w-full h-[400px] md:h-[200px] lg:h-[300px] relative overflow-hidden">
     <div class="w-full h-full absolute top-0 left-0">
       <img v-if="image && image.url" class="w-full h-full object-cover" :src="image.url" alt="Traveler">
       <div v-else class="w-full h-full bg-gray-300 flex items-center justify-center">
@@ -56,13 +56,13 @@ const openMessenger = () => {
                 <Icon icon="tabler:message" class="text-xl" />
                 <span class="whitespace-nowrap">Message us</span>
               </button>
-            <a href="tel:9085721338" target="_blank">
-              <button
-                class="w-full sm:w-auto bg-[var(--tag-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200">
-                <Icon icon="material-symbols:call-outline" class="text-xl" />
-                <span class="whitespace-nowrap">Call us</span>
-              </button>
-            </a>
+              <a href="tel:9085721338" target="_blank" class="w-full">
+                <button
+                  class="w-full sm:w-auto bg-[var(--tag-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200">
+                  <Icon icon="material-symbols:call-outline" class="text-xl" />
+                  <span class="whitespace-nowrap">Call us</span>
+                </button>
+              </a>
               <button
                 @click="share.open(
                             route(
