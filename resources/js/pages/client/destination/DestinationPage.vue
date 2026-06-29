@@ -36,9 +36,5 @@ defineProps<Props>();
         <MotionWrapper :delay="0.1">
             <FeaturedOutboundPackage :destinations="destinations" />
         </MotionWrapper>
-
-        <MotionWrapper :delay="0.15">
-            <InquiryForm />
-        </MotionWrapper>
     </AppLayout>     
 </template>

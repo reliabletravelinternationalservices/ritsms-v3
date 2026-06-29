@@ -9,14 +9,14 @@ const props = defineProps<{ package: Package, isInbound: boolean, usdRate: numbe
 
 const handleCheckAvailability = () => {
     appModal.open({
-        title: "Request Booking Availability is under update",
-        description: "We are currently improving this feature. For a meantime send your request to inquiry.",
+        title: "Online Booking Unavailable",
+        description: "Online booking is temporarily unavailable. Please send us an inquiry, and our team will help you confirm availability and complete your booking.",
         confirmText: "Send Inquiry",
         onConfirm() {
             appModal.close();
             scrollToSection('inquiry');
         },
-    })
+    });
 }
 </script>
 
