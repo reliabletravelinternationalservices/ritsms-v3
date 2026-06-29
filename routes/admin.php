@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
@@ -33,7 +34,7 @@ use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
-Route::prefix('admin')->middleware('adminAuth')->group(function () {
+Route::prefix('admin')->middleware('adminAuth')->middleware('accountAccess')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -137,4 +138,7 @@ Route::prefix('admin')->middleware('adminAuth')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/verify/{id}/{hash}', [VerifyAdminEmailController::class, 'verify'])
         ->name('admin.verification.verify');
+
+    Route::get ('/accessDenied', [AccountAccessController::class, 'index'])
+        ->name('admin.access.denied');
 });
