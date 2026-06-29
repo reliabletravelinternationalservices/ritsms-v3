@@ -3,10 +3,14 @@ import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { SharedData, type NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from './AppLogo.vue';
 
+
+const page = usePage<SharedData>();
+
+    
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -50,6 +54,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Users',
         icon: 'lucide:users',
+        isShow: page.props.auth.user?.role === 'admin',
         children: [
             {
                 title: 'Admins',
@@ -73,11 +78,13 @@ const footerNavItems: NavItem[] = [
         title: 'Github Repo',
         href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
         icon: 'mdi:github',
+        isShow: page.props.auth.user?.role === 'admin',
     },
     {
         title: 'Documentation',
         href: 'https://laravel.com/docs/starter-kits',
         icon: 'tabler:book',
+        isShow: page.props.auth.user?.role === 'admin',
     },
 ];
 </script>

@@ -35,8 +35,6 @@
             <meta head-key="twitter:title" name="twitter:title" content="{{ Str::limit($seo['title'], 60) }}" />
             <meta head-key="twitter:description" name="twitter:description" content="{{ $seo['description'] }}" />
             <meta head-key="twitter:image" name="twitter:image" content="{{ $seo['image'] }}" />
-        @else
-            <title>{{ config('app.name', 'Reliable International Travel Services') }}</title>
         @endisset
 
         @inertiaHead
