@@ -13,6 +13,7 @@ export interface NavChildItem {
     title: string;
     href: string;
     isActive?: boolean;
+    isShow?: boolean;
 }
 
 export interface NavItem {
@@ -20,7 +21,7 @@ export interface NavItem {
     href?: string;
     icon?: string;
     isActive?: boolean;
-
+    isShow?: boolean;
     children?: NavChildItem[];
 }
 
