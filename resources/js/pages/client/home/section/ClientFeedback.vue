@@ -59,6 +59,9 @@ const feedbacks: Feedback[] = [
                         <h1 class="text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase">
                             Client's Feedback & Reviews
                         </h1>
+                        <p class="text-base md:text-lg tracking-wide font-roboto text-[var(--muted-custom)] italic">
+                            Every review reflects our commitment to exceptional service, trusted guidance, and unforgettable travel experiences.
+                        </p>
                     </div>
                 </div>
 
