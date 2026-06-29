@@ -1,7 +1,21 @@
 <template>
-    <section class="w-full">
-        <div class="max-w-5xl m-auto py-8 flex flex-col gap-6">
-            <iframe class="m-auto" src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F781032031404993%2F&show_text=false&width=267&t=0" width="267" height="476" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+    <div class="text-center max-w-3xl mx-auto">
+        <span>
+            
+            <h2 class="text-3xl font-bold text-[var(--tertiary-custom)]">Behind Our Stories</h2>
+        </span>
+        <p class="mt-3 text-[var(--muted-custom)]">
+            Learn more about Reliable International Travel Services through our featured videos. Discover our journey, meet our team, and see how we help travelers create unforgettable experiences around the world.
+        </p>
+    </div>
+    <section class="w-full flex flex-row justify-center gap-6">
+        <div class=" py-8 flex flex-col gap-2">
+            <iframe width="315" height="576" src="https://www.youtube.com/embed/G6Sag2iQt8k" title="TOP REVENUE PARTNER: A Milestone for Reliable International Travel Services! 🏆✨" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
+        <div class="py-8 flex flex-col gap-2">
+            <iframe width="315" height="576" src="https://www.youtube.com/embed/lbOasvp3PEU" title="Reliable International Travel Services: 17 Years of Excellence &amp; Reliability #reliableservice" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div class="py-8 flex flex-col gap-2">
+            <iframe width="315" height="576" src="https://www.youtube.com/embed/d5Pj-aGjvHQ" title="🙏 Thank You to All Our Clients ✈️ For the Amazing Journeys &amp; Unforgettable Travel Experiences 🌍" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>        </div>
     </section>
 </template>
