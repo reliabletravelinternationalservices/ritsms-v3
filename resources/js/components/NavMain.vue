@@ -23,12 +23,14 @@ import { Link, usePage } from '@inertiajs/vue3';
 interface NavChildItem {
     title: string;
     href: string;
+    isShow?: boolean;
 }
 
 interface NavItem {
     title: string;
     href?: string;
     icon?: string;
+    isShow?: boolean;
     children?: NavChildItem[];
 }
 
@@ -49,8 +51,10 @@ const isDropdownActive = (item: NavItem): boolean => {
         <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
 
         <SidebarMenu>
-            <template v-for="item in items" :key="item.title">
-
+            <template
+                v-for="item in items.filter(item => item.isShow ?? true)"
+                :key="item.title"
+            >
                 <!-- NORMAL LINK -->
                 <SidebarMenuItem v-if="!item.children">
                     <SidebarMenuButton
@@ -63,7 +67,6 @@ const isDropdownActive = (item: NavItem): boolean => {
                                 :icon="item.icon"
                                 class="text-lg"
                             />
-
                             <span>{{ item.title }}</span>
                         </Link>
                     </SidebarMenuButton>
@@ -96,7 +99,7 @@ const isDropdownActive = (item: NavItem): boolean => {
                         <CollapsibleContent>
                             <SidebarMenuSub>
                                 <SidebarMenuSubItem
-                                    v-for="child in item.children"
+                                    v-for="child in item.children.filter(child => child.isShow ?? true)"
                                     :key="child.title"
                                 >
                                     <SidebarMenuSubButton
@@ -112,7 +115,6 @@ const isDropdownActive = (item: NavItem): boolean => {
                         </CollapsibleContent>
                     </SidebarMenuItem>
                 </Collapsible>
-
             </template>
         </SidebarMenu>
     </SidebarGroup>
