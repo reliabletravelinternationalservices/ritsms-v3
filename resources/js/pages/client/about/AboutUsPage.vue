@@ -25,10 +25,10 @@ import HeadContent from '@/components/HeadContent.vue';
             <AgencyRating />
         </MotionWrapper>
         <MotionWrapper :delay="0.1">
-            <AgencyVideo />
+            <AboutAgency />
         </MotionWrapper>
         <MotionWrapper :delay="0.15">
-            <AboutAgency />
+            <AgencyVideo />
         </MotionWrapper>
         <MotionWrapper :delay="0.2">
             <PartnerAgency />
