@@ -10,6 +10,7 @@ import InquiryForm from '../home/section/InquiryForm.vue';
 import SocialMedia from '../contact/section/SocialMedia.vue';
 import AgencyFaq from '../contact/section/AgencyFaq.vue';
 import HeadContent from '@/components/HeadContent.vue';
+import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 
 </script>
 
