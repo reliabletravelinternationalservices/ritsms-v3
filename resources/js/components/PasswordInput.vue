@@ -29,8 +29,8 @@ const toggleVisibility = () => {
       class="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
       @click="toggleVisibility"
     >
-      <Eye v-if="showPassword" class="h-4 w-4" aria-hidden="true" />
-      <EyeOff v-else class="h-4 w-4" aria-hidden="true" />
+      <EyeOff v-if="showPassword" class="h-4 w-4" aria-hidden="true" />
+      <Eye v-else class="h-4 w-4" aria-hidden="true" />
       <span class="sr-only">
         {{ showPassword ? 'Hide password' : 'Show password' }}
       </span>
