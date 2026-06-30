@@ -15,7 +15,7 @@ class AccountAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->guard('web')->user()->status == 'inactive') {
+        if (auth()->guard('web')->check() && auth()->guard('web')->user()->status == 'inactive') {
             return redirect()->route('admin.access.denied');
         }
         return $next($request);
