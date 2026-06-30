@@ -34,7 +34,7 @@ use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
-Route::prefix('admin')->middleware('adminAuth')->middleware('accountAccess')->group(function () {
+Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
