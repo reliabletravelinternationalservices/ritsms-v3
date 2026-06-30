@@ -7,9 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { formatDateString } from '@/lib/utils';
+import { openDeleteDialog } from '@/stores/deleteDialog';
 import { type BreadcrumbItem, SharedData, type User } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
-import { ArrowLeft, CheckCircle2, CircleAlert, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from 'lucide-vue-next';
+import { ArrowLeft, CheckCircle2, CircleAlert, CircleMinus, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -88,6 +89,33 @@ const sendVerificationEmail = () => {
     });
 };
 
+
+const onDelete = () => {
+    openDeleteDialog({
+        title: 'Delete Account',
+        message: `Are you sure you want to delete "${props.admin.name}"? This action cannot be undone.`,
+        confirmText: 'Delete Account',
+        cancelText: 'Cancel',
+
+        onConfirm: () => {
+            router.delete(
+                route('admin.users.admins.destroy', {
+                    id: props.admin.id
+                }),
+                {
+                    onSuccess: () => {
+                        toast.success('Account deleted successfully');
+                    },
+
+                    onError: () => {
+                        toast.error('Failed to delete account');
+                    },
+                }
+            );
+        },
+    });
+};
+
 const envUrl = import.meta.env.VITE_APP_URL;
 </script>
 
@@ -108,14 +136,20 @@ const envUrl = import.meta.env.VITE_APP_URL;
                     <Button variant="outline" as-child class="gap-2">
                         <Link href="#">
                             <Pencil class="h-4 w-4" />
-                            Edit Account
+                            Edit
                         </Link>
                     </Button>
-                    <Button variant="destructive" as-child class="gap-2">
-                        <Link href="#" method="delete" as="button" type="button" preserve-scroll>
+                    <Button @click="onDelete" v-if="!isCurrentUser && !isEmailVerified" variant="destructive" as-child>
+                        <span class="cursor-pointer">
                             <Trash2 class="h-4 w-4" />
-                            Delete Account
-                        </Link>
+                            Delete
+                        </span>
+                    </Button>
+                    <Button v-else variant="ghost" as-child class="gap-2 bg-red-700/10 border-red-700">
+                        <span class="cursor-pointer">
+                            <CircleMinus class="h-4 w-4" />
+                            Deactivate
+                        </span>
                     </Button>
                 </div>
 
