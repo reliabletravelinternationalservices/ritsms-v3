@@ -61,6 +61,7 @@ const clearAvatar = () => {
 
 const submit = () => {
     form.post(route('admin.users.admins.store'), {
+        preserveScroll: true,
         onSuccess: () => {
             form.reset();
             clearAvatar();
