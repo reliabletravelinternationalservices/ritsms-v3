@@ -14,8 +14,9 @@ class ServiceCountryController extends Controller
     public function index()
     {
         $destinations = $this->repository->getAllDestinations();
+        $stats = $this->repository->getDestinationStatistics();
 
-        return Inertia::render('admin/destination/ServiceCountry', compact('destinations'));
+        return Inertia::render('admin/destination/ServiceCountry', compact('destinations', 'stats'));
     }
 
     public function show(int $destination)
