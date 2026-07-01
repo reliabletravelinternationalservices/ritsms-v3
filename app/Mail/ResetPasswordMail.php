@@ -16,15 +16,15 @@ class ResetPasswordMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
     
     public User $user;
-    public string $token;
+    public string $resetUrl;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, string $token)
+    public function __construct(User $user, string $resetUrl)
     {
         $this->user = $user;
-        $this->token = $token;
+        $this->resetUrl = $resetUrl;
     }
 
     /**
@@ -42,13 +42,11 @@ class ResetPasswordMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
-        $resetUrl = route('admin.forgot.password.reset', ['token' => $this->token, 'email' => $this->user->email], false);
-
         return new Content(
             view: 'mail.reset-password',
             with: [
                 'user' => $this->user,
-                'resetUrl' => $resetUrl,
+                'resetUrl' => $this->resetUrl,
             ],
         );
     }

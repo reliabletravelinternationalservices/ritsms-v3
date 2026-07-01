@@ -107,9 +107,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendAccountPasswordResetNotification()
     {
         $token = app('auth.password.broker')->createToken($this);
+        $resetUrl = route('admin.forgot.password.reset', ['token' => $token, 'email' => $this->email], false);
 
         Mail::to($this->email)->queue(
-            new ResetPasswordMail($this, $token)
+            new ResetPasswordMail($this, $resetUrl)
         );
     }
 }
