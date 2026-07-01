@@ -44,11 +44,11 @@ const props = withDefaults(defineProps<CombinedPageProps>(), {
     })
 });
 
-const packageTrendType = computed(() => {
-    if (props.metrics.packages_trend > 0) return 'up'
-    if (props.metrics.packages_trend < 0) return 'down'
-    return 'neutral'
-})
+// const packageTrendType = computed(() => {
+//     if (props.metrics.packages_trend > 0) return 'up'
+//     if (props.metrics.packages_trend < 0) return 'down'
+//     return 'neutral'
+// })
 
 </script>
 
