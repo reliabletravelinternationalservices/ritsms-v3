@@ -42,4 +42,18 @@ class AdminRepository
         $folderPath = "upload/user/admin/{$id}";
         return $file->store($folderPath, 'public');
     }
+
+
+
+    public function updateAdminAccountStatus(int $id, string $status)
+    {
+        return DB::transaction(function () use ($id, $status) {
+            $admin = User::findOrFail($id);
+            $admin->status = $status;
+            $admin->save();
+
+            return $admin;
+        });
+    }
+
 }

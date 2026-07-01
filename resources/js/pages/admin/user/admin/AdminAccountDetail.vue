@@ -10,7 +10,7 @@ import { formatDateString } from '@/lib/utils';
 import { openDeleteDialog } from '@/stores/deleteDialog';
 import { type BreadcrumbItem, SharedData, type User } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
-import { ArrowLeft, CheckCircle2, CircleAlert, CircleMinus, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from 'lucide-vue-next';
+import { ArrowLeft, CheckCircle2, CircleAlert, CircleMinus, CirclePlus, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -116,6 +116,38 @@ const onDelete = () => {
     });
 };
 
+
+const disableForm = useForm({
+    status: 'inactive',
+});
+
+const onStatusUpdate = (status: string) => {
+    openDeleteDialog({
+        title: `${status === 'active' ? 'Activate' : 'Deactivate'} Account`,
+        message: `Are you sure you want to ${status === 'active' ? 'activate' : 'deactivate'} "${props.admin.name}"?`,
+        confirmText: `${status === 'active' ? 'Activate' : 'Deactivate'} Account`,
+        cancelText: 'Cancel',
+
+        onConfirm: () => {
+            disableForm.status = status;
+            disableForm.patch(
+                route('admin.users.admins.details.update', {
+                    id: props.admin.id
+                }),
+                {
+                    onSuccess: () => {
+                        toast.success(`Account ${status === 'active' ? 'activated' : 'deactivated'} successfully`);
+                    },
+                    onError: () => {
+                        toast.error(`Failed to ${status === 'active' ? 'activate' : 'deactivate'} account`);
+                    },
+                }
+            );
+        },
+    });
+};
+
+
 const envUrl = import.meta.env.VITE_APP_URL;
 </script>
 
@@ -139,18 +171,29 @@ const envUrl = import.meta.env.VITE_APP_URL;
                             Edit
                         </Link>
                     </Button>
+
+                                        
+                    <Button @click="onStatusUpdate('active')" v-if="!isCurrentUser && isEmailVerified && props.admin.status === 'inactive'" variant="outline" as-child class="bg-green-700/10 border-green-700">
+                        <span class="cursor-pointer">
+                            <CirclePlus class="h-4 w-4" />
+                            Activate
+                        </span>
+                    </Button>
+                   
+                     <Button @click="onStatusUpdate('inactive')" v-else variant="ghost" as-child class="gap-2 bg-red-700/10 border-red-700">
+                        <span class="cursor-pointer">
+                            <CircleMinus class="h-4 w-4" />
+                            Deactivate
+                        </span>
+                    </Button>
+
                     <Button @click="onDelete" v-if="!isCurrentUser && !isEmailVerified" variant="destructive" as-child>
                         <span class="cursor-pointer">
                             <Trash2 class="h-4 w-4" />
                             Delete
                         </span>
                     </Button>
-                    <Button v-else variant="ghost" as-child class="gap-2 bg-red-700/10 border-red-700">
-                        <span class="cursor-pointer">
-                            <CircleMinus class="h-4 w-4" />
-                            Deactivate
-                        </span>
-                    </Button>
+                   
                 </div>
 
                 <div v-else>

@@ -118,6 +118,7 @@ Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(functi
             Route::delete('/destroy/{id}', [DeleteAdminAccountController::class, 'destroy'])->name('admin.users.admins.destroy');
 
             Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
+            Route::patch('/details/{id}/update', [AdminAccountDetailController::class, 'update'])->name('admin.users.admins.details.update');
         });
 
         Route::prefix('clients')->group(function () {
