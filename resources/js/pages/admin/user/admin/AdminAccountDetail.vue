@@ -173,14 +173,14 @@ const envUrl = import.meta.env.VITE_APP_URL;
                     </Button>
 
                                         
-                    <Button @click="onStatusUpdate('active')" v-if="!isCurrentUser && isEmailVerified && props.admin.status === 'inactive'" variant="outline" as-child class="bg-green-700/10 border-green-700">
+                    <Button @click="onStatusUpdate('active')" v-if="!isCurrentUser && (isEmailVerified && props.admin.status === 'inactive')" variant="outline" as-child class="bg-green-700/10 border-green-700">
                         <span class="cursor-pointer">
                             <CirclePlus class="h-4 w-4" />
                             Activate
                         </span>
                     </Button>
                    
-                     <Button @click="onStatusUpdate('inactive')" v-else variant="ghost" as-child class="gap-2 bg-red-700/10 border-red-700">
+                     <Button @click="onStatusUpdate('inactive')" v-if="!isCurrentUser && (isEmailVerified && props.admin.status === 'active')" variant="ghost" as-child class="gap-2 bg-red-700/10 border-red-700">
                         <span class="cursor-pointer">
                             <CircleMinus class="h-4 w-4" />
                             Deactivate
