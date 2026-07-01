@@ -13,7 +13,7 @@ class LoginController extends Controller
     public function create(Request $request)
     {
         return Inertia::render('admin/auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
+            'canResetPassword' => Route::has('admin.forgot.password.send'),
             'status' => $request->session()->get('status'),
         ]);
     }
