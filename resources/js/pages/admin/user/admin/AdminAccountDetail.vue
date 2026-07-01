@@ -166,7 +166,7 @@ const envUrl = import.meta.env.VITE_APP_URL;
 
                 <div v-if="!isCurrentUser" class="flex items-center gap-2">
                     <Button variant="outline" as-child class="gap-2">
-                        <Link href="#">
+                        <Link :href="route('admin.users.admins.edit', { id: props.admin.id })">
                             <Pencil class="h-4 w-4" />
                             Edit
                         </Link>

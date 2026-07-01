@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\ClientManagementController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
+use App\Http\Controllers\Admin\User\EditAdminAccountController;
 use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -119,6 +120,9 @@ Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(functi
 
             Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
             Route::patch('/details/{id}/update', [AdminAccountDetailController::class, 'update'])->name('admin.users.admins.details.update');
+            
+            Route::get('/details/{id}/edit', [EditAdminAccountController::class, 'index'])->name('admin.users.admins.edit');
+            Route::put('/details/{id}/update', [EditAdminAccountController::class, 'update'])->name('admin.users.admins.update');
         });
 
         Route::prefix('clients')->group(function () {

@@ -4,6 +4,7 @@ namespace App\Repository\Admin;
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdminRepository
 {
@@ -43,6 +44,15 @@ class AdminRepository
         return $file->store($folderPath, 'public');
     }
 
+    public function updateAdminAvatar(int $id, object $file): string
+    {
+        $folderPath = "upload/user/admin/{$id}";
+
+        Storage::disk('public')->delete(Storage::disk('public')->files($folderPath));
+
+        return $file->store($folderPath, 'public');
+    }
+
 
 
     public function updateAdminAccountStatus(int $id, string $status)
@@ -53,6 +63,24 @@ class AdminRepository
             $admin->save();
 
             return $admin;
+        });
+    }
+
+
+    public function updateAdminAccount(int $id, array $data): User
+    {
+        return DB::transaction(function () use ($id, $data) {
+            $admin = User::findOrFail($id);
+
+            if (! empty($data['avatar'])) {
+                $data['avatar'] = $this->updateAdminAvatar($id, $data['avatar']);
+            }else {
+                unset($data['avatar']);
+            }
+
+            $admin->update($data);
+
+            return $admin->fresh();
         });
     }
 
