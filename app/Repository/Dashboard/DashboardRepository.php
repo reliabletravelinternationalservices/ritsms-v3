@@ -7,7 +7,6 @@ use App\Models\Destination;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\PackageGroup;
-use Carbon\Carbon;
 
 class DashboardRepository
 {
@@ -29,22 +28,32 @@ class DashboardRepository
     /**
      * Calculate trend data (current count, trend percentage, trend type)
      */
-    private function calculateTrend($currentCount, $previousCount): array
+    private function calculateTrend(int $totalCount, int $currentCount, int $previousCount): array
     {
         $trendValue = 0;
         $trendType = 'neutral';
+
+        // If no current count, treat as neutral (new month with no data yet)
+        if ($currentCount == 0) {
+            return [
+                'count' => $totalCount,
+                'trend_value' => $trendValue,
+                'trend_type' => $trendType,
+            ];
+        }
 
         if ($previousCount > 0) {
             $trendValue = (($currentCount - $previousCount) / $previousCount) * 100;
             $trendType = $trendValue > 0 ? 'up' : ($trendValue < 0 ? 'down' : 'neutral');
             $trendValue = abs(round($trendValue, 1));
-        } elseif ($currentCount > 0) {
+        } else {
+            // If previous count is 0 but current count > 0, it's a new item
             $trendValue = 100;
             $trendType = 'up';
         }
 
         return [
-            'count' => $currentCount,
+            'count' => $totalCount,
             'trend_value' => $trendValue,
             'trend_type' => $trendType,
         ];
@@ -57,6 +66,7 @@ class DashboardRepository
     {
         $currentMonth = now()->startOfMonth();
         $previousMonth = now()->subMonth()->startOfMonth();
+        $totalPackages = Package::count();
 
         $currentCount = Package::whereBetween('created_at', [
             $currentMonth,
@@ -68,7 +78,7 @@ class DashboardRepository
             $previousMonth->copy()->endOfMonth(),
         ])->count();
 
-        return $this->calculateTrend($currentCount, $previousCount);
+        return $this->calculateTrend($totalPackages, $currentCount, $previousCount);
     }
 
     /**
@@ -89,7 +99,9 @@ class DashboardRepository
             $previousMonth->copy()->endOfMonth(),
         ])->count();
 
-        return $this->calculateTrend($currentCount, $previousCount);
+        $totalDestinations = Destination::count();
+
+        return $this->calculateTrend($totalDestinations, $currentCount, $previousCount);
     }
 
     /**
@@ -110,7 +122,9 @@ class DashboardRepository
             $previousMonth->copy()->endOfMonth(),
         ])->count();
 
-        return $this->calculateTrend($currentCount, $previousCount);
+        $totalInquiries = Inquiry::count();
+
+        return $this->calculateTrend($totalInquiries, $currentCount, $previousCount);
     }
 
     /**
@@ -131,7 +145,9 @@ class DashboardRepository
             $previousMonth->copy()->endOfMonth(),
         ])->count();
 
-        return $this->calculateTrend($currentCount, $previousCount);
+        $totalCollections = PackageGroup::count();
+
+        return $this->calculateTrend($totalCollections, $currentCount, $previousCount);
     }
 
     /**
@@ -152,7 +168,9 @@ class DashboardRepository
             $previousMonth->copy()->endOfMonth(),
         ])->count();
 
-        return $this->calculateTrend($currentCount, $previousCount);
+        $totalBookings = Booking::count();
+
+        return $this->calculateTrend($totalBookings, $currentCount, $previousCount);
     }
 
     /**

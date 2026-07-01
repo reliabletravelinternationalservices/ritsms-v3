@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { User, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import PasswordInput from '@/components/PasswordInput.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
 import InputError from '@/components/InputError.vue';
-import { Camera, X } from 'lucide-vue-next';
+import { Camera, X, AlertTriangle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
+import { truncateText } from '@/lib/utils';
+
+
+const props = defineProps<{ admin: User }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,22 +27,32 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.users.admins'),
     },
     {
-        title: 'Create',
-        href: route('admin.users.admins.create'),
+        title: truncateText(props.admin.name, 20),
+        href: route('admin.users.admins.details', { id: props.admin.id }),
+    },
+    {
+        title: 'Edit',
+        href: route('admin.users.admins.edit', { id: props.admin.id }),
     }
 ];
 
+// Initialize form with existing admin data (omitting password entirely)
 const form = useForm({
-    name: '',
-    display_name: '',
-    email: '',
-    phone: '',
-    password: '',
-    role: 'admin', 
+    _method: 'PUT',
+    name: props.admin.name ?? '',
+    display_name: props.admin.display_name ?? '',
+    email: props.admin.email ?? '',
+    phone: props.admin.phone ?? '',
+    role: props.admin.role, 
     avatar: null as File | null,
 });
 
-const imagePreview = ref<string | null>(null);
+// Set default preview if an existing avatar url is present
+const envUrl = import.meta.env.VITE_APP_URL || '';
+const imagePreview = ref<string | null>(props.admin.avatar !== null ? `${envUrl}/storage/${props.admin.avatar}` : null);
+
+// Check if email has been verified to conditionally lock it
+const isEmailLocked = ref(!!props.admin.email_verified_at);
 
 const handleAvatarChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -50,40 +63,40 @@ const handleAvatarChange = (event: Event) => {
     }
 };
 
-// Method to explicitly clear out the profile picture state
 const clearAvatar = () => {
     form.avatar = null;
     if (imagePreview.value) {
-        URL.revokeObjectURL(imagePreview.value); // Clean up memory
-        imagePreview.value = null;
+        if (imagePreview.value.startsWith('blob:')) {
+            URL.revokeObjectURL(imagePreview.value);
+        }
+        imagePreview.value = props.admin.avatar !== null ? `${envUrl}/storage/${props.admin.avatar}` : null;
     }
 };
 
 const submit = () => {
-    form.post(route('admin.users.admins.store'), {
+    form.post(route('admin.users.admins.update', { id: props.admin.id }), {
         preserveScroll: true,
         onSuccess: () => {
-            form.reset();
-            clearAvatar();
-            toast.success('Admin account created successfully.');
+            toast.success('Admin account updated successfully.');
         },
     });
 };
 </script>
 
 <template>
-    <Head title="Create Admin" />
+    <Head title="Edit Admin" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-4 p-4 mx-auto w-full">
             <Card>
                 <CardHeader>
-                    <CardTitle>Create New Admin Account</CardTitle>
-                    <CardDescription>Fill out the details below to provision a new administrator account.</CardDescription>
+                    <CardTitle>Edit Admin Account</CardTitle>
+                    <CardDescription>Modify account settings and permissions for this administrator.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit.prevent="submit" class="space-y-4">
                         
+                        <!-- Avatar Section -->
                         <div class="flex flex-col items-center justify-center pb-6 border-b border-border/40 gap-2">
                             <Label class="text-sm font-medium text-muted-foreground">Account Avatar</Label>
                             
@@ -110,7 +123,7 @@ const submit = () => {
                                 </div>
 
                                 <Button 
-                                    v-if="imagePreview"
+                                    v-if="form.avatar || (imagePreview && imagePreview !== props.admin.avatar)"
                                     type="button" 
                                     variant="outline" 
                                     size="sm" 
@@ -118,7 +131,7 @@ const submit = () => {
                                     @click="clearAvatar"
                                 >
                                     <X class="w-3.5 h-3.5" />
-                                    Clear
+                                    Reset Avatar
                                 </Button>
                             </div>
                             
@@ -127,6 +140,7 @@ const submit = () => {
                             </div>
                         </div>
 
+                        <!-- Name Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <Label for="name">Full Name</Label>
@@ -157,6 +171,7 @@ const submit = () => {
                             </div>
                         </div>
 
+                        <!-- Access & Phone Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">         
                                 <Label for="role">
@@ -191,41 +206,44 @@ const submit = () => {
                             </div>
                         </div>
 
+                        <!-- Email Input Block -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <Label for="email">Email Address</Label>
+                                <div class="flex items-center gap-1.5">
+                                    <InfoTooltip v-if="isEmailLocked" content="Verified email addresses cannot be changed." />
+                                    <Label for="email">Email Address</Label>
+                                </div>
                                 <Input 
                                     id="email" 
                                     v-model="form.email" 
                                     type="email" 
                                     placeholder="eg. username@example.com" 
-                                    :class="{ 'border-destructive': form.errors.email }"
+                                    :disabled="isEmailLocked"
+                                    :class="{ 'border-destructive': form.errors.email, 'bg-muted opacity-80 cursor-not-allowed': isEmailLocked }"
                                 />
+                                
+                                <!-- Professional Orange Warning Callout -->
+                                <div v-if="isEmailLocked" class="flex items-start gap-2 mt-2 p-2.5 rounded-lg border border-amber-200/60 bg-amber-50/50 text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-400">
+                                    <AlertTriangle class="w-4 h-4 mt-0.5 shrink-0 text-amber-600 dark:text-amber-500" />
+                                    <p class="text-xs leading-relaxed font-medium">
+                                        This email address is verified and cannot be modified to preserve account security.
+                                    </p>
+                                </div>
+
                                 <div class="min-h-[1.5rem]">
                                     <InputError :message="form.errors.email" />
                                 </div>
                             </div>
-                            <div class="space-y-2">
-                                <Label for="password">Password</Label>
-                                <PasswordInput
-                                    id="password"
-                                    v-model="form.password"
-                                    placeholder="Password"
-                                    :class="{ 'border-destructive': form.errors.password }"
-                                />
-                                <div class="min-h-[1.5rem]">
-                                    <InputError :message="form.errors.password" />
-                                </div>
-                            </div>
                         </div>
                         
+                        <!-- Form Actions -->
                         <div class="flex justify-end gap-3 pt-4">
                             <Button type="button" variant="outline" @click="form.reset(); clearAvatar();">
-                                Reset
+                                Undo Changes
                             </Button>
                             <Button type="submit" :disabled="form.processing">
-                                <span v-if="form.processing">Creating...</span>
-                                <span v-else>Create Admin Account</span>
+                                <span v-if="form.processing">Saving...</span>
+                                <span v-else>Save Changes</span>
                             </Button>
                         </div>
                     </form>
