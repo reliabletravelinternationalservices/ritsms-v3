@@ -36,6 +36,10 @@ export interface SharedData {
         defaults: Record<string, unknown>;
         routes: Record<string, string>;
     };
+    flash: {
+        message: string;
+        type: 'success' | 'error' | 'warning' | 'info';
+    };
     [key: string]: any;
 }
 
