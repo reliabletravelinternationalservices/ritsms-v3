@@ -12,4 +12,6 @@ class AccountAccessController extends Controller
     {
         return Inertia::render('admin/auth/InactiveAccountPage');
     }
+
+    
 }

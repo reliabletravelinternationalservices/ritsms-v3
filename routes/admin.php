@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
@@ -143,9 +144,21 @@ Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(functi
 });
 
 Route::prefix('admin')->group(function () {
-    Route::get('/verify/{id}/{hash}', [VerifyAdminEmailController::class, 'verify'])
+    Route::get('/verify/{hash}', [VerifyAdminEmailController::class, 'verify'])
         ->name('admin.verification.verify');
 
     Route::get ('/accessDenied', [AccountAccessController::class, 'index'])
         ->name('admin.access.denied');
+
+    Route::get('/forgot-password', [AccountForgotPassword::class, 'forgotAdminPassword'])
+        ->name('admin.forgot.password');
+
+    Route::post('/forgot-password', [AccountForgotPassword::class, 'sendAdminPasswordResetLink'])
+        ->name('admin.forgot.password.send');
+    
+    Route::get('/reset-password/{token}', [AccountForgotPassword::class, 'createAdminPasswordResetForm'])
+        ->name('admin.forgot.password.reset');
+
+    Route::post('/reset-password', [AccountForgotPassword::class, 'resetAdminPassword'])
+        ->name('admin.password.store');
 });
