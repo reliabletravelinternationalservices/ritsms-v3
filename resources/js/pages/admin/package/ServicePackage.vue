@@ -44,11 +44,11 @@ const props = withDefaults(defineProps<CombinedPageProps>(), {
     })
 });
 
-const packageTrendType = computed(() => {
-    if (props.metrics.packages_trend > 0) return 'up'
-    if (props.metrics.packages_trend < 0) return 'down'
-    return 'neutral'
-})
+// const packageTrendType = computed(() => {
+//     if (props.metrics.packages_trend > 0) return 'up'
+//     if (props.metrics.packages_trend < 0) return 'down'
+//     return 'neutral'
+// })
 
 </script>
 
@@ -63,17 +63,15 @@ const packageTrendType = computed(() => {
                         title="Total products"
                         :value="props.metrics.total_packages"
                         icon="iconoir:package"
-                        :trend-value="`${metrics.packages_trend}%`"
-                        :trend-type="packageTrendType"
                         :delay="0.05"
                     />
                 </div>
-                <div class="relative h-auto">
+                <!-- <div class="relative h-auto">
                     <PlaceholderPattern />
                 </div>
                 <div class="relative h-auto">
                     <PlaceholderPattern />
-                </div>
+                </div> -->
             </div>
             <div class="relative min-h-[100vh] flex-1 rounded-smr md:min-h-min p-6 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                 <PackageTable :packages="packages" :countries="props.countries" />

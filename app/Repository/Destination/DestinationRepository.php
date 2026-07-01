@@ -157,4 +157,20 @@ class DestinationRepository
             return false;
         });
     }
+
+
+
+    public function getDestinationStatistics()
+    {
+        $totalDestinations = Destination::count();
+        $totalLocations = DB::table('destination_locations')->count();
+        $totalListedCountries = DB::table('destinations')->distinct('country')->count();
+
+        return [
+            'total_destinations' => $totalDestinations,
+            'total_locations' => $totalLocations,
+            'total_listed_countries' => $totalListedCountries,
+        ];
+    }
 }
+

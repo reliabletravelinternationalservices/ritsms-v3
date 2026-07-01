@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldAlert, LogOut, MailQuestion } from 'lucide-vue-next';
+import { ShieldAlert, LogOut } from 'lucide-vue-next';
 import { SharedData, type User } from '@/types';
 
 const page = usePage<SharedData>();

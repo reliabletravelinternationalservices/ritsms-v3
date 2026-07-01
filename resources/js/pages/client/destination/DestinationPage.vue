@@ -4,7 +4,6 @@ import DestinationCarousel from './section/DestinationCarousel.vue';
 import TitleHeader from './section/TitleHeader.vue';
 import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
 import FeaturedOutboundPackage from './section/FeaturedOutboundPackage.vue';
-import InquiryForm from '../home/section/InquiryForm.vue';
 import { Destination } from '@/types/destination';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 import HeadContent from '@/components/HeadContent.vue';
