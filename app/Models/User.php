@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmployeeEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -100,5 +101,15 @@ class User extends Authenticatable implements MustVerifyEmail
         $expiresAt = $expiresAt instanceof Carbon ? $expiresAt : Carbon::parse($expiresAt);
 
         return max((int) now()->diffInSeconds($expiresAt, false), 0);
+    }
+
+
+    public function sendAccountPasswordResetNotification()
+    {
+        $token = app('auth.password.broker')->createToken($this);
+
+        Mail::to($this->email)->queue(
+            new ResetPasswordMail($this, $token)
+        );
     }
 }
