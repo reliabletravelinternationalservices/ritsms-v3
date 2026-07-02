@@ -14,8 +14,8 @@ class DeleteAdminAccountController extends Controller
         $user = User::find($id);
         if ($user && $user->avatar) {
             Storage::disk('public')->delete($user->avatar);
-            $user->delete();
         }
+        $user->delete();
         return redirect()->route('admin.users.admins')->with('success', 'Admin deleted successfully.');
     }
 }
