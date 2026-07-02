@@ -33,7 +33,7 @@ class InquiryResultController extends Controller
 
         try {
             Mail::to('inquiry@reliabletravelph.com')
-                ->queue(new InquiryMail($validatedData));
+                ->send(new InquiryMail($validatedData));
         } catch (\Exception $e) {
             Log::error('Failed to send inquiry email.', [
                 'message' => $e->getMessage(),
