@@ -75,7 +75,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
      try {
-            Mail::to($this->email)->queue(
+            Mail::to($this->email)->send(
                 new VerifyEmployeeEmail($this->name, $verificationUrl)
             );
 
