@@ -53,9 +53,9 @@ class VerifyAdminEmailController extends Controller
         return back()->with('success', 'Verification email sent successfully.');
     }
 
-    public function verify(Request $request, int $id, string $hash)
+    public function verify(Request $request, string $hash)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($request->id);
 
         // Invalid or expired signed URL
         if (! $request->hasValidSignature()) {

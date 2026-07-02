@@ -140,7 +140,7 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
         }
     },
     grid: {
-        borderColor: '#18181b',
+        borderColor: '#e4e4e7', // Fallback light border color. (Note: ApexGrid borders aren't fully dynamic to system prefers-color-scheme via standard static configurations without a computed state dependency, but a neutral mid-tone ensures visibility across modes.)
         strokeDashArray: 4,
         xaxis: { lines: { show: false } },
         yaxis: { lines: { show: hasData.value } },
@@ -165,7 +165,7 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
             style: {
                 colors: ['#52525b'],
                 fontSize: '11px',
-            }
+                }
         }
     },
     tooltip: {
@@ -175,11 +175,11 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
             const currentMonth: string = w.globals.categoryLabels[dataPointIndex];
             const currentValue: number = series[seriesIndex][dataPointIndex];
             return `
-                <div class="bg-zinc-900 border border-zinc-800 text-zinc-50 p-3 rounded-xl shadow-xl min-w-[120px] font-sans">
-                    <div class="text-xs font-bold text-zinc-400 mb-1.5">${currentMonth}</div>
+                <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-50 p-3 rounded-xl shadow-xl min-w-[120px] font-sans">
+                    <div class="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">${currentMonth}</div>
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block"></span>
-                        <span class="text-xs text-zinc-300">Inquiries</span>
+                        <span class="text-xs text-zinc-600 dark:text-zinc-300">Inquiries</span>
                         <span class="text-xs font-mono font-bold ml-auto">${currentValue}</span>
                     </div>
                 </div>
@@ -192,14 +192,14 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
 <template>
     <MotionWrapper :delay="0.2">
         <Card
-            class="w-full bg-zinc-950 border border-zinc-900 text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-4 sm:p-6">
+            class="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-2xl rounded-xl overflow-hidden p-4 sm:p-6">
             <CardHeader
-                class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 pb-6 border-b border-zinc-900/50 mb-6 p-0">
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0 pb-6 border-b border-zinc-100 dark:border-zinc-900/50 mb-6 p-0">
                 <div class="space-y-1">
-                    <CardTitle class="text-xl font-bold tracking-tight text-zinc-100">
+                    <CardTitle class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                         {{ props.title }}
                     </CardTitle>
-                    <CardDescription class="text-xs text-zinc-400">
+                    <CardDescription class="text-xs text-zinc-500 dark:text-zinc-400">
                         {{ props.description }}
                     </CardDescription>
                 </div>
@@ -207,10 +207,10 @@ const chartOptions = computed<ApexOptions>((): ApexOptions => ({
                 <div class="w-full sm:w-auto flex items-center justify-start sm:justify-end">
                     <Select v-model="currentYear">
                         <SelectTrigger
-                            class="w-full sm:w-[120px] h-9 bg-zinc-900 border-zinc-800 text-zinc-200 focus:ring-sky-600">
+                            class="w-full sm:w-[120px] h-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-sky-600">
                             <SelectValue placeholder="Year" />
                         </SelectTrigger>
-                        <SelectContent class="bg-zinc-900 border-zinc-800 text-zinc-200">
+                        <SelectContent class="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
                             <SelectItem v-for="year in availableYears" :key="year" :value="year">
                                 {{ year }}
                             </SelectItem>
