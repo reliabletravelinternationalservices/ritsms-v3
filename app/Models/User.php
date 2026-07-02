@@ -75,7 +75,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
      try {
-            Mail::to($this->email)->queue(
+            Mail::to($this->email)->send(
                 new VerifyEmployeeEmail($this->name, $verificationUrl)
             );
 
@@ -109,7 +109,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $token = app('auth.password.broker')->createToken($this);
         $resetUrl = url(route('admin.forgot.password.reset', ['token' => $token, 'email' => $this->email], false));
 
-        Mail::to($this->email)->queue(
+        Mail::to($this->email)->send(
             new ResetPasswordMail($this, $resetUrl)
         );
     }
