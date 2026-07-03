@@ -17,11 +17,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
     label: 'Outbound', href: route('client.outbound'), dropdown: [
       {
         label: 'Inbound', action: () => {
-          router.get(route('client.inbound'), {}, {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true
-          })
+          window.location.href = route('client.inbound');
         }
       },
     ]

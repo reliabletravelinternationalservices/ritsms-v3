@@ -6,7 +6,6 @@ import AppLogoIcon from './AppClientLogoIcon.vue';
 import Button from './ui/button/Button.vue';
 import { cn } from '@/lib/utils';
 import { route } from 'ziggy-js'
-import { Link } from '@inertiajs/vue3';
 
 
 const isMobileMenuOpen = ref(false);
