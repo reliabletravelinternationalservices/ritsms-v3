@@ -58,7 +58,7 @@ const images = Array.from({ length: 15 }, (_, i) => {
                 </p>
 
                 <div class="pt-2">
-                    <Link :href="route('client.about')" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
+                    <a :href="route('client.about')" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
                         <Button
                             type="button" 
                             class="bg-[var(--tertiary-custom)] font-medium hover:bg-[var(--tertiary-hover-custom)] rounded-none font-roboto flex items-center justify-center px-12 py-3 w-full md:w-auto"
@@ -66,7 +66,7 @@ const images = Array.from({ length: 15 }, (_, i) => {
                             <span class="text-sm md:text-base">Read More</span>
                             <Icon icon="ep:arrow-right-bold" width="18" height="18" class="ml-2" />
                         </Button>
-                    </Link>
+                    </a>
                 </div>
             </div>
         </div>

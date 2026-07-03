@@ -17,15 +17,15 @@ const isMobilePackagesOpen = ref(false);
     <header
         class="w-full p-4 md:p-2 bg-[var(--primary-custom)] text-[var(--secondary-custom)] sticky top-0 z-20 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <Link :href="route('client.landing')">
+            <a :href="route('client.landing')">
                 <AppLogoIcon class="bg-black text-black size-10 fill-current" />
-            </Link>
+            </a>
 
             <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
-                <Link :href="route('client.landing')"
+                <a :href="route('client.landing')"
                     :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })">
                     <span>Home</span>
-                </Link>
+                </a>
                 <Menu as="div" class="relative">
                     <MenuButton
                         class="menu-button flex items-center gap-2 font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75">
@@ -37,39 +37,39 @@ const isMobilePackagesOpen = ref(false);
                     <MenuItems
                         class="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg ring-1 ring-black/5 focus:outline-none">
                         <MenuItem v-slot="{ active }">
-                            <Link :href="route('client.inbound')" class="block px-4 py-2 text-sm"
-                                :class="active ? 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]' : ''">
-                                Inbound Packages</Link>
+                            <a :href="route('client.inbound')" 
+                            :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': route().current('client.inbound') || active })">
+                                Inbound Packages</a>
                         </MenuItem>
                         <MenuItem v-slot="{ active }">
-                            <Link :href="route('client.outbound')" class="block px-4 py-2 text-sm"
-                                :class="active ? 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]' : ''">
-                                Outbound Packages</Link>
+                            <a :href="route('client.outbound')" class="block px-4 py-2 text-sm"
+                                :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': route().current('client.outbound') || active })">
+                                Outbound Packages</a>
                         </MenuItem>
                     </MenuItems>
                 </Menu>
-                <Link :href="route('client.destination')"
+                <a :href="route('client.destination')"
                     :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })">
                     <span>Destinations</span>
-                </Link>
-                <Link :href="route('client.contact')"
+                </a>
+                <a :href="route('client.contact')"
                     :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })">
                     <span>Contact us</span>
-                </Link>
-                <Link :href="route('client.about')"
+                </a>
+                <a :href="route('client.about')"
                     :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })">
                     <span>About us</span>
-                </Link>
+                </a>
             </nav>
 
             <div class="hidden md:flex items-center">
-                <Link href="#">
+                <a href="#">
                     <button
                         class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
                         <span class="font-roboto text-xs md:text-sm">Account</span>
                         <Icon icon="lucide:key-round" width="20" height="20" />
                     </button>
-                </Link>
+                </a>
             </div>
 
             <button @click="isMobileMenuOpen = !isMobileMenuOpen; if (!isMobileMenuOpen) isMobilePackagesOpen = false"
@@ -82,9 +82,12 @@ const isMobilePackagesOpen = ref(false);
         <Transition name="fade-slide">
             <div v-if="isMobileMenuOpen"
                 class="md:hidden bg-[var(--primary-custom)] border-t border-[var(--shadow-custom)] p-4 space-y-4 flex flex-col">
-                <Link :href="route('client.landing')" class="text-[var(--tertiary-custom)] font-bold">Home</Link>
-                <Link :href="route('client.destination')"
-                    class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Destinations</Link>
+                <a :href="route('client.landing')" 
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"
+                    >Home</a>
+                <a :href="route('client.destination')"
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"
+                    >Destinations</a>
                 <div class="pt-2">
                     <button type="button" @click="isMobilePackagesOpen = !isMobilePackagesOpen"
                         class="flex w-full items-center justify-between text-left font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] transition-colors duration-150">
@@ -96,28 +99,32 @@ const isMobilePackagesOpen = ref(false);
 
                     <Transition name="fade-slide">
                         <div v-if="isMobilePackagesOpen" class="mt-2 space-y-2 pl-4">
-                            <Link :href="route('client.inbound')"
-                                class="block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">
+                            <a :href="route('client.inbound')"
+                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.inbound') })">
                                 Inbound Packages
-                            </Link>
-                            <Link :href="route('client.outbound')"
-                                class="block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">
+                            </a>
+                            <a :href="route('client.outbound')"
+                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.outbound') })">
                                 Outbound Packages
-                            </Link>
+                            </a>
                         </div>
                     </Transition>
                 </div>
-                <Link :href="route('client.contact')"
-                    class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">Contact us</Link>
-                <Link :href="route('client.about')"
-                    class="text-[var(--muted-custom)] hover:text-[var(--secondary-custom)]">About us</Link>
+                <a :href="route('client.contact')"
+                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })">
+                    Contact us
+                </a>
+                <a :href="route('client.about')"
+                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })">
+                    About us
+                </a>
                 <hr class="border-[var(--shadow-custom)]" />
-                <Link href="#">
+                <a href="#">
                     <Button class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]">
                         <span>Login</span>
                         <Icon icon="material-symbols:login" width="20" height="20" />
                     </Button>
-                </Link>
+                </a>
             </div>
         </Transition>
     </header>
