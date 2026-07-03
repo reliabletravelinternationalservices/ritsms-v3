@@ -2,7 +2,6 @@
 import DestinationDropdownBreadcrumb from '@/components/DestinationDropdownBreadcrumb.vue';
 import { scrollToSection } from '@/lib/utils';
 import { Icon } from '@iconify/vue';
-import { router } from '@inertiajs/vue3';
 
 const apiUrl = import.meta.env.VITE_APP_URL as string
 interface BreadcrumbItemType {
