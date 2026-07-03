@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Icon } from '@iconify/vue'
 import { cn } from '@/lib/utils'
-import { Link } from '@inertiajs/vue3'
 
 interface DropdownItem {
   label: string
@@ -93,9 +92,9 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                     closeDropdown();
                   "
                 >
-                  <Link v-if="d.href" :href="d.href" class="block w-full">
+                  <a v-if="d.href" :href="d.href" class="block w-full">
                     {{ d.label }}
-                  </Link>
+                  </a>
                   <span v-else>{{ d.label }}</span>
                 </div>
               </div>
@@ -110,9 +109,9 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
           <!-- NORMAL LINK -->
           <template v-else>
-            <Link :href="item.href?? '#'" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
+            <a :href="item.href?? '#'" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
               {{ item.label }}
-            </Link>
+            </a>
           </template>
 
         </BreadcrumbItem>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Package } from '@/types/package';
@@ -8,7 +7,6 @@ import { Head } from '@inertiajs/vue3';
 
 import PackageTable from '@/components/table/package/PackageTable.vue';
 import StatsCard from '@/components/statistic/StatsCard.vue';
-import { computed } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

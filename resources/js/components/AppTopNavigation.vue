@@ -33,7 +33,7 @@ withDefaults(defineProps<Props>(), {
             </div>
             <div class="flex space-x-2 items-center justify-center">
                 <span class="text-[var(--primary-custom)] text-sm">ASK A QUESTION?</span>
-                <a :href="inquiryLink" target="_blank">
+                <a :href="inquiryLink" >
                     <span class="underline text-[var(--tertiary-custom)] text-sm font-bold hover:text-[var(--tertiary-hover-custom)] duration-75">INQUIRE NOW</span>
                 </a>
             </div>

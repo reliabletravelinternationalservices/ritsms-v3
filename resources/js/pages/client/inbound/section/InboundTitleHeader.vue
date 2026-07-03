@@ -2,7 +2,6 @@
 import DestinationDropdownBreadcrumb from '@/components/DestinationDropdownBreadcrumb.vue';
 import { scrollToSection } from '@/lib/utils';
 import { Icon } from '@iconify/vue';
-import { router } from '@inertiajs/vue3';
 
 const appUrl = import.meta.env.VITE_APP_URL
 
@@ -18,11 +17,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
     label: 'Inbound', href: route('client.inbound'), dropdown: [
       {
         label: 'Outbound', action: () => {
-          router.get(route('client.outbound'), {}, {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true
-          })
+          window.location.href = route('client.outbound');
         }
       },
     ]
