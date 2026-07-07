@@ -68,11 +68,14 @@ const images: HeroImage[] = [
     </div>
 
     <Carousel ref="carouselRef" v-bind="carouselConfig">
-        <Slide v-for="image in images" :key="image.id">
+        <Slide v-for="(image, index) in images" :key="image.id">
             <div class="carousel__item w-full h-[450px] md:h-[600px] overflow-hidden">
-                <img 
-                    :src="image.src" 
-                    alt="Travel Destination"
+                <img
+                    :src="image.src"
+                    :alt="index === 0 ? 'Reliable International Travel Services hero destination showcase' : 'Travel destination showcase'"
+                    :loading="index === 0 ? 'eager' : 'lazy'"
+                    :fetchpriority="index === 0 ? 'high' : 'auto'"
+                    decoding="async"
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/main:scale-110"
                 />
             </div>
