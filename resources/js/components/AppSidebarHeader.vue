@@ -2,7 +2,7 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItemType } from '@/types';
-import NotificationDropdown, { type NotificationItem } from '@/components/NotificationDropdown.vue';
+import NotificationDropdown, { type NotificationModel } from '@/components/NotificationDropdown.vue';
 
 defineProps<{
     breadcrumbs?: BreadcrumbItemType[];
@@ -10,7 +10,7 @@ defineProps<{
 
 
 
-const sampleNotifications : NotificationItem[] = [
+const sampleNotifications : NotificationModel[] = [
   {
     id: 1,
     title: 'New Inquiry Received',

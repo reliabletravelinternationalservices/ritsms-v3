@@ -16,4 +16,6 @@ class Inquiry extends Model
         'message',
         'status'
     ];
+
+    
 }
