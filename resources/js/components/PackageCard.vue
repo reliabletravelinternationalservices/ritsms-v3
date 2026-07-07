@@ -14,13 +14,15 @@ defineProps<{
 <template>
   <Link
     :href="isInbound ? route('client.inbound.package.detail', { slug: package.slug }) : route('client.outbound.package.detail', { slug: package.slug })"
-    class="carousel__item">
+    class="carousel__item group">
+    
     <div
-      class=" h-auto md:h-[400px] max-w-[320px] flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white">
+      class="h-auto md:h-[400px] max-w-[320px] flex flex-col md:grid md:grid-rows-2 border border-[var(--shadow-custom)] overflow-hidden bg-white transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:border-gray-300">
 
-      <div class="relative h-[180px] md:h-full">
+      <div class="relative h-[180px] md:h-full overflow-hidden">
         <img v-if="package.primary_image && package.primary_image.url" :src="package.primary_image.url"
-          :alt="package.name" class="w-full h-full object-cover" />
+          :alt="package.name" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
+        
         <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
           <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
         </div>
