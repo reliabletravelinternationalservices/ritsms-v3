@@ -112,16 +112,16 @@ withDefaults(defineProps<Props>(), {
 
         <div class="max-w-5xl mx-auto py-8 border-t border-[var(--shadow-custom)] flex flex-col md:flex-row items-center justify-between gap-6">
             <span class="flex space-x-4 items-center font-roboto text-xs order-2 md:order-1">
-                <a :href="instagramLink" target="_blank">
+                <a :href="instagramLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our Instagram page">
                     <Icon icon="mdi:instagram" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="facebookLink" target="_blank">
+                <a :href="facebookLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook page">
                     <Icon icon="basil:facebook-solid" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="tiktokLink" target="_blank">
+                <a :href="tiktokLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our TikTok page">
                     <Icon icon="ic:baseline-tiktok" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
-                <a :href="youtubeLink" target="_blank">
+                <a :href="youtubeLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">
                     <Icon icon="mdi:youtube" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
                 </a>
             </span>

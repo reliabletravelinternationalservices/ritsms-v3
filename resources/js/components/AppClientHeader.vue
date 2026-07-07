@@ -16,7 +16,7 @@ const isMobilePackagesOpen = ref(false);
     <header
         class="w-full p-4 md:p-2 bg-[var(--primary-custom)] text-[var(--secondary-custom)] sticky top-0 z-20 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a :href="route('client.landing')">
+            <a :href="route('client.landing')" aria-label="Reliable International Travel Services home">
                 <AppLogoIcon class="bg-black text-black size-10 fill-current" />
             </a>
 
@@ -62,7 +62,7 @@ const isMobilePackagesOpen = ref(false);
             </nav>
 
             <div class="hidden md:flex items-center">
-                <a href="#">
+                <a href="#" aria-label="Open account portal">
                     <button
                         class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
                         <span class="font-roboto text-xs md:text-sm">Account</span>
@@ -72,7 +72,8 @@ const isMobilePackagesOpen = ref(false);
             </div>
 
             <button @click="isMobileMenuOpen = !isMobileMenuOpen; if (!isMobileMenuOpen) isMobilePackagesOpen = false"
-                class="md:hidden p-2 text-[var(--muted-custom)] transition-transform duration-200 active:scale-90">
+                class="md:hidden p-2 text-[var(--muted-custom)] transition-transform duration-200 active:scale-90"
+                :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'">
                 <Icon :icon="isMobileMenuOpen ? 'material-symbols:close' : 'material-symbols:menu'" width="32"
                     height="32" class="size-8" />
             </button>

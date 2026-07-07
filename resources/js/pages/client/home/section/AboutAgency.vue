@@ -72,13 +72,13 @@ const images = Array.from({ length: 15 }, (_, i) => {
 
         <div class="w-full grid grid-cols-2 gap-1 order-first md:order-last">
             <div class="col-span-2">
-                <img :src="images[0].url!" class="object-cover h-48 md:h-full w-full" :alt="images[0].alt_text" />
+                <img :src="images[0].url!" class="object-cover h-48 md:h-full w-full" :alt="images[0].alt_text" loading="eager" fetchpriority="high" decoding="async" />
             </div>
             <div class="col-span-1">
-                <img :src="images[1].url!" class="object-cover h-32 md:h-full w-full" :alt="images[1].alt_text" />
+                <img :src="images[1].url!" class="object-cover h-32 md:h-full w-full" :alt="images[1].alt_text" loading="lazy" decoding="async" />
             </div>
             <div class="col-span-1">
-                <img :src="images[2].url!" class="object-cover h-32 md:h-full w-full" :alt="images[2].alt_text" />
+                <img :src="images[2].url!" class="object-cover h-32 md:h-full w-full" :alt="images[2].alt_text" loading="lazy" decoding="async" />
             </div>
         </div>
     </div>
