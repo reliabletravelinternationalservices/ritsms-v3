@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
 import { Icon } from '@iconify/vue';
 import { Package } from '@/types/package';
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils';
@@ -14,7 +13,7 @@ defineProps<{
 </script>
 
 <template>
-  <Link
+  <a
     :href="isInbound ? route('client.inbound.package.detail', { slug: package.slug }) : route('client.outbound.package.detail', { slug: package.slug })"
     class="carousel__item group">
     
@@ -61,5 +60,5 @@ defineProps<{
         </div>
       </div>
     </div>
-  </Link>
+  </a>
 </template>
