@@ -40,6 +40,9 @@ export interface SharedData {
         message: string;
         type: 'success' | 'error' | 'warning' | 'info';
     };
+    settings: {
+        usd_to_php_rate: number;
+    };
     [key: string]: any;
 }
 
