@@ -3,11 +3,13 @@ import { Link } from '@inertiajs/vue3';
 import { Icon } from '@iconify/vue';
 import { Package } from '@/types/package';
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils';
+import { useCurrency } from '@/composables/useCurrency';
+
+const { convertToUsd } = useCurrency();
 
 defineProps<{
   package: Package,
   isInbound: boolean
-  usdRate?: number | null
 }>();
 </script>
 
@@ -52,8 +54,7 @@ defineProps<{
               {{ package.name }}
             </h1>
             <h4 class="font-medium font-roboto text-[10px] md:text-sm text-[var(--muted-custom)] mb-4">
-              from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(usdRate ?
-                (package.base_price / usdRate) : package.base_price, isInbound ? 'USD' : 'PHP') }}/pax</span>
+              from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(isInbound ? convertToUsd(package.base_price) : package.base_price, isInbound ? 'USD' : 'PHP') }}/pax</span>
             </h4>
             <p class="font-roboto text-[11px] md:text-sm line-clamp-2 text-gray-600">{{ package.description }}</p>
           </div>
