@@ -3,19 +3,10 @@ import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
-import { Package } from '@/types/package'
 import ExploreButton from '@/components/ExploreButton.vue'
+import { type CarouselSectionProps } from '../types'
 
-interface Props {
-  packages?: Package[],
-  tag?: string | null,
-  usdRate?: number | null
-}
-const props = withDefaults(defineProps<Props>(), {
-  packages: () => [],
-  usdRate: null,
-  tag: null
-});
+defineProps<CarouselSectionProps>();
 
 </script>
 
@@ -36,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
             See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away.
           </p>
-            <ValidToForeignBanner v-if="props.tag && props.tag !==null" :tag="props.tag" />
+            <ValidToForeignBanner v-if="tag" :tag="tag" />
         </div>
       </div>
 
@@ -46,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="true"  :packages="props.packages" :usd-rate="props.usdRate" />
+        <PackageCarousel :is-inbound="true"  :packages="packages" />
     </div>
   </section>
 </template>

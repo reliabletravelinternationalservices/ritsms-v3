@@ -5,19 +5,10 @@ import PackageCarousel from '@/components/PackageCarousel.vue'
 import { Package } from '@/types/package';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import ExploreButton from '@/components/ExploreButton.vue';
-
-interface Props {
-  packages?: Package[],
-  tag?: string | null
-  usdRate?: number | null
-}
+import { type CarouselSectionProps } from '../types'
 
 
-const props = withDefaults(defineProps<Props>(), {
-  packages: () => [],
-  usdRate: null,
-  validOnlyForForeign: false
-});
+defineProps<CarouselSectionProps>();
 
 </script>
 
@@ -48,7 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="false" :packages="props.packages" :usd-rate="props.usdRate" />
+        <PackageCarousel :is-inbound="false" :packages="packages" />
     </div>
   </section>
 </template>
