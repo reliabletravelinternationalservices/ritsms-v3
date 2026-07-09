@@ -9,7 +9,6 @@ import PackageCard from './PackageCard.vue'
 interface Props {
   isInbound: boolean
   packages?: Package[]
-  usdRate: number | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -17,7 +16,6 @@ const props = withDefaults(defineProps<Props>(), {
   packages: () => []
 })
 
-const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
 
 const screenWidth = ref(0)
 
@@ -66,9 +64,9 @@ const carouselConfig = {
 </script>
 
 <template>
-  <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
+  <Carousel v-bind="carouselConfig" class="w-full">
     <Slide v-for="packageData in props.packages" :key="packageData.id">
-      <PackageCard :package="packageData" :isInbound="props.isInbound" :usdRate="props.usdRate" />
+      <PackageCard :package="packageData" :isInbound="props.isInbound"/>
     </Slide>
 
     <template #addons>
