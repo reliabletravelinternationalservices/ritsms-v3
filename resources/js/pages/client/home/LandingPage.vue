@@ -19,10 +19,11 @@ import PartnerAgency from './section/PartnerAgency.vue';
 import InquiryForm from './section/InquiryForm.vue';
 import ClientFeedback from './section/ClientFeedback.vue';
 
-//logic
-import { useLanding } from './useLanding';
-
-const  { delays, VALID_FOR_FOREIGN_ONLY_TAG } = useLanding();
+//CONSTANTS
+import {
+    LANDING_DELAYS,
+    VALID_FOR_FOREIGN_ONLY_TAG,
+} from './constants';
 
 defineProps<LandingPageProps>();
 
@@ -33,35 +34,35 @@ defineProps<LandingPageProps>();
     <AppLayout>
         <CarouselSection />
 
-        <MotionWrapper :delay="delays.destination">
+        <MotionWrapper :delay="LANDING_DELAYS.destinationSection">
             <DestinationCarousel :destinations="destinations" />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.inbound">
+        <MotionWrapper :delay="LANDING_DELAYS.inboundSection">
             <InboundPackageCarousel :packages="inbound.packages" :tag="VALID_FOR_FOREIGN_ONLY_TAG" />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.outbound">
+        <MotionWrapper :delay="LANDING_DELAYS.outboundSection">
             <OutboundPackageCarousel :packages="outbound.packages" />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.services">
+        <MotionWrapper :delay="LANDING_DELAYS.servicesSection">
             <AgencyServices />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.about">
+        <MotionWrapper :delay="LANDING_DELAYS.aboutSection">
             <AboutAgency />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.partner">
+        <MotionWrapper :delay="LANDING_DELAYS.partnerSection">
             <PartnerAgency />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.inquiry">
+        <MotionWrapper :delay="LANDING_DELAYS.inquirySection">
             <InquiryForm />
         </MotionWrapper>
 
-        <MotionWrapper :delay="delays.feedback">
+        <MotionWrapper :delay="LANDING_DELAYS.feedbackSection">
             <ClientFeedback />
         </MotionWrapper>
     </AppLayout>
