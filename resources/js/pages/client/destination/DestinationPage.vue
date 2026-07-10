@@ -1,38 +1,38 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
+
+// COMPONENTS
 import DestinationCarousel from './section/DestinationCarousel.vue';
 import TitleHeader from './section/TitleHeader.vue';
 import FeaturedInboundPackage from './section/FeaturedInboundPackage.vue';
 import FeaturedOutboundPackage from './section/FeaturedOutboundPackage.vue';
-import { Destination } from '@/types/destination';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
-import HeadContent from '@/components/HeadContent.vue';
 
-interface Props {
-    destinations: Destination[];
-}
-defineProps<Props>();
+// CONSTANTS
+import { SECTION_DELAYS } from './constants';
+
+// TYPES
+import { DestinationProps } from './types.js';
+
+
+defineProps<DestinationProps>();
 
 </script>
 
 <template>
-    <HeadContent
-        title="Explore Most Popular Destinations"
-        description="Discover the most popular destinations for your next adventure!"
-        :url="route('client.destination')"
-    />
+
     <AppLayout>
         <TitleHeader />
 
-        <MotionWrapper :delay="0.2">
+        <MotionWrapper :delay="SECTION_DELAYS.destinationSection">
             <DestinationCarousel :destinations="destinations" />
         </MotionWrapper>
 
-        <MotionWrapper :delay="0.1">
+        <MotionWrapper :delay="SECTION_DELAYS.inboundSection">
             <FeaturedInboundPackage :destinations="destinations" />
         </MotionWrapper>
 
-        <MotionWrapper :delay="0.1">
+        <MotionWrapper :delay="SECTION_DELAYS.outboundSection">
             <FeaturedOutboundPackage :destinations="destinations" />
         </MotionWrapper>
     </AppLayout>     
