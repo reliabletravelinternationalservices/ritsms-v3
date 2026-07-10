@@ -3,7 +3,7 @@
 use App\Http\Controllers\Client\About\AboutUsController;
 use App\Http\Controllers\Client\ContactPageController;
 use App\Http\Controllers\Client\Country\ServiceCountryController;
-use App\Http\Controllers\Client\DestinationPageController;
+use App\Http\Controllers\Client\Destination\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
 use App\Http\Controllers\Client\Location\LocationController;
