@@ -66,7 +66,7 @@ const carouselConfig = {
     >
       <CountryCard
         :destination="destination"
-        :href="route('client.destination.country.destination', { destination: destination.id })"
+        :href="route('client.destination.country', { destination: destination.id })"
       />
     </Slide>
 
