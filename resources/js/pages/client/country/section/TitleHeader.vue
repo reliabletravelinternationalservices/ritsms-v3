@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { Media } from '@/types/media';
+
+// COMPONENTS
 import { Icon } from '@iconify/vue';
 
-interface Props {
-  title: string;
-  description: string;
-  image?: Media;
-}
-
-defineProps<Props>();
+// TYPES
+import { TitleHeaderProps } from '../types';
+defineProps<TitleHeaderProps>();
 </script>
 
 <template>
