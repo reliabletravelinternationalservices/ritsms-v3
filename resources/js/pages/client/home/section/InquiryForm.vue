@@ -18,7 +18,7 @@ import { useForm } from '@inertiajs/vue3';
 // TYPES
 import type { ClassProps } from '../types';
 
-defineProps<ClassProps>();
+const props = defineProps<ClassProps>();
 
 const form = useForm({
     fullname: '',
@@ -41,7 +41,7 @@ const submit = () => {
   <section
     id="inquiry"
     class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center py-24 px-4 md:px-6"
-    :class="class"
+    :class="props.class"
   >
 
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Destination } from '@/types/destination';
 import { Icon } from '@iconify/vue';
-import { Link } from '@inertiajs/vue3';
 
 interface Props {
     destination: Destination;

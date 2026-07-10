@@ -8,8 +8,6 @@ import { Icon } from '@iconify/vue'
 // TYPES
 import { ImageProps } from '@/pages/client/home/types'
 
-// CONSTANTS
-import { CLIENT_FEEDBACK } from '@/pages/client/home/constants'
 
 interface Props {
   feedbacks: ImageProps[]

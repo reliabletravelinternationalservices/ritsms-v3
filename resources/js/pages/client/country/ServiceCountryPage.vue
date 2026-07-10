@@ -5,7 +5,6 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 // COMPONENTS
 import TitleHeader from './section/TitleHeader.vue';
 import DestinationList from './section/DestinationList.vue';
-import HeadContent from '@/components/HeadContent.vue';
 
 // TYPES
 import { DestinationProps } from './types.js';

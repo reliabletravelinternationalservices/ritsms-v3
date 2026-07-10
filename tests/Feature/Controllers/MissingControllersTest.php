@@ -35,7 +35,7 @@ test('service country route renders successfully', function () {
         'tag' => 'country',
     ]);
 
-    $response = $this->get(route('client.destination.country'));
+    $response = $this->get(route('client.destination.countries'));
 
     $response->assertStatus(200);
 });
@@ -48,7 +48,7 @@ test('location route renders successfully', function () {
         'tag' => 'test',
     ]);
 
-    $response = $this->get(route('client.destination.country.destination', ['destination' => $destination->id]));
+    $response = $this->get(route('client.destination.country', ['destination' => $destination->id]));
 
     $response->assertStatus(200);
 });
