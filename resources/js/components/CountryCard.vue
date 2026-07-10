@@ -8,11 +8,11 @@ interface Props {
     href: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>
-    <Link :href="props.href" class="w-full" :aria-label="`Explore travel destinations in ${props.destination.country}`">
+    <a :href="href" class="w-full" :aria-label="`Explore travel destinations in ${destination.country}`">
             <div class="carousel__item h-[400px] md:h-[500px] w-full relative">
               <div class="h-full w-full absolute top-0 left-0 bg-black/40 flex items-end p-6 md:p-8">
                   <span v-if="destination.tag" class="absolute top-2 right-4 text-xs md:text-sm bg-black/30 text-white px-3 py-1">
@@ -23,7 +23,7 @@ const props = defineProps<Props>();
                           <Icon icon="mdi:map-marker" width="22" height="22" class="text-[var(--tertiary-custom)] md:w-[26px] md:h-[26px]" aria-hidden="true" />
                           <h3 class="font-bold font-montserrat text-base md:text-lg text-[var(--tertiary-custom)]">{{ destination.country }}</h3>
                       </span>
-                      <span v-if="props.destination.locations" class="flex items-end justify-start">
+                      <span v-if="destination.locations" class="flex items-end justify-start">
                           <p class="text-[var(--primary-custom)] font-roboto text-sm md:text-base">{{ destination.locations.length }} Destinations</p>
                       </span>
                   </div>
@@ -42,5 +42,5 @@ const props = defineProps<Props>();
               <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" aria-hidden="true" />
             </div>
           </div>
-    </Link>
+    </a>
 </template>
