@@ -3,6 +3,7 @@ import type { ClassValue } from "clsx"
 import type { Ref } from "vue"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+const appUrl = import.meta.env.VITE_APP_URL
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -172,3 +173,11 @@ export const formatItinerariesForEdit = (
         })
         .join('\n\n');
 };
+
+
+
+
+export const getImageUrl = (path: string) => {
+    return `${appUrl}/storage/${path}`;
+}
+
