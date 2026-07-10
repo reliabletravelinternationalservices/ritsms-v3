@@ -1,22 +1,20 @@
 <script setup lang="ts">
+
+// COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import CountryCard from './CountryCard.vue'
-import { Destination } from '@/types/destination'
 
-interface Props {
-  destinations: Destination[]
-}
+// TYPES
+import { DestinationProps } from '@/pages/client/home/types.js'
 
-const props = defineProps<Props>()
+// UTILS
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
 
-/* =========================
-   RESPONSIVE STATE
-========================= */
+defineProps<DestinationProps>()
+
 const windowWidth = ref(window.innerWidth)
 
 const isDesktop = computed(() => windowWidth.value >= 768)
@@ -33,9 +31,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updateWidth)
 })
 
-/* =========================
-   CAROUSEL CONFIG
-========================= */
 const carouselConfig = {
   itemsToShow: 1,
   itemsToScroll: 1,
@@ -62,12 +57,11 @@ const carouselConfig = {
 
 <template>
   <Carousel
-    ref="carouselRef"
     v-bind="carouselConfig"
     class="w-full relative"
   >
     <Slide
-      v-for="destination in props.destinations"
+      v-for="destination in destinations"
       :key="destination.id"
     >
       <CountryCard
