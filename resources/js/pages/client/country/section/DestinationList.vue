@@ -1,13 +1,13 @@
 <script setup lang="ts">
+
+// COMPONENTS
 import CountryCard from '@/components/CountryCard.vue';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
-import { Destination } from '@/types/destination';
 
-interface Props {
-  destinations: Destination[];
-}
+// TYPES
+import { DestinationProps } from '../types';
 
-defineProps<Props>();
+defineProps<DestinationProps>();
 </script>
 
 <template>
@@ -24,7 +24,7 @@ defineProps<Props>();
       >
         <CountryCard 
           :destination="destination" 
-          :href="route('client.destination.country.destination', { destination: destination.id })" 
+          :href="route('client.destination.country', { destination: destination.id })" 
         />
       </MotionWrapper>
     </div>

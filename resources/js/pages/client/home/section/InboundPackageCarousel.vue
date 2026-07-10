@@ -1,21 +1,16 @@
 <script setup lang="ts">
+
+// COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
-import { Package } from '@/types/package'
 import ExploreButton from '@/components/ExploreButton.vue'
 
-interface Props {
-  packages?: Package[],
-  tag?: string | null,
-  usdRate?: number | null
-}
-const props = withDefaults(defineProps<Props>(), {
-  packages: () => [],
-  usdRate: null,
-  tag: null
-});
+// TYPES
+import { type CarouselSectionProps } from '../types'
+
+defineProps<CarouselSectionProps>();
 
 </script>
 
@@ -24,29 +19,29 @@ const props = withDefaults(defineProps<Props>(), {
     
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
       
-      <div class="w-full md:w-1/2 space-y-2">
+      <div class="w-full md:w-2/3 space-y-2">
         <div class="flex items-end gap-1 text-[var(--tertiary-custom)]">
-          <Icon icon="icon-park-solid:local" width="28" height="28" class="md:w-7 md:h-7" />
-          <h2 class="font-bold font-roboto text-lg md:text-xl">INBOUND TOURS</h2>
+          <Icon icon="icon-park-solid:local" width="28" height="28" class="md:w-7 md:h-7" aria-hidden="true" />
+          <p class="font-bold font-roboto text-lg md:text-xl">INBOUND TOURS</p>
         </div>
         <div class="space-y-3">
-          <h1 class="text-2xl md:text-3xl lg:text-4xl text-[var(--secondary-custom)] uppercase font-montserrat font-bold">
-            THE PHILIPPINE'S PARADISE ISLAND
-          </h1>
+          <h2 class="text-2xl md:text-3xl lg:text-4xl text-[var(--secondary-custom)] uppercase font-montserrat font-bold">
+            Explore the Philippines' Paradise Islands
+          </h2>
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
-            See why the Philippines is a top-voted global favorite. Pristine nature and warm hospitality are just a flight away.
+            Discover top inbound travel packages and domestic tours across the Philippines. See why our pristine beaches, islands, and warm hospitality make the country a top global favorite, just a flight away.
           </p>
-            <ValidToForeignBanner v-if="props.tag && props.tag !==null" :tag="props.tag" />
+            <ValidToForeignBanner v-if="tag" :tag="tag" />
         </div>
       </div>
 
       <div class="flex justify-start md:justify-end">
-        <ExploreButton title="Explore More" :href="route('client.inbound')" />
+        <ExploreButton title="Explore Inbound Tours" :href="route('client.inbound')" />
       </div>
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="true"  :packages="props.packages" :usd-rate="props.usdRate" />
+        <PackageCarousel :is-inbound="true"  :packages="packages" />
     </div>
   </section>
 </template>

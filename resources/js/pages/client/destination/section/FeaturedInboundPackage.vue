@@ -1,25 +1,26 @@
 <script setup lang="ts">
+
+// COMPONENTS
 import ExploreButton from '@/components/ExploreButton.vue'
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
-import { Destination } from '@/types/destination'
 import { Icon } from '@iconify/vue'
+
+// UTILS
 import { computed } from 'vue'
+import { getDestinationIdByCountry } from '@/lib/utils'
 
-interface Props {
-  destinations: Destination[]
-}
+// TYPES
+import { DestinationProps } from '../types'
 
-const props = defineProps<Props>()
 
-/* =========================
-   SAFE COMPUTED ID
-========================= */
+
+const props = defineProps<DestinationProps>();
+
 const phID = computed(() =>
-  props.destinations?.find(
-    (dest) => dest.country?.toLowerCase() === 'philippines'
-  )?.id || null
-)
+    getDestinationIdByCountry(props.destinations, 'Philippines')
+);
+
 </script>
 
 <template>
@@ -47,25 +48,26 @@ const phID = computed(() =>
               width="26"
               height="26"
               class="md:w-7 md:h-7"
+              aria-hidden="true"
             />
-            <h2
+            <p
               class="font-bold font-roboto
                      text-base sm:text-lg md:text-xl
                      leading-tight"
             >
               INBOUND DESTINATIONS
-            </h2>
+            </p>
           </div>
 
           <div class="space-y-3 md:space-y-3">
-            <h1
+            <h2
               class="text-xl sm:text-2xl md:text-3xl lg:text-4xl
                      text-[var(--primary-custom)]
                      uppercase font-montserrat font-bold
                      leading-snug md:leading-tight"
             >
-              EXPLORE LOCAL SPOT HERE IN THE PHILIPPINES
-            </h1>
+              Explore Local Destinations in the Philippines
+            </h2>
 
             <p
               class="font-roboto
@@ -76,7 +78,7 @@ const phID = computed(() =>
               Crystal clear waters, majestic cliffs, and endless sunshine. Your ultimate Philippine adventure starts right here.
             </p>
 
-            <ValidToForeignBanner tag="VALID FOR FOREIGN ONLY!" />
+            <ValidToForeignBanner tag="VALID FOR FOREIGN TOURISTS ONLY" />
           </div>
         </div>
 
@@ -86,8 +88,8 @@ const phID = computed(() =>
                  w-full md:w-auto"
         >
           <ExploreButton
-            title="Explore More"
-            :href="phID ? route('client.destination.country.destination', { destination: phID }) : '#'"
+            title="Explore Inbound Destinations"
+            :href="phID ? route('client.destination.country', { destination: phID }) : '#'"
             class="font-bold text-[var(--primary-custom)]
                    hover:text-[var(--tertiary-custom)]
                    border-[var(--primary-custom)]
@@ -106,6 +108,7 @@ const phID = computed(() =>
     <!-- DECOR ICONS -->
     <span
       class="absolute top-5 left-2 -rotate-45 z-0 pointer-events-none opacity-10"
+      aria-hidden="true"
     >
       <Icon
         icon="mdi:location"
@@ -115,6 +118,7 @@ const phID = computed(() =>
 
     <span
       class="absolute -bottom-20 -right-20 -rotate-45 z-0 pointer-events-none opacity-10"
+      aria-hidden="true"
     >
       <Icon
         icon="material-symbols-light:globe"

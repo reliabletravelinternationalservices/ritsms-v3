@@ -1,23 +1,19 @@
 <script setup lang="ts">
+
+// COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
-import { ref } from 'vue'
 
-interface Feedback {
-  id: number
-  name: string
-  image_path: string
-}
+// TYPES
+import { ImageProps } from '@/pages/client/home/types'
+
+
 interface Props {
-  feedbacks?: Feedback[]
+  feedbacks: ImageProps[]
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  feedbacks: () => []
-})
-
-const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+defineProps<Props>()
 
 const carouselConfig = {
   itemsToShow: 1,
@@ -45,12 +41,12 @@ const carouselConfig = {
 </script>
 
 <template>
-    <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full">
-      <Slide v-for="feedback in props.feedbacks" :key="feedback.id">
+    <Carousel v-bind="carouselConfig" class="w-full">
+      <Slide v-for="feedback in feedbacks" :key="feedback.id">
         <div class="carousel__item h-[400px] w-full relative">
           <img 
-            :src="feedback.image_path" 
-            :alt="feedback.name"
+            :src="feedback.src" 
+            :alt="feedback.alt"
             class="w-full h-full object-cover"
           />
         </div>

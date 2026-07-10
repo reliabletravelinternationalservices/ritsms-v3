@@ -1,19 +1,24 @@
 <script setup lang="ts">
+// CONSTANTS
+import { AGENCY_CONTACTS } from '../constants';
+
+// COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import Label from '@/components/ui/label/Label.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Button from '@/components/ui/button/Button.vue';
-import { useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import InputError from '@/components/InputError.vue';
 
-interface Props {
-    class?: string
-}
+// FORMS
+import { useForm } from '@inertiajs/vue3';
 
-const prop = defineProps<Props>();
+// TYPES
+import type { ClassProps } from '../types';
+
+const props = defineProps<ClassProps>();
 
 const form = useForm({
     fullname: '',
@@ -36,23 +41,23 @@ const submit = () => {
   <section
     id="inquiry"
     class="relative max-w-5xl mx-auto flex flex-col gap-4 items-center justify-center py-24 px-4 md:px-6"
-    :class="prop.class"
+    :class="props.class"
   >
 
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div class="w-full md:w-3/4 space-y-2">
         <div class="flex items-end gap-1 text-[var(--tertiary-custom)]">
-          <Icon icon="ix:inquiry-filled" width="28" height="28" class="md:w-7 md:h-7" />
-          <h2 class="font-bold font-roboto text-lg md:text-xl">INQUIRE NOW</h2>
+          <Icon icon="ix:inquiry-filled" width="28" height="28" class="md:w-7 md:h-7" aria-hidden="true" />
+          <p class="font-bold font-roboto text-lg md:text-xl">INQUIRE NOW</p>
         </div>
 
         <div class="space-y-3">
-          <h1 class="text-2xl md:text-3xl lg:text-4xl text-[var(--secondary-custom)] uppercase font-montserrat font-bold">
-            Get In Touch With Us
-          </h1>
+          <h2 class="text-2xl md:text-3xl lg:text-4xl text-[var(--secondary-custom)] uppercase font-montserrat font-bold">
+            Contact Reliable International Travel Services
+          </h2>
 
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
-            Ready to explore the world? Reach out to us for bookings, inquiries, or personalized travel advice. Our dedicated support team is available to assist you with every step of your journey.
+            Ready to explore the world? Contact our travel agency for bookings, inquiries, or personalized travel planning. Our dedicated support team is ready to assist with every step of your journey.
           </p>
         </div>
       </div>
@@ -62,25 +67,25 @@ const submit = () => {
       <div class="w-full flex flex-col gap-4">
         <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
           <h3 class="font-bold font-roboto text-lg md:text-xl">Satellite Address</h3>
-          <div class="flex flex-col gap-2">
+          <address class="flex flex-col gap-2 not-italic">
             <span class="flex items-center justify-start gap-2">
               <span class="bg-[var(--secondary-custom)] p-1">
-                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
               </span>
-              <a target="_blank" href="https://maps.app.goo.gl/sTjrppGkWkyQxLVd6" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-                JJSS Commercial Building Brgy Navarro General Trias, Cavite, Philippines
+              <a target="_blank" :href="AGENCY_CONTACTS.address.primary.link" :aria-label="`View ${AGENCY_CONTACTS.address.primary.label} office address on Google Maps`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+                {{ AGENCY_CONTACTS.address.primary.label }}
               </a>
             </span>
 
             <span class="flex items-center justify-start gap-2">
               <span class="bg-[var(--secondary-custom)] p-1">
-                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
               </span>
-              <a target="_blank" href="https://maps.app.goo.gl/CtAbm3yECPD9qU78A" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-                Nomangonan, San Manuel, Pangasinan
+              <a target="_blank" :href="AGENCY_CONTACTS.address.secondary.link" :aria-label="`View ${AGENCY_CONTACTS.address.secondary.label} office address on Google Maps`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+                {{ AGENCY_CONTACTS.address.secondary.label }}
               </a>
             </span>
-          </div>
+          </address>
         </div>
 
         <div class="w-full border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
@@ -88,19 +93,19 @@ const submit = () => {
 
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
-            <a href="tel:09085721338" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-              +63 908 572 1338
+            <a :href="`tel:${AGENCY_CONTACTS.phone.primary}`" :aria-label="`Call ${AGENCY_CONTACTS.phone.primary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              {{ AGENCY_CONTACTS.phone.primary }}
             </a>
           </span>
 
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
-            <a href="tel:09279275207" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-              +63 927 927 5207
+            <a :href="`tel:${AGENCY_CONTACTS.phone.secondary}`" :aria-label="`Call ${AGENCY_CONTACTS.phone.secondary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              {{ AGENCY_CONTACTS.phone.secondary }}
             </a>
           </span>
         </div>
@@ -109,19 +114,19 @@ const submit = () => {
           <h3 class="font-bold font-roboto text-lg md:text-xl">Email Address</h3>
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
-              <a href="mailto:inquiry@reliabletravelph.com" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-              inquiry@reliabletravelph.com
+              <a :href="`mailto:${AGENCY_CONTACTS.email.primary}`" :aria-label="`Send an email to ${AGENCY_CONTACTS.email.primary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              {{ AGENCY_CONTACTS.email.primary }}
             </a>
           </span>
           
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" />
+              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
-            <a href="mailto:reliabletravelinfo@gmail.com" target="_blank" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
-              reliabletravelinfo@gmail.com
+            <a :href="`mailto:${AGENCY_CONTACTS.email.secondary}`" :aria-label="`Send an email to ${AGENCY_CONTACTS.email.secondary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
+              {{ AGENCY_CONTACTS.email.secondary }}
             </a>
           </span>
         </div>
@@ -153,7 +158,7 @@ const submit = () => {
             </Label>
             <Input
               v-model="form.email"
-              type="text"
+              type="email"
               id="email"
               placeholder="Enter your email address"
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"
@@ -167,7 +172,7 @@ const submit = () => {
             </Label>
             <Input
               v-model="form.phone"
-              type="text"
+              type="tel"
               id="phone"
               placeholder="Enter your phone number"
               class="bg-[var(--primary-custom)] focus:outline-none border border-[var(--muted-custom)] text-sm md:text-base rounded-none"

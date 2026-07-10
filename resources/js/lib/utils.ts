@@ -3,6 +3,8 @@ import type { ClassValue } from "clsx"
 import type { Ref } from "vue"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { Destination } from '@/types/destination';
+const appUrl = import.meta.env.VITE_APP_URL
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -172,3 +174,25 @@ export const formatItinerariesForEdit = (
         })
         .join('\n\n');
 };
+
+
+
+
+export const getImageUrl = (path: string) => {
+    return `${appUrl}/storage/${path}`;
+}
+
+
+
+
+export function getDestinationIdByCountry(
+    destinations: Destination[],
+    country: string
+): number | null {
+    return (
+        destinations.find(
+            destination =>
+                destination.country?.toLowerCase() === country.toLowerCase()
+        )?.id ?? null
+    );
+}

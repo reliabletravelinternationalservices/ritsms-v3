@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { DestinationLocation } from '@/types/destination-location';
+
+// COMPONENTS
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 import { Icon } from '@iconify/vue';
 
-interface Props {
-  locations: DestinationLocation[];
-}
+// TYPES
+import { LocationProps } from '../types';
 
-defineProps<Props>();
+
+
+defineProps<LocationProps>();
 </script>
 
 <template>

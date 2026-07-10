@@ -2,11 +2,9 @@
 
 use App\Http\Controllers\Client\About\AboutUsController;
 use App\Http\Controllers\Client\ContactPageController;
-use App\Http\Controllers\Client\Country\ServiceCountryController;
-use App\Http\Controllers\Client\DestinationPageController;
+use App\Http\Controllers\Client\Destination\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
-use App\Http\Controllers\Client\Location\LocationController;
 use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
@@ -15,11 +13,13 @@ use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
+
+// DESTINATIONS
 Route::prefix('destination')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
     Route::prefix('country')->group(function () {
-        Route::get('/', [ServiceCountryController::class, 'index'])->name('client.destination.country');
-        Route::get('/{destination}', [LocationController::class, 'index'])->name('client.destination.country.destination');
+        Route::get('/', [DestinationPageController::class, 'countries'])->name('client.destination.countries');
+        Route::get('/{destination}', [DestinationPageController::class, 'country'])->name('client.destination.country');
     });
 });
 

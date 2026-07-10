@@ -1,27 +1,23 @@
 <script setup lang="ts">
+// layouts
 import AppLayout from '@/layouts/ClientAppLayout.vue';
+
+// COMPONENTS
 import TitleHeader from './section/TitleHeader.vue';
-import { Destination } from '@/types/destination';
 import DestinationList from './section/DestinationList.vue';
-import HeadContent from '@/components/HeadContent.vue';
 
-interface Props {
-    destinations: Destination[];
-};
+// TYPES
+import { DestinationProps } from './types.js';
 
-const props = defineProps<Props>();
+
+defineProps<DestinationProps>();
 
 </script>
 
 
 <template>
-    <HeadContent
-        title="Countries & Destinations We Serve"
-        description="We included all the countries that included in our services and currently expanding for more tourist destinations"
-        :url="route('client.destination.country')"
-    />
     <AppLayout>
         <TitleHeader title="Countries And Destinations" description="We included all the countries that included in our services and currently expanding for more tourist destinations" :image="destinations[0].image"  />
-        <DestinationList :destinations="props.destinations" />
+        <DestinationList :destinations="destinations" />
     </AppLayout>     
 </template>
