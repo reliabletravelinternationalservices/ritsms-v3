@@ -15,6 +15,7 @@ defineProps<{
 <template>
   <a
     :href="isInbound ? route('client.inbound.package.detail', { slug: package.slug }) : route('client.outbound.package.detail', { slug: package.slug })"
+    :aria-label="`View details for ${package.name} - ${package.destination} package`"
     class="carousel__item group">
     
     <div
@@ -22,7 +23,9 @@ defineProps<{
 
       <div class="relative h-[180px] md:h-full overflow-hidden">
         <img v-if="package.primary_image && package.primary_image.url" :src="package.primary_image.url"
-          :alt="package.name" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
+          :alt="`${package.name} - ${package.destination} travel package`"
+          loading="lazy"
+          class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
         
         <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
           <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
@@ -49,12 +52,12 @@ defineProps<{
           </div>
 
           <div class="flex flex-col">
-            <h1 class="text-lg font-bold text-[var(--color-dark)] line-clamp-1">
+            <h3 class="text-lg font-bold text-[var(--color-dark)] line-clamp-1">
               {{ package.name }}
-            </h1>
-            <h4 class="font-medium font-roboto text-[10px] md:text-sm text-[var(--muted-custom)] mb-4">
+            </h3>
+            <p class="font-medium font-roboto text-[10px] md:text-sm text-[var(--muted-custom)] mb-4">
               from <span class="font-bold text-[var(--warning-custom)] text-sm md:text-lg">{{ formatCurrency(isInbound ? convertToUsd(package.base_price) : package.base_price, isInbound ? 'USD' : 'PHP') }}/pax</span>
-            </h4>
+            </p>
             <p class="font-roboto text-[11px] md:text-sm line-clamp-2 text-gray-600">{{ package.description }}</p>
           </div>
         </div>
