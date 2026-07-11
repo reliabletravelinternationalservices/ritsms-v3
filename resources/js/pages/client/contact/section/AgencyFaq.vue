@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {Accordion, AccordionItem, AccordionTrigger, AccordionContent} from '@/components/ui/accordion';
-import { Icon } from '@iconify/vue';
 
 </script>
 
