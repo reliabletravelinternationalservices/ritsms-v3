@@ -1,5 +1,9 @@
 <script setup lang="ts">
+
+// layouts
 import AppLayout from '@/layouts/ClientAppLayout.vue';
+
+// COMPONENTS
 import TitleHeader from './section/TitleHeader.vue';
 import AgencyRating from './section/AgencyRating.vue';
 import AgencyVideo from './section/AgencyVideo.vue';
@@ -9,41 +13,38 @@ import AgencyOffer from '../contact/section/AgencyOffer.vue';
 import InquiryForm from '../home/section/InquiryForm.vue';
 import SocialMedia from '../contact/section/SocialMedia.vue';
 import AgencyFaq from '../contact/section/AgencyFaq.vue';
-import HeadContent from '@/components/HeadContent.vue';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
+
+// CONSTANTS
+import { SECTION_DELAYS } from './constants';
 
 </script>
 
 <template>
-    <HeadContent
-        title="About Us"
-        description="Learn more about our agency and services we provide."
-        :url="route('client.about')"
-    />
     <AppLayout>
         <TitleHeader />
-        <MotionWrapper :delay="0.05">
+        <MotionWrapper :delay="SECTION_DELAYS.rating">
             <AgencyRating />
         </MotionWrapper>
-        <MotionWrapper :delay="0.1">
+        <MotionWrapper :delay="SECTION_DELAYS.about">
             <AboutAgency />
         </MotionWrapper>
-        <MotionWrapper :delay="0.15">
+        <MotionWrapper :delay="SECTION_DELAYS.video">
             <AgencyVideo />
         </MotionWrapper>
-        <MotionWrapper :delay="0.2">
+        <MotionWrapper :delay="SECTION_DELAYS.partner">
             <PartnerAgency />
         </MotionWrapper>
-        <MotionWrapper :delay="0.25">
+        <MotionWrapper :delay="SECTION_DELAYS.offer">
             <AgencyOffer />
         </MotionWrapper>
-        <MotionWrapper :delay="0.3">
+        <MotionWrapper :delay="SECTION_DELAYS.inquiry">
             <InquiryForm />
         </MotionWrapper>
-        <MotionWrapper :delay="0.35">
+        <MotionWrapper :delay="SECTION_DELAYS.social">
             <SocialMedia />
         </MotionWrapper>
-        <MotionWrapper :delay="0.4">
+        <MotionWrapper :delay="SECTION_DELAYS.faq">
             <AgencyFaq />
         </MotionWrapper>
     </AppLayout>     
