@@ -256,12 +256,12 @@ export const AGENCY_RATINGS = Object.freeze({
 
     tour: {
         label: 'SUCCESSFUL TOURS',
-        value: 2500,
+        value: 10000,
         icon: 'boxicons:plane-land',
     },
     client: {
         label: 'HAPPY CLIENTS',
-        value: 1600,
+        value: 10000,
         icon: 'mdi:emoticon-happy-outline',
     },
     review: {
