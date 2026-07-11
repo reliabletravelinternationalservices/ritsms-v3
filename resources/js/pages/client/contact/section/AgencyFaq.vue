@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {Accordion, AccordionItem, AccordionTrigger, AccordionContent} from '@/components/ui/accordion';
-import { Icon } from '@iconify/vue';
 
 </script>
 
@@ -10,9 +9,9 @@ import { Icon } from '@iconify/vue';
             <div class="w-full flex flex-col items-center gap-8 md:gap-12">
                 
                 <div class="flex flex-col items-center text-center space-y-4 max-w-3xl">
-                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase">
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase">
                         Frequently Asked <span class="text-[var(--tertiary-custom)]">Questions</span>
-                    </h1>
+                    </h2>
                     <p class="text-sm md:text-base font-roboto text-[var(--muted-custom)]">
                         Everything you need to know about our travel services and booking process.
                     </p>
@@ -21,7 +20,7 @@ import { Icon } from '@iconify/vue';
                 <div class="w-full">
                     <Accordion type="single" collapsible>
                         <AccordionItem value="item-1" class="border-[var(--shadow-custom)]">
-                            <AccordionTrigger class="font-bold">What’s included in your packages?</AccordionTrigger>
+                            <AccordionTrigger class="font-bold">What's included in your packages?</AccordionTrigger>
                             <AccordionContent>
                                 Our packages are hassle-free, but inclusions vary depending on destination and promo.
                             </AccordionContent>
@@ -52,16 +51,16 @@ import { Icon } from '@iconify/vue';
                         </AccordionItem>
                     </Accordion>    
                 </div>
-                <div class="flex justify-start md:justify-end">
+                <!-- <div class="flex justify-start md:justify-end">
                     <span class="border-b border-1 border-[var(--secondary--custom)] font-medium text-sm md:text-base font-roboto text-[var(--secondary-custom)] hover:text-[var(--tertiary-hover-custom)] duration-75">
                     <a href="#">
                         <button class="flex items-center">
                             More about FAQs 
-                            <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-6 md:h-6" />
+                            <Icon icon="ic:baseline-arrow-right-alt" width="26" height="26" class="ml-2  md:w-6 md:h-6" aria-hidden="true" />
                         </button>
                     </a>
                     </span>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
