@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 import { PackageGroup } from '@/types/group-package';
-import { usePage } from '@inertiajs/vue3';
 import TitleHeader from './section/TitleHeader.vue';
 import PackageList from './section/PackageList.vue';
 
