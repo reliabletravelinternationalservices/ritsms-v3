@@ -52,6 +52,11 @@ watch(
 const searchPackages = () => {
     emit('search', { ...form.value });
 };
+
+const clearFilters = () => {
+    form.value = { ...defaultFilters };
+    emit('search', { ...form.value });
+};
 </script>
 
 <template>
@@ -87,11 +92,15 @@ const searchPackages = () => {
                 </div>
             </div>
 
-            <div class="w-full md:w-auto">
+            <div class="w-full md:w-auto flex flex-col sm:flex-row gap-3">
                 <button @click.prevent="searchPackages"
                     class="w-full md:w-auto bg-[var(--inbound-custom)] text-[var(--primary-custom)] h-[50px] md:h-[44px] px-8 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--outbound-opacity-custom)] transition-all duration-200">
                     <span class="whitespace-nowrap uppercase ">Search</span>
                     <Icon icon="material-symbols:search" width="24" height="24" />
+                </button>
+                <button @click.prevent="clearFilters"
+                    class="w-full md:w-auto border border-[var(--shadow-custom)] text-[var(--secondary-custom)] h-[50px] md:h-[44px] px-8 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--soft-custom)] transition-all duration-200">
+                    <span class="whitespace-nowrap uppercase">Reset</span>
                 </button>
             </div>
 
