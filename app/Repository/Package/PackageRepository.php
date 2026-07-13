@@ -199,4 +199,10 @@ class PackageRepository
             ->orderBy('country')
             ->pluck('country');
     }
+
+
+    public function getPackageBySlug(string $slug)
+    {
+        return $this->model->with('schedules', 'packageGroups', 'primaryImage', 'images')->where('slug', $slug)->first();
+    }
 }
