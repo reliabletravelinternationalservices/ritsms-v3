@@ -55,6 +55,15 @@ class DestinationRepository
         return Destination::with(['locations', 'locations.image', 'image'])->orderBy('updated_at', 'desc')->get();
     }
 
+    public function getDestinctCountries()
+    {
+        return Destination::with(['locations', 'locations.image', 'image'])
+        ->orderBy('updated_at', 'desc')
+        ->get()
+        ->unique('country')
+        ->pluck('country');
+    }
+
 
 
     public function getDestinationDistinctByCountry()

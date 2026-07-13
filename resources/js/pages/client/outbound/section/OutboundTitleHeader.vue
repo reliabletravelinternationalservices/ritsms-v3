@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import DestinationDropdownBreadcrumb from '@/components/DestinationDropdownBreadcrumb.vue';
 import { scrollToSection } from '@/lib/utils';
+import { BreadcrumbItemType } from '@/types';
 import { Icon } from '@iconify/vue';
-
-const apiUrl = import.meta.env.VITE_APP_URL as string
-interface BreadcrumbItemType {
-  label: string
-  href?: string
-  dropdown?: { label: string; action: () => void }[]
-}
+import { OUTBOUND_IMAGE } from '../constants';
 
 const breadcrumbItems: BreadcrumbItemType[] = [
-  { label: 'Home', href: route('client.landing') },
+  { title: 'Home', href: route('client.landing') },
   {
-    label: 'Outbound', href: route('client.outbound'), dropdown: [
+    title: 'Outbound', href: route('client.outbound'), dropdown: [
       {
         label: 'Inbound', action: () => {
           window.location.href = route('client.inbound');
@@ -22,14 +17,16 @@ const breadcrumbItems: BreadcrumbItemType[] = [
     ]
   },
 ]
+
+
 </script>
 
 <template>
   <section class="w-full h-auto min-h-[400px] md:h-[400px] lg:h-[500px] relative overflow-hidden flex">
     <div class="w-full h-full absolute top-0 left-0">
       <img class="w-full h-full object-cover"
-        :src="`${apiUrl}/storage/upload/agency/outbound_image.png`"
-        alt="Traveler">
+        :src="OUTBOUND_IMAGE"
+        alt="International travel destinations for outbound tour packages">
 
       <span class="absolute inset-0 bg-gradient-to-t bg-black/60 flex items-end justify-start">
         <div class="max-w-3xl flex flex-col items-start gap-6 md:gap-8 p-6 md:p-12 text-[var(--primary-custom)]">
@@ -45,7 +42,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
 
             <p class="text-sm md:text-base font-roboto max-w-2xl leading-relaxed">
               Cross borders and create memories. Experience seamless international travel to the world's most
-              sought-after hidden gems and vibrant cities
+              sought-after hidden gems and vibrant cities.
             </p>
           </span>
 
@@ -53,7 +50,7 @@ const breadcrumbItems: BreadcrumbItemType[] = [
             <button @click="scrollToSection('outbound-package-display')"
               class="w-full sm:w-auto bg-[var(--primary-opacity-custom)] border-2 border-[var(--primary-custom)] text-[var(--primary-custom)] px-6 py-3 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--primary-custom)] hover:text-[var(--muted-custom)] hover:border-[var(--primary-custom)] transition-all duration-200">
               <span class="whitespace-nowrap uppercase">Discover Now</span>
-              <Icon icon="formkit:arrowright" width="26" height="26" />
+              <Icon icon="formkit:arrowright" width="26" height="26" aria-hidden="true" />
             </button>
           </div>
         </div>

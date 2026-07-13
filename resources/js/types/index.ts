@@ -7,6 +7,7 @@ export interface Auth {
 export interface BreadcrumbItem {
     title: string;
     href: string;
+    dropdown?: { label: string; action: () => void }[]
 }
 
 export interface NavChildItem {
@@ -61,3 +62,4 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+

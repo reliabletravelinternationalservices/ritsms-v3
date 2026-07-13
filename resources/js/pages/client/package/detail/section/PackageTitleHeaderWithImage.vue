@@ -27,7 +27,7 @@ type ImageItem = {
 const images = computed<ImageItem[]>(() => {
     return (props.package.images ?? []).map((img: any) => ({
         url: img.url,
-        alt_text: img.alt ?? "image",
+        alt_text: img.alt ?? `${props.package.name} travel package photo`,
     }))
 })
 
@@ -59,7 +59,7 @@ const openMessenger = () => {
                         :title="props.isInbound ? 'Inbound' : 'Outbound'" 
                         :class="props.isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
                     />
-                    <Banner v-if="package.is_foreign_only" title="Valid FOR FOREIGN ONLY!" class="bg-[var(--warning-custom)]"/>
+                    <Banner v-if="package.is_foreign_only" title="Valid For Foreign Tourists Only" class="bg-[var(--warning-custom)]"/>
                 </div>
 
                 <h1 class="text-xl md:text-2xl lg:text-3xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase leading-tight">
@@ -67,12 +67,12 @@ const openMessenger = () => {
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <button @click="openMessenger" type="button" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
-                        <Icon icon="tabler:message" class="text-lg" />
+                    <button @click="openMessenger" type="button" aria-label="Message us on Facebook Messenger" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                        <Icon icon="tabler:message" class="text-lg" aria-hidden="true" />
                         <span>Message us</span>
                     </button>
-                    <a href="tel:09085721338" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
-                        <Icon icon="material-symbols:call-outline" class="text-lg" />
+                    <a href="tel:+639085721338" class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in">
+                        <Icon icon="material-symbols:call-outline" class="text-lg" aria-hidden="true" />
                         <span>Call us</span>
                     </a>
                     <button
@@ -83,9 +83,10 @@ const openMessenger = () => {
                             )
                         )"
                         type="button"
+                        aria-label="Share this package"
                         class="text-xs md:text-sm font-roboto text-[var(--muted-custom)] border-b border-[var(--primary-custom)] hover:border-b hover:border-[var(--muted-custom)] duration-75 flex items-start gap-1 w-fit ease-in"
                     >
-                        <Icon icon="material-symbols:share-outline" class="text-lg" />
+                        <Icon icon="material-symbols:share-outline" class="text-lg" aria-hidden="true" />
                         <span>Share now</span>
                     </button>
                 </div>
@@ -94,16 +95,16 @@ const openMessenger = () => {
             <div v-if="previewImage.length > 0" class="w-full">
                 <button @click="openImageViewer()" type="button" class="grid grid-cols-3 gap-1 w-full text-left">
                     <span class="col-span-3 h-[180px] sm:h-[240px] md:h-[280px] relative flex items-center justify-center overflow-hidden">
-                        <img v-if="previewImage[0] && previewImage[0].url" :src="previewImage[0].url" :alt="previewImage[0].alt_text" class="object-cover h-full w-full">
+                        <img v-if="previewImage[0] && previewImage[0].url" :src="previewImage[0].url" :alt="previewImage[0].alt_text || `${package.name} main photo`" loading="eager" fetchpriority="high" decoding="async" class="object-cover h-full w-full">
                     </span>
                     <span class="col-span-1 h-[100px] sm:h-[140px] md:h-[180px] relative flex items-center justify-center overflow-hidden">
-                        <img v-if="previewImage[1] && previewImage[1].url" :src="previewImage[1].url" :alt="previewImage[1].alt_text" class="object-cover h-full w-full">
+                        <img v-if="previewImage[1] && previewImage[1].url" :src="previewImage[1].url" :alt="previewImage[1].alt_text || `${package.name} photo 2`" loading="lazy" decoding="async" class="object-cover h-full w-full">
                     </span>
                     <span class="col-span-1 h-[100px] sm:h-[140px] md:h-[180px] relative flex items-center justify-center overflow-hidden">
-                        <img v-if="previewImage[2] && previewImage[2].url" :src="previewImage[2].url" :alt="previewImage[2].alt_text" class="object-cover h-full w-full">
+                        <img v-if="previewImage[2] && previewImage[2].url" :src="previewImage[2].url" :alt="previewImage[2].alt_text || `${package.name} photo 3`" loading="lazy" decoding="async" class="object-cover h-full w-full">
                     </span>
                     <span class="col-span-1 h-[100px] sm:h-[140px] md:h-[180px] relative flex items-center justify-center overflow-hidden">
-                        <img v-if="previewImage[3] && previewImage[3].url" :src="previewImage[3].url" :alt="previewImage[3].alt_text" class="object-cover h-full w-full">
+                        <img v-if="previewImage[3] && previewImage[3].url" :src="previewImage[3].url" :alt="previewImage[3].alt_text || `${package.name} photo 4`" loading="lazy" decoding="async" class="object-cover h-full w-full">
                         <span v-if="props.package.images && props.package.images.length > 4" class="absolute inset-0 bg-black/60 flex items-center justify-center p-1 text-center select-none">
                             <span class="underline text-[var(--primary-custom)] text-xs sm:text-sm font-medium">{{ props.package.images.length - 4 }} more images...</span>
                         </span>
@@ -113,7 +114,7 @@ const openMessenger = () => {
             
             <div v-else class="relative">
                 <span class="flex items-center justify-center h-[240px] sm:h-[300px] md:h-[360px] w-full bg-[var(--shadow-custom)]">
-                    <Icon icon="ic:baseline-image-not-supported" class="text-5xl md:text-6xl text-[var(--muted-custom)]" />
+                    <Icon icon="ic:baseline-image-not-supported" class="text-5xl md:text-6xl text-[var(--muted-custom)]" aria-hidden="true" />
                 </span>
             </div>
         </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useDestinationDropdownBreadcrumb } from '@/composables/useDestinationDropdownBreadcrumb';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,42 +9,17 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Icon } from '@iconify/vue'
 import { cn } from '@/lib/utils'
+import { BreadcrumbItemType } from '@/types';
 
-interface DropdownItem {
-  label: string
-  action?: () => void
-  href?: string
-}
 
-interface BreadcrumbItemType {
-  label: string
-  href?: string
-  dropdown?: DropdownItem[]
-}
+const { openIndex, toggleDropdown, closeDropdown} = useDestinationDropdownBreadcrumb();
+
 
 defineProps<{
   items: BreadcrumbItemType[]
 }>()
 
-const openIndex = ref<number | null>(null)
 
-const toggleDropdown = (index: number) => {
-  openIndex.value = openIndex.value === index ? null : index
-}
-
-const closeDropdown = () => {
-  openIndex.value = null
-}
-
-const handleClickOutside = (e: MouseEvent) => {
-  const target = e.target as HTMLElement
-  if (!target.closest('.dropdown-wrapper')) {
-    closeDropdown()
-  }
-}
-
-onMounted(() => document.addEventListener('click', handleClickOutside))
-onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 </script>
 
 <template>
@@ -65,7 +40,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                 @click="toggleDropdown(index)"
                 class="flex items-center gap-1 ease-in duration-200 hover:text-[var(--primary-custom)]"
               >
-                {{ item.label }}
+                {{ item.title }}
                 <span>
                   <Icon
                       icon="gridicons:dropdown"
@@ -92,17 +67,17 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                     closeDropdown();
                   "
                 >
-                  <a v-if="d.href" :href="d.href" class="block w-full">
+                  <!-- <a v-if="d.href" :href="d.href" class="block w-full">
                     {{ d.label }}
-                  </a>
-                  <span v-else>{{ d.label }}</span>
+                  </a> -->
+                  <span>{{ d.label }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Normal last page -->
             <BreadcrumbPage v-else>
-              {{ item.label }}
+              {{ item.title }}
             </BreadcrumbPage>
 
           </template>
@@ -110,7 +85,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
           <!-- NORMAL LINK -->
           <template v-else>
             <a :href="item.href?? '#'" class="ease-in duration-200 hover:text-[var(--primary-custom)]">
-              {{ item.label }}
+              {{ item.title }}
             </a>
           </template>
 

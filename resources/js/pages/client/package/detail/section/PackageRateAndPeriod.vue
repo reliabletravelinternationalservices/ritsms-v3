@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
 import { formatCurrency, formatPackageDateRange, getPackageDurationLabel, scrollToSection } from '@/lib/utils';
-import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 import { appModal } from '@/lib/app-modal';
+import { PackageDetailProps } from '../../types';
+import { useCurrency } from '@/composables/useCurrency';
 
-const props = defineProps<{ package: Package, isInbound: boolean, usdRate: number }>();
+const { convertToUsd } = useCurrency();
+
+defineProps<PackageDetailProps>();
 
 const handleCheckAvailability = () => {
     appModal.open({
@@ -28,46 +31,46 @@ const handleCheckAvailability = () => {
                 
                 <div class="flex flex-col min-w-0">
                     <span class="flex items-center text-xs md:text-sm font-roboto gap-1 font-medium whitespace-nowrap">
-                        <Icon icon="tdesign:money" class="text-lg text-[var(--muted-custom)]" />
+                        <Icon icon="tdesign:money" class="text-lg text-[var(--muted-custom)]" aria-hidden="true" />
                         <span>Base Price</span>
                     </span>
-                    <h4 class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--warning-custom)] break-words">
-                        {{ formatCurrency(isInbound ? (props.package.base_price / props.usdRate) : props.package.base_price, props.isInbound ? 'USD' : 'PHP') }}/pax
-                    </h4>
+                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--warning-custom)] break-words">
+                        {{ formatCurrency(isInbound ? convertToUsd(package.base_price) : package.base_price, isInbound ? 'USD' : 'PHP') }}/pax
+                    </p>
                 </div>
 
                 <div class="flex flex-col min-w-0">
                     <span class="flex items-center text-xs md:text-sm font-roboto gap-1 font-medium whitespace-nowrap">
-                        <Icon icon="mingcute:time-duration-fill" class="text-lg text-[var(--muted-custom)]" />
+                        <Icon icon="mingcute:time-duration-fill" class="text-lg text-[var(--muted-custom)]" aria-hidden="true" />
                         <span>Duration</span>
                     </span>
-                    <h4 class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)] break-words">
-                        {{ getPackageDurationLabel(props.package.duration) }}
-                    </h4>
+                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)] break-words">
+                        {{ getPackageDurationLabel(package.duration) }}
+                    </p>
                 </div>
 
                 <div class="flex flex-col min-w-0 col-span-2 sm:col-span-1">
                     <span class="flex items-center text-xs md:text-sm font-roboto gap-1 font-medium whitespace-nowrap">
-                        <Icon icon="mdi:calendar" class="text-lg text-[var(--muted-custom)]" />
+                        <Icon icon="mdi:calendar" class="text-lg text-[var(--muted-custom)]" aria-hidden="true" />
                         <span>Selling Period</span>
                     </span>
-                    <h4 class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)] break-words">
-                        {{ formatPackageDateRange(props.package.selling_start_date, props.package.selling_end_date) }}
-                    </h4>
+                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--secondary-custom)] break-words">
+                        {{ formatPackageDateRange(package.selling_start_date, package.selling_end_date) }}
+                    </p>
                 </div>
 
                 <div class="flex flex-col min-w-0">
                     <span class="flex items-center text-xs md:text-sm font-roboto gap-1 font-medium whitespace-nowrap">
-                        <Icon icon="ic:baseline-payment" class="text-lg text-[var(--muted-custom)]" />
+                        <Icon icon="ic:baseline-payment" class="text-lg text-[var(--muted-custom)]" aria-hidden="true" />
                         <span>Down Payment</span>
                     </span>
-                    <h4 v-if="props.package.down_payment !== null && props.package.down_payment > 0"
+                    <p v-if="package.down_payment !== null && package.down_payment > 0"
                         class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--correct-custom)] break-words">
-                        {{ formatCurrency(isInbound ? (props.package.down_payment / props.usdRate) : props.package.down_payment, props.isInbound ? 'USD' : 'PHP') }}/pax
-                    </h4>
-                    <h4 v-else class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--muted-custom)]">
+                        {{ formatCurrency(isInbound ? convertToUsd(package.down_payment) : package.down_payment, isInbound ? 'USD' : 'PHP') }}/pax
+                    </p>
+                    <p v-else class="text-base sm:text-lg md:text-xl lg:text-2xl font-roboto font-bold text-[var(--muted-custom)]">
                         N/A
-                    </h4>
+                    </p>
                 </div>
             </div>
 
@@ -75,7 +78,7 @@ const handleCheckAvailability = () => {
                 <Button @click="handleCheckAvailability" size="lg" variant="outline"
                     class="bg-[var(--secondary-custom)] text-[var(--primary-custom)] rounded-none w-full md:w-auto justify-center gap-2">
                     <span>Check Availability</span>
-                    <Icon icon="line-md:arrow-right" class="text-2xl flex-shrink-0" />
+                    <Icon icon="line-md:arrow-right" class="text-2xl flex-shrink-0" aria-hidden="true" />
                 </Button>
             </div>
         </div>

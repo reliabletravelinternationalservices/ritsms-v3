@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Client\About\AboutUsController;
-use App\Http\Controllers\Client\ContactPageController;
+use App\Http\Controllers\Client\Contact\ContactPageController;
 use App\Http\Controllers\Client\Destination\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
 use App\Http\Controllers\Client\Message\InquiryResultController;
-use App\Http\Controllers\Client\OutboundPageController;
+use App\Http\Controllers\Client\Outbound\OutboundPageController;
 use App\Http\Controllers\Client\Package\PackageDetailController;
 use App\Http\Controllers\Client\Package\PackageGroupController;
 use App\Http\Controllers\Client\Policy\InquiryPolicyController;
@@ -28,11 +28,11 @@ Route::prefix('outbound')->group(function () {
     Route::get('/', [OutboundPageController::class, 'index'])->name('client.outbound');
 
     Route::prefix('group')->group(function () {
-        Route::get('/{id}', [PackageGroupController::class, 'index'])->name('client.outbound.package.group');
+        Route::get('/{id}', [OutboundPageController::class, 'groupDetail'])->name('client.outbound.group');
     });
 
     Route::prefix('package')->group(function () {
-        Route::get('/{slug}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');
+        Route::get('/{slug}', [OutboundPageController::class, 'packageDetail'])->name('client.outbound.package.detail');
     });
 });
 
