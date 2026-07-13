@@ -2,7 +2,7 @@
 import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 
-const props = defineProps<{ package: Package }>();
+defineProps<{ package: Package }>();
 </script>
 
 <template>

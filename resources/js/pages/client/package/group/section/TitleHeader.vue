@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Media } from '@/types/media';
 import { Icon } from '@iconify/vue';
 import { Image } from 'lucide-vue-next';
 import { useShareModal } from '@/stores/shareModal';
