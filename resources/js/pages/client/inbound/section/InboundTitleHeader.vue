@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import DestinationDropdownBreadcrumb from '@/components/DestinationDropdownBreadcrumb.vue';
 import { scrollToSection } from '@/lib/utils';
+import { BreadcrumbItemType } from '@/types';
 import { Icon } from '@iconify/vue';
 
 const appUrl = import.meta.env.VITE_APP_URL
 
-interface BreadcrumbItemType {
-  label: string
-  href?: string
-  dropdown?: { label: string; action: () => void }[]
-}
 
 const breadcrumbItems: BreadcrumbItemType[] = [
-  { label: 'Home', href: '/' },
+  { title: 'Home', href: '/' },
   {
-    label: 'Inbound', href: route('client.inbound'), dropdown: [
+    title: 'Inbound', href: route('client.inbound'), dropdown: [
       {
         label: 'Outbound', action: () => {
           window.location.href = route('client.outbound');
