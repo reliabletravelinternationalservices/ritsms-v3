@@ -59,6 +59,18 @@ class DestinationLocationRepository
             ->toArray();
     }
 
+
+    public function getLocationsByCountryName(string $countryName)
+    {
+        return DestinationLocation::whereHas('destination', function ($query) use ($countryName) {
+            $query->where('country', $countryName);
+        })
+        ->select('name')
+        ->distinct()
+        ->orderBy('name')
+        ->pluck('name');
+}
+
     public function createLocationImage(DestinationLocation $location, object $image)
     {
 
