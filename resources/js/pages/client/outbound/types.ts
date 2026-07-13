@@ -6,6 +6,12 @@ export interface OutbounPageProps {
     'regular' : PackageGroup[],
 }
 
+export interface InboundPageProps {
+    'locations' : string[],
+    'featured' : PackageGroup[],
+    'regular' : PackageGroup[],
+}
+
 export interface FilterState {
   country: string;
   season: string;
