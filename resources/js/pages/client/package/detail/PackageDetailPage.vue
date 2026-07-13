@@ -15,15 +15,11 @@ import PackageExclusion from './section/PackageExclusion.vue';
 import PackageNote from './section/PackageNote.vue';
 import { computed } from 'vue';
 import InquiryForm from '../../home/section/InquiryForm.vue';
-import HeadContent from '@/components/HeadContent.vue';
+import { PackageDetailProps } from '../types';
 
 
-const props = defineProps<{
-    package: Package;
-    isInbound: boolean;
-}>();
+const props = defineProps<PackageDetailProps>();
 
-const page = usePage<Record<string, any>>();
 
 const dynamicBreadcrumbs = computed((): BreadcrumbItemType[] => {
     const crumbs: BreadcrumbItemType[] = [
@@ -41,41 +37,25 @@ const dynamicBreadcrumbs = computed((): BreadcrumbItemType[] => {
     return crumbs;
 });
 
-const usdRate: number = page.props.settings?.usd_to_php_rate ?? 1;
 
-const url = computed(() => {
-    const routeName = props.isInbound
-        ? 'client.inbound.package.detail'
-        : 'client.outbound.package.detail';
-
-    return route(routeName, { slug: props.package.slug });
-});
 </script>
 
 <template>
-
-    <HeadContent 
-        :title="props.package.name"
-        :description="props.package.description"
-        :imageUrl="props.package.primary_image?.url || undefined"
-        :url="url"
-    />
-
     <AppLayout>
         <!-- Pass the computed dynamicBreadcrumbs here -->
-        <PackageTitleHeaderWithImage :package="props.package" :isInbound="isInbound"
+        <PackageTitleHeaderWithImage :package="package" :isInbound="isInbound"
             :breadcrumbs="dynamicBreadcrumbs" />
 
-        <PackageRateAndSchedule :package="props.package" :isInbound="isInbound" :usdRate="usdRate" />
-        <PackageIncludedServices :package="props.package" />
-        <PackageTravelSchedule :package="props.package" :isInbound="isInbound" :usdRate="usdRate" />
-        <PackageDescription :package="props.package" />
-        <PackageHighlight :package="props.package" :isInbound="isInbound" />
-        <PackageItinerary :package="props.package" :isInbound="isInbound" />
-        <PackageInclusion :package="props.package" />
-        <PackageExclusion :package="props.package" />
-        <PackageNote v-if="props.package.notes_array && props.package.notes_array.length > 0"
-            :package="props.package" />
+        <PackageRateAndSchedule :package="package" :isInbound="isInbound" />
+        <PackageIncludedServices :package="package" />
+        <PackageTravelSchedule :package="package" :isInbound="isInbound" />
+        <PackageDescription :package="package" />
+        <PackageHighlight :package="package" :isInbound="isInbound" />
+        <PackageItinerary :package="package" :isInbound="isInbound" />
+        <PackageInclusion :package="package" />
+        <PackageExclusion :package="package" />
+        <PackageNote v-if="package.notes_array && package.notes_array.length > 0"
+            :package="package" />
 
         <InquiryForm />
     </AppLayout>
