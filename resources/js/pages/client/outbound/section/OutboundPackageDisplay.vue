@@ -7,6 +7,7 @@ import { PackageGroup } from '@/types/group-package';
 import GroupPackage from '@/components/GroupPackage.vue';
 import OutboundFilter from './OutboundFilter.vue';
 import { useFilteringPackages } from '../useOutboundPage';
+import { DURATION_FILTER_OPTIONS, SEASON_FILTER_OPTIONS } from '../constants.js';
 
 const props = defineProps<{
   countries: string[];
@@ -16,8 +17,6 @@ const props = defineProps<{
 
 const {
   countryOptions,
-  seasonOptions,
-  durationOptions,
   filters,
   filteredNormalGroups,
   noResults,
@@ -49,8 +48,8 @@ const {
       <div class="w-full flex flex-col gap-6 md:gap-8">
         <OutboundFilter 
           :country-options="countryOptions" 
-          :season-options="seasonOptions"
-          :duration-options="durationOptions" 
+          :season-options="SEASON_FILTER_OPTIONS"
+          :duration-options="DURATION_FILTER_OPTIONS" 
           :initial-filters="filters" 
           @search="search" 
         />

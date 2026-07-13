@@ -7,3 +7,19 @@ export interface OutbounPageProps {
     'regular' : PackageGroup[],
 }
 
+export interface FilterState {
+  country: string;
+  season: string;
+  duration: number | null;
+}
+
+export interface Option {
+  label: string;
+  value: string | number | null;
+}
+
+export interface UseFilteringPackagesProps {
+  countries: string[];
+  featuredGroups: PackageGroup[];
+  normalGroups: PackageGroup[];
+}

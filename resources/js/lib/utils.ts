@@ -196,3 +196,17 @@ export function getDestinationIdByCountry(
         )?.id ?? null
     );
 }
+
+
+export const normalizeText = (value: string | undefined | null) => value?.trim().toLowerCase() ?? '';
+
+
+export const toTitleCase = (value: string) => {
+  return value
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+};
+
+

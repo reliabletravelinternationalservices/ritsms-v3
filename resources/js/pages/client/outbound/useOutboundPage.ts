@@ -4,25 +4,11 @@ import { computed, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { PackageGroup } from '@/types/group-package';
 import { Package } from '@/types/package';
+import { FilterState, Option, UseFilteringPackagesProps } from './types';
+import { normalizeText, toTitleCase } from '@/lib/utils';
 
-interface FilterState {
-  country: string;
-  season: string;
-  duration: number | null;
-}
 
-interface Option {
-  label: string;
-  value: string | number | null;
-}
 
-interface UseFilteringPackagesProps {
-  countries: string[];
-  featuredGroups: PackageGroup[];
-  normalGroups: PackageGroup[];
-}
-
-const normalizeText = (value: string | undefined | null) => value?.trim().toLowerCase() ?? '';
 
 const extractCountry = (destination: string) => {
   const normalized = normalizeText(destination);
@@ -32,29 +18,9 @@ const extractCountry = (destination: string) => {
   return segments.length > 1 ? segments.at(-1) ?? segments[0] : segments[0];
 };
 
-const toTitleCase = (value: string) => {
-  return value
-    .split(' ')
-    .filter(Boolean)
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(' ');
-};
 
-const seasonOptions: Option[] = [
-  { label: 'Winter', value: 'winter' },
-  { label: 'Summer', value: 'summer' },
-  { label: 'Autumn', value: 'autumn' },
-  { label: 'Spring', value: 'spring' },
-];
 
-const durationOptions: Option[] = Array.from({ length: 30 }, (_, index) => {
-  const duration = index + 1;
-  return {
-    label: `${duration} Day${duration === 1 ? '' : 's'}`,
-    value: duration,
-  };
-});
-
+// URL PARSER
 const parseFiltersFromUrl = (pageUrl: string): FilterState => {
   const currentUrl = new URL(pageUrl, window.location.origin);
   const searchParams = currentUrl.searchParams;
@@ -68,6 +34,9 @@ const parseFiltersFromUrl = (pageUrl: string): FilterState => {
     duration: Number.isNaN(duration) ? null : duration,
   };
 };
+
+
+// PACKAGE FILTERATION
 
 export function useFilteringPackages(props: UseFilteringPackagesProps) {
   const page = usePage<Record<string, any>>();
@@ -159,8 +128,6 @@ export function useFilteringPackages(props: UseFilteringPackagesProps) {
 
   return {
     countryOptions,
-    seasonOptions,
-    durationOptions,
     filters,
     filteredNormalGroups,
     noResults,
