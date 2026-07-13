@@ -3,18 +3,12 @@ import { Media } from '@/types/media';
 import { Icon } from '@iconify/vue';
 import { Image } from 'lucide-vue-next';
 import { useShareModal } from '@/stores/shareModal';
+import { GroupDetailHeaderProps } from '../../types';
 
 const share = useShareModal();
 
-interface Props {
-  id: number
-  title: string,
-  description?: string | null,
-  image?: Media
-  isInbound: boolean
-}
 
-const props = defineProps<Props>();
+const props = defineProps<GroupDetailHeaderProps>();
 
 const openMessenger = () => {
     window.open(

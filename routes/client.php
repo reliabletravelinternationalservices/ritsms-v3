@@ -32,7 +32,7 @@ Route::prefix('outbound')->group(function () {
     });
 
     Route::prefix('package')->group(function () {
-        Route::get('/{slug}', [PackageDetailController::class, 'index'])->name('client.outbound.package.detail');
+        Route::get('/{slug}', [OutboundPageController::class, 'packageDetail'])->name('client.outbound.package.detail');
     });
 });
 
