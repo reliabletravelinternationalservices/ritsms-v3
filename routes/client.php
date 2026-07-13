@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\About\AboutUsController;
-use App\Http\Controllers\Client\ContactPageController;
+use App\Http\Controllers\Client\Contact\ContactPageController;
 use App\Http\Controllers\Client\Destination\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
