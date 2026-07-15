@@ -63,7 +63,7 @@ test('outbound and inbound package group routes render successfully', function (
     ]);
 
     $outboundResponse = $this->get(route('client.outbound.group', ['id' => $group->id]));
-    $inboundResponse = $this->get(route('client.inbound.package.group', ['id' => $group->id]));
+    $inboundResponse = $this->get(route('client.inbound.group', ['id' => $group->id]));
 
     $outboundResponse->assertStatus(200);
     $inboundResponse->assertStatus(200);
