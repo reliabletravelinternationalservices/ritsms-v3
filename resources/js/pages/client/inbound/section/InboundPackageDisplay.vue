@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { usePage } from '@inertiajs/vue3';
 import { useFilteringPackages } from '../useInboundPage';
 import GroupPackage from '@/components/GroupPackage.vue';
 import InboundFilter from './InboundFilter.vue';
