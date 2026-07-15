@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
-import { useFilteringPackages } from './useInboundPage';
+import { useFilteringPackages } from '../useInboundPage';
 import GroupPackage from '@/components/GroupPackage.vue';
 import InboundFilter from './InboundFilter.vue';
 import { PackageGroup } from '@/types/group-package';
@@ -52,7 +52,7 @@ const seasonOptions = [
           :is-inbound="true" 
           :usd-rate="usdRate" 
           :tag="group.tag"
-          :href="route('client.inbound.package.group', { id: group.id })" 
+          :href="route('client.inbound.group', { id: group.id })" 
         />
       </div>
 
@@ -76,7 +76,7 @@ const seasonOptions = [
             :is-inbound="true" 
             :usd-rate="usdRate" 
             :tag="group.tag"
-            :href="route('client.inbound.package.group', { id: group.id })" 
+            :href="route('client.inbound.group', { id: group.id })" 
           />
         </div>
 
