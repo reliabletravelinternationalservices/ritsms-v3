@@ -59,7 +59,7 @@ const openMessenger = () => {
               <button
                 @click="share.open(
                             route(
-                                `client.${props.isInbound ? 'inbound' : 'outbound'}.package.group`,
+                                `client.${props.isInbound ? 'inbound' : 'outbound'}.group`,
                                 { id: props.id }
                             )
                         )"
