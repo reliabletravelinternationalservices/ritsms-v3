@@ -12,7 +12,6 @@ const props = defineProps<{
     isFeatured: boolean
     isInbound: boolean
     packages?: Package[] | null
-    usdRate: number | null
     tag?: string | null
     href?: string
 }>();
@@ -41,8 +40,7 @@ const props = defineProps<{
             </span>
         </div>
         <div class="w-full">
-            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound"
-                :usd-rate="usdRate" />
+            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound" />
             <span v-else
                 class="flex flex-col items-center justify-center gap-2 w-full h-24 bg-[var(--outbound-opacity-custom-10)] rounded-lg">
                 <span
