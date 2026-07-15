@@ -2,17 +2,8 @@
 import DropdownField from '@/components/DropdownField.vue';
 import { Icon } from '@iconify/vue';
 import { ref, watch } from 'vue';
+import { FilterState, Option } from '../types';
 
-type FilterState = {
-    country: string;
-    season: string;
-    duration: number | null;
-};
-
-interface Option {
-    label: string;
-    value: string | number | null;
-}
 
 const props = defineProps<{
     countryOptions: Option[];
