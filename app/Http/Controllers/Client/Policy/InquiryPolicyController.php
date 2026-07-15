@@ -12,8 +12,8 @@ class InquiryPolicyController extends Controller
     public function index()
     {
         View::share('seo', [
-            'title' => 'Inquiry Policy',
-            'description' => 'We keep our process transparent. Here is exactly why your details are necessary when you send us a message.',
+            'title' => 'Why We Ask for Your Information',
+            'description' => 'Learn how we protect your personal data in compliance with the Philippine Data Privacy Act. See exactly why we collect your contact details and how they are used.',
             'image' => asset('storage/upload/agency/logo.png'),
             'url' => url()->current(),
         ]);
