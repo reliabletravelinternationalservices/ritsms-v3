@@ -60,7 +60,7 @@ class InboundPageService
         $this->share->SEO(
             $group->title,
             $group->description,
-            asset($group->primaryImage->url?? config('assets.logo')),
+            asset($group->image->url?? config('assets.logo')),
         );
     }
 
