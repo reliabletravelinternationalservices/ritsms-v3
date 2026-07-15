@@ -22,20 +22,22 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="flex flex-col items-start gap-4 py-12 "
+    <div class="flex flex-col items-start gap-4 py-12"
         :class="isFeatured ? 'border-b border-[var(--shadow-custom)]' : ''">
-        <div class="flex items-end justify-between w-full">
-            <div class="flex flex-col items-start gap-1 w-2/3">
-                <span v-if="isFeatured" class="flex items-center gap-1 text-[var(--tertiary-custom)]">
-                    <Icon icon="solar:pin-bold" width="24" height="24" />
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 w-full">
+            <div class="flex flex-col items-start gap-1 w-full sm:max-w-[70%] min-w-0">
+                <p v-if="isFeatured" class="flex items-center gap-1 text-[var(--tertiary-custom)]">
+                    <Icon icon="solar:pin-bold" width="24" height="24" class="shrink-0" aria-hidden="true" />
                     <span class="font-bold font-roboto text-md md:text-lg uppercase">FEATURED TOURS</span>
-                </span>
-                <h1 class="font-bold font-montserrat text-xl md:text-2xl uppercase">{{ title }}</h1>
-                <p v-if="description" class="font-roboto text-sm md:text-base">{{ description }}</p>
+                </p>
+                <h2 class="font-bold font-montserrat text-lg sm:text-xl md:text-2xl uppercase leading-snug line-clamp-2 break-words w-full">
+                    {{ title }}
+                </h2>
+                <p v-if="description" class="font-roboto text-sm md:text-base line-clamp-2 break-words w-full">{{ description }}</p>
                 <ValidToForeignBanner v-if="tag" :tag="tag" />
             </div>
-            <span v-if="href">
-                <ExploreButton title="Explore All" :href="href" />
+            <span v-if="href" class="shrink-0 w-[110px] sm:w-auto">
+                <ExploreButton title="Explore More" :href="href" class="w-[110px]  sm:w-auto" />
             </span>
         </div>
         <div class="w-full">
@@ -45,7 +47,7 @@ const props = defineProps<{
                 class="flex flex-col items-center justify-center gap-2 w-full h-24 bg-[var(--outbound-opacity-custom-10)] rounded-lg">
                 <span
                     class="flex items-center justify-center rounded-full bg-[var(--primary-custom)] text-white w-12 h-12">
-                    <Icon icon="material-symbols:search-rounded" width="24" height="24" />
+                    <Icon icon="material-symbols:search-rounded" width="24" height="24" aria-hidden="true" />
                 </span>
                 <p class="font-bold text-sm uppercase tracking-[0.08em] text-[var(--primary-custom)]">No packages found
                 </p>
