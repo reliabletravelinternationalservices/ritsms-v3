@@ -2,6 +2,8 @@
 
 namespace App\Services\Client;
 
+use App\Models\Package;
+use App\Models\PackageGroup;
 use App\Repository\Destination\DestinationLocationRepository;
 use App\Repository\Package\PackageGroupRepository;
 use App\Repository\Package\PackageRepository;
@@ -40,6 +42,48 @@ class InboundPageService
         );
     }
 
+
+
+
+    // GROUP DETAILS PAGE
+    public function getGroupDetailByID(int $id) {
+        return $this->repository->getPackageGroupByID($id); 
+    }
+
+    public function geGroupPackagePageData(PackageGroup $group)
+    {
+        $isInbound = true;
+        return compact('group', 'isInbound');
+    }
+
+    public function initializeGroupDetailPageSEO(PackageGroup $group) {
+        $this->share->SEO(
+            $group->title,
+            $group->description,
+            asset($group->primaryImage->url?? config('assets.logo')),
+        );
+    }
+
+
+    // PACKAGE DETAILS PAGE
+    public function getPackageBySlug(string $slug) {
+        return $this->packageRepo->getPackageBySlug($slug);
+        
+    }
+
+    public function getPackageDetailPageData(Package $package) {
+        $isInbound = true;
+        return compact('package', 'isInbound');
+    }
+
+
+    public function initializePackageDetailPageSEO(Package $package) {
+        $this->share->SEO(
+            $package->name,
+            $package->description,
+            asset($package->primaryImage->url?? config('assets.logo')),
+        );
+    }
 
 
 }
