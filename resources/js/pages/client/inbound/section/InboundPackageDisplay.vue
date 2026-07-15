@@ -5,8 +5,6 @@ import GroupPackage from '@/components/GroupPackage.vue';
 import InboundFilter from './InboundFilter.vue';
 import { PackageGroup } from '@/types/group-package';
 
-const page = usePage<Record<string, any>>();
-const usdRate: number | null = page.props.settings?.usd_to_php_rate ?? null;
 
 const props = defineProps<{
   featuredGroups: PackageGroup[];
@@ -50,7 +48,6 @@ const seasonOptions = [
           :packages="group.packages" 
           :is-featured="true"
           :is-inbound="true" 
-          :usd-rate="usdRate" 
           :tag="group.tag"
           :href="route('client.inbound.group', { id: group.id })" 
         />
@@ -74,7 +71,6 @@ const seasonOptions = [
             :packages="group.packages"
             :is-featured="false" 
             :is-inbound="true" 
-            :usd-rate="usdRate" 
             :tag="group.tag"
             :href="route('client.inbound.group', { id: group.id })" 
           />
