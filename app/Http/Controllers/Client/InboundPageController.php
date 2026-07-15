@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Services\Client\InboundPageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
 
 class InboundPageController extends Controller
