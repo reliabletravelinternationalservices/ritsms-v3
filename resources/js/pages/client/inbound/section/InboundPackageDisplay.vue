@@ -4,6 +4,7 @@ import { useFilteringPackages } from '../useInboundPage';
 import GroupPackage from '@/components/GroupPackage.vue';
 import InboundFilter from './InboundFilter.vue';
 import { PackageGroup } from '@/types/group-package';
+import { DURATION_FILTER_OPTIONS, SEASON_FILTER_OPTIONS } from '../constants';
 
 
 const props = defineProps<{
@@ -14,7 +15,6 @@ const props = defineProps<{
 
 const {
   destinationOptions,
-  durationOptions,
   filters,
   filteredNormalGroups,
   noResults,
@@ -27,12 +27,6 @@ const {
   normalGroups: props.normalGroups,
 });
 
-const seasonOptions = [
-  { label: 'Winter', value: 'winter' },
-  { label: 'Summer', value: 'summer' },
-  { label: 'Autumn', value: 'autumn' },
-  { label: 'Spring', value: 'spring' },
-];
 </script>
 
 <template>
@@ -56,8 +50,8 @@ const seasonOptions = [
       <div class="w-full flex flex-col gap-6">
         <InboundFilter 
           :destination-options="destinationOptions" 
-          :season-options="seasonOptions"
-          :duration-options="durationOptions" 
+          :season-options="SEASON_FILTER_OPTIONS"
+          :duration-options="DURATION_FILTER_OPTIONS" 
           :initial-filters="filters" 
           @search="search" 
         />
