@@ -64,7 +64,7 @@ const carouselConfig = {
 </script>
 
 <template>
-  <Carousel v-bind="carouselConfig" class="w-full">
+  <Carousel v-bind="carouselConfig" class="w-full" aria-label="Travel package carousel">
     <Slide v-for="packageData in props.packages" :key="packageData.id">
       <PackageCard :package="packageData" :isInbound="props.isInbound"/>
     </Slide>
@@ -73,14 +73,18 @@ const carouselConfig = {
       <Navigation v-if="showNavigation" class="hidden md:block ">
         <template #prev>
           <div
+            role="button"
+            aria-label="Previous package"
             class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
-            <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" />
+            <Icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="text-white" aria-hidden="true" />
           </div>
         </template>
         <template #next>
           <div
+            role="button"
+            aria-label="Next package"
             class="md:h-[400px] h-[330px] w-full bg-black/5 hover:bg-black/30 flex items-center justify-center duration-100">
-            <Icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="text-white" />
+            <Icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="text-white" aria-hidden="true" />
           </div>
         </template>
       </Navigation>
