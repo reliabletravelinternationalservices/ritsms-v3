@@ -7,8 +7,6 @@ use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
 use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\Outbound\OutboundPageController;
-use App\Http\Controllers\Client\Package\PackageDetailController;
-use App\Http\Controllers\Client\Package\PackageGroupController;
 use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,11 +39,11 @@ Route::prefix('inbound')->group(function () {
     Route::get('/', [InboundPageController::class, 'index'])->name('client.inbound');
 
     Route::prefix('group')->group(function () {
-        Route::get('/{id}', [PackageGroupController::class, 'index'])->name('client.inbound.package.group');
+        Route::get('/{id}', [InboundPageController::class, 'groupDetail'])->name('client.inbound.group');
     });
 
     Route::prefix('package')->group(function () {
-        Route::get('/{slug}', [PackageDetailController::class, 'index'])->name('client.inbound.package.detail');
+        Route::get('/{slug}', [InboundPageController::class, 'packageDetail'])->name('client.inbound.package.detail');
     });
 });
 
