@@ -3,15 +3,10 @@ import { usePage } from '@inertiajs/vue3';
 import type { PackageGroup } from '@/types/group-package';
 import type { Package } from '@/types/package';
 import { normalizeText, toTitleCase } from '@/lib/utils';
-import { FilterState, Option } from './types';
+import { FilterState, Option, UseInboundFilteringPackagesProps } from './types';
 
 
 
-export interface UseInboundFilteringPackagesProps {
-  destinationLocations: string[];
-  featuredGroups: PackageGroup[];
-  normalGroups: PackageGroup[];
-}
 
 const parseFiltersFromUrl = (pageUrl: string): FilterState => {
   const currentUrl = new URL(pageUrl, window.location.origin);
@@ -35,19 +30,6 @@ export function useFilteringPackages(props: UseInboundFilteringPackagesProps) {
       .filter(Boolean)
       .sort((a, b) => a.localeCompare(b))
       .map((destination) => ({ label: toTitleCase(destination), value: destination }));
-  });
-
-  const allGroups = computed(() => [...props.featuredGroups, ...props.normalGroups]);
-  const allPackages = computed<Package[]>(() => allGroups.value.flatMap((group) => group.packages ?? []));
-
-  const durationOptions = computed<Option[]>(() => {
-    return Array.from(
-      new Set(allPackages.value
-        .map((pkg) => pkg.duration)
-        .filter((duration): duration is number => duration !== null && duration !== undefined))
-    )
-      .sort((a, b) => a - b)
-      .map((duration) => ({ label: `${duration} Days`, value: duration }));
   });
 
   const filters = ref<FilterState>(parseFiltersFromUrl(page.url));
@@ -129,7 +111,6 @@ export function useFilteringPackages(props: UseInboundFilteringPackagesProps) {
 
   return {
     destinationOptions,
-    durationOptions,
     filters,
     filteredNormalGroups,
     noResults,
