@@ -60,6 +60,7 @@ const openMessenger = () => {
                         :class="props.isInbound ? 'bg-[var(--inbound-custom)]' : 'bg-[var(--outbound-custom)]'"
                     />
                     <Banner v-if="package.is_foreign_only" title="Valid For Foreign Tourists Only" class="bg-[var(--warning-custom)]"/>
+                    <Banner v-if="package.tag" :title="package.tag" class="bg-orange-700"/>
                 </div>
 
                 <h1 class="text-xl md:text-2xl lg:text-3xl font-montserrat font-bold text-[var(--secondary-custom)] uppercase leading-tight">
