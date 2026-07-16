@@ -5,7 +5,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import Button from './ui/button/Button.vue';
 import { cn } from '@/lib/utils';
 import { route } from 'ziggy-js'
-import AppLogoNameIcon from './AppLogoNameIcon.vue';
+import AppLogoIcon from './AppLogoIcon.vue';
 
 
 const isMobileMenuOpen = ref(false);
@@ -17,7 +17,7 @@ const isMobilePackagesOpen = ref(false);
         class="w-full p-4 md:p-2 bg-[var(--primary-custom)] text-[var(--secondary-custom)] sticky top-0 z-20 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a :href="route('client.landing')" aria-label="Reliable International Travel Services home">
-                <AppLogoNameIcon class="w-32 md:w-40 h-14" />
+                 <AppLogoIcon class="bg-black text-black size-10 fill-current" />
             </a>
 
             <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
