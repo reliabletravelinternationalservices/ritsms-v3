@@ -13,6 +13,6 @@ class LandingPageController extends Controller
     public function index()
     {
         $this->service->initializeSEO();
-        return Inertia::render('client/home/LandingPage', $this->service->getData());
+        return Inertia::render('client/home/LandingPage');
     }
 }
