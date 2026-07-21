@@ -1,18 +1,33 @@
 <script setup lang="ts">
 
 // TYPES
-import { type CarouselSectionProps } from '../types'
 
 // COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
-import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import ExploreButton from '@/components/ExploreButton.vue';
 
 
+// COMPOSABLES
+import { useOutboundPackages } from '@/composables/services/usePackages'
+import { onMounted } from 'vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
+import PackageCarouselSkeleton from '@/components/skeleton/PackageCarouselSkeleton.vue'
 
-defineProps<CarouselSectionProps>();
+
+
+const {
+  packages,
+  loading,
+  error,
+  fetchPackages,
+  refresh
+} = useOutboundPackages()
+
+onMounted(() => {
+  fetchPackages()
+})
 
 </script>
 
@@ -33,7 +48,6 @@ defineProps<CarouselSectionProps>();
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
               Discover top outbound travel packages to Asia, Europe, and beyond, plus curated island getaways closer to home. Book affordable, reliable international tours designed around the world's most loved destinations.
           </p>
-          <ValidToForeignBanner v-if="tag" :tag="tag" />
         </div>
       </div>
 
@@ -43,7 +57,9 @@ defineProps<CarouselSectionProps>();
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="false" :packages="packages" />
+        <PackageCarouselSkeleton v-if="loading" />
+        <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+        <PackageCarousel v-else :is-inbound="false"  :packages="packages" />
     </div>
   </section>
 </template>
