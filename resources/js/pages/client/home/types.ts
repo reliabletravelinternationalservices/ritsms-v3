@@ -5,17 +5,6 @@ interface PackageResult {
     packages: Package[];
 }
 
-export interface LandingPageProps {
-    destinations: Destination[];
-    inbound: PackageResult;
-    outbound: PackageResult;
-}
-
-
-export interface CarouselSectionProps {
-  packages?: Package[],
-  tag?: string | null,
-}
 
 
 export interface ClassProps {
@@ -30,9 +19,8 @@ export interface ImageProps {
 }
 
 
-export interface DestinationProps {
-    destinations: Destination[]
-}
+
+
 
 export interface ServiceProps {
     id: number,
