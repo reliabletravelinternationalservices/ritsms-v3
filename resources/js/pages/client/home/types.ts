@@ -1,11 +1,3 @@
-import { Destination } from "@/types/destination";
-import { Package } from "@/types/package";
-
-interface PackageResult {
-    packages: Package[];
-}
-
-
 
 export interface ClassProps {
     class?: string

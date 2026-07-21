@@ -25,7 +25,7 @@ defineProps<DestinationProps>();
         <TitleHeader />
 
         <MotionWrapper :delay="SECTION_DELAYS.destinationSection">
-            <DestinationCarousel :destinations="destinations" />
+            <DestinationCarousel />
         </MotionWrapper>
 
         <MotionWrapper :delay="SECTION_DELAYS.inboundSection">
