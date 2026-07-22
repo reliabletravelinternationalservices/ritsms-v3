@@ -1,22 +1,26 @@
 import { ref } from 'vue'
 
-import { Package } from '@/types/package-api'
-import { inboundPackageService, outboundPackageService } from '@/services/packageService'
+import { Package, PackageFilter } from '@/types/package-api'
+import { packageService } from '@/services/packageService'
+import { PaginatedData } from '@/types/api'
 
-export function useInboundPackages() {
+export function usePackages() {
+    const paginatedPackages = ref<PaginatedData<Package[]>>()
     const packages = ref<Package[]>([])
+    
     const loading = ref(false)
     const loaded = ref(false)
     const error = ref<string | null>(null)
 
-    const fetchPackages = async () => {
+    const fetchPackages = async (filters: PackageFilter = {}) => {
         loading.value = true
         error.value = null
 
         try {
-            const response = await inboundPackageService.getAll()
+            const response = await packageService.getAll( filters)
 
-            packages.value = response.data
+            paginatedPackages.value = response.data
+            packages.value = response.data.data
             loaded.value = true
         } catch (err: any) {
             error.value =
@@ -30,57 +34,7 @@ export function useInboundPackages() {
         }
     }
 
-    const refresh = () => fetchPackages()
-
-    const reset = () => {
-        packages.value = []
-        loading.value = false
-        loaded.value = false
-        error.value = null
-    }
-
-    return {
-        packages,
-
-        loading,
-        loaded,
-        error,
-
-        fetchPackages,
-        refresh,
-        reset,
-    }
-}
-
-
-export function useOutboundPackages() {
-    const packages = ref<Package[]>([])
-    const loading = ref(false)
-    const loaded = ref(false)
-    const error = ref<string | null>(null)
-
-    const fetchPackages = async () => {
-        loading.value = true
-        error.value = null
-
-        try {
-            const response = await outboundPackageService.getAll()
-
-            packages.value = response.data
-            loaded.value = true
-        } catch (err: any) {
-            error.value =
-                err.response?.data?.message ??
-                err.message ??
-                'Failed to fetch packages.'
-
-            packages.value = []
-        } finally {
-            loading.value = false
-        }
-    }
-
-    const refresh = () => fetchPackages()
+    const refresh = (filters: PackageFilter = {}) => fetchPackages(filters)
 
     const reset = () => {
         packages.value = []
