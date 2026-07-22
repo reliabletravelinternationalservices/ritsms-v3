@@ -10,7 +10,6 @@ import { onMounted } from 'vue';
 const {
   groupedPackages,
   fetchGroupPackages,
-  loaded,
   loading,
   error,
   

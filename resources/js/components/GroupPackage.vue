@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ExploreButton from '@/components/ExploreButton.vue';
 import PackageCarousel from '@/components/PackageCarousel.vue';
-import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
 import { GroupedPackage } from '@/types/grouped-package';

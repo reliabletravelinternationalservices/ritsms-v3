@@ -6,8 +6,6 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
 import OutboundPackageDisplay from './section/OutboundPackageDisplay.vue';
 
-// TYPES
-import { OutbounPageProps } from './types.js';
 
 </script>
 

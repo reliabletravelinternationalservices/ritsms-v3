@@ -13,7 +13,7 @@ class OutboundPageController extends Controller
     public function index()
     {
         $this->service->initializeRootPageSEO();
-        return Inertia::render('client/outbound/OutboundPage', $this->service->getOutboundPageData());
+        return Inertia::render('client/outbound/OutboundPage');
     }
 
 
