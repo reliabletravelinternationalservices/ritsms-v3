@@ -18,4 +18,10 @@ class DestinationController extends Controller
     {
         return $this->repo->fetchCountry($country);
     }
+
+
+    public function getCountriesNames()
+    {
+        return $this->repo->fetchCountriesNames();
+    }
 }
