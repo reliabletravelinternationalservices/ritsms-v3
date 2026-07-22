@@ -13,3 +13,19 @@ export interface Package {
     created_at: string
     updated_at: string
 }
+
+
+
+export interface PackageFilter {
+    priceRange?: PriceRange
+    isForeignOnly?: boolean
+    destination?: string
+    name?: string
+    perPage?: number
+}
+
+
+export interface PriceRange {
+    min: number
+    max: number
+}
