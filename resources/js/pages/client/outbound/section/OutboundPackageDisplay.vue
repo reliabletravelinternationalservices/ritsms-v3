@@ -3,6 +3,7 @@
 
 // COMPONENTS
 import GroupPackage from '@/components/GroupPackage.vue';
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue';
 import GroupPackageSkeleton from '@/components/skeleton/GroupPackageSkeleton.vue';
 import { useGroupPackages } from '@/composables/services/usePackages.js';  
 import { onMounted } from 'vue';
