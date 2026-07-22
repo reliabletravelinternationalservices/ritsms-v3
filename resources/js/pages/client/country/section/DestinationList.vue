@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 // COMPONENTS
-import CountryCard from '@/components/CountryCard.vue';
+import CountryCard from '@/components/carousel/country/CountryCard.vue';
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 
 // TYPES
@@ -23,7 +23,7 @@ defineProps<DestinationProps>();
         class="h-full w-full"
       >
         <CountryCard 
-          :destination="destination" 
+          :country="destination" 
           :href="route('client.destination.country', { destination: destination.id })" 
         />
       </MotionWrapper>

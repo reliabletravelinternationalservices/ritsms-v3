@@ -16,7 +16,7 @@ class InboundPageController extends Controller
     public function index()
     {
         $this->service->initializeRootPageSEO();
-        return Inertia::render('client/inbound/InboundPage', $this->service->getInboundPageData());
+        return Inertia::render('client/inbound/InboundPage');
     }
 
 
