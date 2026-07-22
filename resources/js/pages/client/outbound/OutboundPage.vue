@@ -9,12 +9,11 @@ import OutboundPackageDisplay from './section/OutboundPackageDisplay.vue';
 // TYPES
 import { OutbounPageProps } from './types.js';
 
-defineProps<OutbounPageProps>();
 </script>
 
 <template>
     <AppLayout>
         <OutboundTitleHeader  />
-        <OutboundPackageDisplay :featuredGroups="featured" :normalGroups="regular" :countries="countries"/>
+        <OutboundPackageDisplay />
     </AppLayout>     
 </template>
