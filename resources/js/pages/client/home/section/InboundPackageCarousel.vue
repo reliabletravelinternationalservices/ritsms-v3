@@ -6,11 +6,11 @@ import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import ExploreButton from '@/components/ExploreButton.vue'
-import { useInboundPackages } from '@/composables/services/usePackages'
 import { onMounted } from 'vue'
 import { VALID_FOR_FOREIGN_ONLY_TAG } from '../constants'
 import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 import PackageCarouselSkeleton from '@/components/skeleton/PackageCarouselSkeleton.vue'
+import { usePackages } from '@/composables/services/usePackages'
 
 // TYPES
 
@@ -20,10 +20,13 @@ const {
   error,
   fetchPackages,
   refresh
-} = useInboundPackages()
+} = usePackages()
 
 onMounted(() => {
-  fetchPackages()
+  fetchPackages({
+    isForeignOnly: true,
+    perPage: 10
+  })
 })
 
 </script>

@@ -10,10 +10,10 @@ import ExploreButton from '@/components/ExploreButton.vue';
 
 
 // COMPOSABLES
-import { useOutboundPackages } from '@/composables/services/usePackages'
 import { onMounted } from 'vue'
 import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 import PackageCarouselSkeleton from '@/components/skeleton/PackageCarouselSkeleton.vue'
+import { usePackages } from '@/composables/services/usePackages';
 
 
 
@@ -23,10 +23,16 @@ const {
   error,
   fetchPackages,
   refresh
-} = useOutboundPackages()
+} = usePackages()
 
 onMounted(() => {
-  fetchPackages()
+  fetchPackages(
+    {
+      isForeignOnly: false,
+      perPage: 10
+    }
+  )
+
 })
 
 </script>
