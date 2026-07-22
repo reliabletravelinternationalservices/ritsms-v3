@@ -14,4 +14,9 @@ class PackageController extends Controller
 
         return  $this->repo->fetchPackages($request->all());
     }
+
+    public function getGroupedPackage(Request $request)
+    {
+        return  $this->repo->fetchGroupedPackages($request->all());
+    }
 }

@@ -75,4 +75,37 @@ class DestinationRepository
             ], 500);
         }
     }
+
+
+    public function fetchCountriesNames()
+    {
+        try {
+            $data = Destination::query()
+                ->select('id', 'country')
+                ->distinct()
+                ->orderBy('country', 'asc')
+                ->get();
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No countries found.',
+                    'data' => [],
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Countries names retrieved successfully.',
+                'data' => $data,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong.',
+                'error' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
+            
+    }
 }
