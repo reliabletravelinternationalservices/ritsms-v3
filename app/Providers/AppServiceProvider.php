@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Destination;
+use App\Models\Package;
+use App\Observers\DestinationObserver;
+use App\Observers\PackageObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->getLimit('packages');
         $this->getLimit('countries', 120);
+        $this->getObserver();
     }
 
 
@@ -35,5 +40,12 @@ class AppServiceProvider extends ServiceProvider
                 ->by($request->ip());
         });
 
+    }
+
+
+    private function getObserver()
+    {
+        Destination::observe(DestinationObserver::class);
+        Package::observe(PackageObserver::class);
     }
 }
