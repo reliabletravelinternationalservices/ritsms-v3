@@ -15,8 +15,6 @@ import { SECTION_DELAYS } from './constants';
 import { DestinationProps } from './types.js';
 
 
-defineProps<DestinationProps>();
-
 </script>
 
 <template>
