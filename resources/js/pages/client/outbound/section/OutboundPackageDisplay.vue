@@ -6,7 +6,7 @@ import GroupPackageSkeleton from '@/components/skeleton/GroupPackageSkeleton.vue
 import { useGroupPackages } from '@/composables/services/usePackages.js';
 import { onMounted } from 'vue';
 
-const { groupedPackages, fetchGroupPackages, loaded, loading, loadingMore, loadMore, isLastPage, error } = useGroupPackages();
+const { groupedPackages, fetchGroupPackages, loading, loadingMore, loadMore, isLastPage, error } = useGroupPackages();
 
 onMounted(() => {
     fetchGroupPackages({ isOutbound: true, perPage: 10, page: 1 });
