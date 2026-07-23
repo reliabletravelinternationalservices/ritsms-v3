@@ -10,6 +10,7 @@ import { useCountry } from '@/composables/services/useCountries';
 const {
     countries,
     isLastPage,
+    lastFilters,
 
     loading,
     loadingMore,
@@ -38,7 +39,7 @@ onMounted(() => {
         </div>
 
         <!-- Error -->
-        <ApiFetchError v-else-if="error" class="w-full p-6" :retry="refresh" :description="error" />
+        <ApiFetchError v-else-if="error" class="w-full p-6" :retry="() => refresh({ ...lastFilters })" :description="error" />
 
         <!-- Content -->
         <template v-else>

@@ -26,9 +26,11 @@ export function useCountry() {
         filters: CountryFilter = {},
         append = false
     ) => {
-        append
-            ? (loadingMore.value = true)
-            : (loading.value = true)
+        if (append) {
+            loadingMore.value = true
+        } else {
+            loading.value = true
+        }
 
         error.value = null
 
@@ -64,7 +66,7 @@ export function useCountry() {
 
     const refresh = (filters: CountryFilter = {}) =>
         fetchCountries({
-            ...lastFilters.value,
+            ...filters,
             page: 1,
         })
 
@@ -123,6 +125,7 @@ export function useCountry() {
         error,
 
         isLastPage,
+        lastFilters,
 
         fetchCountries,
         refresh,
