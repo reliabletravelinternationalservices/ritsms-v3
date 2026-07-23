@@ -5,7 +5,7 @@ import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
 import CountryCarousel from '@/components/carousel/country/CountryCarousel.vue'
 import ExploreButton from '@/components/ExploreButton.vue'
-import { useCountries } from '@/composables/services/useCountries'
+import { useCountry } from '@/composables/services/useCountries'
 import CountryCarouselSkeleton from '@/components/skeleton/CountryCarouselSkeleton.vue'
 import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 import { onMounted } from 'vue'
@@ -16,10 +16,12 @@ const {
   error,
   fetchCountries,
   refresh
-} = useCountries()
+} = useCountry()
 
 onMounted(() => {
-  fetchCountries()
+  fetchCountries({
+    perPage: 10
+  })
 })
 
 </script>
@@ -51,7 +53,7 @@ onMounted(() => {
 
     <div class="w-full">
       <CountryCarouselSkeleton v-if="loading" />
-      <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+      <ApiFetchError v-else-if="error" :retry="() => refresh({ perPage: 10 })" :description="error" />
       <CountryCarousel v-else :countries="countries"  />
     </div>
   </section>
