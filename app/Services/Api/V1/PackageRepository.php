@@ -128,7 +128,7 @@ class PackageRepository
                     'updated_at',
                 ])
                 ->with([
-                    'packages:id,package_group_id,slug,name,base_price,duration,destination,description,created_at,updated_at',
+                    'packages:id,slug,name,base_price,duration,destination,description,created_at,updated_at',
                     'packages.primaryImage:id,mediable_id,mediable_type,file_name,file_path,alt_text',
                 ])
 
