@@ -10,9 +10,19 @@ class PackageRepository
 {
 
 
-
     public function fetchPackages(array $filters = [])
     {
+        $filters = Arr::only($filters, [
+            'destination',
+            'duration',
+            'name',
+            'isForeignOnly',
+            'priceRange',
+            'priceRange.min',
+            'priceRange.max',
+            'perPage',
+        ]);
+
         try {
             $data = Package::query()
                 ->select([
@@ -31,17 +41,17 @@ class PackageRepository
                 ])
 
                 ->when(
-                    Arr::get($filters, 'destination'),
+                    filled(Arr::get($filters, 'destination')),
                     fn ($query, $destination) => $query->where('destination', $destination)
                 )
 
                 ->when(
-                    Arr::get($filters, 'duration'),
+                    filled(Arr::get($filters, 'duration')),
                     fn ($query, $duration) => $query->where('duration', $duration)
                 )
 
                 ->when(
-                    Arr::get($filters, 'name'),
+                    filled(Arr::get($filters, 'name')),
                     fn ($query, $name) => $query->where('name', 'like', "%{$name}%")
                 )
 
@@ -67,8 +77,9 @@ class PackageRepository
                         ]);
                     }
                 )
+
                 ->latest()
-                ->paginate(Arr::get($filters, 'perPage', 10));
+                ->paginate((int) Arr::get($filters, 'perPage', 10));
 
             if ($data->isEmpty()) {
                 return response()->json([
@@ -94,6 +105,15 @@ class PackageRepository
 
     public function fetchGroupedPackages(array $filters = [])
     {
+        $filters = Arr::only($filters, [
+            'title',
+            'tag',
+            'isInbound',
+            'isOutbound',
+            'isFeatured',
+            'perPage',
+        ]);
+
         try {
             $data = PackageGroup::query()
                 ->select([
@@ -108,11 +128,11 @@ class PackageRepository
                     'updated_at',
                 ])
                 ->with([
-                    'packages:id,slug,name,base_price,duration,destination,description,created_at,updated_at',
+                    'packages:id,package_group_id,slug,name,base_price,duration,destination,description,created_at,updated_at',
                     'packages.primaryImage:id,mediable_id,mediable_type,file_name,file_path,alt_text',
                 ])
 
-                // Search by title
+                // Search title
                 ->when(
                     filled(Arr::get($filters, 'title')),
                     fn ($query) => $query->where(
@@ -122,7 +142,16 @@ class PackageRepository
                     )
                 )
 
-                // Filter inbound
+                // Filter tag
+                ->when(
+                    filled(Arr::get($filters, 'tag')),
+                    fn ($query) => $query->where(
+                        'tag',
+                        Arr::get($filters, 'tag')
+                    )
+                )
+
+                // Inbound
                 ->when(
                     Arr::has($filters, 'isInbound'),
                     fn ($query) => $query->where(
@@ -134,7 +163,7 @@ class PackageRepository
                     )
                 )
 
-                // Filter outbound
+                // Outbound
                 ->when(
                     Arr::has($filters, 'isOutbound'),
                     fn ($query) => $query->where(
@@ -146,7 +175,7 @@ class PackageRepository
                     )
                 )
 
-                // Filter featured
+                // Featured
                 ->when(
                     Arr::has($filters, 'isFeatured'),
                     fn ($query) => $query->where(
@@ -159,20 +188,25 @@ class PackageRepository
                 )
 
                 ->orderByDesc('is_featured')
-                ->orderByDesc('created_at')
+                ->latest()
 
                 ->paginate(
-                    Arr::get($filters, 'perPage', 10)
+                    (int) Arr::get($filters, 'perPage', 10)
                 );
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No package groups found.',
+                    'data' => [],
+                ], 404);
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => $data->isEmpty()
-                    ? 'No package groups found.'
-                    : 'Package groups retrieved successfully.',
+                'message' => 'Package groups retrieved successfully.',
                 'data' => $data,
-            ], $data->isEmpty() ? 404 : 200);
-
+            ]);
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
