@@ -3,13 +3,27 @@
 // COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
-import CountryCarousel from '@/components/CountryCarousel.vue'
+import CountryCarousel from '@/components/carousel/country/CountryCarousel.vue'
 import ExploreButton from '@/components/ExploreButton.vue'
+import { useCountry } from '@/composables/services/useCountries'
+import CountryCarouselSkeleton from '@/components/skeleton/CountryCarouselSkeleton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
+import { onMounted } from 'vue'
 
-// TYPES
-import { DestinationProps } from '../types'
+const {
+  countries,
+  loading,
+  error,
+  fetchCountries,
+  refresh
+} = useCountry()
 
-defineProps<DestinationProps>()
+onMounted(() => {
+  fetchCountries({
+    perPage: 10
+  })
+})
+
 </script>
 
 <template>
@@ -38,7 +52,9 @@ defineProps<DestinationProps>()
     </div>
 
     <div class="w-full">
-      <CountryCarousel :destinations="destinations"  />
+      <CountryCarouselSkeleton v-if="loading" />
+      <ApiFetchError v-else-if="error" :retry="() => refresh({ perPage: 10 })" :description="error" />
+      <CountryCarousel v-else :countries="countries"  />
     </div>
   </section>
 </template>

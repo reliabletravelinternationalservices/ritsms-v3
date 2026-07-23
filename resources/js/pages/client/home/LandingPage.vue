@@ -2,9 +2,6 @@
 // LAYOUT
 import AppLayout from '@/layouts/ClientAppLayout.vue';
 
-// PROPS
-import { type LandingPageProps } from './types';
-
 // COMPONENTS
 import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 import CarouselSection from '@/pages/client/home/section/ImageCarousel.vue';
@@ -22,10 +19,8 @@ import ClientFeedback from './section/ClientFeedback.vue';
 //CONSTANTS
 import {
     LANDING_DELAYS,
-    VALID_FOR_FOREIGN_ONLY_TAG,
 } from './constants';
 
-defineProps<LandingPageProps>();
 
 </script>
 
@@ -35,15 +30,15 @@ defineProps<LandingPageProps>();
         <CarouselSection />
 
         <MotionWrapper :delay="LANDING_DELAYS.destinationSection">
-            <DestinationCarousel :destinations="destinations" />
+            <DestinationCarousel />
         </MotionWrapper>
 
         <MotionWrapper :delay="LANDING_DELAYS.inboundSection">
-            <InboundPackageCarousel :packages="inbound.packages" :tag="VALID_FOR_FOREIGN_ONLY_TAG" />
+            <InboundPackageCarousel  />
         </MotionWrapper>
 
         <MotionWrapper :delay="LANDING_DELAYS.outboundSection">
-            <OutboundPackageCarousel :packages="outbound.packages" />
+            <OutboundPackageCarousel />
         </MotionWrapper>
 
         <MotionWrapper :delay="LANDING_DELAYS.servicesSection">

@@ -11,11 +11,7 @@ import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 // CONSTANTS
 import { SECTION_DELAYS } from './constants';
 
-// TYPES
-import { DestinationProps } from './types.js';
 
-
-defineProps<DestinationProps>();
 
 </script>
 
@@ -25,15 +21,15 @@ defineProps<DestinationProps>();
         <TitleHeader />
 
         <MotionWrapper :delay="SECTION_DELAYS.destinationSection">
-            <DestinationCarousel :destinations="destinations" />
+            <DestinationCarousel />
         </MotionWrapper>
 
         <MotionWrapper :delay="SECTION_DELAYS.inboundSection">
-            <FeaturedInboundPackage :destinations="destinations" />
+            <FeaturedInboundPackage />
         </MotionWrapper>
 
         <MotionWrapper :delay="SECTION_DELAYS.outboundSection">
-            <FeaturedOutboundPackage :destinations="destinations" />
+            <FeaturedOutboundPackage />
         </MotionWrapper>
     </AppLayout>     
 </template>

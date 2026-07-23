@@ -2,6 +2,7 @@
 
 export interface Auth {
     user: User;
+    traveler: Traveler;
 }
 
 export interface BreadcrumbItem {
@@ -55,6 +56,20 @@ export interface User {
     display_name: string;
     phone: string | null;
     role: 'admin' | 'agent';
+    email_verified_at: string | null;
+    status: 'active' | 'inactive';
+    created_at: string;
+    updated_at: string;
+}
+
+
+
+export interface Traveler {
+    id: number;
+    name: string;
+    email: string;
+    avatar?: string;
+    phone: string | null;
     email_verified_at: string | null;
     status: 'active' | 'inactive';
     created_at: string;

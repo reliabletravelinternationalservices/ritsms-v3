@@ -1,31 +1,31 @@
 <script setup lang="ts">
 import ExploreButton from '@/components/ExploreButton.vue';
 import PackageCarousel from '@/components/PackageCarousel.vue';
-import { Package } from '@/types/package';
 import { Icon } from '@iconify/vue';
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue';
+import { GroupedPackage } from '@/types/grouped-package';
 
 
-const props = defineProps<{
-    title: string
-    description?: string | null
-    isFeatured: boolean
-    isInbound: boolean
-    packages?: Package[] | null
-    tag?: string | null
-    href?: string
-}>();
+const props = defineProps<{ group: GroupedPackage , href?: string, isInbound?: boolean}>()
 
+
+const {
+    title,
+    description,
+    packages,
+    is_featured,
+    tag,
+} = props.group;
 
 
 </script>
 
 <template>
     <div class="flex flex-col items-start gap-4 py-12"
-        :class="isFeatured ? 'border-b border-[var(--shadow-custom)]' : ''">
+        :class="is_featured ? 'border-b border-[var(--shadow-custom)]' : ''">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 w-full">
             <div class="flex flex-col items-start gap-1 w-full sm:max-w-[70%] min-w-0">
-                <p v-if="isFeatured" class="flex items-center gap-1 text-[var(--tertiary-custom)]">
+                <p v-if="is_featured" class="flex items-center gap-1 text-[var(--tertiary-custom)]">
                     <Icon icon="solar:pin-bold" width="24" height="24" class="shrink-0" aria-hidden="true" />
                     <span class="font-bold font-roboto text-md md:text-lg uppercase">FEATURED TOURS</span>
                 </p>
@@ -40,7 +40,7 @@ const props = defineProps<{
             </span>
         </div>
         <div class="w-full">
-            <PackageCarousel v-if="packages" :packages="props.packages ?? []" :is-inbound="isInbound" />
+            <PackageCarousel v-if="packages" :packages="packages ?? []" :is-inbound="isInbound" />
             <span v-else
                 class="flex flex-col items-center justify-center gap-2 w-full h-24 bg-[var(--outbound-opacity-custom-10)] rounded-lg">
                 <span

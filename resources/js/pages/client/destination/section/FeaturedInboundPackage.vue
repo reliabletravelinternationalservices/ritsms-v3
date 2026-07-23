@@ -5,22 +5,30 @@ import ExploreButton from '@/components/ExploreButton.vue'
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import { Icon } from '@iconify/vue'
-
-// UTILS
-import { computed } from 'vue'
-import { getDestinationIdByCountry } from '@/lib/utils'
-
-// TYPES
-import { DestinationProps } from '../types'
+import { useCountry } from '@/composables/services/useCountries'
+import { onMounted } from 'vue'
+import CountryLocationImageSkeleton from '@/components/skeleton/CountryLocationImageSkeleton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 
 
 
-const props = defineProps<DestinationProps>();
+// COMPOSABLE
+const {
+  countries,
+  loading,
+  loaded,
+  error,
+  fetchCountries,
+  refresh
+} = useCountry()
 
-const phID = computed(() =>
-    getDestinationIdByCountry(props.destinations, 'Philippines')
-);
-
+onMounted(() => {
+  fetchCountries({
+    countryName: 'Philippines',
+    with: { locations: true },
+    perPage: 10
+  })
+})
 </script>
 
 <template>
@@ -28,7 +36,7 @@ const phID = computed(() =>
     class="relative flex overflow-hidden flex-col gap-4 items-center justify-center
            min-h-[100vh] md:min-h-[700px] lg:min-h-[900px]
            py-10 md:py-12 px-4 md:px-6
-           bg-[var(--inbound-custom)]"
+           bg-[var(--inbound-custom)] w-full"
   >
     <div
       class="w-full max-w-5xl mx-auto relative z-10
@@ -89,7 +97,7 @@ const phID = computed(() =>
         >
           <ExploreButton
             title="Explore Inbound Destinations"
-            :href="phID ? route('client.destination.country', { destination: phID }) : '#'"
+            :href="countries[0] ? route('client.destination.country', { destination: countries[0].id }) : '#'"
             class="font-bold text-[var(--primary-custom)]
                    hover:text-[var(--tertiary-custom)]
                    border-[var(--primary-custom)]
@@ -97,12 +105,16 @@ const phID = computed(() =>
           />
         </div>
       </div>
-
+      
       <!-- CAROUSEL -->
-      <ImageDestinationCarousel
-        :destinations="props.destinations"
-        :is-philippines-only="true"
-      />
+      <div class="w-full">
+          <CountryLocationImageSkeleton v-if="loading" />
+          <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+          <ImageDestinationCarousel
+          v-if="loaded"
+          :countries="countries"
+        />
+      </div>
     </div>
 
     <!-- DECOR ICONS -->

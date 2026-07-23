@@ -2,32 +2,16 @@
 import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
-import { ref, computed, watch } from 'vue'
-import { Destination } from '@/types/destination'
+import { ref, watch } from 'vue'
+import {  CountryWithLocations } from '@/types/country'
+import { getImageUrl } from '@/lib/utils'
 
-type Props = {
-  destinations: Destination[]
-  isPhilippinesOnly: boolean
+interface Props {
+  countries: CountryWithLocations[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  destinations: () => [],
-  isPhilippinesOnly: false,
-})
-
-/* =========================
-   FILTERED DATA (SAFE)
-========================= */
-const filteredDestinations = computed(() => {
-  if (!props.destinations.length) return []
-
-  if (props.isPhilippinesOnly) {
-    return props.destinations.filter(
-      (dest) => dest.country?.toLowerCase() === 'philippines'
-    )
-  }
-
-  return props.destinations
+  countries: () => [],
 })
 
 /* =========================
@@ -52,7 +36,7 @@ const selectDestination = (index: number) => {
    AUTO FIX INDEX (IMPORTANT)
    prevents crash when filtering changes
 ========================= */
-watch(filteredDestinations, (newList) => {
+watch(() => props.countries, (newList) => {
   if (selectedImage.value >= newList.length) {
     selectedImage.value = 0
   }
@@ -102,22 +86,44 @@ const carouselConfig2 = {
     ========================== -->
     <Carousel ref="carouselRef2" v-bind="carouselConfig2" class="w-full">
       <Slide
-        v-for="(destLocation, index) in filteredDestinations[selectedImage]?.locations || []"
+        v-for="(loc, index) in countries[selectedImage]?.locations || []"
         :key="index"
       >
-        <div class="h-[300px] md:h-[500px] w-full relative">
+        <div class="group relative h-[300px] w-full overflow-hidden md:h-[500px] rounded-lg">
           <img
-            v-if="destLocation?.image?.url"
-            :src="destLocation.image.url"
-            :alt="filteredDestinations[selectedImage]?.image?.alt_text || ''"
-            class="w-full h-full object-cover object-center"
+            v-if="loc.image"
+            :src="getImageUrl(loc.image.file_path)"
+            :alt="loc.image.alt_text || loc.name"
+            class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
           />
 
           <div
             v-else
-            class="w-full h-full bg-gray-200 flex items-center justify-center"
+            class="flex h-full w-full items-center justify-center bg-gray-200"
           >
-            <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" />
+            <Icon
+              icon="mdi:image-off"
+              width="48"
+              height="48"
+              class="text-gray-400"
+            />
+          </div>
+
+          <!-- Dark overlay -->
+          <div
+            class="absolute inset-0 bg-black/0 transition-all duration-300 group-hover:bg-black/50"
+          ></div>
+
+          <!-- Location Name -->
+          <div
+            class="absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100"
+          >
+            <h3
+              class="translate-y-4 transform px-6 text-center text-2xl font-bold text-white transition-all duration-300 group-hover:translate-y-0 uppercase font-montserrat tracking-wider"
+            >
+              {{ loc.name }}
+            </h3>
+            <p class="translate-y-4 transform px-6 text-center text-white transition-all duration-300 group-hover:translate-y-0 text-sme max-w-[70%]">{{ loc.description }}</p>
           </div>
         </div>
       </Slide>
@@ -145,7 +151,7 @@ const carouselConfig2 = {
     ========================== -->
     <Carousel ref="carouselRef" v-bind="carouselConfig" class="w-full mt-3">
       <Slide
-        v-for="(destination, index) in filteredDestinations"
+        v-for="(destination, index) in countries"
         :key="destination.id"
       >
         <div
@@ -164,9 +170,9 @@ const carouselConfig2 = {
 
           <!-- image -->
           <img
-            v-if="destination.image?.url"
-            :src="destination.image.url"
-            :alt="destination.image?.alt_text || ''"
+            v-if="destination.image"
+            :src="getImageUrl(destination.image.file_path)"
+            :alt="destination.image?.alt_text || destination.country + ' travel destination'"
             class="w-full h-full object-cover"
           />
 

@@ -6,11 +6,28 @@ import { Icon } from '@iconify/vue'
 import PackageCarousel from '@/components/PackageCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import ExploreButton from '@/components/ExploreButton.vue'
+import { onMounted } from 'vue'
+import { VALID_FOR_FOREIGN_ONLY_TAG } from '../constants'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
+import PackageCarouselSkeleton from '@/components/skeleton/PackageCarouselSkeleton.vue'
+import { usePackages } from '@/composables/services/usePackages'
 
 // TYPES
-import { type CarouselSectionProps } from '../types'
 
-defineProps<CarouselSectionProps>();
+const {
+  packages,
+  loading,
+  error,
+  fetchPackages,
+  refresh
+} = usePackages()
+
+onMounted(() => {
+  fetchPackages({
+    isForeignOnly: true,
+    perPage: 10
+  })
+})
 
 </script>
 
@@ -31,7 +48,7 @@ defineProps<CarouselSectionProps>();
           <p class="font-roboto text-sm md:text-base text-[var(--muted-custom)]">
             Discover top inbound travel packages and domestic tours across the Philippines. See why our pristine beaches, islands, and warm hospitality make the country a top global favorite, just a flight away.
           </p>
-            <ValidToForeignBanner v-if="tag" :tag="tag" />
+            <ValidToForeignBanner :tag="VALID_FOR_FOREIGN_ONLY_TAG" />
         </div>
       </div>
 
@@ -41,7 +58,9 @@ defineProps<CarouselSectionProps>();
     </div>
 
     <div class="w-full">
-        <PackageCarousel :is-inbound="true"  :packages="packages" />
+        <PackageCarouselSkeleton v-if="loading" />
+        <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+        <PackageCarousel v-else :is-inbound="true"  :packages="packages" />
     </div>
   </section>
 </template>

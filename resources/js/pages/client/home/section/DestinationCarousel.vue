@@ -1,16 +1,30 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 
 // COMPONENTS
 import 'vue3-carousel/carousel.css'
 import { Icon } from '@iconify/vue'
-import CountryCarousel from '@/components/CountryCarousel.vue'
+import CountryCarousel from '@/components/carousel/country/CountryCarousel.vue'
 import ExploreButton from '@/components/ExploreButton.vue'
 
-// TYPES
-import type { DestinationProps } from '../types'
+// COMPOSABLE
+import { useCountry } from '@/composables/services/useCountries'
+import CountryCarouselSkeleton from '@/components/skeleton/CountryCarouselSkeleton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 
-defineProps<DestinationProps>();
+const {
+  countries,
+  loading,
+  error,
+  fetchCountries,
+  refresh
+} = useCountry()
 
+onMounted(() => {
+  fetchCountries({
+    perPage: 10
+  })
+})
 </script>
 
 <template>
@@ -34,12 +48,24 @@ defineProps<DestinationProps>();
       </div>
 
       <div class="flex justify-start md:justify-end">
-          <ExploreButton title="Explore Destinations" :href="route('client.destination')" />
+        <ExploreButton title="Explore Destinations" :href="route('client.destination')" />
       </div>
     </div>
 
-    <div class="w-full">
-      <CountryCarousel :destinations="destinations"  />
-    </div>
+  <div class="w-full">
+
+    <CountryCarouselSkeleton v-if="loading" />
+
+    <ApiFetchError v-else-if="error" :retry="() => refresh({ perPage: 10 })" :description="error" />
+
+    <CountryCarousel
+      v-else
+      :countries="countries"
+    />
+
+    
+
+    
+  </div>
   </section>
 </template>

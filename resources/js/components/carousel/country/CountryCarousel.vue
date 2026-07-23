@@ -7,13 +7,14 @@ import { Icon } from '@iconify/vue'
 import CountryCard from './CountryCard.vue'
 
 // TYPES
-import { DestinationProps } from '@/pages/client/home/types.js'
+import { Country } from '@/types/country.js'
 
 // UTILS
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 
-defineProps<DestinationProps>()
+
+defineProps<{ countries : Country[]}>()
 
 const windowWidth = ref(window.innerWidth)
 
@@ -61,12 +62,12 @@ const carouselConfig = {
     class="w-full relative"
   >
     <Slide
-      v-for="destination in destinations"
-      :key="destination.id"
+      v-for="country in countries"
+      :key="country.id"
     >
       <CountryCard
-        :destination="destination"
-        :href="route('client.destination.country', { destination: destination.id })"
+        :country="country"
+        :href="route('client.destination.country', { destination: country.id })"
       />
     </Slide>
 

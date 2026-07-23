@@ -41,6 +41,8 @@ class Package extends Model
 
     protected $casts = [
         'is_foreign_only' => 'boolean',
+        'base_price' => 'float',
+        'down_payment' => 'float',
     ];
 
 

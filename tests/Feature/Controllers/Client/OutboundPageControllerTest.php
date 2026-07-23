@@ -6,6 +6,5 @@ test('outbound page renders successfully', function () {
     $response->assertStatus(200);
     $response->assertInertia(fn ($page) => $page
         ->component('client/outbound/OutboundPage')
-        ->has('countries')
     );
 });

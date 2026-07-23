@@ -3,7 +3,7 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { Icon } from '@iconify/vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Package } from '@/types/package'
+import { Package } from '@/types/package-api'
 import PackageCard from './PackageCard.vue'
 
 interface Props {
@@ -65,8 +65,8 @@ const carouselConfig = {
 
 <template>
   <Carousel v-bind="carouselConfig" class="w-full" aria-label="Travel package carousel">
-    <Slide v-for="packageData in props.packages" :key="packageData.id">
-      <PackageCard :package="packageData" :isInbound="props.isInbound"/>
+    <Slide v-for="data in packages" :key="data.id">
+      <PackageCard :package="data" :isInbound="isInbound"/>
     </Slide>
 
     <template #addons>

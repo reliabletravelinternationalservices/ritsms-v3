@@ -6,15 +6,12 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 import OutboundTitleHeader from './section/OutboundTitleHeader.vue';
 import OutboundPackageDisplay from './section/OutboundPackageDisplay.vue';
 
-// TYPES
-import { OutbounPageProps } from './types.js';
 
-defineProps<OutbounPageProps>();
 </script>
 
 <template>
     <AppLayout>
         <OutboundTitleHeader  />
-        <OutboundPackageDisplay :featuredGroups="featured" :normalGroups="regular" :countries="countries"/>
+        <OutboundPackageDisplay />
     </AppLayout>     
 </template>

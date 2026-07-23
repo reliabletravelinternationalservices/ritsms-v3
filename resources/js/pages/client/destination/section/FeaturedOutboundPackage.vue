@@ -4,11 +4,27 @@
 import ExploreButton from '@/components/ExploreButton.vue'
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import { Icon } from '@iconify/vue'
+import { useCountry } from '@/composables/services/useCountries'
+import { onMounted } from 'vue'
+import CountryLocationImageSkeleton from '@/components/skeleton/CountryLocationImageSkeleton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 
-// TYPES
-import { DestinationProps } from '../types';
+// COMPOSABLE
+const {
+  countries,
+  loading,
+  loaded,
+  error,
+  fetchCountries,
+  refresh
+} = useCountry()
 
-defineProps<DestinationProps>()
+onMounted(() => {
+  fetchCountries({
+    with: { locations: true },
+    perPage: 10
+  })
+})
 </script>
 
 <template>
@@ -87,10 +103,14 @@ defineProps<DestinationProps>()
       </div>
 
       <!-- CAROUSEL -->
-      <ImageDestinationCarousel
-        :destinations="destinations"
-        :is-philippines-only="false"
-      />
+      <div class="w-full">
+          <CountryLocationImageSkeleton v-if="loading" />
+          <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+          <ImageDestinationCarousel
+          v-if="loaded"
+          :countries="countries"
+        />
+      </div>
     </div>
 
     <!-- DECOR ICONS -->

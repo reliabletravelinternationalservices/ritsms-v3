@@ -15,7 +15,7 @@ class DestinationPageController extends Controller
     {
         $this->service->initializeRootPageSEO();
 
-        return Inertia::render('client/destination/DestinationPage', $this->service->getAllDestinationData());
+        return Inertia::render('client/destination/DestinationPage');
     }
 
     public function countries()
