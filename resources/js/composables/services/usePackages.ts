@@ -182,6 +182,7 @@ export function useGroupPackages() {
         error,
 
         isLastPage,
+        lastFilters,
         loadMore,
         nextPage,
         prevPage,
