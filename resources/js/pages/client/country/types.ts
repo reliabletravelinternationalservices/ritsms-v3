@@ -8,6 +8,6 @@ export interface DestinationProps {
 export interface TitleHeaderProps {
   title: string;
   description: string;
-  image?: Media;
+  image?: string;
 }
 
