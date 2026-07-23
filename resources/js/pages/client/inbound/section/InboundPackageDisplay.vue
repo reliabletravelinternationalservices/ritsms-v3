@@ -10,6 +10,7 @@ const {
   groupedPackages,
   fetchGroupPackages,
   loading,
+  loaded,
   error,
   
 } = useGroupPackages()
@@ -27,7 +28,7 @@ onMounted(() => {
       <div class="flex flex-col gap-4 md:gap-6">
         <GroupPackageSkeleton v-if="loading" />
         <ApiFetchError v-else-if="error" :retry="fetchGroupPackages" :description="error" />
-        <template v-else>
+        <template v-if="loaded">
           <GroupPackage 
             v-for="(group, index) in groupedPackages" 
             :key="`featured-${group.id}-${index}`"
