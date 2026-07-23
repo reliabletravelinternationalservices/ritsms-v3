@@ -1,46 +1,86 @@
 <script setup lang="ts">
-import { getImageUrl } from '@/lib/utils';
-import { Country } from '@/types/country';
-import { Icon } from '@iconify/vue';
+import { getImageUrl } from '@/lib/utils'
+import { Country } from '@/types/country'
+import { Icon } from '@iconify/vue'
 
 interface Props {
-    country: Country;
-    href: string;
+  country: Country
+  href: string
 }
 
-defineProps<Props>();
+defineProps<Props>()
 </script>
 
 <template>
-    <a :href="href" class="w-full" :aria-label="`Explore travel destinations in ${country.country}`">
-            <div class="carousel__item h-[400px] md:h-[500px] w-full relative">
-              <div class="h-full w-full absolute top-0 left-0 bg-black/40 flex items-end p-6 md:p-8">
-                  <span v-if="country.tag" class="absolute top-2 right-4 text-xs md:text-sm bg-black/30 text-white px-3 py-1">
-                    {{ country.tag }}
-                  </span>
-                  <div class="border-l-4 border-[var(--tertiary-custom)] pl-2 text-left">
-                      <span class="flex items-end justify-start">
-                          <Icon icon="mdi:map-marker" width="22" height="22" class="text-[var(--tertiary-custom)] md:w-[26px] md:h-[26px]" aria-hidden="true" />
-                          <h3 class="font-bold font-montserrat text-base md:text-lg text-[var(--tertiary-custom)]">{{ country.country }}</h3>
-                      </span>
-                      <span v-if="country.locations_count > 0" class="flex items-end justify-start">
-                          <p class="text-[var(--primary-custom)] font-roboto text-sm md:text-base">{{ country.locations_count }} Destinations</p>
-                      </span>
-                  </div>
-              </div>
-            <img 
-              v-if="country.image"
-              :src="getImageUrl(country.image.file_path)" 
-              :alt="country.image.alt_text || `${country.country} travel destination`"
-              loading="lazy"
-              class="w-full h-full object-cover"
-            />
-            <div 
-              v-else
-              class="w-full h-full bg-gray-200 flex items-center justify-center"
-            >
-              <Icon icon="mdi:image-off" width="48" height="48" class="text-gray-400" aria-hidden="true" />
-            </div>
+  <a
+    :href="href"
+    class="group block w-full overflow-hidden"
+    :aria-label="`Explore travel destinations in ${country.country}`"
+  >
+    <div class="relative h-[400px] w-full overflow-hidden md:h-[500px]">
+
+      <!-- Image -->
+      <img
+        v-if="country.image"
+        :src="getImageUrl(country.image.file_path)"
+        :alt="country.image.alt_text || `${country.country} travel destination`"
+        loading="lazy"
+        class="h-full w-full object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-75"
+      />
+
+      <!-- No Image -->
+      <div
+        v-else
+        class="flex h-full w-full items-center justify-center bg-gray-200"
+      >
+        <Icon
+          icon="mdi:image-off"
+          width="48"
+          height="48"
+          class="text-gray-400"
+        />
+      </div>
+
+      <!-- Overlay -->
+      <div
+        class="absolute inset-0 flex items-end bg-black/40 p-6 transition-all duration-300 group-hover:bg-black/55 md:p-8"
+      >
+
+        <!-- Tag -->
+        <span
+          v-if="country.tag"
+          class="absolute right-4 top-4 bg-black/40 px-3 py-1 text-xs text-white transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-[var(--tertiary-custom)] group-hover:text-black md:text-sm"
+        >
+          {{ country.tag }}
+        </span>
+
+        <!-- Content -->
+        <div
+          class="border-l-4 border-[var(--tertiary-custom)] pl-2 transition-all duration-300 group-hover:translate-x-1"
+        >
+          <div class="flex justify-start items-center gap-1">
+            <!-- <Icon
+              icon="mdi:map-marker"
+              aria-hidden="true"
+              class="h-6 w-6 text-[var(--tertiary-custom)] transition-transform duration-300 group-hover:scale-110"
+            /> -->
+            <span>
+                <h3
+                  class="font-montserrat text-lg font-bold text-[var(--tertiary-custom)] transition-colors duration-300 group-hover:text-white"
+                >
+                  {{ country.country }}
+                </h3>
+                <p
+                  v-if="country.locations_count > 0"
+                  class="font-roboto text-sm text-[var(--primary-custom)] transition-colors duration-300 group-hover:text-white"
+                >
+                    {{ country.locations_count }} Destinations
+                </p>
+            </span>
           </div>
-    </a>
+        </div>
+
+      </div>
+    </div>
+  </a>
 </template>
