@@ -126,12 +126,12 @@ export function useCountry() {
 
         isLastPage,
         lastFilters,
-
-        fetchCountries,
-        refresh,
         loadMore,
         nextPage,
         prevPage,
+
+        fetchCountries,
+        refresh,
         reset,
     }
 }
