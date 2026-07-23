@@ -4,11 +4,25 @@
 import ExploreButton from '@/components/ExploreButton.vue'
 import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import { Icon } from '@iconify/vue'
+import { useCountry } from '@/composables/services/useCountries'
+import { onMounted } from 'vue'
 
-// TYPES
-import { DestinationProps } from '../types';
+// COMPOSABLE
+const {
+  countries,
+  loading,
+  loaded,
+  error,
+  fetchCountries,
+  refresh
+} = useCountry()
 
-defineProps<DestinationProps>()
+onMounted(() => {
+  fetchCountries({
+    with: { locations: true },
+    perPage: 10
+  })
+})
 </script>
 
 <template>
@@ -88,7 +102,7 @@ defineProps<DestinationProps>()
 
       <!-- CAROUSEL -->
       <ImageDestinationCarousel
-        :destinations="destinations"
+        :countries="countries"
         :is-philippines-only="false"
       />
     </div>
