@@ -11,8 +11,6 @@ import MotionWrapper from '@/components/ui/MotionWrapper.vue';
 // CONSTANTS
 import { SECTION_DELAYS } from './constants';
 
-// TYPES
-import { DestinationProps } from './types.js';
 
 
 </script>

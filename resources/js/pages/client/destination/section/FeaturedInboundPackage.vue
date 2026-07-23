@@ -6,7 +6,7 @@ import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import ValidToForeignBanner from '@/components/ValidToForeignBanner.vue'
 import { Icon } from '@iconify/vue'
 import { useCountry } from '@/composables/services/useCountries'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import CountryLocationImageSkeleton from '@/components/skeleton/CountryLocationImageSkeleton.vue'
 import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 
@@ -113,7 +113,6 @@ onMounted(() => {
           <ImageDestinationCarousel
           v-if="loaded"
           :countries="countries"
-          :is-philippines-only="true"
         />
       </div>
     </div>

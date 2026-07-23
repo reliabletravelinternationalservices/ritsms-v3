@@ -6,6 +6,8 @@ import ImageDestinationCarousel from '@/components/ImageDestinationCarousel.vue'
 import { Icon } from '@iconify/vue'
 import { useCountry } from '@/composables/services/useCountries'
 import { onMounted } from 'vue'
+import CountryLocationImageSkeleton from '@/components/skeleton/CountryLocationImageSkeleton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
 
 // COMPOSABLE
 const {
@@ -101,10 +103,14 @@ onMounted(() => {
       </div>
 
       <!-- CAROUSEL -->
-      <ImageDestinationCarousel
-        :countries="countries"
-        :is-philippines-only="false"
-      />
+      <div class="w-full">
+          <CountryLocationImageSkeleton v-if="loading" />
+          <ApiFetchError v-else-if="error" :retry="refresh" :description="error" />
+          <ImageDestinationCarousel
+          v-if="loaded"
+          :countries="countries"
+        />
+      </div>
     </div>
 
     <!-- DECOR ICONS -->

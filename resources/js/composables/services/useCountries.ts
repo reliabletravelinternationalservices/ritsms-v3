@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { countryService } from '@/services/countryService'
-import type { Country, CountryFilter, CountryWithLocations } from '@/types/country'
+import type { CountryFilter, CountryWithLocations } from '@/types/country'
 import { PaginatedData } from '@/types/api'
 
 export function useCountry() {
