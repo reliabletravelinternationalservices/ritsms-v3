@@ -9,19 +9,8 @@ use Illuminate\Http\Request;
 class DestinationController extends Controller
 {
     public function __construct(private DestinationRepository $repo){}
-    public function getCountries()
+    public function getCountries(Request $request)
     {
-        return $this->repo->fetchCountries();
-    }
-
-    public function getCountry(string $country)
-    {
-        return $this->repo->fetchCountry($country);
-    }
-
-
-    public function getCountriesNames()
-    {
-        return $this->repo->fetchCountriesNames();
+        return $this->repo->fetchCountries($request->all());
     }
 }
