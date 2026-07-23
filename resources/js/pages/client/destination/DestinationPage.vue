@@ -29,11 +29,11 @@ defineProps<DestinationProps>();
         </MotionWrapper>
 
         <MotionWrapper :delay="SECTION_DELAYS.inboundSection">
-            <FeaturedInboundPackage :destinations="destinations" />
+            <FeaturedInboundPackage />
         </MotionWrapper>
 
         <MotionWrapper :delay="SECTION_DELAYS.outboundSection">
-            <FeaturedOutboundPackage :destinations="destinations" />
+            <FeaturedOutboundPackage />
         </MotionWrapper>
     </AppLayout>     
 </template>
