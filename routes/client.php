@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
 
 // DESTINATIONS
-Route::prefix('destination')->group(function () {
+Route::prefix('destinations')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
-    Route::prefix('country')->group(function () {
+    Route::prefix('countries')->group(function () {
         Route::get('/', [DestinationPageController::class, 'countries'])->name('client.destination.countries');
         Route::get('/{destination}', [DestinationPageController::class, 'country'])->name('client.destination.country');
     });
@@ -29,7 +29,7 @@ Route::prefix('outbound')->group(function () {
         Route::get('/{id}', [OutboundPageController::class, 'groupDetail'])->name('client.outbound.group');
     });
 
-    Route::prefix('package')->group(function () {
+    Route::prefix('packages')->group(function () {
         Route::get('/{slug}', [OutboundPageController::class, 'packageDetail'])->name('client.outbound.package.detail');
     });
 });
@@ -38,11 +38,11 @@ Route::prefix('outbound')->group(function () {
 Route::prefix('inbound')->group(function () {
     Route::get('/', [InboundPageController::class, 'index'])->name('client.inbound');
 
-    Route::prefix('group')->group(function () {
+    Route::prefix('groups')->group(function () {
         Route::get('/{id}', [InboundPageController::class, 'groupDetail'])->name('client.inbound.group');
     });
 
-    Route::prefix('package')->group(function () {
+    Route::prefix('packages')->group(function () {
         Route::get('/{slug}', [InboundPageController::class, 'packageDetail'])->name('client.inbound.package.detail');
     });
 });
@@ -56,5 +56,5 @@ Route::prefix('inquiry')->group(function () {
 
 
 
-Route::get('/contact', [ContactPageController::class, 'index'])->name('client.contact');
+Route::get('/contacts', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
