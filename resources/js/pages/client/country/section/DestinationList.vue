@@ -6,6 +6,7 @@ import CountryCard from '@/components/carousel/country/CountryCard.vue';
 import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue';
 import CountryCarouselSkeleton from '@/components/skeleton/CountryCarouselSkeleton.vue';
 import { useCountry } from '@/composables/services/useCountries';
+import LoadMoreButton from '@/components/LoadMoreButton.vue';
 
 const {
     countries,
@@ -62,20 +63,11 @@ onMounted(() => {
             <!-- Load More -->
             <CountryCarouselSkeleton v-if="loadingMore" class="m-auto flex w-full max-w-5xl items-center justify-center p-6" />
 
-            <div v-if="countries.length && !isLastPage && !loadingMore" class="mt-8 flex justify-center">
-                <button
-                    @click="loadMore"
-                    :disabled="loadingMore"
-                    class="group inline-flex items-center gap-2 rounded-lg border border-slate-300 px-6 py-3 transition hover:bg-slate-50 disabled:opacity-60"
-                >
-                    <Icon v-if="loadingMore" icon="svg-spinners:180-ring" class="h-5 w-5" />
-
-                    <template v-else>
-                        <span class="text-sm font-semibold">Show More</span>
-                        <Icon icon="codicon:fold-down" class="h-4 w-4 transition-transform group-hover:animate-pulse" />
-                    </template>
-                </button>
-            </div>
+            <LoadMoreButton
+                v-if="countries.length && !isLastPage && !loadingMore"
+                :loading="loadingMore"
+                @click="loadMore"
+            />
         </template>
     </section>
 </template>
