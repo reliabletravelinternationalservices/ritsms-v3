@@ -11,13 +11,14 @@ import { onMounted } from 'vue';
 const {
   groupedPackages,
   fetchGroupPackages,
+  loaded,
   loading,
   error,
   
 } = useGroupPackages()
 
 onMounted(() => {
-  fetchGroupPackages({ isOutbound: true })
+  fetchGroupPackages({ isOutbound: true, perPage: 10 })
 })
 
 </script>
@@ -31,7 +32,7 @@ onMounted(() => {
       <div class="flex flex-col gap-4 md:gap-6">
         <GroupPackageSkeleton v-if="loading" />
         <ApiFetchError v-else-if="error" :retry="fetchGroupPackages" :description="error" />
-        <template v-else>
+        <template v-if="loaded">
           <GroupPackage 
             v-for="(group, index) in groupedPackages" 
             :key="`featured-${group.id}-${index}`"

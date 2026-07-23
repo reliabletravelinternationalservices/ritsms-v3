@@ -16,7 +16,7 @@ const {
 } = useGroupPackages()
 
 onMounted(() => {
-  fetchGroupPackages({ isInbound: true })
+  fetchGroupPackages({ isInbound: true, perPage: 10 })
 })
 
 </script>
