@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/ClientAppLayout.vue';
-import { PackageGroup } from '@/types/group-package';
 import TitleHeader from './section/TitleHeader.vue';
 import PackageList from './section/PackageList.vue';
-
-
+import { GroupedPackage } from '@/types/grouped-package.js';
 
 interface Props {
-    group: PackageGroup,
-    isInbound: boolean
+    params: {
+        group: GroupedPackage,
+        isInbound: boolean
+    }
 }
 
-const props = defineProps<Props>();
-
+defineProps<Props>();
 
 </script>
 
 <template>
     <AppLayout>
-        <TitleHeader  :title="props.group.title" :description="props.group.description" :image="props.group.image" :isInbound="props.isInbound" :id="props.group.id" />
-        <PackageList :packages="props.group.packages?? []" :isInbound="props.isInbound" />
+        <TitleHeader  :group="params.group" :isInbound="params.isInbound" />
+        <PackageList :groupID="params.group.id" :isInbound="params.isInbound" />
     </AppLayout>     
 </template>
