@@ -17,4 +17,5 @@ export interface GroupPackageFilter {
     isFeatured?: boolean
     title?: string
     perPage?: number
+    page?: number
 }

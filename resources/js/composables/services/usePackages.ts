@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { Package, PackageFilter } from '@/types/package-api'
 import { groupedPackageService, packageService } from '@/services/packageService'
@@ -60,23 +60,49 @@ export function usePackages() {
 
 
 export function useGroupPackages() {
-    const paginatedGroupPackages = ref<PaginatedData<GroupedPackage[]>>()
+    const pagination = ref<PaginatedData<GroupedPackage[]> | null>(null)
+
 
     const groupedPackages = ref<GroupedPackage[]>([])
 
     const loading = ref(false)
+    const loadingMore = ref(false)
     const loaded = ref(false)
     const error = ref<string | null>(null)
 
-    const fetchGroupPackages = async (filters: GroupPackageFilter = {}) => {
-        loading.value = true
+    const lastFilters = ref<GroupPackageFilter>({})
+
+    const isLastPage = computed(() => {
+        if (!pagination.value) return true
+
+        return pagination.value.current_page >= pagination.value.last_page
+    })
+
+    const fetchGroupPackages = async (
+        filters: GroupPackageFilter = {},
+        append = false
+    ) => {
+        if (append) {
+            loadingMore.value = true
+        } else {
+            loading.value = true
+        }
+
         error.value = null
         
         try {
+
+            lastFilters.value = { ...filters }
             const response = await groupedPackageService.getAll(filters)
 
-            paginatedGroupPackages.value = response.data
-            groupedPackages.value = response.data.data
+            pagination.value = response.data
+            
+            if (append) {
+                groupedPackages.value.push(...response.data.data)
+            } else {
+                groupedPackages.value = response.data.data
+            }
+
             loaded.value = true
         } catch (err: any) {
             error.value =
@@ -84,28 +110,82 @@ export function useGroupPackages() {
                 err.message ??
                 'Failed to fetch group packages.'
 
-            groupedPackages.value = []
+            if (append) {
+                groupedPackages.value = []
+                pagination.value = null
+            }
         } finally {
             loading.value = false
+            loadingMore.value = false
         }
     }
 
-    const refresh = (filters: PackageFilter = {}) => fetchGroupPackages(filters)
+    const refresh = (filters: GroupPackageFilter = {}) => 
+        fetchGroupPackages({
+            ...filters, 
+            page: 1,
+        })
+
+    const loadMore = async () => {
+        if (!pagination.value || isLastPage.value) return
+
+        await fetchGroupPackages(
+            {
+                ...lastFilters.value,
+                page: pagination.value.current_page + 1,
+                perPage: pagination.value.per_page,
+            },
+            true
+        )
+    }
+
+
+    const nextPage = async () => {
+        if (!pagination.value?.next_page_url) return
+
+        await fetchGroupPackages({
+            ...lastFilters.value,
+            page: pagination.value.current_page + 1,
+            perPage: pagination.value.per_page,
+        })
+    }
+
+    const prevPage = async () => {
+        if (!pagination.value?.prev_page_url) return
+
+        await fetchGroupPackages({
+            ...lastFilters.value,
+            page: pagination.value.current_page - 1,
+            perPage: pagination.value.per_page,
+        })
+    }
 
     const reset = () => {
         groupedPackages.value = []
+        pagination.value = null
 
         loading.value = false
+        loadingMore.value = false
         loaded.value = false
         error.value = null
+
+        lastFilters.value = {}
     }
 
     return {
         groupedPackages,
+        pagination,
 
         loading,
+        loadingMore,
         loaded,
         error,
+
+        isLastPage,
+        lastFilters,
+        loadMore,
+        nextPage,
+        prevPage,
 
         fetchGroupPackages,
         refresh,

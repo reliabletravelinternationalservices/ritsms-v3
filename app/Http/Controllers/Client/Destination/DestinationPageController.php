@@ -20,11 +20,9 @@ class DestinationPageController extends Controller
 
     public function countries()
     {
-        $data = $this->service->getAllDestinationData();
-        $imageUrl = $data['destinations']->first()?->image?->url;
-        $this->service->initializeCountriesPageSEO($imageUrl);
+        $this->service->initializeCountriesPageSEO();
 
-        return Inertia::render('client/country/ServiceCountryPage', $data);
+        return Inertia::render('client/country/ServiceCountryPage');
     }
 
     public function country(Destination $destination)

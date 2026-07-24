@@ -43,7 +43,7 @@ defineProps<{
     <button
       v-if="retry"
       @click="retry"
-      class="mt-6 inline-flex items-center gap-2 rounded-lg bg-[var(--primary-custom)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-95 sm:px-6 sm:py-3 sm:text-base"
+      class="mt-6 inline-flex items-center gap-2 rounded-lg bg-zinc-400 px-5 py-2.5 text-sm font-medium text-zinc-50 transition-all hover:opacity-90 active:scale-95 sm:px-6 sm:py-3 sm:text-base"
     >
       <Icon icon="solar:refresh-bold" class="text-lg" />
       Try Again

@@ -1,39 +1,75 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 
-// COMPONENTS
-import CountryCard from '@/components/carousel/country/CountryCard.vue';
-import MotionWrapper from '@/components/ui/MotionWrapper.vue';
+import CountryCard from '@/components/carousel/country/CountryCard.vue'
+import LoadMoreButton from '@/components/LoadMoreButton.vue'
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue'
+import CountryCarouselSkeleton from '@/components/skeleton/CountryCarouselSkeleton.vue'
+import { useCountry } from '@/composables/services/useCountries'
 
-// TYPES
-import { DestinationProps } from '../types';
+const {
+  countries,
+  isLastPage,
+  lastFilters,
+  loading,
+  loadingMore,
+  error,
+  fetchCountries,
+  refresh,
+  loadMore,
+} = useCountry()
 
-defineProps<DestinationProps>();
+onMounted(() => {
+  fetchCountries({
+    page: 1,
+    perPage: 6,
+  })
+})
 </script>
 
 <template>
-  <section class="w-full px-4 sm:px-6 lg:px-8">
-    <div 
-      v-if="destinations && destinations.length > 0"
-      class="max-w-5xl mx-auto py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      <MotionWrapper 
-        v-for="(destination, index) in destinations" 
-        :key="destination.id"
-        :delay="0.05 * (index % 3)" 
-        class="h-full w-full"
-      >
-        <CountryCard 
-          :country="destination" 
-          :href="route('client.destination.country', { destination: destination.id })" 
-        />
-      </MotionWrapper>
+  <section class="w-full px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Initial Loading -->
+    <div v-if="loading && !countries.length">
+      <CountryCarouselSkeleton
+        v-for="n in 2"
+        :key="n"
+        class="mx-auto flex w-full max-w-5xl items-center justify-center p-6"
+      />
     </div>
 
-    <div 
-      v-else 
-      class="w-full max-w-md mx-auto py-12 flex flex-col items-center justify-center text-center text-slate-400"
-    >
-      <p class="text-sm font-medium">No destinations found.</p>
-    </div>
+    <!-- Error -->
+    <ApiFetchError
+      v-else-if="error"
+      class="w-full p-6"
+      :description="error"
+      :retry="() => refresh({ ...lastFilters })"
+    />
+
+    <!-- Content -->
+    <template v-else>
+      <div
+        v-if="countries.length"
+        class="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-8 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <CountryCard
+          v-for="country in countries"
+          :key="country.id"
+          :country="country"
+          :href="route('client.destination.country', { destination: country.id })"
+        />
+      </div>
+
+      <CountryCarouselSkeleton
+        v-if="loadingMore"
+        class="mx-auto flex w-full max-w-5xl items-center justify-center p-6"
+      />
+
+      <LoadMoreButton
+        v-else-if="countries.length && !isLastPage"
+        :loading="loadingMore"
+        @click="loadMore"
+      />
+    </template>
   </section>
 </template>

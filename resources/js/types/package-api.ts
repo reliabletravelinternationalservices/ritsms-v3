@@ -22,6 +22,7 @@ export interface PackageFilter {
     destination?: string
     name?: string
     perPage?: number
+    page?: number
 }
 
 

@@ -32,5 +32,6 @@ export interface CountryFilter {
     with?: {
         locations?: boolean
     }
+    page?: number
     perPage?: number
 }

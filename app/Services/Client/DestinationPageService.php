@@ -35,12 +35,12 @@ class DestinationPageService
     }
 
 
-    public function initializeCountriesPageSEO(string|null $imageUrl = null)
+    public function initializeCountriesPageSEO()
     {
         $this->share->SEO(
             'Countries & Travel Destinations We Serve',
             'Browse the full list of countries and destinations covered by our travel packages, tours, and ticketing services. We\'re continuously expanding to new destinations worldwide.',
-            asset($imageUrl?? config('assets.logo')),
+            asset('storage/upload/agency/destination_image.png', config('assets.logo')),
         );
     }
 

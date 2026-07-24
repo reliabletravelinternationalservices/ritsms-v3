@@ -13,9 +13,9 @@ defineProps<TitleHeaderProps>();
     
     <div class="absolute inset-0 w-full h-full z-0">
       <img 
-        v-if="image?.url" 
-        :src="image.url" 
-        :alt="image.alt_text || title" 
+        v-if="image" 
+        :src="image" 
+        alt="Service country banner" 
         class="w-full h-full object-cover object-center"
         loading="eager"
       />
