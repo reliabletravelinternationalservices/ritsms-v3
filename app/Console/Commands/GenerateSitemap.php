@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Destination;
 use App\Models\Package;
+use App\Models\PackageGroup;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -55,7 +56,7 @@ class GenerateSitemap extends Command
                 Url::create(
                     route(
                         'client.destination.country',
-                        $destination->id
+                        $destination->slug
                     )
                 )
                 ->setPriority(0.9)
@@ -107,6 +108,32 @@ class GenerateSitemap extends Command
                 );
 
             });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Package Groups
+        |--------------------------------------------------------------------------
+        */
+
+        PackageGroup::query()->each(function (PackageGroup $group) use ($sitemap) {
+            $routes = [];
+
+            if ($group->include_as_outbound) {
+                $routes[] = route('client.outbound.group', ['slug' => $group->slug]);
+            }
+
+            if ($group->include_as_inbound) {
+                $routes[] = route('client.inbound.group', ['slug' => $group->slug]);
+            }
+
+            foreach ($routes as $route) {
+                $sitemap->add(
+                    Url::create($route)
+                        ->setPriority(0.9)
+                        ->setLastModificationDate($group->updated_at)
+                );
+            }
+        });
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
