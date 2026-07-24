@@ -19,9 +19,9 @@ class DestinationPageService
         return compact('destinations');
     }
 
-    public function getDestinationByID(int $id)
+    public function getDestinationBySlug(string $slug)
     {
-        $destination =$this->repository->getDestinationByID($id);
+        $destination =$this->repository->getDestinationBySlug($slug);
         return compact('destination');
     }
 
