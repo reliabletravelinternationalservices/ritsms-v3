@@ -1,6 +1,6 @@
 import api from '@/lib/api'
 import type { ApiResponse } from '@/types/api'
-import { GroupedPackage, GroupPackageFilter } from '@/types/grouped-package'
+import { GroupedPackageWithPackages, GroupPackageFilter } from '@/types/grouped-package'
 import { Package, PackageFilter } from '@/types/package-api'
 
 
@@ -13,8 +13,8 @@ export const packageService = {
 
 
 export const groupedPackageService = {
-    async getAll(filters: GroupPackageFilter = {}): Promise<ApiResponse<GroupedPackage[]>> {
-        const { data } = await api.get<ApiResponse<GroupedPackage[]>>('/packages/groups', { params: filters })
+    async getAll(filters: GroupPackageFilter = {}): Promise<ApiResponse<GroupedPackageWithPackages[]>> {
+        const { data } = await api.get<ApiResponse<GroupedPackageWithPackages[]>>('/packages/groups', { params: filters })
         return data
     },
 }
