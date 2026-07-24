@@ -97,7 +97,7 @@ onMounted(() => {
         >
           <ExploreButton
             title="Explore Inbound Destinations"
-            :href="countries[0] ? route('client.destination.country', { destination: countries[0].id }) : '#'"
+            :href="countries[0] ? route('client.destination.country', { slug: countries[0].slug }) : '#'"
             class="font-bold text-[var(--primary-custom)]
                    hover:text-[var(--tertiary-custom)]
                    border-[var(--primary-custom)]
