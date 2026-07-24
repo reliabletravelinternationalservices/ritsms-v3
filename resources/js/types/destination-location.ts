@@ -7,6 +7,4 @@ export interface DestinationLocation {
     map_link?: string;
 
     image: Media;
-    created_at: string;
-    updated_at: string;
 }
