@@ -29,7 +29,7 @@ onMounted(() => {
                     :key="group.id"
                     :group="group"
                     :isInbound="false"
-                    :href="route('client.inbound.group', { id: group.id })"
+                    :href="route('client.outbound.group', { slug: group.slug })"
                 />
                 <GroupPackageSkeleton v-if="loadingMore" />
 
