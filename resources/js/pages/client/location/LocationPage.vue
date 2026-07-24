@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 // COMPONENTS
 import TitleHeader from './section/TitleHeader.vue';
 import LocationList from './section/LocationList.vue';
-import { Destination, DestinationWithLocations } from '@/types/destination.js';
+import {  DestinationWithLocations } from '@/types/destination.js';
 
 // TYPES
 

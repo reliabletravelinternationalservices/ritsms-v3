@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { Package, PackageFilter } from '@/types/package-api'
 import { groupedPackageService, packageService } from '@/services/packageService'
 import { PaginatedData } from '@/types/api'
-import { GroupedPackage, GroupedPackageWithPackages, GroupPackageFilter } from '@/types/grouped-package'
+import {  GroupedPackageWithPackages, GroupPackageFilter } from '@/types/grouped-package'
 
 export function usePackages() {
     const pagination = ref<PaginatedData<Package[]> | null>(null)

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { TitleHeaderProps } from '../types';
 import { Media } from '@/types/media';
 import { getImageUrl } from '@/lib/utils';
 
