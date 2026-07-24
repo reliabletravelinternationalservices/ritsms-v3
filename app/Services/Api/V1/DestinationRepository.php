@@ -10,12 +10,21 @@ class DestinationRepository
 
     public function fetchCountries(array $params = [])
     {
+                    // Only allow supported parameters
+        $filters = Arr::only($params, [
+            'countryName',
+            'page',
+            'perPage',
+            'with',
+            'with.locations',
+        ]);
 
         $query = Destination::query()
             ->select([
                 'id',
                 'country',
                 'tag',
+                'slug',
                 'created_at',
                 'updated_at',
             ])
@@ -33,20 +42,20 @@ class DestinationRepository
 
         // Search country
         $query->when(
-            filled(Arr::get($params, 'countryName')),
+            filled(Arr::get($filters, 'countryName')),
             fn ($q) => $q->where(
                 'country',
                 'like',
-                '%' . Arr::get($params, 'countryName') . '%'
+                '%' . Arr::get($filters, 'countryName') . '%'
             )
         );
 
         // Filter by tag
         $query->when(
-            filled(Arr::get($params, 'tag')),
+            filled(Arr::get($filters, 'tag')),
             fn ($q) => $q->where(
                 'tag',
-                Arr::get($params, 'tag')
+                Arr::get($filters, 'tag')
             )
         );
 
@@ -56,7 +65,7 @@ class DestinationRepository
         |--------------------------------------------------------------------------
         */
 
-        if (filter_var(Arr::get($params, 'with.locations', false), FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var(Arr::get($filters, 'with.locations', false), FILTER_VALIDATE_BOOLEAN)) {
             $query->with([
             'locations' => fn ($q) => $q->with('image:id,mediable_id,mediable_type,file_name,file_path,alt_text')->latest(),
             ]);
@@ -77,14 +86,14 @@ class DestinationRepository
         */
 
         if (
-            filled(Arr::get($params, 'perPage')) ||
-            filled(Arr::get($params, 'page'))
+            filled(Arr::get($filters, 'perPage')) ||
+            filled(Arr::get($filters, 'page'))
         ) {
             $data = $query->paginate(
-                perPage: (int) Arr::get($params, 'perPage', 10),
+                perPage: (int) Arr::get($filters, 'perPage', 10),
                 columns: ['*'],
                 pageName: 'page',
-                page: (int) Arr::get($params, 'page', 1),
+                page: (int) Arr::get($filters, 'page', 1),
             );
         } else {
             $data = $query->get();
