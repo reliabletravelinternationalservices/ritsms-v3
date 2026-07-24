@@ -18,7 +18,7 @@ Route::prefix('destinations')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
     Route::prefix('countries')->group(function () {
         Route::get('/', [DestinationPageController::class, 'countries'])->name('client.destination.countries');
-        Route::get('/{destination}', [DestinationPageController::class, 'country'])->name('client.destination.country');
+        Route::get('/{slug}', [DestinationPageController::class, 'country'])->name('client.destination.country');
     });
 });
 
@@ -26,8 +26,8 @@ Route::prefix('destinations')->group(function () {
 Route::prefix('outbound')->group(function () {
     Route::get('/', [OutboundPageController::class, 'index'])->name('client.outbound');
 
-    Route::prefix('group')->group(function () {
-        Route::get('/{id}', [OutboundPageController::class, 'groupDetail'])->name('client.outbound.group');
+    Route::prefix('groups')->group(function () {
+        Route::get('/{slug}', [OutboundPageController::class, 'groupDetail'])->name('client.outbound.group');
     });
 
     Route::prefix('packages')->group(function () {
@@ -40,7 +40,7 @@ Route::prefix('inbound')->group(function () {
     Route::get('/', [InboundPageController::class, 'index'])->name('client.inbound');
 
     Route::prefix('groups')->group(function () {
-        Route::get('/{id}', [InboundPageController::class, 'groupDetail'])->name('client.inbound.group');
+        Route::get('/{slug}', [InboundPageController::class, 'groupDetail'])->name('client.inbound.group');
     });
 
     Route::prefix('packages')->group(function () {
