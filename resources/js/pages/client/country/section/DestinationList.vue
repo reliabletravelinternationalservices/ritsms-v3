@@ -56,7 +56,7 @@ onMounted(() => {
           v-for="country in countries"
           :key="country.id"
           :country="country"
-          :href="route('client.destination.country', { destination: country.id })"
+          :href="route('client.destination.country', { slug: country.slug })"
         />
       </div>
 
