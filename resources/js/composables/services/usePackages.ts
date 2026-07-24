@@ -3,25 +3,47 @@ import { computed, ref } from 'vue'
 import { Package, PackageFilter } from '@/types/package-api'
 import { groupedPackageService, packageService } from '@/services/packageService'
 import { PaginatedData } from '@/types/api'
-import { GroupedPackage, GroupPackageFilter } from '@/types/grouped-package'
+import { GroupedPackage, GroupedPackageWithPackages, GroupPackageFilter } from '@/types/grouped-package'
 
 export function usePackages() {
-    const paginatedPackages = ref<PaginatedData<Package[]>>()
+    const pagination = ref<PaginatedData<Package[]> | null>(null)
     const packages = ref<Package[]>([])
     
     const loading = ref(false)
     const loaded = ref(false)
+    const loadingMore = ref(false)
     const error = ref<string | null>(null)
 
-    const fetchPackages = async (filters: PackageFilter = {}) => {
-        loading.value = true
-        error.value = null
+    const lastFilters = ref<PackageFilter>({})
+
+    const isLastPage = computed(() => {
+        if (!pagination.value) return true
+
+        return pagination.value.current_page >= pagination.value.last_page
+    })
+
+    const fetchPackages = async (
+        filters: PackageFilter = {},
+        append = false
+    ) => {
+        if (append) {
+            loadingMore.value = true
+        } else {
+            loading.value = true
+        }
 
         try {
+            lastFilters.value = { ...filters }
             const response = await packageService.getAll( filters)
 
-            paginatedPackages.value = response.data
-            packages.value = response.data.data
+            pagination.value = response.data
+
+            if (append) {
+                packages.value.push(...response.data.data)
+            } else {
+                packages.value = response.data.data
+            }
+
             loaded.value = true
         } catch (err: any) {
             error.value =
@@ -29,13 +51,54 @@ export function usePackages() {
                 err.message ??
                 'Failed to fetch packages.'
 
-            packages.value = []
+            if (append) {
+                packages.value = []
+                pagination.value = null
+            }
         } finally {
             loading.value = false
+            loadingMore.value = false
         }
     }
 
-    const refresh = (filters: PackageFilter = {}) => fetchPackages(filters)
+    const refresh = (filters: PackageFilter = {}) => 
+        fetchPackages({
+            ...filters, 
+            page: 1,
+        })
+
+    const loadMore = async () => {
+        if (!pagination.value || isLastPage.value) return
+
+        await fetchPackages(
+            {
+                ...lastFilters.value,
+                page: pagination.value.current_page + 1,
+                perPage: pagination.value.per_page,
+            },
+            true
+        )
+    }
+    
+    const nextPage = async () => {
+        if (!pagination.value?.next_page_url) return
+
+        await fetchPackages({
+            ...lastFilters.value,
+            page: pagination.value.current_page + 1,
+            perPage: pagination.value.per_page, 
+        })
+    }
+
+    const prevPage = async () => {
+        if (!pagination.value?.prev_page_url) return
+
+        await fetchPackages({
+            ...lastFilters.value,
+            page: pagination.value.current_page - 1,
+            perPage: pagination.value.per_page,
+        })
+    }
 
     const reset = () => {
         packages.value = []
@@ -46,10 +109,18 @@ export function usePackages() {
 
     return {
         packages,
+        pagination,
 
+        isLastPage,
+        lastFilters,
+        loadingMore,
         loading,
         loaded,
         error,
+
+        loadMore,
+        nextPage,
+        prevPage,
 
         fetchPackages,
         refresh,
@@ -60,10 +131,10 @@ export function usePackages() {
 
 
 export function useGroupPackages() {
-    const pagination = ref<PaginatedData<GroupedPackage[]> | null>(null)
+    const pagination = ref<PaginatedData<GroupedPackageWithPackages[]> | null>(null)
 
 
-    const groupedPackages = ref<GroupedPackage[]>([])
+    const groupedPackages = ref<GroupedPackageWithPackages[]>([])
 
     const loading = ref(false)
     const loadingMore = ref(false)
