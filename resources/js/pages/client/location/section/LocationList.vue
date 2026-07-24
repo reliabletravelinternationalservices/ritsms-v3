@@ -10,6 +10,7 @@ import { LocationProps } from '../types';
 
 
 defineProps<LocationProps>();
+
 </script>
 
 <template>
