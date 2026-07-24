@@ -113,6 +113,14 @@ class PackageGroupRepository
             ->findOrFail($id);
     }
 
+    public function getPackageGroupBySlug(string $slug): PackageGroup
+    {
+        return $this->model
+            ->with(['image', 'packages.primaryImage']) // Nested eager loading
+            ->where('slug', $slug)
+            ->firstOrFail();
+    }
+
     /**
      * Get all package groups with their representative image and packages.
      * Returns a Collection of PackageGroup models ready for UI consumption.
