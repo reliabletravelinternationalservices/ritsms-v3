@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { TitleHeaderProps } from '../types';
+import { Media } from '@/types/media';
+import { getImageUrl } from '@/lib/utils';
 
+interface Props {
+  title: string;
+  description: string;
+  image?: Media;
+}
+defineProps<Props>();
 
-defineProps<TitleHeaderProps>();
 </script>
 
 <template>
@@ -11,9 +17,9 @@ defineProps<TitleHeaderProps>();
     
     <div class="absolute inset-0 w-full h-full z-0">
       <img 
-        v-if="image && image.url" 
-        :src="image.url" 
-        :alt="image.alt_text || title" 
+        v-if="image" 
+        :src="getImageUrl(image.file_path)" 
+        :alt="image.alt_text" 
         class="w-full h-full object-cover object-center"
         loading="eager"
       />

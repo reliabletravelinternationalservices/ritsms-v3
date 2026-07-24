@@ -25,11 +25,14 @@ class DestinationPageController extends Controller
         return Inertia::render('client/country/ServiceCountryPage');
     }
 
-    public function country(Destination $destination)
+    public function country(string $slug)
     {
-        $destination = $this->service->getDestinationByID($destination->id);
-        $this->service->initializeDestinationPageSEO($destination['destination']);
+        $destination = Destination::select(['id', 'title', 'description', 'country', 'tag'])
+        ->with(['locations:id,destination_id,name,description,map_link', 'image:id,mediable_id,mediable_type,url,alt_text,file_name,file_path', 'locations.image:id,mediable_id,mediable_type,alt_text,file_name,file_path'])
+        ->where('slug', $slug)->firstOrFail();
 
-        return Inertia::render('client/location/LocationPage', $destination);
+        $this->service->initializeDestinationPageSEO($destination);
+
+        return Inertia::render('client/location/LocationPage', compact('destination'));
     }
 }

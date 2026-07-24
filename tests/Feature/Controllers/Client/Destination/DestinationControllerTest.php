@@ -23,7 +23,7 @@ test('location page renders successfully', function () {
         'tag' => 'test',
     ]);
 
-    $response = $this->get(route('client.destination.country', ['destination' => $destination->id]));
+    $response = $this->get(route('client.destination.country', ['slug' => $destination->slug]));
 
     $response->assertStatus(200);
 });

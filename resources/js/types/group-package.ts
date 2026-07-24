@@ -1,5 +1,5 @@
 import { Media } from "./media";
-import { Package } from "./package";
+import { Package } from "./package-api";
 
 export interface PackageGroup {
     id: number;
@@ -9,10 +9,14 @@ export interface PackageGroup {
     include_as_inbound: boolean;
     is_featured: boolean;
     tag: string | null;
-    
-    // Relationship
-    packages?: Package[];
     image: Media;
-    created_at: string;
-    updated_at: string;
+    slug: string;
 }
+
+
+
+export type PackageGroupWithPackages = PackageGroup & {
+    packages?: Package[];
+}
+
+

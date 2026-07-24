@@ -45,8 +45,8 @@ class OutboundPageService
 
 
     // PACKAGE GROUP DETAILS PAGE
-    public function getGroupDetailByID(int $id) {
-        return $this->repository->getPackageGroupByID($id); 
+    public function getPackageGroupBySlug(string $slug) {
+        return $this->repository->getPackageGroupBySlug($slug); 
     }
 
     public function geGroupPackagePageData(PackageGroup $group)

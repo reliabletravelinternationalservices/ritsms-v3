@@ -6,8 +6,10 @@ export interface Destination {
     description: string;
     tag?: string;
     country: string;
+    image?: Media;
+}
+
+export type DestinationWithLocations = Destination & {
     locations: DestinationLocation[];
-    image: Media;
-    created_at: string;
-    updated_at: string;
+
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('country');
             $table->string('tag')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

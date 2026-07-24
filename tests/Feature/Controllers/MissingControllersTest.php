@@ -32,6 +32,7 @@ test('service country route renders successfully', function () {
         'title' => 'Test Country',
         'description' => 'Country description',
         'country' => 'Testland',
+        'slug' => 'test-country',
         'tag' => 'country',
     ]);
 
@@ -45,10 +46,11 @@ test('location route renders successfully', function () {
         'title' => 'Test Destination',
         'description' => 'Location description',
         'country' => 'Test Country',
+        'slug' => 'test-location',
         'tag' => 'test',
     ]);
 
-    $response = $this->get(route('client.destination.country', ['destination' => $destination->id]));
+    $response = $this->get(route('client.destination.country', ['slug' => $destination->slug]));
 
     $response->assertStatus(200);
 });
@@ -62,8 +64,8 @@ test('outbound and inbound package group routes render successfully', function (
         'is_featured' => false,
     ]);
 
-    $outboundResponse = $this->get(route('client.outbound.group', ['id' => $group->id]));
-    $inboundResponse = $this->get(route('client.inbound.group', ['id' => $group->id]));
+    $outboundResponse = $this->get(route('client.outbound.group', ['slug' => $group->slug]));
+    $inboundResponse = $this->get(route('client.inbound.group', ['slug' => $group->slug]));
 
     $outboundResponse->assertStatus(200);
     $inboundResponse->assertStatus(200);

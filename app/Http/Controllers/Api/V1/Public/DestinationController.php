@@ -9,23 +9,13 @@ use Illuminate\Support\Arr;
 
 class DestinationController extends Controller
 {
-    public function __construct(private DestinationRepository $repo){}
+    public function __construct(private DestinationRepository $repo) {}
     public function getCountries(Request $request)
     {
 
-            // Only allow supported parameters
-        $filters = Arr::only($request->all(), [
-            'countryName',
-            'page',
-            'perPage',
-            'with',
-            'with.locations',
-        ]);
-
-        
         try {
-            
-            $data = $this->repo->fetchCountries($filters);
+
+            $data = $this->repo->fetchCountries($request->all());
 
             $isEmpty = $data instanceof \Illuminate\Contracts\Pagination\Paginator
                 ? $data->isEmpty()
@@ -44,7 +34,6 @@ class DestinationController extends Controller
                 'message' => 'Countries retrieved successfully.',
                 'data' => $data,
             ]);
-
         } catch (\Exception $e) {
 
             return response()->json([
@@ -52,10 +41,6 @@ class DestinationController extends Controller
                 'message' => 'Something went wrong.',
                 'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
-
         }
-
-
-
     }
 }

@@ -23,6 +23,7 @@ export interface PackageFilter {
     name?: string
     perPage?: number
     page?: number
+    groupID?: number
 }
 
 

@@ -11,7 +11,7 @@ test('package group page renders successfully', function () {
         'is_featured' => false,
     ]);
 
-    $response = $this->get(route('client.outbound.group', ['id' => $group->id]));
+    $response = $this->get(route('client.outbound.group', ['slug' => $group->slug]));
 
     $response->assertStatus(200);
 });

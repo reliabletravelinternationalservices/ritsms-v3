@@ -5,12 +5,15 @@ import AppLayout from '@/layouts/ClientAppLayout.vue';
 // COMPONENTS
 import TitleHeader from './section/TitleHeader.vue';
 import LocationList from './section/LocationList.vue';
+import {  DestinationWithLocations } from '@/types/destination.js';
 
 // TYPES
-import { DestinationProps } from './types.js';
 
+interface Props {
+    destination: DestinationWithLocations
+}
 
-defineProps<DestinationProps>();
+defineProps<Props>();
 
 </script>
 
