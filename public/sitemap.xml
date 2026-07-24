@@ -2,267 +2,337 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
     <url>
     <loc>http://ritsms.test</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
     <loc>http://ritsms.test/about</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/contact</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <loc>http://ritsms.test/contacts</loc>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <loc>http://ritsms.test/destinations</loc>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries</loc>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
     <loc>http://ritsms.test/outbound</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
     <loc>http://ritsms.test/inbound</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
     <loc>http://ritsms.test/inquiry/policy</loc>
-    <lastmod>2026-07-15T07:51:37+00:00</lastmod>
+    <lastmod>2026-07-24T07:06:03+00:00</lastmod>
     <priority>1.0</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/1</loc>
-    <lastmod>2026-06-12T21:38:53+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/japan-lbqual</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/2</loc>
-    <lastmod>2026-06-12T21:44:34+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/south-korea-iltvfb</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/3</loc>
-    <lastmod>2026-06-12T21:56:00+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/china-l50vat</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/4</loc>
-    <lastmod>2026-06-08T02:17:04+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/australia-synbo2</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/5</loc>
-    <lastmod>2026-06-12T22:28:20+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/dubai-qullup</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/7</loc>
-    <lastmod>2026-06-12T21:50:56+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/europe-2l6bcg</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/8</loc>
-    <lastmod>2026-06-12T22:29:19+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/brunei-hp8ksj</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/9</loc>
-    <lastmod>2026-06-12T22:13:09+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/indonesia-cupmej</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/10</loc>
-    <lastmod>2026-06-12T22:30:11+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/cambodia-l8goiw</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/11</loc>
-    <lastmod>2026-06-12T22:19:36+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/hong-kong-arjhcz</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/12</loc>
-    <lastmod>2026-06-12T22:17:06+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/malaysia-tumb5n</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/13</loc>
-    <lastmod>2026-06-12T21:31:30+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/singapore-keifsv</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/14</loc>
-    <lastmod>2026-06-12T21:28:13+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/new-zealand-ofpr71</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/15</loc>
-    <lastmod>2026-06-12T21:20:32+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/thailand-qo6wkk</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/16</loc>
-    <lastmod>2026-06-12T20:33:40+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/macau-fswqvg</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/17</loc>
-    <lastmod>2026-06-12T21:16:52+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/taiwan-tfzcvv</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/destination/country/18</loc>
-    <lastmod>2026-06-12T20:32:37+00:00</lastmod>
+    <loc>http://ritsms.test/destinations/countries/philippines-g8mrlo</loc>
+    <lastmod>2026-07-24T02:38:20+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/your-ultimate-siargao-escape-3-days-of-sun-surf-and-secret-islands</loc>
+    <loc>http://ritsms.test/outbound/packages/your-ultimate-siargao-escape-3-days-of-sun-surf-and-secret-islands</loc>
     <lastmod>2026-06-18T23:44:04+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/experience-iloilo-guimaras-heritage-mangoes-and-paradise</loc>
+    <loc>http://ritsms.test/outbound/packages/experience-iloilo-guimaras-heritage-mangoes-and-paradise</loc>
     <lastmod>2026-06-18T20:19:54+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-ilocos-epic-sand-dunes-giant-windmills-and-historic-vigan</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-ilocos-epic-sand-dunes-giant-windmills-and-historic-vigan</loc>
     <lastmod>2026-06-18T20:19:34+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-coron-crystal-lagoons-coral-gardens-and-shipwrecks</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-coron-crystal-lagoons-coral-gardens-and-shipwrecks</loc>
     <lastmod>2026-06-18T20:03:29+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-cebu-whale-sharks-sandbars-and-ancient-heritage</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-cebu-whale-sharks-sandbars-and-ancient-heritage</loc>
     <lastmod>2026-06-18T16:28:02+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-calatagan-hidden-islands-white-castles-and-beach-bliss</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-calatagan-hidden-islands-white-castles-and-beach-bliss</loc>
     <lastmod>2026-06-18T18:50:03+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-boracay-white-sands-coral-gardens-and-ocean-thrills</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-boracay-white-sands-coral-gardens-and-ocean-thrills</loc>
     <lastmod>2026-06-18T18:49:46+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/outbound/package/discover-baguio-mountain-air-pine-forests-and-cultural-wonders</loc>
+    <loc>http://ritsms.test/outbound/packages/discover-baguio-mountain-air-pine-forests-and-cultural-wonders</loc>
     <lastmod>2026-06-18T18:49:28+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/love-in-taiwan-tour-scenic-sun-moon-lake-taipei-via-eva-air</loc>
+    <loc>http://ritsms.test/inbound/packages/love-in-taiwan-tour-scenic-sun-moon-lake-taipei-via-eva-air</loc>
     <lastmod>2026-06-05T03:53:40+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/chengdu-chongqing-tour-pandas-hongya-cave-liziba-monorail</loc>
+    <loc>http://ritsms.test/inbound/packages/chengdu-chongqing-tour-pandas-hongya-cave-liziba-monorail</loc>
     <lastmod>2026-06-05T04:05:53+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/chengdu-dagu-glacier-snow-tour-giant-pandas-alpine-cable-car-experience</loc>
+    <loc>http://ritsms.test/inbound/packages/chengdu-dagu-glacier-snow-tour-giant-pandas-alpine-cable-car-experience</loc>
     <lastmod>2026-06-05T05:41:18+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/da-nang-hoi-an-tour-ba-na-hills-golden-bridge-basket-boats-ancient-town</loc>
+    <loc>http://ritsms.test/inbound/packages/da-nang-hoi-an-tour-ba-na-hills-golden-bridge-basket-boats-ancient-town</loc>
     <lastmod>2026-06-05T05:49:49+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/hokkaido-winter-tour-kiroro-snow-world-otaru-canal-sapporo-escape</loc>
+    <loc>http://ritsms.test/inbound/packages/hokkaido-winter-tour-kiroro-snow-world-otaru-canal-sapporo-escape</loc>
     <lastmod>2026-06-05T05:57:07+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/shanghai-highlights-tour-the-bund-guangfuling-site-disneyland-free-day</loc>
+    <loc>http://ritsms.test/inbound/packages/shanghai-highlights-tour-the-bund-guangfuling-site-disneyland-free-day</loc>
     <lastmod>2026-06-05T06:06:32+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/beijing-premium-tour-great-wall-forbidden-city-pop-land-labubu-experience</loc>
+    <loc>http://ritsms.test/inbound/packages/beijing-premium-tour-great-wall-forbidden-city-pop-land-labubu-experience</loc>
     <lastmod>2026-06-05T06:15:08+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/hokkaido-christmas-snow-tour-kiroro-snow-world-otaru-canal-sapporo-escape</loc>
+    <loc>http://ritsms.test/inbound/packages/hokkaido-christmas-snow-tour-kiroro-snow-world-otaru-canal-sapporo-escape</loc>
     <lastmod>2026-06-05T07:43:07+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/nagoya-shirakawa-go-tour-takayama-old-town-shinhotaka-ropeway-onsen-resort</loc>
+    <loc>http://ritsms.test/inbound/packages/nagoya-shirakawa-go-tour-takayama-old-town-shinhotaka-ropeway-onsen-resort</loc>
     <lastmod>2026-06-05T08:13:08+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/shanghai-hangzhou-premium-tour-disneyland-anji-alpine-skiing-west-lake-cruise</loc>
+    <loc>http://ritsms.test/inbound/packages/shanghai-hangzhou-premium-tour-disneyland-anji-alpine-skiing-west-lake-cruise</loc>
     <lastmod>2026-06-05T08:20:17+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/shanghai-snow-world-highlights-tour-yaoxue-ice-resort-pop-mart-the-bund</loc>
+    <loc>http://ritsms.test/inbound/packages/shanghai-snow-world-highlights-tour-yaoxue-ice-resort-pop-mart-the-bund</loc>
     <lastmod>2026-06-05T08:27:36+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/zhangjiajie-avatar-mountains-tour-glass-bridge-bailong-elevator-72-odd-buildings</loc>
+    <loc>http://ritsms.test/inbound/packages/zhangjiajie-avatar-mountains-tour-glass-bridge-bailong-elevator-72-odd-buildings</loc>
     <lastmod>2026-06-05T08:32:44+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/tokyo-nagano-tour-snow-monkeys-sora-terrace-karuizawa-outlets-disneyland</loc>
+    <loc>http://ritsms.test/inbound/packages/tokyo-nagano-tour-snow-monkeys-sora-terrace-karuizawa-outlets-disneyland</loc>
     <lastmod>2026-06-05T08:39:08+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/japan-golden-route-tour-tokyo-disneyland-mt-fuji-bullet-train-best-of-kyotoosaka</loc>
+    <loc>http://ritsms.test/inbound/packages/japan-golden-route-tour-tokyo-disneyland-mt-fuji-bullet-train-best-of-kyotoosaka</loc>
     <lastmod>2026-06-05T08:43:45+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/melbourne-winter-highlights-mt-buller-snow-adventure-phillip-island-penguins</loc>
+    <loc>http://ritsms.test/inbound/packages/melbourne-winter-highlights-mt-buller-snow-adventure-phillip-island-penguins</loc>
     <lastmod>2026-06-05T08:49:28+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/beijing-shanghai-dual-city-tour-great-wall-bullet-train-the-bund-skyline</loc>
+    <loc>http://ritsms.test/inbound/packages/beijing-shanghai-dual-city-tour-great-wall-bullet-train-the-bund-skyline</loc>
     <lastmod>2026-06-05T08:55:06+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/chongqing-zhangjiajie-tour-viral-monorail-avatar-mountains-glass-bridge</loc>
+    <loc>http://ritsms.test/inbound/packages/chongqing-zhangjiajie-tour-viral-monorail-avatar-mountains-glass-bridge</loc>
     <lastmod>2026-06-05T08:59:52+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/sydney-melbourne-highlights-great-ocean-road-blue-mountains-penguin-parade</loc>
+    <loc>http://ritsms.test/inbound/packages/sydney-melbourne-highlights-great-ocean-road-blue-mountains-penguin-parade</loc>
     <lastmod>2026-06-05T09:04:23+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/taiwan-christmas-adventure-christmasland-xinyi-shifen-sky-lantern-yehliu</loc>
+    <loc>http://ritsms.test/inbound/packages/taiwan-christmas-adventure-christmasland-xinyi-shifen-sky-lantern-yehliu</loc>
     <lastmod>2026-06-05T09:08:00+00:00</lastmod>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>http://ritsms.test/inbound/package/discover-puerto-princesa-caves-coral-reefs-and-your-next-big-adventure</loc>
+    <loc>http://ritsms.test/inbound/packages/discover-puerto-princesa-caves-coral-reefs-and-your-next-big-adventure</loc>
     <lastmod>2026-06-06T04:45:42+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/visit-and-explore-korea-autumn</loc>
+    <lastmod>2026-07-08T18:06:30+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/visit-and-explore-korea-spring</loc>
+    <lastmod>2026-07-08T18:17:17+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/full-board-package-autumn-in-korea</loc>
+    <lastmod>2026-07-08T18:25:47+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/a-new-adventure-calls-experience-springtime-in-korea</loc>
+    <lastmod>2026-07-08T18:34:28+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/catch-the-summer-vibes-koreas-coastlines-are-calling</loc>
+    <lastmod>2026-07-08T18:39:59+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/visit-and-explore-korea-winter</loc>
+    <lastmod>2026-07-08T18:46:32+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/packages/fairytale-europe-5-country-vacation</loc>
+    <lastmod>2026-07-13T17:56:54+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/outbound/groups/ready-to-go-travels-fa3ngy</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/outbound/groups/top-china-travel-deals-2gboho</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/groups/recommended-by-tourist-bw7eqa</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/groups/philippines-summer-deals-wjysub</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/outbound/groups/new-japan-travel-packages-c8zzya</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/inbound/groups/destinations-with-relaxing-nature-sy0smn</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://ritsms.test/outbound/groups/korea-best-travel-tours-j7wtwc</loc>
+    <lastmod>2026-07-24T02:45:38+00:00</lastmod>
     <priority>0.9</priority>
             </url>
 </urlset>
