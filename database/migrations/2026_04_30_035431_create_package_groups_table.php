@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('include_as_outbound')->default(false);
             $table->boolean('include_as_inbound')->default(false);
             $table->boolean('is_featured')->default(false);
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

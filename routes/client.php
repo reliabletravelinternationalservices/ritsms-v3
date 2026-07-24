@@ -11,6 +11,7 @@ use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
+// Route::get('/updateTable', [LandingPageController::class, 'updateTableData'])->name('client.update');
 
 // DESTINATIONS
 Route::prefix('destinations')->group(function () {

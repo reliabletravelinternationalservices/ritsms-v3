@@ -127,30 +127,43 @@ class Package extends Model
         ];
     }
 
-    protected static function generateSlug(string $name, int|null $ignoreId = null)
-    {
-        $slug = Str::slug($name);
+    // protected static function generateSlug(string $name, int|null $ignoreId = null)
+    // {
+    //     $slug = Str::slug($name);
 
-        $query = static::where('slug', 'like', "{$slug}%");
+    //     $query = static::where('slug', 'like', "{$slug}%");
 
-        if ($ignoreId) {
-            $query->where('id', '!=', $ignoreId);
-        }
+    //     if ($ignoreId) {
+    //         $query->where('id', '!=', $ignoreId);
+    //     }
 
-        $count = $query->count();
+    //     $count = $query->count();
 
-        return $count ? "{$slug}-" . ($count + 1) : $slug;
-    }
+    //     return $count ? "{$slug}-" . ($count + 1) : $slug;
+    // }
 
     protected static function booted()
     {
         static::creating(function ($package) {
-            $package->slug = static::generateSlug($package->name);
+            do {
+                $base = Str::limit(Str::slug($package->name), 50, '');
+                $slug = "{$base}-" . Str::lower(Str::random(6));
+            } while (static::where('slug', $slug)->exists());
+
+            $package->slug = $slug;
         });
+
 
         static::updating(function ($package) {
             if ($package->isDirty('name')) {
-                $package->slug = static::generateSlug($package->name, $package->id);
+                do {
+                    $base = Str::limit(Str::slug($package->name), 50, '');
+                    $slug = "{$base}-" . Str::lower(Str::random(6));
+                } while (static::where('slug', $slug)
+                    ->where('id', '!=', $package->id)
+                    ->exists());
+
+                $package->slug = $slug;
             }
         });
     }
