@@ -50,6 +50,12 @@ class DestinationRepository
         return Destination::with(['locations', 'image', 'locations.image'])->findOrFail($id);
     }
 
+    public function getDestinationBySlug(string $slug)
+    {
+        // This executes 1 query for destination + 2 queries for relations
+        return Destination::with(['locations', 'image', 'locations.image'])->where('slug', $slug)->firstOrFail();
+    }
+
     public function getAllDestinations()
     {
         return Destination::with(['locations', 'locations.image', 'image'])->orderBy('updated_at', 'desc')->get();
