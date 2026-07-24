@@ -1,3 +1,4 @@
+import { Image } from "./image"
 import { Package } from "./package-api"
 
 export interface GroupedPackage {
@@ -8,7 +9,8 @@ export interface GroupedPackage {
     include_as_outbound: boolean
     include_as_inbound: boolean
     is_featured: boolean
-    packages: Package[]
+    image: Image
+    slug: string
 }
 
 export interface GroupPackageFilter {
@@ -18,4 +20,8 @@ export interface GroupPackageFilter {
     title?: string
     perPage?: number
     page?: number
+}
+
+export interface GroupedPackageWithPackages extends GroupedPackage {
+    packages: Package[]
 }
