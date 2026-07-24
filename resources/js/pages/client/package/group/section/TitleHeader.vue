@@ -2,12 +2,17 @@
 import { Icon } from '@iconify/vue';
 import { Image } from 'lucide-vue-next';
 import { useShareModal } from '@/stores/shareModal';
-import { GroupDetailHeaderProps } from '../../types';
+import { getImageUrl } from '@/lib/utils';
+import { GroupedPackage } from '@/types/grouped-package';
 
 const share = useShareModal();
 
+interface Props {
+    group: GroupedPackage,
+    isInbound: boolean
+}
 
-const props = defineProps<GroupDetailHeaderProps>();
+const props = defineProps<Props>();
 
 const openMessenger = () => {
     window.open(
@@ -21,7 +26,7 @@ const openMessenger = () => {
 <template>
   <section class="w-full h-[400px] md:h-[200px] lg:h-[300px] relative overflow-hidden">
     <div class="w-full h-full absolute top-0 left-0">
-      <img v-if="image && image.url" class="w-full h-full object-cover" :src="image.url" alt="Traveler">
+      <img v-if="group.image" class="w-full h-full object-cover" :src="getImageUrl(group.image.file_path)" alt="Traveler">
       <div v-else class="w-full h-full bg-gray-300 flex items-center justify-center">
         <span class="text-gray-400">
           <Image width="60" height="60" />
@@ -34,10 +39,10 @@ const openMessenger = () => {
 
           <span class="flex flex-col items-center justify-center gap-3 text-center">
             <h1 class="text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold tracking-wide">
-              {{ title }}
+              {{ group.title }}
             </h1>
-            <p v-if="description" class="text-sm md:text-base font-roboto max-w-2xl leading-relaxed">
-              {{ description }}
+            <p v-if="group.description" class="text-sm md:text-base font-roboto max-w-2xl leading-relaxed">
+              {{ group.description }}
             </p>
           </span>
 
@@ -49,7 +54,7 @@ const openMessenger = () => {
                 <Icon icon="tabler:message" class="text-xl" />
                 <span class="whitespace-nowrap">Message us</span>
               </button>
-              <a href="tel:9085721338" target="_blank" class="w-full">
+              <a href="tel:+639085721338" class="w-full">
                 <button
                   class="w-full sm:w-auto bg-[var(--tag-custom)] text-[var(--primary-custom)] px-6 py-2 flex items-center justify-center gap-2 font-roboto hover:bg-[var(--tertiary-hover-custom)] transition-all duration-200">
                   <Icon icon="material-symbols:call-outline" class="text-xl" />
@@ -59,8 +64,8 @@ const openMessenger = () => {
               <button
                 @click="share.open(
                             route(
-                                `client.${props.isInbound ? 'inbound' : 'outbound'}.group`,
-                                { id: props.id }
+                                `client.${ isInbound ? 'inbound' : 'outbound'}.group`,
+                                { slug: props.group.slug }
                             )
                         )"
                 type="button"

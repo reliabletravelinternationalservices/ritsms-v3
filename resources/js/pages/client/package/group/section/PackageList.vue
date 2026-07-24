@@ -1,45 +1,56 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import MotionWrapper from '../../../../../components/ui/MotionWrapper.vue';
-import PackageCard from '../../../../../components/PackageCard.vue';
-import { Package } from '@/types/package';
-import { Icon } from '@iconify/vue';
+import { onMounted } from 'vue';
+
+import LoadMoreButton from '@/components/LoadMoreButton.vue';
+import PackageCard from '@/components/PackageCard.vue';
+import ApiFetchError from '@/components/placeholder/error/ApiFetchError.vue';
+import PackageCarouselSkeleton from '@/components/skeleton/PackageCarouselSkeleton.vue';
+import { usePackages } from '@/composables/services/usePackages';
 
 interface Props {
-    packages: Package[],
-    isInbound: boolean,
+    groupID: number;
+    isInbound: boolean;
 }
+
 const props = defineProps<Props>();
 
-const visibleCount = ref(6);
-const visiblePackages = computed(() => props.packages.slice(0, visibleCount.value));
-const hasMorePackages = computed(() => visibleCount.value < props.packages.length);
+const { packages, fetchPackages, loading, loadingMore, loadMore, isLastPage, error } = usePackages();
 
-const showMore = () => {
-    visibleCount.value = Math.min(props.packages.length, visibleCount.value + 3);
-};
+onMounted(() => {
+    fetchPackages({
+        page: 1,
+        perPage: 6,
+        groupID: props.groupID,
+    });
+});
 </script>
 
 <template>
-    <section class="w-full flex flex-col justify-center py-6">
-        <div class="max-w-5xl m-auto py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-6">
-            <MotionWrapper v-for="packageData in visiblePackages" :key="packageData.id">
-                <PackageCard :package="packageData" :isInbound="props.isInbound" />
-            </MotionWrapper>
+    <section class="flex w-full flex-col justify-center py-6">
+        <!-- Initial Loading -->
+        <div v-if="loading" class="mx-auto flex flex-col w-full max-w-5xl justify-center py-8 gap-6">
+            <PackageCarouselSkeleton v-for="i in 2" :key="i" />
         </div>
 
-        <div v-if="hasMorePackages" class="mt-8 flex justify-center">
-            <button
-                type="button"
-                @click="showMore"
-                class="inline-flex items-center justify-center px-7 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 gap-2"
-                :class="props.isInbound
-                    ? 'hover:text-[var(--inbound-custom)]'
-                    : 'hover:text-[var(--outbound-custom)]'"
-            >
-                <span class="whitespace-nowrap">Show more</span>
-                <Icon icon="codicon:fold-down" class="w-4 h-4" />
-            </button>
-        </div>
+        <!-- Error -->
+        <ApiFetchError v-else-if="error" :description="error" :retry="fetchPackages" />
+
+        <!-- Content -->
+        <template v-else>
+            <div v-if="packages.length" class="mx-auto grid max-w-5xl grid-cols-1 gap-12 py-8 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+                <PackageCard v-for="pkg in packages" :key="pkg.id" :package="pkg" :isInbound="isInbound" />
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="py-20 text-center text-slate-500">No packages found.</div>
+
+            <!-- Loading More -->
+            <div v-if="loadingMore" class="flex w-full justify-center py-8">
+                <PackageCarouselSkeleton />
+            </div>
+
+            <!-- Load More -->
+            <LoadMoreButton v-else-if="packages.length && !isLastPage" :loading="loadingMore" @click="loadMore" />
+        </template>
     </section>
 </template>
