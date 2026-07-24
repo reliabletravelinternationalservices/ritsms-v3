@@ -25,9 +25,9 @@ class DestinationPageController extends Controller
         return Inertia::render('client/country/ServiceCountryPage');
     }
 
-    public function country(Destination $destination)
+    public function country(string $slug)
     {
-        $destination = $this->service->getDestinationByID($destination->id);
+        $destination = $this->service->getDestinationBySlug($slug);
         $this->service->initializeDestinationPageSEO($destination['destination']);
 
         return Inertia::render('client/location/LocationPage', $destination);
