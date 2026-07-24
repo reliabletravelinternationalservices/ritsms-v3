@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\PackageGroup;
 use App\Services\Client\InboundPageService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,11 +22,15 @@ class InboundPageController extends Controller
 
 
 
-    public function groupDetail(int $id)
+    public function groupDetail(string $slug)
     {
-        $group = $this->service->getGroupDetailByID($id);
+        $group = PackageGroup::select(['id', 'title', 'description'])->with('image:id,mediable_id,mediable_type,file_name,file_path,alt_text')->where('slug', $slug)->first();
         $this->service->initializeGroupDetailPageSEO($group);
-        return Inertia::render('client/package/group/PackageGroupPage', $this->service->geGroupPackagePageData($group));
+        $params =[
+            'group' => $group,
+            'isInbound' => true
+        ];
+        return Inertia::render('client/package/group/PackageGroupPage', compact('params'));
     }
 
 
