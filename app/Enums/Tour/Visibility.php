@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Tour;
 
 
-enum TourVisibility: string
+enum Visibility: string
 {
     case PUBLIC = 'public';
     case PRIVATE = 'private';

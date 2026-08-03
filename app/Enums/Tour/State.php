@@ -2,7 +2,7 @@
 
 namespace App\Enums\Tour;
 
-enum TourState: string
+enum State: string
 {
     case DRAFT = 'draft';
     case PUBLISHED = 'published';

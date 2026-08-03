@@ -3,7 +3,7 @@
 
 namespace App\Enums\Tour;
 
-enum TourCategory: string
+enum Category: string
 {
     case DOMESTIC = 'domestic';
     case INBOUND = 'inbound';
