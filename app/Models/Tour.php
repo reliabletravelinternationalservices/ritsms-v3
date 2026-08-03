@@ -8,7 +8,7 @@ use App\Enums\Tour\State;
 use App\Enums\Tour\TourType;
 use App\Enums\Tour\Visibility;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property Category $category
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
+    use SoftDeletes;
 
     protected $table = 'tours';
 

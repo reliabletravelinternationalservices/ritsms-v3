@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('badge', 100)->nullable();
             $table->text('notes')->nullable()
                 ->comment('For Internal Use Only - Not visible to customers');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
