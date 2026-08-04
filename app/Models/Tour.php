@@ -9,6 +9,8 @@ use App\Enums\Tour\TourType;
 use App\Enums\Tour\Visibility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 /**
  * @property Category $category
@@ -66,5 +68,41 @@ class Tour extends Model
             'description' => 'array',
             'terms_and_conditions' => 'array',
         ];
+    }
+
+
+    // Relationships
+    public function transportations(): BelongsToMany
+    {
+        return $this->belongsToMany(Transportation::class, 'tours_transportations');
+    }
+
+    public function routes(): BelongsToMany
+    {
+        return $this->belongsToMany(TourRoute::class)
+            ->orderBy('sequence');
+    }
+
+    public function departures()
+    {
+        return $this->hasMany(TourDeparture::class);
+    }
+
+
+
+    public function itineraries()
+    {
+        return $this->hasMany(TourItinerary::class)
+            ->orderBy('day_no');
+    }
+
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            TourGroup::class,
+            'tour_group_items'
+        )->withPivot('sort_order')
+            ->orderByPivot('sort_order');
     }
 }
