@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import { Link } from '@inertiajs/vue3';
 
 defineProps<{
     title?: string;
@@ -9,19 +8,25 @@ defineProps<{
 </script>
 
 <template>
-    <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-        <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
+    <div
+        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-[rgb(var(--app-color-background))] dark:bg-background p-6 md:p-10">
+        <div
+            class="w-full max-w-lg bg-[rgb(var(--app-color-background))] rounded-lg p-12 shadow-md dark:bg-background dark:shadow-none dark:border dark:border-border">
+            <div class="flex flex-col gap-10 w-full">
                 <div class="flex flex-col items-center gap-4">
-                    <Link :href="route('client.landing')" class="flex flex-col items-center gap-2 font-medium">
-                        <div class="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                            <AppLogoIcon class="size-9 fill-current text-[var(--foreground)] dark:text-white" />
-                        </div>
-                        <span class="sr-only">{{ title }}</span>
-                    </Link>
+                    <div class="mb-1 flex h-20 w-20 items-center justify-center rounded-md">
+                        <AppLogoIcon class="w-full h-full fill-current" />
+                    </div>
+                    <!-- <span class="sr-only">{{ title }}</span> -->
                     <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ title }}</h1>
-                        <p class="text-center text-sm text-muted-foreground">{{ description }}</p>
+                        <h1
+                            class="text-xl font-bold text-[rgb(var(--app-color-foreground))] uppercase dark:text-foreground">
+                            {{ title }}</h1>
+                        <p
+                            class="text-center text-sm text-[rgb(var(--app-color-foreground-muted))] dark:text-foreground-muted">
+                            {{
+                                description }}
+                        </p>
                     </div>
                 </div>
                 <slot />
