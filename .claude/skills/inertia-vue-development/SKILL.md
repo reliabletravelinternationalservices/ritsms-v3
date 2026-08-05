@@ -124,9 +124,116 @@ function createUser() {
 
 ## Form Handling
 
+### Form Component (Recommended)
+
+The recommended way to build forms is with the `<Form>` component:
+
+<!-- Form Component Example -->
+```vue
+<script setup>
+import { Form } from '@inertiajs/vue3'
+</script>
+
+<template>
+    <Form action="/users" method="post" #default="{ errors, processing, wasSuccessful }">
+        <input type="text" name="name" />
+        <div v-if="errors.name">{{ errors.name }}</div>
+
+        <input type="email" name="email" />
+        <div v-if="errors.email">{{ errors.email }}</div>
+
+        <button type="submit" :disabled="processing">
+            {{ processing ? 'Creating...' : 'Create User' }}
+        </button>
+
+        <div v-if="wasSuccessful">User created!</div>
+    </Form>
+</template>
+```
+
+### Form Component With All Props
+
+<!-- Form Component Full Example -->
+```vue
+<script setup>
+import { Form } from '@inertiajs/vue3'
+</script>
+
+<template>
+    <Form
+        action="/users"
+        method="post"
+        #default="{
+            errors,
+            hasErrors,
+            processing,
+            progress,
+            wasSuccessful,
+            recentlySuccessful,
+            setError,
+            clearErrors,
+            resetAndClearErrors,
+            defaults,
+            isDirty,
+            reset,
+            submit
+        }"
+    >
+        <input type="text" name="name" :value="defaults.name" />
+        <div v-if="errors.name">{{ errors.name }}</div>
+
+        <button type="submit" :disabled="processing">
+            {{ processing ? 'Saving...' : 'Save' }}
+        </button>
+
+        <progress v-if="progress" :value="progress.percentage" max="100">
+            {{ progress.percentage }}%
+        </progress>
+
+        <div v-if="wasSuccessful">Saved!</div>
+    </Form>
+</template>
+```
+
+### Form Component Reset Props
+
+The `<Form>` component supports automatic resetting:
+
+- `resetOnError` - Reset form data when the request fails
+- `resetOnSuccess` - Reset form data when the request succeeds
+- `setDefaultsOnSuccess` - Update default values on success
+
+Use the `search-docs` tool with a query of `form component resetting` for detailed guidance.
+
+<!-- Form with Reset Props -->
+```vue
+<script setup>
+import { Form } from '@inertiajs/vue3'
+</script>
+
+<template>
+    <Form
+        action="/users"
+        method="post"
+        reset-on-success
+        set-defaults-on-success
+        #default="{ errors, processing, wasSuccessful }"
+    >
+        <input type="text" name="name" />
+        <div v-if="errors.name">{{ errors.name }}</div>
+
+        <button type="submit" :disabled="processing">
+            Submit
+        </button>
+    </Form>
+</template>
+```
+
+Forms can also be built using the `useForm` composable for more programmatic control. Use the `search-docs` tool with a query of `useForm helper` for guidance.
+
 ### `useForm` Composable
 
-For Inertia v2.0.x: Build forms using the `useForm` composable as the `<Form>` component is not available until v2.1.0+.
+For more programmatic control or to follow existing conventions, use the `useForm` composable:
 
 <!-- useForm Composable Example -->
 ```vue
