@@ -13,13 +13,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Super Admin',
-            'display_name' => 'Developer Account',
-            'role' => 'admin',
-            'status' => 'active',
+        User::create([
+            'code' => 'ADM-20260421-02445',
+            'display_name' => 'Reliable Info',
+            'is_active' => true,
             'email' => 'reliabletravelinfo@gmail.com',
-            'password' => bcrypt('reliable@password'),
+            'password' => bcrypt('password'),
         ]);
     }
 }
