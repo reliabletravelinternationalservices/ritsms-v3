@@ -121,7 +121,7 @@ Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(functi
 
             Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
             Route::patch('/details/{id}/update', [AdminAccountDetailController::class, 'update'])->name('admin.users.admins.details.update');
-            
+
             Route::get('/details/{id}/edit', [EditAdminAccountController::class, 'index'])->name('admin.users.admins.edit');
             Route::put('/details/{id}/update', [EditAdminAccountController::class, 'update'])->name('admin.users.admins.update');
         });
@@ -147,7 +147,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/verify/{hash}', [VerifyAdminEmailController::class, 'verify'])
         ->name('admin.verification.verify');
 
-    Route::get ('/accessDenied', [AccountAccessController::class, 'index'])
+    Route::get('/access_restricted', [AccountAccessController::class, 'index'])
         ->name('admin.access.denied');
 
     Route::get('/forgot-password', [AccountForgotPassword::class, 'forgotAdminPassword'])
@@ -155,7 +155,7 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/forgot-password', [AccountForgotPassword::class, 'sendAdminPasswordResetLink'])
         ->name('admin.forgot.password.send');
-    
+
     Route::get('/reset-password/{token}', [AccountForgotPassword::class, 'createAdminPasswordResetForm'])
         ->name('admin.forgot.password.reset');
 
