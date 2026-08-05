@@ -16,6 +16,23 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: rits_phpmyadmin
+    restart: unless-stopped
+
+    depends_on:
+      - mysql
+
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ritsroot
+
+    ports:
+      - "8080:80"
+
   redis:
     image: redis:8-alpine
     container_name: rits_redis
