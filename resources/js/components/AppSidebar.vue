@@ -3,79 +3,87 @@
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { SharedData, type NavItem } from '@/types';
-import { Link, usePage } from '@inertiajs/vue3';
+import { type NavItem } from '@/types';
+import { Link } from '@inertiajs/vue3';
 import AppLogo from './AppLogo.vue';
 
 
-const page = usePage<SharedData>();
+// const page = usePage<SharedData>();
 
-
-const mainNavItems: NavItem[] = [
+const statisticsNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: route('admin.dashboard'),
         url: route('admin.dashboard', undefined, false),
-        icon: 'si:grid-duotone',
-    },
-    {
-        title: 'Packages',
-        icon: 'lucide:package',
-        children: [
-            {
-                title: 'Packages List',
-                href: route('admin.packages'),
-            },
-            {
-                title: 'Groups',
-                href: route('admin.packages.groups'),
-            },
-        ],
-    },
-    {
-        title: 'Destinations',
-        icon: 'lucide:map',
-        children: [
-            {
-                title: 'Countries List',
-                href: route('admin.destinations'),
-            }
-        ],
-    },
-    {
-        title: 'Bookings',
-        href: route('admin.bookings'),
-        url: route('admin.bookings', undefined, false),
-        icon: 'ant-design:book-outlined',
-    },
-    {
-        title: 'Inquiries',
-        url: route('admin.inquiries', undefined, false),
-        href: route('admin.inquiries'),
-        icon: 'ix:inquiry',
-    },
-    {
-        title: 'Users',
-        icon: 'lucide:users',
-        isShow: page.props.auth.user?.role === 'admin',
-        children: [
-            {
-                title: 'Admins',
-                href: route('admin.users.admins'),
-            },
-            {
-                title: 'Clients',
-                href: route('admin.users.clients'),
-            }
-        ],
-    },
-    {
-        title: 'Logs',
-        url: route('admin.logs', undefined, false),
-        href: route('admin.logs'),
-        icon: 'streamline-sharp:reset-clock',
+        icon: 'lucide:home',
     },
 ];
+
+// const mainNavItems: NavItem[] = [
+//     {
+//         title: 'Dashboard',
+//         href: route('admin.dashboard'),
+//         url: route('admin.dashboard', undefined, false),
+//         icon: 'si:grid-duotone',
+//     },
+//     {
+//         title: 'Packages',
+//         icon: 'lucide:package',
+//         children: [
+//             {
+//                 title: 'Packages List',
+//                 href: route('admin.packages'),
+//             },
+//             {
+//                 title: 'Groups',
+//                 href: route('admin.packages.groups'),
+//             },
+//         ],
+//     },
+//     {
+//         title: 'Destinations',
+//         icon: 'lucide:map',
+//         children: [
+//             {
+//                 title: 'Countries List',
+//                 href: route('admin.destinations'),
+//             }
+//         ],
+//     },
+//     {
+//         title: 'Bookings',
+//         href: route('admin.bookings'),
+//         url: route('admin.bookings', undefined, false),
+//         icon: 'ant-design:book-outlined',
+//     },
+//     {
+//         title: 'Inquiries',
+//         url: route('admin.inquiries', undefined, false),
+//         href: route('admin.inquiries'),
+//         icon: 'ix:inquiry',
+//     },
+//     {
+//         title: 'Users',
+//         icon: 'lucide:users',
+//         isShow: page.props.auth.user?.role === 'admin',
+//         children: [
+//             {
+//                 title: 'Admins',
+//                 href: route('admin.users.admins'),
+//             },
+//             {
+//                 title: 'Clients',
+//                 href: route('admin.users.clients'),
+//             }
+//         ],
+//     },
+//     {
+//         title: 'Logs',
+//         url: route('admin.logs', undefined, false),
+//         href: route('admin.logs'),
+//         icon: 'streamline-sharp:reset-clock',
+//     },
+// ];
 
 // const footerNavItems: NavItem[] = [
 //     {
@@ -108,7 +116,7 @@ const mainNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain group-title="Statistics" :items="mainNavItems" />
+            <NavMain group-title="Statistics" :items="statisticsNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
