@@ -12,6 +12,7 @@ import DeleteDialog from '@/components/ui/DeleteDialog.vue';
 import { imageViewer } from "@/lib/imageViewer"
 import { appModal } from "@/lib/app-modal"
 import ShareModal from './components/ShareModal.vue';
+import VueApexCharts from 'vue3-apexcharts';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -45,6 +46,8 @@ createInertiaApp({
             .use(appModal)
             .use(plugin)
             .use(ZiggyVue)
+            .use(VueApexCharts)
+            .component('ApexCharts', VueApexCharts)
             .mount(el);
     },
     progress: {
