@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
+// import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
@@ -10,11 +10,12 @@ import AppLogo from './AppLogo.vue';
 
 const page = usePage<SharedData>();
 
-    
+
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: route('admin.dashboard'),
+        url: route('admin.dashboard', undefined, false),
         icon: 'si:grid-duotone',
     },
     {
@@ -44,10 +45,12 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Bookings',
         href: route('admin.bookings'),
+        url: route('admin.bookings', undefined, false),
         icon: 'ant-design:book-outlined',
     },
     {
         title: 'Inquiries',
+        url: route('admin.inquiries', undefined, false),
         href: route('admin.inquiries'),
         icon: 'ix:inquiry',
     },
@@ -68,25 +71,26 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Logs',
+        url: route('admin.logs', undefined, false),
         href: route('admin.logs'),
         icon: 'streamline-sharp:reset-clock',
     },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
-        icon: 'mdi:github',
-        isShow: page.props.auth.user?.role === 'admin',
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: 'tabler:book',
-        isShow: page.props.auth.user?.role === 'admin',
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Github Repo',
+//         href: 'https://github.com/reliabletravelinternationalservices/ritsms-v3',
+//         icon: 'mdi:github',
+//         isShow: page.props.auth.user?.role === 'admin',
+//     },
+//     {
+//         title: 'Documentation',
+//         href: 'https://laravel.com/docs/starter-kits',
+//         icon: 'tabler:book',
+//         isShow: page.props.auth.user?.role === 'admin',
+//     },
+// ];
 </script>
 
 <template>
@@ -104,11 +108,11 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain group-title="Statistics" :items="mainNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
+            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
         </SidebarFooter>
     </Sidebar>

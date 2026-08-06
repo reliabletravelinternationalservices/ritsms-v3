@@ -54,9 +54,10 @@ const submit = () => {
 
                 <div class="flex items-center justify-between" tabindex="3">
                     <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" v-model:checked="form.remember" tabindex="4" class="bg-[rgb(var(--app-color-background))] 
-                            data-[state=checked]:text-[rgb(var(--app-color-background))] data-[state=checked]:border-[rgb(var(--app-color-primary))] data-[state=checked]:bg-[rgb(var(--app-color-primary))]
-                            dark:bg-background" />
+                        <Checkbox id="remember" v-model:checked="form.remember" tabindex="4"
+                            class="bg-[rgb(var(--app-color-background))] 
+                            data-[state=checked]:text-background data-[state=checked]:border-[rgb(var(--app-color-primary))] data-[state=checked]:bg-[rgb(var(--app-color-primary))]
+                            dark:bg-[rgb(var(--app-color-background))] dark:data-[state=checked]:text-background dark:data-[state=checked]:border-[rgb(var(--app-color-primary))] dark:data-[state=checked]:bg-[rgb(var(--app-color-primary))]" />
                         <span>Remember me</span>
                     </Label>
                 </div>

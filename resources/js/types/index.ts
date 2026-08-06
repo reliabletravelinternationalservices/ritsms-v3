@@ -22,6 +22,7 @@ export interface NavItem {
     title: string;
     href?: string;
     icon?: string;
+    url?: string;
     isActive?: boolean;
     isShow?: boolean;
     children?: NavChildItem[];
