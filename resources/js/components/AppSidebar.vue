@@ -17,6 +17,12 @@ const statisticsNavItems: NavItem[] = [
         url: route('admin.dashboard', undefined, false),
         icon: 'lucide:home',
     },
+    {
+        title: 'Inbox',
+        href: route('admin.inbox'),
+        url: route('admin.inbox', undefined, false),
+        icon: 'lucide:inbox',
+    },
 ];
 
 // const mainNavItems: NavItem[] = [

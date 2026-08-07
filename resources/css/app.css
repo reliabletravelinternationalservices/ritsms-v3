@@ -79,13 +79,12 @@ html {
         /* NEW COLOR */
         /* --app-color-background: 250 250 250;
         --app-color-foreground: 30 30 30;
-        --app-color-primary: 221 153 29;
         --app-color-foreground-muted: 92 92 92; */
 
         --color-orange: #FF932E;
         --color-green: #008C10;
         --color-deepOrange: #FF383C;
-        
+        --color-primary: 221 153 29;        
 
         /* FONTS */
         --font-montserrat: 'Montserrat', sans-serif;

@@ -34,12 +34,21 @@ use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
 use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
+use App\Http\Controllers\Admin\InboxController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
 Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('inbox')->group(function () {
+            Route::controller(InboxController::class)->group(function () {
+                Route::get('/', 'index')->name('inbox');
+            });
+        });
+    });
 
     Route::prefix('packages')->group(function () {
         Route::get('/', [ServicePackageController::class, 'index'])->name('admin.packages');
