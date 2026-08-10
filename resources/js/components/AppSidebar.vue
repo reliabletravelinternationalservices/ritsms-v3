@@ -23,6 +23,12 @@ const statisticsNavItems: NavItem[] = [
         url: route('admin.inbox', undefined, false),
         icon: 'lucide:inbox',
     },
+    {
+        title: 'Quotes',
+        href: route('admin.quotations'),
+        url: route('admin.quotations', undefined, false),
+        icon: 'lucide:clipboard-list',
+    },
 ];
 
 // const mainNavItems: NavItem[] = [
