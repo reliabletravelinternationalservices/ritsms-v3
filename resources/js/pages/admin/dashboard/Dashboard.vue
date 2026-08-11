@@ -75,7 +75,7 @@ const topPackagesData = [
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 relative">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-4">
+            <div class="grid auto-rows-min gap-4 md:grid-cols-4 lg:grid-cols-3">
                 <div class="relative">
                     <DataCard icon-color="text-[var(--color-orange)]" icon="lucide:inbox" title="Pending Inbox"
                         :value="0" />
