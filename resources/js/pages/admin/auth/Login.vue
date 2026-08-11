@@ -63,7 +63,7 @@ const submit = () => {
                 </div>
 
                 <Button type="submit"
-                    class="mt-4 w-full bg-[rgb(var(--app-color-primary))] hover:bg-[rgb(var(--app-color-primary)/0.8)]"
+                    class="mt-4 w-full bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary)/0.8)]"
                     tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Log in
