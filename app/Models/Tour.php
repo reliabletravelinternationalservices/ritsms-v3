@@ -97,6 +97,12 @@ class Tour extends Model
     }
 
 
+    public function hotels()
+    {
+        return $this->hasMany(TourHotel::class);
+    }
+
+
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(

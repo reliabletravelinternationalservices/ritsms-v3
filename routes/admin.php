@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\User\EditAdminAccountController;
 use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\QuotationController;
+use App\Http\Controllers\Admin\Tour\TourManagementController;
 use Illuminate\Support\Facades\Route;
 
 // OUTBOUND DESTINATIONS
@@ -53,6 +54,12 @@ Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(functi
         Route::prefix('quotations')->group(function () {
             Route::controller(QuotationController::class)->group(function () {
                 Route::get('/', 'index')->name('quotations');
+            });
+        });
+
+        Route::prefix('tours')->group(function () {
+            Route::controller(TourManagementController::class)->group(function () {
+                Route::get('/', 'index')->name('tours');
             });
         });
     });

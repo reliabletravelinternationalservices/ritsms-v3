@@ -31,6 +31,16 @@ const statisticsNavItems: NavItem[] = [
     },
 ];
 
+const toursNavItems: NavItem[] = [
+    {
+        title: 'Tour Management',
+        href: route('admin.tours'),
+        url: route('admin.tours', undefined, false),
+        icon: 'lucide:plane',
+    },
+
+];
+
 // const mainNavItems: NavItem[] = [
 //     {
 //         title: 'Dashboard',
@@ -129,6 +139,7 @@ const statisticsNavItems: NavItem[] = [
 
         <SidebarContent>
             <NavMain group-title="Statistics" :items="statisticsNavItems" />
+            <NavMain group-title="Tours" :items="toursNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
