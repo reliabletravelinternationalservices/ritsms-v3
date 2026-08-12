@@ -9,6 +9,7 @@ use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\Outbound\OutboundPageController;
 use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
 // Route::get('/updateTable', [LandingPageController::class, 'updateTableData'])->name('client.update');
@@ -59,3 +60,10 @@ Route::prefix('inquiry')->group(function () {
 
 Route::get('/contacts', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
+
+
+Route::fallback(function () {
+    return Inertia::render('error/RouteFallbackError', [
+        'code' => '404',
+    ]);
+});

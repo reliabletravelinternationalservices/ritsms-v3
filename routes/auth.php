@@ -9,10 +9,12 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('guestUser')->prefix('admin')->name('admin.')->group(function () {
-    Route::controller(LoginController::class)->group(function () {
-        Route::get('/login', 'login')->name('login');
-        Route::post('/login', 'store')->name('login.store');
+Route::domain(config('app.admin_domain'))->group(function () {
+    Route::middleware('guestUser')->name('admin.')->group(function () {
+        Route::controller(LoginController::class)->group(function () {
+            Route::get('/login', 'login')->name('login');
+            Route::post('/login', 'store')->name('login.store');
+        });
     });
 });
 
