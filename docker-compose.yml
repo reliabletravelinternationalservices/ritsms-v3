@@ -1,18 +1,16 @@
 services:
+
   mysql:
     image: mysql:8.4
     container_name: rits_mysql
     restart: unless-stopped
-
     environment:
       MYSQL_ROOT_PASSWORD: ritsroot
       MYSQL_DATABASE: rits_db
       MYSQL_USER: rits
       MYSQL_PASSWORD: secret
-
     ports:
       - "3307:3306"
-
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -20,16 +18,13 @@ services:
     image: phpmyadmin:latest
     container_name: rits_phpmyadmin
     restart: unless-stopped
-
     depends_on:
       - mysql
-
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: ritsroot
-
     ports:
       - "8080:80"
 
@@ -37,7 +32,6 @@ services:
     image: redis:8-alpine
     container_name: rits_redis
     restart: unless-stopped
-
     ports:
       - "6379:6379"
 
@@ -45,10 +39,21 @@ services:
     image: axllent/mailpit:latest
     container_name: rits_mailpit
     restart: unless-stopped
-
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  traefik:
+    image: traefik:v3.5
+    container_name: rits_traefik
+    restart: unless-stopped
+    command:
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
 
 volumes:
   mysql_data:
