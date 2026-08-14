@@ -1,47 +1,60 @@
 <script setup lang="ts">
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-export interface SelectOption {
+export interface DropdownItem {
     label: string
-    value: string
-}
-
-interface Props {
-    options: SelectOption[]
-    placeholder?: string
-    modelValue?: string
+    value?: string
     disabled?: boolean
-    class?: string
+    separator?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    placeholder: 'Select...',
-    modelValue: '',
-    disabled: false,
-})
+withDefaults(
+    defineProps<{
+        items: DropdownItem[]
+        label?: string
+        align?: 'start' | 'center' | 'end'
+    }>(),
+    {
+        align: 'end',
+    }
+)
 
 const emit = defineEmits<{
-    'update:model-value': [value: string]
+    select: [item: DropdownItem]
 }>()
 </script>
 
 <template>
-    <Select :model-value="props.modelValue" :disabled="props.disabled"
-        @update:model-value="emit('update:model-value', $event as string)">
-        <SelectTrigger class="w-full border border-muted-foreground" :class="props.class">
-            <SelectValue :placeholder="props.placeholder" />
-        </SelectTrigger>
+    <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+            <slot name="trigger">
+                <button type="button">
+                    Open
+                </button>
+            </slot>
+        </DropdownMenuTrigger>
 
-        <SelectContent>
-            <SelectItem v-for="(option, index) in props.options" :key="index" :value="option.value">
-                {{ option.label }}
-            </SelectItem>
-        </SelectContent>
-    </Select>
+        <DropdownMenuContent :align="align">
+            <DropdownMenuLabel v-if="label">
+                {{ label }}
+            </DropdownMenuLabel>
+
+            <DropdownMenuSeparator v-if="label" />
+
+            <template v-for="(item, index) in items" :key="index">
+                <DropdownMenuSeparator v-if="item.separator" />
+
+                <DropdownMenuItem v-else :disabled="item.disabled" @click="emit('select', item)">
+                    {{ item.label }}
+                </DropdownMenuItem>
+            </template>
+        </DropdownMenuContent>
+    </DropdownMenu>
 </template>
