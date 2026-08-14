@@ -13,6 +13,9 @@ import { imageViewer } from "@/lib/imageViewer"
 import { appModal } from "@/lib/app-modal"
 import ShareModal from './components/ShareModal.vue';
 import VueApexCharts from 'vue3-apexcharts';
+import { createPinia } from 'pinia'
+
+const pinia = createPinia()
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -46,6 +49,7 @@ createInertiaApp({
             .use(appModal)
             .use(plugin)
             .use(ZiggyVue)
+            .use(pinia)
             .use(VueApexCharts)
             .component('ApexCharts', VueApexCharts)
             .mount(el);
