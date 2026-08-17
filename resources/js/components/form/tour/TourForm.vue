@@ -2,6 +2,7 @@
 import { useTourFormStore } from '@/stores/tourForm'
 import NavButton from './NavButton.vue';
 import OverviewForm from './OverviewSection.vue';
+import ItineraryForm from './ItinerarySection.vue';
 
 const tourForm = useTourFormStore()
 
@@ -19,7 +20,7 @@ const { isCurrentSection, setSection, SECTION } = tourForm
             <OverviewForm />
         </div>
         <div v-else-if="isCurrentSection(SECTION.ITINERARIES)">
-            this is itinerary form
+            <ItineraryForm />
         </div>
         <div v-else-if="isCurrentSection(SECTION.INCLUSIONS)">
             this is inclusions form
