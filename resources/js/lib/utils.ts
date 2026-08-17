@@ -210,3 +210,16 @@ export const toTitleCase = (value: string) => {
 };
 
 
+
+
+export const isMultipleFlight = (value: string) => {
+    switch (value) {
+        case 'tri_city':
+            return true;
+        case 'multi_city':
+            return true;
+        default:
+            return false;
+    }
+}
+
