@@ -49,7 +49,7 @@ const editor = useEditor({
     editorProps: {
         attributes: {
             class:
-                'min-h-[150px] w-full outline-none prose prose-sm max-w-none focus:outline-none',
+                'min-h-[100px] w-full outline-none prose prose-sm max-w-none focus:outline-none',
         },
     },
 
@@ -79,8 +79,8 @@ onBeforeUnmount(() => {
 
 <style>
 .tiptap-textarea .ProseMirror {
-    min-height: 150px;
-    max-height: 300px;
+    min-height: 100px;
+    max-height: 250px;
     overflow-y: auto;
     outline: none;
 }
