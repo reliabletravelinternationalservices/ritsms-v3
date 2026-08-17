@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug', 100)->unique();
             $table->string('name', 120);
             $table->enum('category', ['domestic', 'inbound', 'outbound']);
-            $table->enum('itinerary_type', ['round_trip', 'multi_city', 'one_way']);
+            $table->enum('itinerary_type', ['round_trip', 'tri_city', 'multi_city', 'one_way']);
             $table->enum('tour_type', ['regular', 'private', 'custom', 'group']);
             $table->enum('state', ['draft', 'published', 'archived'])->default('draft');
             $table->enum('visibility', ['public', 'private'])->default('private');
