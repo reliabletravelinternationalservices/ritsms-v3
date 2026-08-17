@@ -1,15 +1,36 @@
 // stores/tour-form.ts
 
+import { isMultipleFlight } from '@/lib/utils'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const SECTION = {
   OVERVIEW: 'overview',
   ITINERARIES: 'itineraries',
-  INCLUSIONS: 'inclusions',
-  EXCLUSIONS: 'exclusions',
-  PRICING: 'pricing',
+  ROUTES: 'routes',
+  HOTELS: 'hotels',
+  PRICE_AND_SCHEDULE: 'price-and-schedule',
+  ASSETS_AND_IMAGES: 'assets-and-images',
 } as const
+
+
+interface Itinerary {
+  day_no: number
+  title: string
+  activity: string
+}
+interface Route {
+    departure_country_id: string
+    departure_location: string
+    destination_country_id: string
+    destination_location: string
+  }
+
+interface Hotel {
+    name: string
+    rate: string
+    link: string
+  }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
 
@@ -32,11 +53,20 @@ export const useTourFormStore = defineStore('tour-form', () => {
       itinerary_type: '',
     },
 
-    itineraries: [] as {
-      day_no: number
-      title: string
-      activity: string
-    }[],
+    itineraries: [] as Itinerary[],
+
+    flightAndHotelItems: {
+        routes: [ 
+          {
+            departure_country_id: '',
+            departure_location: '',
+            destination_country_id: '',
+            destination_location: '',
+          }
+      ] as Route[],
+
+      hotels: [] as Hotel[],
+    },
 
     pricing: {
       adult: 0,
@@ -54,16 +84,20 @@ export const useTourFormStore = defineStore('tour-form', () => {
       label: 'Itineraries',
     },
     {
-      key: SECTION.INCLUSIONS,
-      label: 'Inclusions',
+      key: SECTION.ROUTES,
+      label: 'Flights & Routes',
     },
     {
-      key: SECTION.EXCLUSIONS,
-      label: 'Exclusions',
+      key: SECTION.HOTELS,
+      label: 'Hotels',
     },
     {
-      key: SECTION.PRICING,
-      label: 'Pricing',
+      key: SECTION.PRICE_AND_SCHEDULE,
+      label: 'Price & Schedule',
+    },
+    {
+      key: SECTION.ASSETS_AND_IMAGES,
+      label: 'Assets & Images',
     },
   ]
 
@@ -101,6 +135,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
     }
   }
 
+
+  function syncRoutes(value: string) {
+    if(!isMultipleFlight(value)) {
+      form.value.flightAndHotelItems.routes = form.value.flightAndHotelItems.routes.slice(0, 1);
+    }
+  }
+
   function setSection(section: TourSection) {
     currentSection.value = section
   }
@@ -109,8 +150,54 @@ export const useTourFormStore = defineStore('tour-form', () => {
     return currentSection.value === section
   }
 
+
+  function addRoute() {
+    form.value.flightAndHotelItems.routes.push({
+      departure_country_id: '',
+      departure_location: '',
+      destination_country_id: '',
+      destination_location: '',
+    })
+  }
+
+  function removeRoute(index: number) {
+    if (form.value.flightAndHotelItems.routes.length <= 1) return;
+    form.value.flightAndHotelItems.routes.splice(index, 1)
+  }
+
+
+  function addHotel() {
+    form.value.flightAndHotelItems.hotels.push({
+      name: '',
+      rate: '',
+      link: '',
+    })
+  }
+
+  function removeHotel(index: number) {
+    form.value.flightAndHotelItems.hotels.splice(index, 1)
+  }
+
+
+  function containsHotel () {
+    return form.value.flightAndHotelItems.hotels.length > 0
+  }
+
   function containsItinerary() {
     return form.value.itineraries.length > 0
+  }
+
+  function containsItineraryType() {
+      return !!form.value.overviewItems.itinerary_type;
+  }
+
+
+  function containsMultipleFlights() {
+    return isMultipleFlight(form.value.overviewItems.itinerary_type)
+  }
+
+  function isRoundTrip() {
+    return form.value.overviewItems.itinerary_type === 'round_trip'
   }
 
   return {
@@ -119,8 +206,17 @@ export const useTourFormStore = defineStore('tour-form', () => {
     form,
     sections,
     syncItineraries,
+    syncRoutes,
     setSection,
     isCurrentSection,
+    isRoundTrip,
     containsItinerary,
+    containsItineraryType,
+    containsMultipleFlights,
+    containsHotel,
+    addRoute,
+    removeRoute,
+    addHotel,
+    removeHotel,
   }
 })

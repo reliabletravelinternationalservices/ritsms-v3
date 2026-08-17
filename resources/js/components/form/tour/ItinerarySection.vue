@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TextArea from '@/components/tiptap/TextArea.vue'
 import Input from '@/components/ui/input/Input.vue'
+import { Icon } from '@iconify/vue'
 import { useTourFormStore } from '@/stores/tourForm'
 
 const tourForm = useTourFormStore()
@@ -8,58 +9,60 @@ const tourForm = useTourFormStore()
 </script>
 
 <template>
-    <div class="space-y-4">
-        <div
-            class="flex items-center justify-between w-full border-b-2 border-foreground py-2 text-md font-bold uppercase">
-            <span>ITINERARIES</span>
-            <span class="text-muted-foreground">* {{ (tourForm.containsItinerary() ?
-                tourForm.form.overviewItems.duration
-                :
-                0) }}
-                days</span>
-        </div>
-
-        <!-- No duration selected -->
-        <div v-if="!tourForm.containsItinerary()"
-            class="flex min-h-40 flex-col items-center justify-center rounded-md border border-dashed border-border text-center">
-            <div class="mb-2 rounded-full bg-muted p-3">
-                <Icon icon="lucide:calendar-days" class="size-5 text-muted-foreground" />
+    <div class="space-y-6">
+        <div class="space-y-4">
+            <div
+                class="flex items-center justify-between w-full border-b-2 border-foreground py-2 text-md font-bold uppercase">
+                <span>ITINERARIES</span>
+                <span class="text-muted-foreground">* {{ (tourForm.containsItinerary() ?
+                    tourForm.form.overviewItems.duration
+                    :
+                    0) }}
+                    days</span>
             </div>
 
-            <p class="text-sm font-medium text-foreground">
-                Select a tour duration
-            </p>
+            <!-- No type selected -->
+            <div v-if="!tourForm.containsItinerary()"
+                class="flex min-h-40 flex-col items-center justify-center rounded-md border border-dashed border-border text-center">
+                <div class="mb-2 rounded-full bg-muted p-3">
+                    <Icon icon="lucide:calendar-days" class="size-5 text-muted-foreground" />
+                </div>
 
-            <p class="mt-1 text-xs text-muted-foreground">
-                Tour itineraries will appear here once you select the duration.
-            </p>
-        </div>
+                <p class="text-sm font-medium text-foreground">
+                    Select a tour duration
+                </p>
 
-        <!-- Itineraries -->
-        <div v-for="day in tourForm.form.itineraries" :key="day.day_no"
-            class="space-y-4 rounded-md border border-border p-8">
-            <span class="text-sm font-bold text-muted-foreground uppercase">
-                DAY {{ day.day_no }}
-            </span>
-
-            <div class="space-y-2">
-                <label :for="`day-${day.day_no}-title`" class="block text-sm font-medium">
-                    Title
-                    <span class="text-red-600">*</span>
-                </label>
-
-                <Input :id="`day-${day.day_no}-title`" v-model="day.title" placeholder="Enter day title"
-                    class="font-roboto text-sm" />
+                <p class="mt-1 text-xs text-muted-foreground">
+                    Tour itineraries will appear here once you select the duration.
+                </p>
             </div>
 
-            <div class="space-y-2">
-                <label :for="`day-${day.day_no}-activity`" class="block text-sm font-medium">
-                    Activities
-                    <span class="text-red-600">*</span>
-                </label>
+            <!-- Itineraries -->
+            <div v-for="day in tourForm.form.itineraries" :key="day.day_no"
+                class="space-y-4 rounded-md border border-border p-8">
+                <span class="text-sm font-bold text-muted-foreground uppercase">
+                    DAY {{ day.day_no }}
+                </span>
 
-                <TextArea :id="`day-${day.day_no}-activity`" v-model="day.activity" placeholder="Enter activities"
-                    class="font-roboto text-sm" />
+                <div class="space-y-2">
+                    <label :for="`day-${day.day_no}-title`" class="block text-sm font-medium">
+                        Title
+                        <span class="text-red-600">*</span>
+                    </label>
+
+                    <Input :id="`day-${day.day_no}-title`" v-model="day.title" placeholder="Enter day title"
+                        class="font-roboto text-sm" />
+                </div>
+
+                <div class="space-y-2">
+                    <label :for="`day-${day.day_no}-activity`" class="block text-sm font-medium">
+                        Activities
+                        <span class="text-red-600">*</span>
+                    </label>
+
+                    <TextArea :id="`day-${day.day_no}-activity`" v-model="day.activity" placeholder="Enter activities"
+                        class="font-roboto text-sm" />
+                </div>
             </div>
         </div>
     </div>

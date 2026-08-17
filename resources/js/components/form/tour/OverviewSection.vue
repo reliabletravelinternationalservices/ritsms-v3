@@ -45,15 +45,16 @@ const itineraryTypes: SelectOption[] = [
         value: 'one_way',
     },
     {
+        label: 'Tri City',
+        value: 'tri_city',
+    },
+    {
         label: 'Multi City',
         value: 'multi_city',
     }
 ]
 
 
-const handleDurationChange = (value: string) => {
-    tourForm.syncItineraries(value);
-}
 
 </script>
 
@@ -87,7 +88,7 @@ const handleDurationChange = (value: string) => {
                                 class="text-red-600">*</span></label>
                         <SelectMenu v-model="tourForm.form.overviewItems.duration" name="duration"
                             placeholder="Select duration" :options="daysDurations" class="font-roboto text-sm"
-                            @change="handleDurationChange" />
+                            @change="(value: string) => tourForm.syncItineraries(value)" />
                         <!-- <InputError message="Tour name is required" /> -->
                     </div>
                 </div>
@@ -98,7 +99,8 @@ const handleDurationChange = (value: string) => {
                             Type
                             <span class="text-red-600">*</span></label>
                         <SelectMenu v-model="tourForm.form.overviewItems.itinerary_type" name="itinerary_type"
-                            placeholder="Select type" :options="itineraryTypes" class="font-roboto text-sm" />
+                            placeholder="Select type" :options="itineraryTypes" class="font-roboto text-sm"
+                            @change="(value: string) => tourForm.syncRoutes(value)" />
                         <!-- <InputError message="Tour name is required" /> -->
                     </div>
                     <div class="space-y-2 w-full">
