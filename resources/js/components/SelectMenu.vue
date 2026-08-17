@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { AcceptableValue } from 'reka-ui'
 
 export interface SelectOption {
     label: string
@@ -28,12 +29,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
     'update:model-value': [value: string]
+    change: [value: string]
 }>()
+
+const handleChange = (value: AcceptableValue) => {
+    emit('update:model-value', value as string)
+    emit('change', value as string)
+}
 </script>
 
 <template>
-    <Select :model-value="props.modelValue" :disabled="props.disabled"
-        @update:model-value="emit('update:model-value', $event as string)">
+    <Select :model-value="props.modelValue" :disabled="props.disabled" @update:model-value="handleChange">
         <SelectTrigger class="w-full" :class="props.class">
             <SelectValue :placeholder="props.placeholder" />
         </SelectTrigger>
