@@ -16,4 +16,6 @@ class SeederPath
     public const DESTINATIONS = __DIR__.'/../../database/data/destinations.json';
 
     public const DESTINATION_LOCATIONS = __DIR__.'/../../database/data/destination_locations.json';
+
+    public const COUNTRIES = __DIR__.'/../../database/data/countries.json';
 }

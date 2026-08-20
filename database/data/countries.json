@@ -1,0 +1,202 @@
+[
+  {
+    "name": "Philippines",
+    "iso2": "PH",
+    "iso3": "PHL",
+    "phone_code": "+63",
+    "flag": "🇵🇭",
+    "is_active": true
+  },
+  {
+    "name": "Japan",
+    "iso2": "JP",
+    "iso3": "JPN",
+    "phone_code": "+81",
+    "flag": "🇯🇵",
+    "is_active": true
+  },
+  {
+    "name": "South Korea",
+    "iso2": "KR",
+    "iso3": "KOR",
+    "phone_code": "+82",
+    "flag": "🇰🇷",
+    "is_active": true
+  },
+  {
+    "name": "Thailand",
+    "iso2": "TH",
+    "iso3": "THA",
+    "phone_code": "+66",
+    "flag": "🇹🇭",
+    "is_active": true
+  },
+  {
+    "name": "Vietnam",
+    "iso2": "VN",
+    "iso3": "VNM",
+    "phone_code": "+84",
+    "flag": "🇻🇳",
+    "is_active": true
+  },
+  {
+    "name": "Singapore",
+    "iso2": "SG",
+    "iso3": "SGP",
+    "phone_code": "+65",
+    "flag": "🇸🇬",
+    "is_active": true
+  },
+  {
+    "name": "Malaysia",
+    "iso2": "MY",
+    "iso3": "MYS",
+    "phone_code": "+60",
+    "flag": "🇲🇾",
+    "is_active": true
+  },
+  {
+    "name": "Indonesia",
+    "iso2": "ID",
+    "iso3": "IDN",
+    "phone_code": "+62",
+    "flag": "🇮🇩",
+    "is_active": true
+  },
+  {
+    "name": "China",
+    "iso2": "CN",
+    "iso3": "CHN",
+    "phone_code": "+86",
+    "flag": "🇨🇳",
+    "is_active": true
+  },
+  {
+    "name": "Hong Kong",
+    "iso2": "HK",
+    "iso3": "HKG",
+    "phone_code": "+852",
+    "flag": "🇭🇰",
+    "is_active": true
+  },
+  {
+    "name": "Taiwan",
+    "iso2": "TW",
+    "iso3": "TWN",
+    "phone_code": "+886",
+    "flag": "🇹🇼",
+    "is_active": true
+  },
+  {
+    "name": "United Arab Emirates",
+    "iso2": "AE",
+    "iso3": "ARE",
+    "phone_code": "+971",
+    "flag": "🇦🇪",
+    "is_active": true
+  },
+  {
+    "name": "United States",
+    "iso2": "US",
+    "iso3": "USA",
+    "phone_code": "+1",
+    "flag": "🇺🇸",
+    "is_active": true
+  },
+  {
+    "name": "Canada",
+    "iso2": "CA",
+    "iso3": "CAN",
+    "phone_code": "+1",
+    "flag": "🇨🇦",
+    "is_active": true
+  },
+  {
+    "name": "Australia",
+    "iso2": "AU",
+    "iso3": "AUS",
+    "phone_code": "+61",
+    "flag": "🇦🇺",
+    "is_active": true
+  },
+  {
+    "name": "New Zealand",
+    "iso2": "NZ",
+    "iso3": "NZL",
+    "phone_code": "+64",
+    "flag": "🇳🇿",
+    "is_active": true
+  },
+  {
+    "name": "United Kingdom",
+    "iso2": "GB",
+    "iso3": "GBR",
+    "phone_code": "+44",
+    "flag": "🇬🇧",
+    "is_active": true
+  },
+  {
+    "name": "France",
+    "iso2": "FR",
+    "iso3": "FRA",
+    "phone_code": "+33",
+    "flag": "🇫🇷",
+    "is_active": true
+  },
+  {
+    "name": "Italy",
+    "iso2": "IT",
+    "iso3": "ITA",
+    "phone_code": "+39",
+    "flag": "🇮🇹",
+    "is_active": true
+  },
+  {
+    "name": "Spain",
+    "iso2": "ES",
+    "iso3": "ESP",
+    "phone_code": "+34",
+    "flag": "🇪🇸",
+    "is_active": true
+  },
+  {
+    "name": "Switzerland",
+    "iso2": "CH",
+    "iso3": "CHE",
+    "phone_code": "+41",
+    "flag": "🇨🇭",
+    "is_active": true
+  },
+  {
+    "name": "Germany",
+    "iso2": "DE",
+    "iso3": "DEU",
+    "phone_code": "+49",
+    "flag": "🇩🇪",
+    "is_active": true
+  },
+  {
+    "name": "Netherlands",
+    "iso2": "NL",
+    "iso3": "NLD",
+    "phone_code": "+31",
+    "flag": "🇳🇱",
+    "is_active": true
+  },
+  {
+    "name": "Turkey",
+    "iso2": "TR",
+    "iso3": "TUR",
+    "phone_code": "+90",
+    "flag": "🇹🇷",
+    "is_active": true
+  },
+  {
+    "name": "India",
+    "iso2": "IN",
+    "iso3": "IND",
+    "phone_code": "+91",
+    "flag": "🇮🇳",
+    "is_active": true
+  }
+]
