@@ -19,7 +19,7 @@ return new class extends Migration
             $table->char('iso2', 2)->unique();
             $table->char('iso3', 3)->unique();
 
-            $table->string('phone_code', 10)->unique();
+            $table->string('phone_code', 10);
 
             $table->string('flag', 255)->nullable();
 
