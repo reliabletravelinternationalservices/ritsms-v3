@@ -29,6 +29,12 @@ const statisticsNavItems: NavItem[] = [
         url: route('admin.quotations', undefined, false),
         icon: 'lucide:clipboard-list',
     },
+    {
+        title: 'Bookings',
+        href: route('admin.bookings'),
+        url: route('admin.bookings', undefined, false),
+        icon: 'lucide:book-marked',
+    },
 ];
 
 const toursNavItems: NavItem[] = [
