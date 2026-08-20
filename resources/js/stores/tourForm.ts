@@ -32,6 +32,15 @@ interface Hotel {
     link: string
   }
 
+interface Schedule {
+    departure_date: '',
+    price: '',
+    discounted_price: '',
+    airline_name: '',
+    departure_flight_no: '',
+    return_flight_no: '',
+}
+
 type TourSection = typeof SECTION[keyof typeof SECTION]
 
 export const useTourFormStore = defineStore('tour-form', () => {
@@ -68,9 +77,15 @@ export const useTourFormStore = defineStore('tour-form', () => {
       hotels: [] as Hotel[],
     },
 
-    pricing: {
-      adult: 0,
-      child: 0,
+    priceAndScheduleItems: {
+      selected_dates: [],
+      def_departure_date: '',
+      def_price: '',
+      def_discounted_price: '',
+      def_airline_name: '',
+      def_departure_flight_no: '',
+      def_return_flight_no: '',
+      schedules: [] as Schedule[],
     },
   })
 
@@ -100,6 +115,86 @@ export const useTourFormStore = defineStore('tour-form', () => {
       label: 'Assets & Images',
     },
   ]
+
+
+  // ===============================================================
+  // SECTION FUNCTIONS
+  // ===============================================================
+  function setSection(section: TourSection) {
+    currentSection.value = section
+  }
+
+  function isCurrentSection(section: TourSection) {
+    return currentSection.value === section
+  }
+
+
+  // ===============================================================
+  // ROUTE FUNCTIONS
+  // ===============================================================
+  function addRoute() {
+    form.value.flightAndHotelItems.routes.push({
+      departure_country_id: '',
+      departure_location: '',
+      destination_country_id: '',
+      destination_location: '',
+    })
+  }
+
+  function removeRoute(index: number) {
+    if (form.value.flightAndHotelItems.routes.length <= 1) return;
+    form.value.flightAndHotelItems.routes.splice(index, 1)
+  }
+
+  function syncRoutes(value: string) {
+    if(!isMultipleFlight(value)) {
+      form.value.flightAndHotelItems.routes = form.value.flightAndHotelItems.routes.slice(0, 1);
+    }
+  }
+
+
+
+  // ===============================================================
+  // HOTEL FUNCTIONS
+  // ===============================================================
+  function addHotel() {
+    form.value.flightAndHotelItems.hotels.push({
+      name: '',
+      rate: '',
+      link: '',
+    })
+  }
+
+  function removeHotel(index: number) {
+    form.value.flightAndHotelItems.hotels.splice(index, 1)
+  }
+
+
+  function containsHotel () {
+    return form.value.flightAndHotelItems.hotels.length > 0
+  }
+
+
+
+  // ================================================================
+  // ITINERARY FUNCTIONS
+  // ===============================================================
+  function containsItinerary() {
+    return form.value.itineraries.length > 0
+  }
+
+  function containsItineraryType() {
+      return !!form.value.overviewItems.itinerary_type;
+  }
+
+
+  function containsMultipleFlights() {
+    return isMultipleFlight(form.value.overviewItems.itinerary_type)
+  }
+
+  function isRoundTrip() {
+    return form.value.overviewItems.itinerary_type === 'round_trip'
+  }
 
   function syncItineraries(value: string) {
     const duration = Number(value || 0)
@@ -136,69 +231,22 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
 
-  function syncRoutes(value: string) {
-    if(!isMultipleFlight(value)) {
-      form.value.flightAndHotelItems.routes = form.value.flightAndHotelItems.routes.slice(0, 1);
-    }
+
+  // ===============================================================
+  // PRICE & SCHEDULE FUNCTIONS
+  // ===============================================================
+  const clearSelectedDates = () => {
+    form.value.priceAndScheduleItems.selected_dates = []
   }
 
-  function setSection(section: TourSection) {
-    currentSection.value = section
+  const containsSelectedDates = () => {
+    return form.value.priceAndScheduleItems.selected_dates.length > 0
   }
 
-  function isCurrentSection(section: TourSection) {
-    return currentSection.value === section
+  function syncSchedules(values: string[]) {
+    //TODO: SYNCHRONIZE SCHEDULE
   }
 
-
-  function addRoute() {
-    form.value.flightAndHotelItems.routes.push({
-      departure_country_id: '',
-      departure_location: '',
-      destination_country_id: '',
-      destination_location: '',
-    })
-  }
-
-  function removeRoute(index: number) {
-    if (form.value.flightAndHotelItems.routes.length <= 1) return;
-    form.value.flightAndHotelItems.routes.splice(index, 1)
-  }
-
-
-  function addHotel() {
-    form.value.flightAndHotelItems.hotels.push({
-      name: '',
-      rate: '',
-      link: '',
-    })
-  }
-
-  function removeHotel(index: number) {
-    form.value.flightAndHotelItems.hotels.splice(index, 1)
-  }
-
-
-  function containsHotel () {
-    return form.value.flightAndHotelItems.hotels.length > 0
-  }
-
-  function containsItinerary() {
-    return form.value.itineraries.length > 0
-  }
-
-  function containsItineraryType() {
-      return !!form.value.overviewItems.itinerary_type;
-  }
-
-
-  function containsMultipleFlights() {
-    return isMultipleFlight(form.value.overviewItems.itinerary_type)
-  }
-
-  function isRoundTrip() {
-    return form.value.overviewItems.itinerary_type === 'round_trip'
-  }
 
   return {
     SECTION,
@@ -218,5 +266,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
     removeRoute,
     addHotel,
     removeHotel,
+    syncSchedules,
+    clearSelectedDates,
+    containsSelectedDates
   }
 })
