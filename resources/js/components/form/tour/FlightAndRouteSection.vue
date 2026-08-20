@@ -42,7 +42,7 @@ const countries: SelectOption[] = [
 
             <!-- No duration selected -->
             <div v-if="!tourForm.containsItineraryType()"
-                class="flex min-h-40 flex-col items-center justify-center rounded-md border border-dashed border-border text-center">
+                class="flex min-h-40 flex-col items-center justify-center rounded-md border border-dashed border-border text-center p-4">
                 <div class="mb-2 rounded-full bg-muted p-3">
                     <Icon icon="lucide:plane" class="size-5 text-muted-foreground" />
                 </div>
@@ -57,7 +57,7 @@ const countries: SelectOption[] = [
             </div>
 
             <!-- Itineraries -->
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                 <div v-for="(route, index) in tourForm.form.flightAndHotelItems.routes" :key="index"
                     class="space-y-6 rounded-md border border-border p-8">
                     <span class="text-sm font-bold text-muted-foreground uppercase">
