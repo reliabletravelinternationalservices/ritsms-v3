@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\QuotationController;
 use App\Http\Controllers\Admin\Tour\CreateTourController;
 use App\Http\Controllers\Admin\Tour\TourManagementController;
+use App\Http\Controllers\Admin\Booking\BookingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -117,6 +118,21 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(CreateTourController::class)->group(function () {
                 Route::get('/create', 'index')->name('tours.create');
             });
+        });
+
+        
+        /*
+            |--------------------------------------------------------------------------
+            | BOOKINGS
+            |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('bookings')->group(function () {
+
+            Route::controller(BookingController::class)->group(function () {
+                Route::get('/', 'index')->name('bookings');
+            });
+
         });
     });
 
