@@ -242,3 +242,25 @@ export function parseStringDate(value: string, addDay?: number): string {
     })
 }
 
+export function parseStringDateWithDuration(value: string, duration?: string): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (duration ? parseInt(duration) : 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
+
+export const createObjectURL = (file: File) => {
+    return URL.createObjectURL(file)
+}
