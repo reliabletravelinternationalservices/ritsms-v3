@@ -13,8 +13,8 @@ const props = withDefaults(
     maxHeight?: number
   }>(),
   {
-    minHeight: 150,
-    maxHeight: 300,
+    minHeight: 100,
+    maxHeight: 250,
   }
 )
 

@@ -210,3 +210,35 @@ export const toTitleCase = (value: string) => {
 };
 
 
+
+
+export const isMultipleFlight = (value: string) => {
+    switch (value) {
+        case 'tri_city':
+            return true;
+        case 'multi_city':
+            return true;
+        default:
+            return false;
+    }
+}
+
+
+export function parseStringDate(value: string, addDay?: number): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (addDay ?? 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
