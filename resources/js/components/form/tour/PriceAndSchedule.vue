@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import MultiDatePicker from '@/components/MultiDatePicker.vue'
 import Input from '@/components/ui/input/Input.vue'
 import DatePicker from '@/components/NewDatePicker.vue'
-import { parseStringDate } from '@/lib/utils'
+import { parseStringDate, parseStringDateWithDuration } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Icon } from '@iconify/vue'
 import { useTourFormStore } from '@/stores/tourForm'
@@ -11,10 +11,6 @@ import { useTourFormStore } from '@/stores/tourForm'
 
 
 const tourForm = useTourFormStore();
-
-
-
-const bookingDeadline = ref<string>('')
 
 </script>
 
@@ -43,7 +39,7 @@ const bookingDeadline = ref<string>('')
                     <div class="space-y-2 w-full">
                         <label class="text-sm font-semibold text-zinc-600">Booking Deadline <span
                                 class="text-xs text-muted-foreground italic">(Optional)</span></label>
-                        <DatePicker v-model="bookingDeadline" placeholder="Select date" class="h-10 w-full" />
+                        <DatePicker v-model="tourForm.form.priceAndScheduleItems.def_booking_deadline" placeholder="Select date" class="h-10 w-full" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,9 +108,7 @@ const bookingDeadline = ref<string>('')
                             <div class="flex items-center gap-4 text-lg">
                                 <span> {{ parseStringDate(date) }} </span>
                                 <Icon icon="lucide:move-right" class="size-6" />
-                                <span> {{ parseStringDate(date, (parseInt(tourForm.form.overviewItems.duration ?? '0') -
-                                    1))
-                                }}
+                                <span> {{ parseStringDateWithDuration(date, tourForm.form.overviewItems.duration) }}
                                 </span>
                             </div>
                         </AccordionTrigger>
@@ -130,6 +124,7 @@ const bookingDeadline = ref<string>('')
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-sm font-semibold text-zinc-600">Airline Name <span
+                                                class="text-xs text-muted-foreground italic">(Customize)</span> <span
                                                 class="text-red-600">*</span></label>
                                         <Input type="text"
                                             placeholder="e.g. Qatar Airways, Manila International Airport..."
@@ -139,11 +134,13 @@ const bookingDeadline = ref<string>('')
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <label class="text-sm font-semibold text-zinc-600">Departure Flight No <span
+                                                class="text-xs text-muted-foreground italic">(Customize)</span> <span
                                                 class="text-red-600">*</span></label>
                                         <Input type="text" placeholder="e.g. 2A1234" class="h-10 w-full" />
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-sm font-semibold text-zinc-600">Return Flight No <span
+                                                class="text-xs text-muted-foreground italic">(Customize)</span> <span
                                                 class="text-red-600">*</span></label>
                                         <Input type="text" placeholder="e.g. 2A1234" class="h-10 w-full" />
                                     </div>
