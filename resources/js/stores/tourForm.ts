@@ -85,7 +85,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
       def_airline_name: '',
       def_departure_flight_no: '',
       def_return_flight_no: '',
+      def_booking_deadline: '',
       schedules: [] as Schedule[],
+    },
+
+    imageAndAssetItems: {
+      thumbnail: null as number | null,
+      additional_images: [] as File[],
     },
   })
 
@@ -103,12 +109,12 @@ export const useTourFormStore = defineStore('tour-form', () => {
       label: 'Flights & Routes',
     },
     {
-      key: SECTION.HOTELS,
-      label: 'Hotels',
-    },
-    {
       key: SECTION.PRICE_AND_SCHEDULE,
       label: 'Price & Schedule',
+    },
+    {
+      key: SECTION.HOTELS,
+      label: 'Hotels',
     },
     {
       key: SECTION.ASSETS_AND_IMAGES,
@@ -248,6 +254,27 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
 
+  
+  // ===============================================================
+  // IMAGES & ASSETS FUNCTIONS
+  // ===============================================================
+  
+  function addImage(file: File) {
+    form.value.imageAndAssetItems.additional_images.push(file)
+  }
+
+  function removeImage(index: number) {
+    form.value.imageAndAssetItems.additional_images.splice(index, 1)
+  }
+
+  function setThumbnail(index: number) {
+    if (index === form.value.imageAndAssetItems.thumbnail) {
+      form.value.imageAndAssetItems.thumbnail = null
+      return
+    }
+    form.value.imageAndAssetItems.thumbnail = index
+  }
+
   return {
     SECTION,
     currentSection,
@@ -268,6 +295,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     removeHotel,
     syncSchedules,
     clearSelectedDates,
-    containsSelectedDates
+    containsSelectedDates,
+    addImage,
+    removeImage,
+    setThumbnail,
   }
 })
