@@ -6,6 +6,7 @@ import ItineraryForm from './ItinerarySection.vue';
 import FlightAndRouteSection from './FlightAndRouteSection.vue';
 import HotelSection from './HotelSection.vue';
 import PriceAndSchedule from './PriceAndSchedule.vue';
+import ImageAndAssetSection from './ImageAndAssetSection.vue';
 
 const tourForm = useTourFormStore()
 
@@ -35,7 +36,7 @@ const { isCurrentSection, setSection, SECTION } = tourForm
             <PriceAndSchedule />
         </div>
         <div v-else-if="isCurrentSection(SECTION.ASSETS_AND_IMAGES)">
-            this is Assets form
+            <ImageAndAssetSection />
         </div>
     </div>
 </template>
