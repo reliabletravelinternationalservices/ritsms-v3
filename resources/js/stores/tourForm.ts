@@ -1,6 +1,7 @@
 // stores/tour-form.ts
 
 import { isMultipleFlight } from '@/lib/utils'
+import { TourWithItinerary } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -13,11 +14,47 @@ const SECTION = {
   ASSETS_AND_IMAGES: 'assets-and-images',
 } as const
 
+const validationSections = {
+    [SECTION.OVERVIEW]: [
+      'name',
+      'badge',
+      'description',
+      'highlights',
+      'inclusions',
+      'exclusions',
+      'terms_and_conditions',
+      'category',
+      'duration',
+      'itinerary_type',
+    ],
+
+    [SECTION.ITINERARIES]: [
+      'itineraries',
+    ],
+
+    [SECTION.ROUTES]: [
+      'routes',
+    ],
+
+    [SECTION.HOTELS]: [
+      'hotels',
+    ],
+
+    [SECTION.PRICE_AND_SCHEDULE]: [
+      'selected_dates',
+      'schedules',
+    ],
+
+    [SECTION.ASSETS_AND_IMAGES]: [
+      'thumbnail',
+      'additional_images',
+    ],
+}
 
 interface Itinerary {
   day_no: number
   title: string
-  activity: string
+  activities: string
 }
 interface Route {
     departure_country_id: string
@@ -46,6 +83,7 @@ type TourSection = typeof SECTION[keyof typeof SECTION]
 export const useTourFormStore = defineStore('tour-form', () => {
   const currentSection = ref<TourSection>(SECTION.OVERVIEW)
   const previousDuration = ref(0)
+  const errors = ref<Record<string, string>>({})
 
   const form = ref({
     overviewItems: {
@@ -64,8 +102,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
     itineraries: [] as Itinerary[],
 
-    flightAndHotelItems: {
-        routes: [ 
+    routes: [ 
           {
             departure_country_id: '',
             departure_location: '',
@@ -74,8 +111,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
           }
       ] as Route[],
 
-      hotels: [] as Hotel[],
-    },
+    hotels: [] as Hotel[],
 
     priceAndScheduleItems: {
       selected_dates: [],
@@ -106,7 +142,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     },
     {
       key: SECTION.ROUTES,
-      label: 'Flights & Routes',
+      label: 'Routes',
     },
     {
       key: SECTION.PRICE_AND_SCHEDULE,
@@ -139,7 +175,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ROUTE FUNCTIONS
   // ===============================================================
   function addRoute() {
-    form.value.flightAndHotelItems.routes.push({
+    form.value.routes.push({
       departure_country_id: '',
       departure_location: '',
       destination_country_id: '',
@@ -148,13 +184,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function removeRoute(index: number) {
-    if (form.value.flightAndHotelItems.routes.length <= 1) return;
-    form.value.flightAndHotelItems.routes.splice(index, 1)
+    if (form.value.routes.length <= 1) return;
+    form.value.routes.splice(index, 1)
   }
 
   function syncRoutes(value: string) {
     if(!isMultipleFlight(value)) {
-      form.value.flightAndHotelItems.routes = form.value.flightAndHotelItems.routes.slice(0, 1);
+      form.value.routes = form.value.routes.slice(0, 1);
     }
   }
 
@@ -164,7 +200,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // HOTEL FUNCTIONS
   // ===============================================================
   function addHotel() {
-    form.value.flightAndHotelItems.hotels.push({
+    form.value.hotels.push({
       name: '',
       rate: '',
       link: '',
@@ -172,12 +208,12 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function removeHotel(index: number) {
-    form.value.flightAndHotelItems.hotels.splice(index, 1)
+    form.value.hotels.splice(index, 1)
   }
 
 
   function containsHotel () {
-    return form.value.flightAndHotelItems.hotels.length > 0
+    return form.value.hotels.length > 0
   }
 
 
@@ -226,7 +262,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
       itineraries.push({
         day_no: dayNo,
         title: '',
-        activity: '',
+        activities: '',
       })
     }
 
@@ -275,6 +311,54 @@ export const useTourFormStore = defineStore('tour-form', () => {
     form.value.imageAndAssetItems.thumbnail = index
   }
 
+
+
+  // ==============================================================
+  // FILL FORM WITH EXISTING TOUR DATA
+  // ==============================================================
+    function fillFormWithTourData(tour: TourWithItinerary) {
+      form.value.overviewItems = {
+          name: tour.name,
+          badge: tour.badge ?? '',
+          description: tour.description ?? '',
+          highlights: tour.highlights ?? '',
+          terms_and_conditions: tour.terms_and_conditions ?? '',
+          inclusions: tour.inclusions ?? '',
+          exclusions: tour.exclusions ?? '',
+          category: tour.category,
+          duration: String(tour.duration),
+          itinerary_type: tour.itinerary_type,
+      }
+
+      syncItineraries(String(tour.duration))
+
+      if (Array.isArray(tour.itineraries)) {
+          form.value.itineraries = tour.itineraries.map((itinerary) => ({
+              day_no: itinerary.day_no,
+              title: itinerary.title,
+              activities: itinerary.activities,
+          }))
+      }
+  }
+
+
+  // ==============================================================
+  // validation functions
+  // ==============================================================
+  function hasSectionErrors(section: TourSection): boolean {
+    return Object.keys(errors.value).some(
+        key => key.startsWith(`${section}.`)
+    )
+  }
+
+  function setErrors(value: Record<string, string>) {
+      errors.value = value
+  }
+
+  function clearErrors() {
+      errors.value = {}
+  }
+
   return {
     SECTION,
     currentSection,
@@ -299,5 +383,10 @@ export const useTourFormStore = defineStore('tour-form', () => {
     addImage,
     removeImage,
     setThumbnail,
+    fillFormWithTourData,
+    hasSectionErrors,
+    setErrors,
+    clearErrors,
+    errors,
   }
 })
