@@ -10,7 +10,8 @@ use App\Enums\Tour\Visibility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 /**
  * @property Category $category
@@ -110,5 +111,58 @@ class Tour extends Model
             'tour_group_items'
         )->withPivot('sort_order')
             ->orderByPivot('sort_order');
+    }
+
+
+
+
+    // other
+    public function generateSlug(): string
+    {
+        $baseSlug = Str::limit(
+            Str::slug($this->name),
+            20,
+            ''
+        );
+
+        $slug = $baseSlug;
+        $counter = 2;
+
+        while (
+            static::where('slug', $slug)
+                ->where('id', '!=', $this->id)
+                ->exists()
+        ) {
+            $suffix = "-{$counter}";
+            $slug = Str::limit(
+                $baseSlug,
+                20 - strlen($suffix),
+                ''
+            ) . $suffix;
+
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    public function generateCode(): string
+    {
+        do {
+            $code = 'TR-' . now()->format('Ymd') . '-' . random_int(1000, 9999);
+        } while (self::where('code', $code)->exists());
+
+        return $code;
+    }
+
+
+
+    protected static function booted(): void
+    {
+        static::creating(function (Tour $tour) {
+            $tour->code = $tour->generateCode();
+            $tour->slug = $tour->generateSlug();
+        });
+        
     }
 }
