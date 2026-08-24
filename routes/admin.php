@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\QuotationController;
 use App\Http\Controllers\Admin\Tour\CreateTourController;
 use App\Http\Controllers\Admin\Tour\TourManagementController;
 use App\Http\Controllers\Admin\Booking\BookingController;
+use App\Http\Controllers\Admin\Tour\EditTourController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -116,7 +117,13 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
             Route::controller(CreateTourController::class)->group(function () {
-                Route::get('/create', 'index')->name('tours.create');
+                Route::get('/create', 'create')->name('tours.create');
+                Route::post('/store', 'store')->name('tours.store');
+            });
+
+            Route::controller(EditTourController::class)->group(function () {
+                Route::get('/{slug}/edit', 'edit')->name('tours.edit');
+                Route::put('/{tour}/update', 'update')->name('tours.update');
             });
         });
 
