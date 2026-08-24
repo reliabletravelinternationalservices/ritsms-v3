@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('tour_itineraries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tour_id')
-                ->constrained()
+                ->constrained('tours')
                 ->cascadeOnDelete();
             $table->unsignedSmallInteger('day_no');
             $table->string('title', 120);
-            $table->json('description')->nullable();
+            $table->text('activities')->nullable();
             $table->unique(['tour_id', 'day_no']);
             $table->softDeletes();
             $table->timestamps();

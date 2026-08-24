@@ -13,7 +13,7 @@ class TourItinerary extends Model
         'tour_id',
         'day_no',
         'title',
-        'description',
+        'activities',
     ];
 
     public function tour(): BelongsTo
