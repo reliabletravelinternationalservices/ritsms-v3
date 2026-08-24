@@ -10,6 +10,7 @@ use App\Enums\Tour\Visibility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
@@ -78,9 +79,9 @@ class Tour extends Model
         return $this->belongsToMany(Transportation::class, 'tours_transportations');
     }
 
-    public function routes(): BelongsToMany
+    public function routes(): HasMany
     {
-        return $this->belongsToMany(TourRoute::class)
+        return $this->hasMany(TourRoute::class)
             ->orderBy('sequence');
     }
 

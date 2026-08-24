@@ -15,7 +15,7 @@ const props = defineProps<{
 
 const tourForm = useTourFormStore()
 
-const { isCurrentSection, setSection, SECTION, hasSectionErrors } = tourForm
+const { isCurrentSection, setSection, SECTION } = tourForm
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/ButtonIcon.vue'
+import InputError from '@/components/InputError.vue'
 import SelectMenu from '@/components/SelectMenu.vue'
 import Input from '@/components/ui/input/Input.vue'
 import { useReferenceDataStore } from '@/stores/referenceData'
@@ -101,6 +102,7 @@ const referenceData = useReferenceDataStore()
                                     :options="referenceData.countryOptions"
                                     class="font-roboto text-sm"
                                 />
+                                <InputError :message="tourForm.errors['routes.'+ index + '.departure_country_id']" />
                             </div>
 
                             <div class="space-y-2">
@@ -114,10 +116,11 @@ const referenceData = useReferenceDataStore()
 
                                 <Input
                                     :id="`departure-route-${index + 1}-location`"
-                                    v-model="route.departure_location"
+                                    v-model="route.departure_city"
                                     placeholder="Location"
                                     class="font-roboto text-sm"
                                 />
+                                <InputError :message="tourForm.errors['routes.'+ index + '.departure_city']" />
                             </div>
 
                         </div>
@@ -158,6 +161,7 @@ const referenceData = useReferenceDataStore()
                                     :options="referenceData.countryOptions"
                                     class="font-roboto text-sm"
                                 />
+                                <InputError  :message="tourForm.errors['routes.' + index + '.destination_country_id']" />
                             </div>
 
                             <div class="space-y-2">
@@ -171,10 +175,11 @@ const referenceData = useReferenceDataStore()
 
                                 <Input
                                     :id="`destination-route-${index + 1}-location`"
-                                    v-model="route.destination_location"
+                                    v-model="route.destination_city"
                                     placeholder="Location"
                                     class="font-roboto text-sm"
                                 />
+                                <InputError  :message="tourForm.errors['routes.' + index + '.destination_city']" />
                             </div>
 
                         </div>

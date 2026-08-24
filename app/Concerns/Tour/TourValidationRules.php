@@ -128,10 +128,9 @@ trait TourValidationRules
 
     /*
     |
-    |  ITINERARU RULES
+    |  ITINERARY RULES
     |
     */
-
     protected function itineraryRules(): array
     {
         return [
@@ -182,4 +181,91 @@ trait TourValidationRules
         ];
     }
 
+
+    /*
+    |
+    |  ROUTES RULES
+    |
+    */
+    protected function routesRules(): array
+    {
+        return [
+            'routes' => [
+                'nullable',
+                'array',
+                'min:1',
+            ],
+
+            'routes.*.departure_country_id' => [
+                'required',
+                'integer',
+                'exists:countries,id',
+            ],
+
+            'routes.*.destination_country_id' => [
+                'required',
+                'integer',
+                'exists:countries,id',
+            ],
+
+            'routes.*.departure_city' => [
+                'required',
+                'string',
+                'max:120',
+            ],
+
+            'routes.*.destination_city' => [
+                'required',
+                'string',
+                'max:120',
+            ],
+        ];
+    }
+
+    protected function routesErrorMessages(): array
+    {
+        return [
+            'routes.array' =>
+                'Routes must be a valid list.',
+
+            'routes.min' =>
+                'At least one flight route is required.',
+
+            'routes.*.departure_country_id.required' =>
+                'Departure country is required.',
+
+            'routes.*.departure_country_id.integer' =>
+                'Departure country is invalid.',
+
+            'routes.*.departure_country_id.exists' =>
+                'The selected departure country does not exist.',
+
+            'routes.*.destination_country_id.required' =>
+                'Destination country is required.',
+
+            'routes.*.destination_country_id.integer' =>
+                'Destination country is invalid.',
+
+            'routes.*.destination_country_id.exists' =>
+                'The selected destination country does not exist.',
+
+            'routes.*.departure_city.required' =>
+                'Departure city is required.',
+
+            'routes.*.departure_city.string' =>
+                'Departure city must be a valid text.',
+
+            'routes.*.departure_city.max' =>
+                'Departure city may not exceed 120 characters.',
+
+            'routes.*.destination_city.required' =>
+                'Destination city is required.',
+
+            'routes.*.destination_city.string' =>
+                'Destination city must be a valid text.',
+
+            'routes.*.destination_city.max' =>
+                'Destination city may not exceed 120 characters.',
+        ];
+    }
 }

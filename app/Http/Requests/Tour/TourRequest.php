@@ -37,6 +37,13 @@ class TourRequest extends FormRequest
             );
         }
 
+        if ($this->has('routes')) {
+            $data['routes'] = json_decode(
+                $this->input('routes'),
+                true
+            );
+        }
+
         $this->merge($data);
     }
 
@@ -55,6 +62,9 @@ class TourRequest extends FormRequest
 
             // ITINERARIES
             ...$this->itineraryRules(),
+
+            // ROUTES
+            ...$this->routesRules(),
         ];
     }
 
@@ -63,6 +73,7 @@ class TourRequest extends FormRequest
         return [
             ...$this->overviewErrorMessages(),
             ...$this->itineraryErrorMessages(),
+            ...$this->routesErrorMessages()
         ];
     }
         

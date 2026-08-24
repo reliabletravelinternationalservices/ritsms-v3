@@ -58,9 +58,10 @@ interface Itinerary {
 }
 interface Route {
     departure_country_id: string
-    departure_location: string
+    departure_city: string
     destination_country_id: string
-    destination_location: string
+    destination_city: string
+    sequence: number
   }
 
 interface Hotel {
@@ -105,9 +106,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     routes: [ 
           {
             departure_country_id: '',
-            departure_location: '',
+            departure_city: '',
             destination_country_id: '',
-            destination_location: '',
+            destination_city: '',
           }
       ] as Route[],
 
@@ -175,11 +176,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ROUTE FUNCTIONS
   // ===============================================================
   function addRoute() {
+    const totalRoute = form.value.routes.length;
     form.value.routes.push({
       departure_country_id: '',
-      departure_location: '',
+      departure_city: '',
       destination_country_id: '',
-      destination_location: '',
+      destination_city: '',
+      sequence: totalRoute
     })
   }
 
@@ -273,6 +276,33 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
 
+  function normalizeItineraries(duration: number) {
+      if (duration <= 0) {
+          form.value.itineraries = []
+          return
+      }
+
+      const itineraries = form.value.itineraries
+
+      // Add missing days
+      while (itineraries.length < duration) {
+          itineraries.push({
+              day_no: itineraries.length + 1,
+              title: '',
+              activities: '',
+          })
+      }
+
+      // Remove extra days
+      if (itineraries.length > duration) {
+          itineraries.splice(duration)
+      }
+
+      // Always make day numbers sequential
+      itineraries.forEach((itinerary, index) => {
+          itinerary.day_no = index + 1
+      })
+  }
 
   // ===============================================================
   // PRICE & SCHEDULE FUNCTIONS
@@ -316,7 +346,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ==============================================================
   // FILL FORM WITH EXISTING TOUR DATA
   // ==============================================================
-    function fillFormWithTourData(tour: TourWithItinerary) {
+  function fillFormWithTourData(tour: TourWithItinerary) {
+      const duration = Number(tour.duration || 0)
+
       form.value.overviewItems = {
           name: tour.name,
           badge: tour.badge ?? '',
@@ -326,19 +358,24 @@ export const useTourFormStore = defineStore('tour-form', () => {
           inclusions: tour.inclusions ?? '',
           exclusions: tour.exclusions ?? '',
           category: tour.category,
-          duration: String(tour.duration),
+          duration: String(duration),
           itinerary_type: tour.itinerary_type,
       }
 
-      syncItineraries(String(tour.duration))
-
-      if (Array.isArray(tour.itineraries)) {
-          form.value.itineraries = tour.itineraries.map((itinerary) => ({
+      // Load database itineraries first
+      form.value.itineraries = Array.isArray(tour.itineraries)
+          ? tour.itineraries.map((itinerary) => ({
               day_no: itinerary.day_no,
-              title: itinerary.title,
-              activities: itinerary.activities,
+              title: itinerary.title ?? '',
+              activities: itinerary.activities ?? '',
           }))
-      }
+          : []
+
+      // Then make sure the array matches duration
+      normalizeItineraries(duration)
+
+      // Mark this as the current duration
+      previousDuration.value = duration
   }
 
 

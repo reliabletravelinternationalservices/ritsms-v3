@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $name
@@ -40,5 +41,22 @@ class Country extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    
+    public function departureRoutes(): HasMany
+    {
+        return $this->hasMany(
+            TourRoute::class,
+            'departure_country_id'
+        );
+    }
+
+    public function destinationRoutes(): HasMany
+    {
+        return $this->hasMany(
+            TourRoute::class,
+            'destination_country_id'
+        );
     }
 }
