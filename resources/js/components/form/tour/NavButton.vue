@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 defineProps<{
     label: string
     active?: boolean
+    isError?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -26,6 +29,7 @@ const emit = defineEmits<{
                 'after:bg-transparent',
             ],
     ]" @click="emit('click')">
-        {{ label }}
+        <span>{{ label }}</span>
+        <Icon v-if="isError" icon="material-symbols:error-outline-rounded" class="absolute top-1 right-1 text-red-500 animate-pulse" />
     </button>
 </template>
