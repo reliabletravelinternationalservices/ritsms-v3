@@ -11,12 +11,27 @@ export interface Tour {
     state: 'draft' | 'published' | 'archived';
     visibility: 'public' | 'private';
     duration: number;
-    highlights: string[];
-    inclusions: string[];
-    exclusions: string[];
-    terms_and_conditions: string[];
+    highlights: string;
+    inclusions: string;
+    exclusions: string;
+    terms_and_conditions: string;
     notes: string | null;
     deleted_at?: string | null;
     created_at?: string | null;
     updated_at?: string | null;
 }
+
+export interface Itinerary {
+    id: number;
+    tour_id: number;
+    day_no: number;
+    title: string;
+    activities: string;
+    deleted_at?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+}
+
+export type TourWithItinerary = Tour & {
+    itineraries: Itinerary[];
+};
