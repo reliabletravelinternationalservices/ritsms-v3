@@ -1,7 +1,7 @@
 // stores/tour-form.ts
 
 import { isMultipleFlight } from '@/lib/utils'
-import { TourWithItinerary } from '@/types/tour'
+import { TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -61,7 +61,7 @@ interface Route {
     departure_city: string
     destination_country_id: string
     destination_city: string
-    sequence: number
+    sequence: string
   }
 
 interface Hotel {
@@ -109,6 +109,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
             departure_city: '',
             destination_country_id: '',
             destination_city: '',
+            sequence: '1'
           }
       ] as Route[],
 
@@ -182,7 +183,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
       departure_city: '',
       destination_country_id: '',
       destination_city: '',
-      sequence: totalRoute
+      sequence: totalRoute.toString()
     })
   }
 
@@ -346,7 +347,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ==============================================================
   // FILL FORM WITH EXISTING TOUR DATA
   // ==============================================================
-  function fillFormWithTourData(tour: TourWithItinerary) {
+  function fillFormWithTourData(tour: TourWithRelationshipTables) {
       const duration = Number(tour.duration || 0)
 
       form.value.overviewItems = {
@@ -376,6 +377,17 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
       // Mark this as the current duration
       previousDuration.value = duration
+
+      form.value.routes = Array.isArray(tour.routes)
+      ? tour.routes.map((route) => ({
+        departure_country_id:  route.departure_country_id.toString(),
+        destination_country_id: route.destination_country_id.toString(),
+        departure_city: route.departure_city,
+        destination_city: route.destination_city,
+        sequence: route.sequence.toString()
+      })) 
+      : []
+  
   }
 
 
