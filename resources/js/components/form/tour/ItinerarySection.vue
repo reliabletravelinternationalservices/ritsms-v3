@@ -2,15 +2,28 @@
 import InputError from '@/components/InputError.vue'
 import TextArea from '@/components/tiptap/TextArea.vue'
 import Input from '@/components/ui/input/Input.vue'
+import ButtonIcon from '@/components/ButtonIcon.vue'
 import { Icon } from '@iconify/vue'
+import { VueDraggable } from 'vue-draggable-plus'
 import { useTourFormStore } from '@/stores/tourForm'
 
 const tourForm = useTourFormStore()
+
+function syncDayNumbers() {
+    tourForm.form.itineraries.forEach((itinerary, index) => {
+        itinerary.day_no = index + 1
+    })
+}
+
+function handleDragEnd() {
+    syncDayNumbers()
+}
+
 </script>
 
 <template>
     <div class="space-y-6">
-        <div class="space-y-4">
+        <div class="space-y-2">
 
             <!-- SECTION HEADER -->
             <div
@@ -20,11 +33,7 @@ const tourForm = useTourFormStore()
 
                 <span class="text-muted-foreground">
                     *
-                    {{
-                        tourForm.containsItinerary()
-                            ? tourForm.form.overviewItems.duration
-                            : 0
-                    }}
+                    {{tourForm.getTourDuration()}}
                     days
                 </span>
             </div>
@@ -46,33 +55,67 @@ const tourForm = useTourFormStore()
                 </p>
 
                 <p class="mt-1 text-xs text-muted-foreground">
-                    Tour itineraries will appear here once you select the duration.
+                    Tour itineraries will appear here once you select the
+                    duration.
                 </p>
             </div>
 
             <!-- ITINERARIES -->
-            <div
+            <VueDraggable
                 v-else
+                v-model="tourForm.form.itineraries"
+                item-key="_id"
+                :animation="200"
+                handle=".drag-handle"
                 class="flex flex-col gap-4 p-4"
+                @end="handleDragEnd"
             >
                 <div
-                    v-for="(day, index) in tourForm.form.itineraries"
-                    :key="index"
-                    class="space-y-5 rounded-md border border-border p-8"
+                    v-for="(itinerary, index) in tourForm.form.itineraries"
+                    :key="itinerary._id"
+                    class="space-y-3 rounded-md border border-border p-4"
                 >
                     <!-- DAY HEADER -->
-                    <div class="flex items-center justify-between">
-                        <span
-                            class="text-sm font-bold text-muted-foreground uppercase"
-                        >
-                            DAY {{ day.day_no }}
-                        </span>
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-2">
+
+                            <!-- DRAG HANDLE -->
+                            <button
+                                type="button"
+                                class="drag-handle cursor-grab touch-none text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                                title="Drag to reorder"
+                            >
+                                <Icon
+                                    icon="lucide:grip-vertical"
+                                    class="size-5"
+                                />
+                            </button>
+
+                            <!-- DAY NUMBER -->
+                            <span
+                                class="text-sm font-bold text-muted-foreground uppercase"
+                            >
+                                DAY {{ itinerary.day_no }}
+                            </span>
+                        </div>
+
+                        <!-- DELETE -->
+                        <ButtonIcon
+                            type="button"
+                            @click="
+                                tourForm.removeItineraryDay(
+                                    itinerary.day_no
+                                )
+                            "
+                            icon="lucide:trash-2"
+                            class="text-red-600 bg-transparent hover:bg-red-50"
+                        />
                     </div>
 
                     <!-- TITLE -->
                     <div class="space-y-2">
                         <label
-                            :for="`day-${day.day_no}-title`"
+                            :for="`day-${itinerary._id}-title`"
                             class="block text-sm font-medium"
                         >
                             Title
@@ -80,8 +123,8 @@ const tourForm = useTourFormStore()
                         </label>
 
                         <Input
-                            :id="`day-${day.day_no}-title`"
-                            v-model="day.title"
+                            :id="`day-${itinerary._id}-title`"
+                            v-model="itinerary.title"
                             placeholder="Enter day title"
                             class="font-roboto text-sm"
                             :aria-invalid="
@@ -103,7 +146,7 @@ const tourForm = useTourFormStore()
                     <!-- ACTIVITIES -->
                     <div class="space-y-2">
                         <label
-                            :for="`day-${day.day_no}-activities`"
+                            :for="`day-${itinerary._id}-activities`"
                             class="block text-sm font-medium"
                         >
                             Activities
@@ -111,8 +154,7 @@ const tourForm = useTourFormStore()
                         </label>
 
                         <TextArea
-                            :id="`day-${day.day_no}-activities`"
-                            v-model="day.activities"
+                            v-model="itinerary.activities"
                             placeholder="Enter activities"
                             class="font-roboto text-sm"
                             :aria-invalid="
@@ -131,6 +173,17 @@ const tourForm = useTourFormStore()
                         />
                     </div>
                 </div>
+            </VueDraggable>
+
+            <!-- ADD DAY -->
+            <div class="w-full" v-if="!tourForm.isExeedItineraryDurationConstaint('max')">
+                <button
+                    type="button"
+                    @click="tourForm.addItineraryDay()"
+                    class="w-full rounded-md border-2 border-dashed border-border bg-[rgb(var(--color-primary)/0.04)] px-4 py-2.5 text-sm font-medium text-[rgb(var(--color-primary))] transition-all duration-150 hover:bg-[rgb(var(--color-primary)/0.08)]"
+                >
+                    + Add Day
+                </button>
             </div>
         </div>
     </div>

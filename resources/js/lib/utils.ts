@@ -264,3 +264,7 @@ export function parseStringDateWithDuration(value: string, duration?: string): s
 export const createObjectURL = (file: File) => {
     return URL.createObjectURL(file)
 }
+
+export const generateId = () => {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}

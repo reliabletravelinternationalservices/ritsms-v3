@@ -88,8 +88,7 @@ const itineraryTypes: SelectOption[] = [
                                 class="text-xs text-muted-foreground">(days)</span> <span
                                 class="text-red-600">*</span></label>
                         <SelectMenu v-model="tourForm.form.overviewItems.duration" name="duration"
-                            placeholder="Select duration" :options="daysDurations" class="font-roboto text-sm"
-                            @change="(value: string) => tourForm.syncItineraries(value)" />
+                            placeholder="Select duration" :options="daysDurations" class="font-roboto text-sm"/>
                         <InputError :message="tourForm.errors['overview.duration']" />  
                     </div>
                 </div>
@@ -100,8 +99,7 @@ const itineraryTypes: SelectOption[] = [
                             Type
                             <span class="text-red-600">*</span></label>
                         <SelectMenu v-model="tourForm.form.overviewItems.itinerary_type" name="itinerary_type"
-                            placeholder="Select type" :options="itineraryTypes" class="font-roboto text-sm"
-                            @change="(value: string) => tourForm.syncRoutes(value)" />
+                            placeholder="Select type" :options="itineraryTypes" class="font-roboto text-sm" />
                         <InputError :message="tourForm.errors['overview.itinerary_type']" />
                     </div>
                     <div class="space-y-2 w-full">

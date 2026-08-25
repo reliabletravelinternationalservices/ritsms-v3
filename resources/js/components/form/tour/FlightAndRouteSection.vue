@@ -25,7 +25,7 @@ const referenceData = useReferenceDataStore()
 
             <!-- NO ITINERARY TYPE -->
             <div
-                v-if="!tourForm.containsItineraryType()"
+                v-if="!tourForm.containsRoute()"
                 class="flex min-h-40 flex-col items-center justify-center rounded-md border border-dashed border-border text-center p-4"
             >
                 <div class="mb-2 rounded-full bg-muted p-3">

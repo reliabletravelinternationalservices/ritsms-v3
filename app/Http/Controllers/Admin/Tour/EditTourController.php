@@ -16,7 +16,7 @@ class EditTourController extends Controller
         $tour = Tour::with(['itineraries', 'routes'])
             ->where('slug', $slug)
             ->firstOrFail();
-
+    
         $countries = Country::query()
             ->select([
                 'id',
@@ -34,6 +34,7 @@ class EditTourController extends Controller
 
     public function update(TourRequest $request, Tour $tour)
     {
+      
         $validatedData = $request->validated();
         
         $tour->update($validatedData['overview']);

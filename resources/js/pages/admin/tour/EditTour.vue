@@ -7,7 +7,6 @@ import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { useTourFormStore } from '@/stores/tourForm';
 import { BreadcrumbItem } from '@/types';
-import { Country } from '@/types/country';
 import { TourWithRelationshipTables } from '@/types/tour';
 import { Icon } from '@iconify/vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -69,12 +68,6 @@ function saveTourChanges() {
         JSON.stringify(tourForm.form.routes)
     )
 
-    // New images
-    tourForm.form.imageAndAssetItems.additional_images.forEach((image) => {
-        if (image instanceof File) {
-            formData.append('images[]', image)
-        }
-    })
 
     // Laravel method spoofing
     formData.append('_method', 'PUT')
@@ -92,6 +85,7 @@ function saveTourChanges() {
             },
 
             onError: (errors) => {
+                console.error(errors)
                 tourForm.setErrors(errors)
 
                 toast.error(

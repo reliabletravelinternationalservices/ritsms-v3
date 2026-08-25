@@ -137,7 +137,6 @@ trait TourValidationRules
             'itineraries' => [
                 'nullable',
                 'array',
-                'min:1',
             ],
 
             'itineraries.*.day_no' => [
@@ -164,7 +163,6 @@ trait TourValidationRules
         return [
             // Itineraries
             'itineraries.array' => 'Itineraries must be a valid list.',
-            'itineraries.min' => 'At least one itinerary is required.',
 
             // Day number
             'itineraries.*.day_no.required' => 'Day number is required.',
@@ -193,7 +191,6 @@ trait TourValidationRules
             'routes' => [
                 'nullable',
                 'array',
-                'min:1',
             ],
 
             'routes.*.departure_country_id' => [
@@ -231,9 +228,6 @@ trait TourValidationRules
         return [
             'routes.array' =>
                 'Routes must be a valid list.',
-
-            'routes.min' =>
-                'At least one flight route is required.',
 
             'routes.*.departure_country_id.required' =>
                 'Departure country is required.',

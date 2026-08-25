@@ -5,14 +5,18 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import UniqueID from '@tiptap/extension-unique-id'
+
 
 const props = withDefaults(
     defineProps<{
+        id?: string
         modelValue?: string | object
         placeholder?: string
         disabled?: boolean
     }>(),
     {
+        id: undefined,
         modelValue: '',
         placeholder: 'Write something...',
         disabled: false,
@@ -35,11 +39,10 @@ const editor = useEditor({
             },
         }),
 
-        Underline,
-
-        Link.configure({
-            openOnClick: false,
+        UniqueID.configure({
+            types: ['all'],
         }),
+
 
         Placeholder.configure({
             placeholder: props.placeholder,
@@ -48,6 +51,7 @@ const editor = useEditor({
 
     editorProps: {
         attributes: {
+            id: props.id || '',
             class:
                 'min-h-[100px] w-full outline-none prose prose-sm max-w-none focus:outline-none',
         },
@@ -64,16 +68,22 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="
+    <div
+        class="
             w-full rounded-md border bg-background
             transition-colors
             focus-within:ring-2
             focus-within:ring-ring
             focus-within:ring-offset-2
-        " :class="{
+        "
+        :class="{
             'cursor-not-allowed opacity-50': disabled,
-        }">
-        <EditorContent :editor="editor" class="tiptap-textarea p-3" />
+        }"
+    >
+        <EditorContent
+            :editor="editor"
+            class="tiptap-textarea p-3"
+        />
     </div>
 </template>
 
@@ -85,12 +95,6 @@ onBeforeUnmount(() => {
     outline: none;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Paragraph
-|--------------------------------------------------------------------------
-*/
-
 .tiptap-textarea .ProseMirror p {
     margin: 0;
 }
@@ -98,12 +102,6 @@ onBeforeUnmount(() => {
 .tiptap-textarea .ProseMirror p+p {
     margin-top: 0.5rem;
 }
-
-/*
-|--------------------------------------------------------------------------
-| Lists
-|--------------------------------------------------------------------------
-*/
 
 .tiptap-textarea .ProseMirror ul {
     list-style-type: disc;
@@ -114,12 +112,6 @@ onBeforeUnmount(() => {
     list-style-type: decimal;
     padding-left: 1.5rem;
 }
-
-/*
-|--------------------------------------------------------------------------
-| Headings
-|--------------------------------------------------------------------------
-*/
 
 .tiptap-textarea .ProseMirror h1 {
     font-size: 1.5rem;
@@ -136,23 +128,11 @@ onBeforeUnmount(() => {
     font-weight: 600;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Blockquote
-|--------------------------------------------------------------------------
-*/
-
 .tiptap-textarea .ProseMirror blockquote {
     border-left: 3px solid hsl(var(--border));
     padding-left: 1rem;
     color: hsl(var(--muted-foreground));
 }
-
-/*
-|--------------------------------------------------------------------------
-| Tiptap Placeholder
-|--------------------------------------------------------------------------
-*/
 
 .tiptap-textarea .ProseMirror p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);
@@ -161,12 +141,6 @@ onBeforeUnmount(() => {
     float: left;
     height: 0;
 }
-
-/*
-|--------------------------------------------------------------------------
-| Focus
-|--------------------------------------------------------------------------
-*/
 
 .tiptap-textarea .ProseMirror:focus {
     outline: none;

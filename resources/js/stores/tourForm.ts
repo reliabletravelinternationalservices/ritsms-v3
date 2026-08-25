@@ -1,9 +1,10 @@
 // stores/tour-form.ts
 
-import { isMultipleFlight } from '@/lib/utils'
-import { TourWithRelationshipTables } from '@/types/tour'
+import { generateId, isMultipleFlight } from '@/lib/utils'
+import { Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { Itinerary as NewItinerary }  from '@/types/tour'
 
 const SECTION = {
   OVERVIEW: 'overview',
@@ -51,7 +52,20 @@ const validationSections = {
     ],
 }
 
+interface TourOverview {
+      name: string,
+      badge: string,
+      description: string,
+      highlights: string,
+      terms_and_conditions: string,
+      inclusions: string,
+      exclusions: string,
+      category: string,
+      duration: string,
+      itinerary_type: string,
+}
 interface Itinerary {
+  _id: string
   day_no: number
   title: string
   activities: string
@@ -99,19 +113,11 @@ export const useTourFormStore = defineStore('tour-form', () => {
       category: '',
       duration: '',
       itinerary_type: '',
-    },
+    } as TourOverview,
 
     itineraries: [] as Itinerary[],
 
-    routes: [ 
-          {
-            departure_country_id: '',
-            departure_city: '',
-            destination_country_id: '',
-            destination_city: '',
-            sequence: '1'
-          }
-      ] as Route[],
+    routes: [] as Route[],
 
     hotels: [] as Hotel[],
 
@@ -147,12 +153,12 @@ export const useTourFormStore = defineStore('tour-form', () => {
       label: 'Routes',
     },
     {
-      key: SECTION.PRICE_AND_SCHEDULE,
-      label: 'Price & Schedule',
-    },
-    {
       key: SECTION.HOTELS,
       label: 'Hotels',
+    },
+    {
+      key: SECTION.PRICE_AND_SCHEDULE,
+      label: 'Price & Schedule',
     },
     {
       key: SECTION.ASSETS_AND_IMAGES,
@@ -173,17 +179,121 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
 
+
+  // ===============================================================
+  // OVERVIEW FUNCTIONS
+  // ===============================================================
+  function getTourDuration(){
+    return parseInt(form.value.overviewItems.duration?? '0')
+  }
+
+  function containsItineraryType() {
+      return !!form.value.overviewItems.itinerary_type;
+  }
+
+  function containsMultipleFlights() {
+    return isMultipleFlight(form.value.overviewItems.itinerary_type)
+  }
+
+  function isRoundTrip() {
+    return form.value.overviewItems.itinerary_type === 'round_trip'
+  }
+
+  function fillOverview(tour: Tour){
+      form.value.overviewItems = {
+          name: tour.name,
+          badge: tour.badge ?? '',
+          description: tour.description ?? '',
+          highlights: tour.highlights ?? '',
+          terms_and_conditions: tour.terms_and_conditions ?? '',
+          inclusions: tour.inclusions ?? '',
+          exclusions: tour.exclusions ?? '',
+          category: tour.category,
+          duration: String(tour.duration),
+          itinerary_type: tour.itinerary_type,
+      }  
+  }
+
+
+
+  // ================================================================
+  // ITINERARY FUNCTIONS
+  // ===============================================================
+
+  function addItineraryDay(){
+    if(isExeedItineraryDurationConstaint('max')) return;
+
+    const count = form.value.itineraries.length + 1
+    form.value.itineraries.push({
+      _id: generateId(),
+      day_no: count,
+      title:  '',
+      activities:'',
+    })
+  }
+
+  function removeItineraryDay(dayNo: number) {
+      if (isExeedItineraryDurationConstaint('min')) return
+
+      form.value.itineraries = form.value.itineraries
+          .filter(itinerary => itinerary.day_no !== dayNo)
+          .map((itinerary, index) => ({
+              ...itinerary,
+              day_no: index + 1,
+          }))
+  }
+
+  function reorderItineraryDays() {
+      form.value.itineraries = form.value.itineraries.map(
+          (itinerary, index) => ({
+              ...itinerary,
+              day_no: index + 1,
+          })
+      )
+  }
+
+  function isExeedItineraryDurationConstaint(type: 'min' | 'max'){
+      const count = getItineraryCount()
+      const duration = getTourDuration()
+      if (type == 'min' &&  count < 0 ) return true
+      if (type == 'max' &&  count == duration ) return true
+      return false
+  }
+
+  function getItineraryCount(){
+    return form.value.itineraries.length;
+  }
+  
+  function containsItinerary() {
+    return form.value.itineraries.length > 0
+  }
+
+  function fillItinerary(itineraries: NewItinerary[]){
+    itineraries.map((itinerary)=>{
+       form.value.itineraries.push({
+        _id: generateId(),
+        day_no: itinerary.day_no,
+        title: itinerary.title,
+        activities: itinerary.activities
+       })
+    })
+  }
+
+
+
+
   // ===============================================================
   // ROUTE FUNCTIONS
   // ===============================================================
   function addRoute() {
-    const totalRoute = form.value.routes.length;
+    const count = getRouteCount()
+
     form.value.routes.push({
       departure_country_id: '',
       departure_city: '',
       destination_country_id: '',
       destination_city: '',
-      sequence: totalRoute.toString()
+      sequence: count.toString()
     })
   }
 
@@ -192,13 +302,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
     form.value.routes.splice(index, 1)
   }
 
-  function syncRoutes(value: string) {
-    if(!isMultipleFlight(value)) {
-      form.value.routes = form.value.routes.slice(0, 1);
-    }
+  function getRouteCount(){
+    return form.value.routes.length
   }
 
-
+  function containsRoute(){
+    return getRouteCount() > 0;
+  }
 
   // ===============================================================
   // HOTEL FUNCTIONS
@@ -215,95 +325,12 @@ export const useTourFormStore = defineStore('tour-form', () => {
     form.value.hotels.splice(index, 1)
   }
 
-
   function containsHotel () {
     return form.value.hotels.length > 0
   }
 
 
 
-  // ================================================================
-  // ITINERARY FUNCTIONS
-  // ===============================================================
-  function containsItinerary() {
-    return form.value.itineraries.length > 0
-  }
-
-  function containsItineraryType() {
-      return !!form.value.overviewItems.itinerary_type;
-  }
-
-
-  function containsMultipleFlights() {
-    return isMultipleFlight(form.value.overviewItems.itinerary_type)
-  }
-
-  function isRoundTrip() {
-    return form.value.overviewItems.itinerary_type === 'round_trip'
-  }
-
-  function syncItineraries(value: string) {
-    const duration = Number(value || 0)
-
-    // Only sync when duration actually changed
-    if (duration === previousDuration.value) {
-      return
-    }
-
-    previousDuration.value = duration
-
-    if (duration <= 0) {
-      form.value.itineraries = []
-      return
-    }
-
-    const itineraries = form.value.itineraries
-
-    // Add new itinerary days
-    while (itineraries.length < duration) {
-      const dayNo = itineraries.length + 1
-
-      itineraries.push({
-        day_no: dayNo,
-        title: '',
-        activities: '',
-      })
-    }
-
-    // Remove extra itinerary days
-    if (itineraries.length > duration) {
-      itineraries.splice(duration)
-    }
-  }
-
-
-  function normalizeItineraries(duration: number) {
-      if (duration <= 0) {
-          form.value.itineraries = []
-          return
-      }
-
-      const itineraries = form.value.itineraries
-
-      // Add missing days
-      while (itineraries.length < duration) {
-          itineraries.push({
-              day_no: itineraries.length + 1,
-              title: '',
-              activities: '',
-          })
-      }
-
-      // Remove extra days
-      if (itineraries.length > duration) {
-          itineraries.splice(duration)
-      }
-
-      // Always make day numbers sequential
-      itineraries.forEach((itinerary, index) => {
-          itinerary.day_no = index + 1
-      })
-  }
 
   // ===============================================================
   // PRICE & SCHEDULE FUNCTIONS
@@ -348,46 +375,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // FILL FORM WITH EXISTING TOUR DATA
   // ==============================================================
   function fillFormWithTourData(tour: TourWithRelationshipTables) {
-      const duration = Number(tour.duration || 0)
-
-      form.value.overviewItems = {
-          name: tour.name,
-          badge: tour.badge ?? '',
-          description: tour.description ?? '',
-          highlights: tour.highlights ?? '',
-          terms_and_conditions: tour.terms_and_conditions ?? '',
-          inclusions: tour.inclusions ?? '',
-          exclusions: tour.exclusions ?? '',
-          category: tour.category,
-          duration: String(duration),
-          itinerary_type: tour.itinerary_type,
-      }
-
-      // Load database itineraries first
-      form.value.itineraries = Array.isArray(tour.itineraries)
-          ? tour.itineraries.map((itinerary) => ({
-              day_no: itinerary.day_no,
-              title: itinerary.title ?? '',
-              activities: itinerary.activities ?? '',
-          }))
-          : []
-
-      // Then make sure the array matches duration
-      normalizeItineraries(duration)
-
-      // Mark this as the current duration
-      previousDuration.value = duration
-
-      form.value.routes = Array.isArray(tour.routes)
-      ? tour.routes.map((route) => ({
-        departure_country_id:  route.departure_country_id.toString(),
-        destination_country_id: route.destination_country_id.toString(),
-        departure_city: route.departure_city,
-        destination_city: route.destination_city,
-        sequence: route.sequence.toString()
-      })) 
-      : []
-  
+    fillOverview(tour)
+    fillItinerary(tour.itineraries)
   }
 
 
@@ -413,17 +402,29 @@ export const useTourFormStore = defineStore('tour-form', () => {
     currentSection,
     form,
     sections,
-    syncItineraries,
-    syncRoutes,
     setSection,
     isCurrentSection,
-    isRoundTrip,
-    containsItinerary,
+
+
+    getTourDuration,
     containsItineraryType,
     containsMultipleFlights,
-    containsHotel,
+    isRoundTrip,
+    
+
+
+    addItineraryDay,
+    removeItineraryDay,
+    reorderItineraryDays,
+    isExeedItineraryDurationConstaint,
+    containsItinerary,
+
+
     addRoute,
     removeRoute,
+    containsRoute,
+
+    containsHotel,
     addHotel,
     removeHotel,
     syncSchedules,
