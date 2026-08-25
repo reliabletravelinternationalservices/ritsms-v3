@@ -219,6 +219,10 @@ trait TourValidationRules
                 'string',
                 'max:120',
             ],
+            'routes.*.sequence' =>  [
+                'required',
+                'integer',
+            ]
         ];
     }
 
@@ -266,6 +270,10 @@ trait TourValidationRules
 
             'routes.*.destination_city.max' =>
                 'Destination city may not exceed 120 characters.',
+
+            'routes.*.sequence.required' => 'Route sequence is required.',
+
+            'routes.*.sequence.integer' => 'Route sequence is invalid.'
         ];
     }
 }
