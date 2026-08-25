@@ -8,7 +8,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { useTourFormStore } from '@/stores/tourForm';
 import { BreadcrumbItem } from '@/types';
 import { Country } from '@/types/country';
-import { TourWithItinerary } from '@/types/tour';
+import { TourWithRelationshipTables } from '@/types/tour';
 import { Icon } from '@iconify/vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -17,7 +17,7 @@ import { useReferenceDataStore } from '@/stores/referenceData'
 
 
 const props = defineProps<{
-    tour: TourWithItinerary;
+    tour: TourWithRelationshipTables;
     countries: {
         id: number,
         name: string
