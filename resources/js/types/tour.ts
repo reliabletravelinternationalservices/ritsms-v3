@@ -32,6 +32,22 @@ export interface Itinerary {
     updated_at?: string | null;
 }
 
-export type TourWithItinerary = Tour & {
+
+export interface Route {
+    id: number;
+    tour_id: number;
+    departure_country_id: number;
+    destination_country_id: number;
+    departure_city: string;
+    destination_city: string;
+    sequence: number;
+    deleted_at?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+}
+
+export type TourWithRelationshipTables = Tour & {
     itineraries: Itinerary[];
+    routes:  Route[];
 };
+
