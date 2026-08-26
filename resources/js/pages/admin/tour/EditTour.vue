@@ -13,7 +13,9 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 import { useReferenceDataStore } from '@/stores/referenceData'
+import { useAlertDialog } from '@/composables/useAlertDialog';
 
+const { alertDialog } = useAlertDialog()
 
 const props = defineProps<{
     tour: TourWithRelationshipTables;
@@ -24,6 +26,7 @@ const props = defineProps<{
 }>()
 
 const isSaving = ref(false)
+const isReseting = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
@@ -101,6 +104,20 @@ function saveTourChanges() {
     )
 }
 
+
+function resetFormChanges(){
+    alertDialog({
+    variant: 'warning',
+    title: 'Reset Changes',
+    description: 'All your changes will be gone. Are you sure you want to reset?',
+    confirmText: 'Reset',
+    onConfirm: () =>  {
+        isReseting.value = true
+        tourForm.resetFormChanges()
+        isReseting.value = false
+        }
+    })
+}
 </script>
 
 
@@ -110,6 +127,24 @@ function saveTourChanges() {
         <Head title="Edit Tour" />
         <div class="text-foreground">
             <div class="flex justify-end gap-4 border-y py-2 px-6 border-border">
+                <Button variant="default"
+                    class="flex items-center gap-2 bg-zinc-600 hover:bg-zinc-400 text-white"
+                    :disabled="isReseting"
+                    @click="resetFormChanges()"
+                    >
+
+                    <Icon
+                        v-if="isReseting"
+                        icon="lucide:loader-2"
+                        class="size-5 animate-spin"
+                    />
+                    <Icon
+                        v-else
+                        icon="lucide:refresh-ccw"
+                        class="size-5"
+                    />
+                </Button>
+
                 <Button variant="default"
                     class="flex items-center gap-2 bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary)/0.8)] text-white"
                     :disabled="isSaving"
