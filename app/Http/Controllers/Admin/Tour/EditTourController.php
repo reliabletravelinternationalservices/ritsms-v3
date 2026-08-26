@@ -34,17 +34,18 @@ class EditTourController extends Controller
 
     public function update(TourRequest $request, Tour $tour)
     {
-      
+        
         $validatedData = $request->validated();
         
         $tour->update($validatedData['overview']);
 
-        $tour->itineraries()->delete();
+
+        $tour->itineraries()->forceDelete();
         if (!empty($validatedData['itineraries'])) {
             $tour->itineraries()->createMany($validatedData['itineraries']);
         }
         
-        $tour->routes()->delete();
+        $tour->routes()->forceDelete();
         if (!empty($validatedData['routes'])) {
             $tour->routes()->createMany($validatedData['routes']);
         }
