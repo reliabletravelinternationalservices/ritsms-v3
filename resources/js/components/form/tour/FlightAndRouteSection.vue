@@ -61,21 +61,18 @@ const referenceData = useReferenceDataStore()
                     <div
                         class="flex items-center justify-between text-sm font-bold text-muted-foreground uppercase"
                     >
-                        <span v-if="tourForm.isRoundTrip()">
+                        <span v-if="tourForm.containsMultipleFlights()">
+                            Flight Route {{ index + 1 }}
+                        </span>
+                        <span v-else>
                             Flight Route
                         </span>
 
-                        <template v-else-if="tourForm.containsMultipleFlights()">
-                            <span>
-                                Flight Route {{ index + 1 }}
-                            </span>
-
-                            <ButtonIcon
-                                @click="tourForm.removeRoute(index)"
-                                icon="lucide:trash-2"
-                                class="text-red-600 bg-transparent hover:bg-red-50"
-                            />
-                        </template>
+                        <ButtonIcon
+                            @click="tourForm.removeRoute(index)"
+                            icon="lucide:trash-2"
+                            class="text-red-600 bg-transparent hover:bg-red-50"
+                        />
                     </div>
 
                     <!-- DEPARTURE / DESTINATION -->
@@ -189,9 +186,8 @@ const referenceData = useReferenceDataStore()
             </div>
 
             <!-- ADD ROUTE -->
-            <div class="w-full">
+            <div v-if="!tourForm.isOnRouteLimit()" class="w-full">
                 <button
-                    v-if="tourForm.containsMultipleFlights()"
                     type="button"
                     @click="tourForm.addRoute()"
                     class="w-full text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.04)] border-2 border-dashed border-border px-4 py-2.5 text-sm font-medium transition-all duration-150 rounded-md hover:bg-[rgb(var(--color-primary)/0.08)]"
