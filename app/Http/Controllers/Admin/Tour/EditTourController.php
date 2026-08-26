@@ -15,6 +15,7 @@ class EditTourController extends Controller
     {
         $tour = Tour::with(['itineraries', 'routes'])
             ->where('slug', $slug)
+            ->whereNull('deleted_at')
             ->firstOrFail();
     
         $countries = Country::query()
