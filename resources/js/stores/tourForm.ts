@@ -4,7 +4,7 @@ import { generateId, isMultipleFlight } from '@/lib/utils'
 import { Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { Itinerary as NewItinerary }  from '@/types/tour'
+import { Itinerary as NewItinerary, Route as NewRoute }  from '@/types/tour'
 
 const SECTION = {
   OVERVIEW: 'overview',
@@ -97,8 +97,8 @@ type TourSection = typeof SECTION[keyof typeof SECTION]
 
 export const useTourFormStore = defineStore('tour-form', () => {
   const currentSection = ref<TourSection>(SECTION.OVERVIEW)
-  const previousDuration = ref(0)
   const errors = ref<Record<string, string>>({})
+  const oldValues = ref<TourWithRelationshipTables>()
 
   const form = ref({
     overviewItems: {
@@ -195,8 +195,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     return isMultipleFlight(form.value.overviewItems.itinerary_type)
   }
 
-  function isRoundTrip() {
-    return form.value.overviewItems.itinerary_type === 'round_trip'
+  function containsOneToTwoFlight() {
+    const oneRoutes = ['round_trip', 'one_way']
+    return oneRoutes.includes(form.value.overviewItems.itinerary_type)
   }
 
   function fillOverview(tour: Tour){
@@ -214,6 +215,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
       }  
   }
 
+  function isRoundTrip(){
+    return form.value.overviewItems.itinerary_type === 'round_trip'
+  }
 
 
   // ================================================================
@@ -255,7 +259,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function isExeedItineraryDurationConstaint(type: 'min' | 'max'){
       const count = getItineraryCount()
       const duration = getTourDuration()
-      if (type == 'min' &&  count < 0 ) return true
+      const MIN = 0
+      if (type == 'min' &&  count < MIN ) return true
       if (type == 'max' &&  count == duration ) return true
       return false
   }
@@ -268,7 +273,12 @@ export const useTourFormStore = defineStore('tour-form', () => {
     return form.value.itineraries.length > 0
   }
 
+  function resetItinerary(){
+    form.value.itineraries = []
+  }
+
   function fillItinerary(itineraries: NewItinerary[]){
+    resetItinerary()
     itineraries.map((itinerary)=>{
        form.value.itineraries.push({
         _id: generateId(),
@@ -287,6 +297,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ===============================================================
   function addRoute() {
     const count = getRouteCount()
+    if (isOnRouteLimit()) return
 
     form.value.routes.push({
       departure_country_id: '',
@@ -298,7 +309,6 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function removeRoute(index: number) {
-    if (form.value.routes.length <= 1) return;
     form.value.routes.splice(index, 1)
   }
 
@@ -308,6 +318,34 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
   function containsRoute(){
     return getRouteCount() > 0;
+  }
+
+  function resetRoute(){
+    form.value.routes = []
+  }
+
+
+  function getRouteTypeLimit(){
+    if(containsOneToTwoFlight()) return 2
+    return null
+  }
+
+  function isOnRouteLimit(){
+    const count = getRouteCount()
+    const typeLimit = getRouteTypeLimit()
+    return (typeLimit && count >= typeLimit)
+  }
+
+  function fillRoute(routes: NewRoute[]){
+    routes.map((route) => {
+      form.value.routes.push({
+        departure_country_id: route.departure_country_id.toString(),
+        destination_country_id: route.destination_country_id.toString(),
+        departure_city: route.departure_city,
+        destination_city: route.destination_city,
+        sequence: route.sequence.toString()
+      })
+    })
   }
 
   // ===============================================================
@@ -328,6 +366,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function containsHotel () {
     return form.value.hotels.length > 0
   }
+
 
 
 
@@ -377,8 +416,26 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function fillFormWithTourData(tour: TourWithRelationshipTables) {
     fillOverview(tour)
     fillItinerary(tour.itineraries)
+    fillRoute(tour.routes)
+    backupOldValues(tour)
   }
 
+  function backupOldValues(tour: TourWithRelationshipTables){
+      oldValues.value =  tour;
+  }
+
+  function resetFormChanges(){
+    if (!containsOldFormValues()) return
+    fillFormWithTourData(oldValues.value!)
+  }
+
+  function containsOldFormValues(){
+    return !!oldValues.value
+  }
+
+
+
+  
 
   // ==============================================================
   // validation functions
@@ -409,6 +466,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     getTourDuration,
     containsItineraryType,
     containsMultipleFlights,
+    containsOneToTwoFlight,
     isRoundTrip,
     
 
@@ -418,25 +476,41 @@ export const useTourFormStore = defineStore('tour-form', () => {
     reorderItineraryDays,
     isExeedItineraryDurationConstaint,
     containsItinerary,
+    resetItinerary,
 
 
     addRoute,
     removeRoute,
     containsRoute,
+    resetRoute,
+    isOnRouteLimit,
+
 
     containsHotel,
     addHotel,
     removeHotel,
+
+
     syncSchedules,
     clearSelectedDates,
     containsSelectedDates,
+
+    
     addImage,
     removeImage,
     setThumbnail,
+
+
     fillFormWithTourData,
+    resetFormChanges,
+    containsOldFormValues,
+
     hasSectionErrors,
     setErrors,
     clearErrors,
     errors,
+
+
+    
   }
 })
