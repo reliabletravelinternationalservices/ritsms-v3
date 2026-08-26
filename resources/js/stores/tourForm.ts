@@ -15,42 +15,42 @@ const SECTION = {
   ASSETS_AND_IMAGES: 'assets-and-images',
 } as const
 
-const validationSections = {
-    [SECTION.OVERVIEW]: [
-      'name',
-      'badge',
-      'description',
-      'highlights',
-      'inclusions',
-      'exclusions',
-      'terms_and_conditions',
-      'category',
-      'duration',
-      'itinerary_type',
-    ],
+// const validationSections = {
+//     [SECTION.OVERVIEW]: [
+//       'name',
+//       'badge',
+//       'description',
+//       'highlights',
+//       'inclusions',
+//       'exclusions',
+//       'terms_and_conditions',
+//       'category',
+//       'duration',
+//       'itinerary_type',
+//     ],
 
-    [SECTION.ITINERARIES]: [
-      'itineraries',
-    ],
+//     [SECTION.ITINERARIES]: [
+//       'itineraries',
+//     ],
 
-    [SECTION.ROUTES]: [
-      'routes',
-    ],
+//     [SECTION.ROUTES]: [
+//       'routes',
+//     ],
 
-    [SECTION.HOTELS]: [
-      'hotels',
-    ],
+//     [SECTION.HOTELS]: [
+//       'hotels',
+//     ],
 
-    [SECTION.PRICE_AND_SCHEDULE]: [
-      'selected_dates',
-      'schedules',
-    ],
+//     [SECTION.PRICE_AND_SCHEDULE]: [
+//       'selected_dates',
+//       'schedules',
+//     ],
 
-    [SECTION.ASSETS_AND_IMAGES]: [
-      'thumbnail',
-      'additional_images',
-    ],
-}
+//     [SECTION.ASSETS_AND_IMAGES]: [
+//       'thumbnail',
+//       'additional_images',
+//     ],
+// }
 
 interface TourOverview {
       name: string,
@@ -85,12 +85,12 @@ interface Hotel {
   }
 
 interface Schedule {
-    departure_date: '',
-    price: '',
-    discounted_price: '',
-    airline_name: '',
-    departure_flight_no: '',
-    return_flight_no: '',
+    departure_date: string,
+    price: string,
+    discounted_price: string,
+    airline_name: string,
+    departure_flight_no: string,
+    return_flight_no: string,
 }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
@@ -121,8 +121,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
     hotels: [] as Hotel[],
 
-    priceAndScheduleItems: {
+    schedules: {
       selected_dates: [],
+      is_customized: false,
       def_departure_date: '',
       def_price: '',
       def_discounted_price: '',
@@ -130,7 +131,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
       def_departure_flight_no: '',
       def_return_flight_no: '',
       def_booking_deadline: '',
-      schedules: [] as Schedule[],
+      customize: [] as Schedule[],
     },
 
     imageAndAssetItems: {
@@ -387,18 +388,46 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ===============================================================
   // PRICE & SCHEDULE FUNCTIONS
   // ===============================================================
-  const clearSelectedDates = () => {
-    form.value.priceAndScheduleItems.selected_dates = []
+  function clearSelectedDates() {
+    form.value.schedules.selected_dates = []
   }
 
+  function resetCustomizeSchedule (){
+    form.value.schedules.customize = []
+  } 
   const containsSelectedDates = () => {
-    return form.value.priceAndScheduleItems.selected_dates.length > 0
+    return form.value.schedules.selected_dates.length > 0
   }
 
   function syncSchedules(values: string[]) {
-    //TODO: SYNCHRONIZE SCHEDULE
+    resetCustomizeSchedule()
+    values.map((value)=>{
+      const sched = form.value.schedules;
+      form.value.schedules.customize.push({
+        departure_date: value,
+        departure_flight_no: sched.def_return_flight_no,
+        return_flight_no: sched.def_return_flight_no,
+        price: sched.def_price,
+        discounted_price:  sched.def_discounted_price,
+        airline_name: sched.def_airline_name,
+
+      })
+    })
   }
 
+  function handleCustomizeChange(value: boolean) {
+    form.value.schedules.is_customized = value
+
+      console.log('Customize:', value)
+
+      if (value) {
+          // Customize checked
+          console.log('Using customized schedules')
+      } else {
+          // Customize unchecked
+          console.log('Using default schedule details')
+      }
+  }
 
   
   // ===============================================================
@@ -508,6 +537,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     syncSchedules,
     clearSelectedDates,
     containsSelectedDates,
+    handleCustomizeChange,
 
     
     addImage,
