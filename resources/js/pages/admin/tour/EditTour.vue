@@ -72,6 +72,12 @@ function saveTourChanges() {
     )
 
 
+    formData.append(
+        'hotels',
+        JSON.stringify(tourForm.form.hotels)
+    )
+
+
     // Laravel method spoofing
     formData.append('_method', 'PUT')
 

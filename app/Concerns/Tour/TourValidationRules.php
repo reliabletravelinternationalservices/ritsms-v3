@@ -270,4 +270,48 @@ trait TourValidationRules
             'routes.*.sequence.integer' => 'Route sequence is invalid.'
         ];
     }
+
+
+    protected function hotelRules(): array
+    {
+        return [
+            'hotels' => ['nullable', 'array'],
+
+            'hotels.*.name' => [
+                'required',
+                'string',
+                'max:150',
+            ],
+
+            'hotels.*.rate' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+
+            'hotels.*.link' => [
+                'nullable',
+                'url',
+                'max:500',
+            ],
+        ];
+    }
+
+    protected function hotelMessages(): array
+    {
+        return [
+            'hotels.array' => 'Hotels must be a valid list.',
+
+            'hotels.*.name.required' => 'Hotel name is required.',
+            'hotels.*.name.string' => 'Hotel name must be a valid text.',
+            'hotels.*.name.max' => 'Hotel name may not exceed 150 characters.',
+
+            'hotels.*.rate.required' => 'Hotel rate is required.',
+            'hotels.*.rate.numeric' => 'Hotel rate must be a valid number.',
+            'hotels.*.rate.min' => 'Hotel rate must be at least 0.',
+
+            'hotels.*.link.url' => 'Hotel link must be a valid URL.',
+            'hotels.*.link.max' => 'Hotel link may not exceed 500 characters.',
+        ];
+    }
 }

@@ -85,21 +85,21 @@ class Tour extends Model
             ->orderBy('sequence');
     }
 
-    public function departures()
+    public function departures(): HasMany
     {
         return $this->hasMany(TourDeparture::class);
     }
 
 
 
-    public function itineraries()
+    public function itineraries(): HasMany
     {
         return $this->hasMany(TourItinerary::class)
             ->orderBy('day_no');
     }
 
 
-    public function hotels()
+    public function hotels(): HasMany
     {
         return $this->hasMany(TourHotel::class);
     }

@@ -46,8 +46,17 @@ export interface Route {
     updated_at?: string | null;
 }
 
+export interface Hotel {
+    id: number;
+    tour_id: number;
+    name:  string;
+    rate: number;
+    link?: string | null
+}
+
 export type TourWithRelationshipTables = Tour & {
     itineraries: Itinerary[];
     routes:  Route[];
+    hotels:  Hotel[];
 };
 

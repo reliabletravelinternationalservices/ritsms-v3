@@ -4,7 +4,7 @@ import { generateId, isMultipleFlight } from '@/lib/utils'
 import { Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { Itinerary as NewItinerary, Route as NewRoute }  from '@/types/tour'
+import { Itinerary as NewItinerary, Route as NewRoute,  Hotel as NewHotel }  from '@/types/tour'
 
 const SECTION = {
   OVERVIEW: 'overview',
@@ -337,6 +337,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function fillRoute(routes: NewRoute[]){
+    resetRoute()
     routes.map((route) => {
       form.value.routes.push({
         departure_country_id: route.departure_country_id.toString(),
@@ -367,8 +368,20 @@ export const useTourFormStore = defineStore('tour-form', () => {
     return form.value.hotels.length > 0
   }
 
+  function resetHotel(){
+    form.value.hotels = []
+  }
 
-
+  function fillHotel(hotels: NewHotel[]){
+    resetHotel()
+    hotels.map((hotel) => {
+      form.value.hotels.push({
+         name:  hotel.name,
+         rate: hotel.rate.toString(),
+         link: hotel.link?? ''
+      })
+    })
+  }
 
 
   // ===============================================================
@@ -417,6 +430,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillOverview(tour)
     fillItinerary(tour.itineraries)
     fillRoute(tour.routes)
+    fillHotel(tour.hotels)
     backupOldValues(tour)
   }
 

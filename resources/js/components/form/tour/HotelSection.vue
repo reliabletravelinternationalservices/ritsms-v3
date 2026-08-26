@@ -57,7 +57,7 @@ const ratings: SelectOption[] = [
             </div>
 
             <!-- hotels -->
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div v-else class="grid md:grid-cols-1 lg:grid-cols-2 gap-4 p-4">
                 <div v-for="(hotel, index) in tourForm.form.hotels" :key="index"
                     class="space-y-6 rounded-md border border-border p-8">
                     <span class="text-sm font-bold text-muted-foreground uppercase">

@@ -13,7 +13,7 @@ class EditTourController extends Controller
 {
     public function edit(string $slug): \Inertia\Response
     {
-        $tour = Tour::with(['itineraries', 'routes'])
+        $tour = Tour::with(['itineraries', 'routes', 'hotels'])
             ->where('slug', $slug)
             ->whereNull('deleted_at')
             ->firstOrFail();
@@ -49,6 +49,11 @@ class EditTourController extends Controller
         $tour->routes()->forceDelete();
         if (!empty($validatedData['routes'])) {
             $tour->routes()->createMany($validatedData['routes']);
+        }
+
+        $tour->hotels()->forceDelete();
+        if (!empty($validatedData['hotels'])) {
+            $tour->hotels()->createMany($validatedData['hotels']);
         }
         return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])->with('success', 'Tour saved successfully.');
     }

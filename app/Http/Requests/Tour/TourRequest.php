@@ -44,6 +44,13 @@ class TourRequest extends FormRequest
             );
         }
 
+        if ($this->has('hotels')) {
+            $data['hotels'] = json_decode(
+                $this->input('hotels'),
+                true
+            );
+        }
+
         $this->merge($data);
     }
 
@@ -65,6 +72,9 @@ class TourRequest extends FormRequest
 
             // ROUTES
             ...$this->routesRules(),
+            
+            // HOTELS
+            ...$this->hotelRules(),
         ];
     }
 
@@ -73,7 +83,8 @@ class TourRequest extends FormRequest
         return [
             ...$this->overviewErrorMessages(),
             ...$this->itineraryErrorMessages(),
-            ...$this->routesErrorMessages()
+            ...$this->routesErrorMessages(),
+            ...$this->hotelMessages(),
         ];
     }
         
