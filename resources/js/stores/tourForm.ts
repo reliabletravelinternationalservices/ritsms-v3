@@ -451,7 +451,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
         departure_date: departureDate,
         booking_deadline: schedules.def_booking_deadline,
-
+        airline_name: schedules.def_airline_name,
+        departure_flight_no: schedules.def_departure_flight_no,
+        return_flight_no: schedules.def_return_flight_no,
         is_active: true,
       }))
   }
