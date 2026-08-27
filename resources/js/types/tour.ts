@@ -15,6 +15,7 @@ export interface Tour {
     inclusions: string;
     exclusions: string;
     terms_and_conditions: string;
+    booking_deadline?: string | null;
     notes: string | null;
     deleted_at?: string | null;
     created_at?: string | null;

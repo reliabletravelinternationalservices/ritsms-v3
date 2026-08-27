@@ -19,7 +19,7 @@ const { isCurrentSection, setSection, SECTION } = tourForm
 </script>
 
 <template>
-    <div class="flex gap-4">
+    <div class="flex gap-2">
         <NavButton v-if="isCreateNew" :key="tourForm.sections[0].key" :label="tourForm.sections[0].label"
             :active="tourForm.currentSection === tourForm.sections[0].key" @click="setSection(tourForm.sections[0].key)" :is-error="tourForm.hasSectionErrors(tourForm.sections[0].key)"/>
 

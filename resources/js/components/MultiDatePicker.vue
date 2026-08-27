@@ -184,7 +184,7 @@ const displayValue = computed<string>(() => {
                 triggerClass
             )">
                 <span :class="cn(
-                    'truncate text-xs',
+                    'truncate text-sm',
                     {
                         'text-muted-foreground':
                             props.modelValue.length === 0,

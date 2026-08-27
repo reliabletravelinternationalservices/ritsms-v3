@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/ButtonIcon.vue'
+import InputError from '@/components/InputError.vue'
 import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue'
 import Input from '@/components/ui/input/Input.vue'
 import { useTourFormStore } from '@/stores/tourForm'
@@ -76,6 +77,7 @@ const ratings: SelectOption[] = [
                                 </label>
                                 <Input :id="`hotel-${index + 1}-name`" v-model="hotel.name" placeholder="Hotel name"
                                     class="font-roboto text-sm" />
+                                <InputError :message="tourForm.errors['hotels.' + index + '.name']" />
                             </div>
 
                             <div class="space-y-2">
@@ -86,6 +88,7 @@ const ratings: SelectOption[] = [
 
                                 <SelectMenu :id="`hotel-${index + 1}-rate`" v-model="hotel.rate"
                                     placeholder="Select rate" :options="ratings" class="font-roboto text-sm" />
+                                <InputError :message="tourForm.errors['hotels.' + index + '.rate']" />
                             </div>
 
                             <div class="space-y-2">
@@ -95,6 +98,7 @@ const ratings: SelectOption[] = [
                                 </label>
                                 <Input :id="`hotel-${index + 1}-link`" v-model="hotel.link" placeholder="Hotel link"
                                     class="font-roboto text-sm" />
+                                <InputError :message="tourForm.errors['hotels.' + index + '.link']" />
                             </div>
 
                         </div>
