@@ -50,6 +50,7 @@ class Tour extends Model
         'terms_and_conditions',
         'description',
         'badge',
+        'booking_deadline',
         'notes',
     ];
 

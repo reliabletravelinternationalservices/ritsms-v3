@@ -28,6 +28,7 @@ return new class extends Migration
             $table->json('terms_and_conditions');
             $table->string('description', 225);
             $table->string('badge', 100)->nullable();
+            $table->date('booking_deadline')->nullable();
             $table->text('notes')->nullable()
                 ->comment('For Internal Use Only - Not visible to customers');
             $table->softDeletes();
