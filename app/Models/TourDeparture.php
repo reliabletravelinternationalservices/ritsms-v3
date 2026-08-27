@@ -19,7 +19,6 @@ class TourDeparture extends Model
         'max_pax',
         'departure_date',
         'return_date',
-        'booking_deadline',
         'is_active',
     ];
 
