@@ -57,24 +57,24 @@ function saveTourChanges() {
 
     formData.append(
         'overview',
-        JSON.stringify(tourForm.form.overviewItems)
+        JSON.stringify(tourForm.transformOverview())
     )
 
     formData.append(
         'itineraries',
-        JSON.stringify(tourForm.form.itineraries)
+        JSON.stringify(tourForm.transformItinerary())
     )
 
 
     formData.append(
         'routes',
-        JSON.stringify(tourForm.form.routes)
+        JSON.stringify(tourForm.transformRoute())
     )
 
 
     formData.append(
         'hotels',
-        JSON.stringify(tourForm.form.hotels)
+        JSON.stringify(tourForm.transformHotel())
     )
 
     formData.append(

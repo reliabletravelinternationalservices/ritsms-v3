@@ -58,7 +58,7 @@ class EditTourController extends Controller
         }
 
         $tour->departures()->forceDelete();
-        if (!empty($validatedData['departures'])) {
+        if (!empty($validatedData['schedules'])) {
             $tour->departures()->createMany($validatedData['schedules']);
         }
         return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])->with('success', 'Tour saved successfully.');

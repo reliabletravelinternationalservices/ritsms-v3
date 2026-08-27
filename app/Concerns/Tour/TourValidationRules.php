@@ -358,6 +358,12 @@ trait TourValidationRules
                 'date',
             ],
 
+            'schedules.*.return_date' => [
+                'required',
+                'date',
+                'after_or_equal:schedules.*.departure_date',
+            ],
+
             'schedules.*.airline_name' => [
                 'required',
                 'string',

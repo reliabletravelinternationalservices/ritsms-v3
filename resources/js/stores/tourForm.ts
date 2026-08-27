@@ -15,42 +15,6 @@ const SECTION = {
   ASSETS_AND_IMAGES: 'assets-and-images',
 } as const
 
-// const validationSections = {
-//     [SECTION.OVERVIEW]: [
-//       'name',
-//       'badge',
-//       'description',
-//       'highlights',
-//       'inclusions',
-//       'exclusions',
-//       'terms_and_conditions',
-//       'category',
-//       'duration',
-//       'itinerary_type',
-//     ],
-
-//     [SECTION.ITINERARIES]: [
-//       'itineraries',
-//     ],
-
-//     [SECTION.ROUTES]: [
-//       'routes',
-//     ],
-
-//     [SECTION.HOTELS]: [
-//       'hotels',
-//     ],
-
-//     [SECTION.PRICE_AND_SCHEDULE]: [
-//       'selected_dates',
-//       'schedules',
-//     ],
-
-//     [SECTION.ASSETS_AND_IMAGES]: [
-//       'thumbnail',
-//       'additional_images',
-//     ],
-// }
 
 interface TourOverview {
       name: string,
@@ -63,13 +27,13 @@ interface TourOverview {
       category: string,
       duration: string,
       itinerary_type: string,
-      booking_deadline?: string
+      booking_deadline?: string 
 }
 interface Itinerary {
   _id: string
   day_no: number
   title: string
-  activities: string
+  activities?: string
 }
 interface Route {
     departure_country_id: string
@@ -82,18 +46,33 @@ interface Route {
 interface Hotel {
     name: string
     rate: string
-    link: string
+    link?: string
   }
 
-interface Schedule {
+interface Schedule{
+      selected_dates: string[]
+      is_customized: boolean,
+      def_departure_date: string,
+      def_base_price: string,
+      def_discounted_price: string,
+      def_airline_name: string,
+      def_departure_flight_no: string,
+      def_return_flight_no: string,
+      def_booking_deadline: string,
+      def_min_pax: string,
+      def_max_pax?: string,
+      customize: CustomSchedule[]
+}
+interface CustomSchedule {
     departure_date: string,
+    return_date: string,
     base_price: string,
     discounted_price: string,
     airline_name: string,
     departure_flight_no: string,
     return_flight_no: string,
     min_pax: string,
-    max_pax: string,
+    max_pax?: string,
 }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
@@ -104,20 +83,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   const oldValues = ref<TourWithRelationshipTables>()
 
   const form = ref({
-    overviewItems: {
-      name: '',
-      badge: '',
-      description: '',
-      highlights: '',
-      terms_and_conditions: '',
-      inclusions: '',
-      exclusions: '',
-
-      category: '',
-      duration: '',
-      itinerary_type: '',
-      booking_deadline: undefined,
-    } as TourOverview,
+    overviewItems: {} as TourOverview,
 
     itineraries: [] as Itinerary[],
 
@@ -125,20 +91,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
     hotels: [] as Hotel[],
 
-    schedules: {
-      selected_dates: [],
-      is_customized: true,
-      def_departure_date: '',
-      def_base_price: '',
-      def_discounted_price: '',
-      def_airline_name: '',
-      def_departure_flight_no: '',
-      def_return_flight_no: '',
-      def_booking_deadline: '',
-      def_min_pax: '1',
-      def_max_pax: '',
-      customize: [] as Schedule[],
-    },
+    schedules: {} as Schedule,
 
     imageAndAssetItems: {
       thumbnail: null as number | null,
@@ -227,6 +180,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
     return form.value.overviewItems.itinerary_type === 'round_trip'
   }
 
+  function transformOverview() {
+    const data = form.value.overviewItems
+
+    return {
+      ...data,
+      booking_deadline: data.booking_deadline ?? null,
+    }
+  }
 
   // ================================================================
   // ITINERARY FUNCTIONS
@@ -297,7 +258,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
     })
   }
 
-
+  function transformItinerary() {
+    return form.value.itineraries.map((itinerary) => ({
+      day_no: itinerary.day_no,
+      title: itinerary.title,
+      activities: itinerary.activities ?? null,
+    }))
+  }
 
 
   // ===============================================================
@@ -356,6 +323,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     })
   }
 
+  function transformRoute(){
+    return form.value.routes
+  }
   // ===============================================================
   // HOTEL FUNCTIONS
   // ===============================================================
@@ -390,6 +360,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
     })
   }
 
+  function transformHotel(){
+    return form.value.hotels.map((hotel) => ({
+        name: hotel.name,
+        rate: hotel.rate,
+        link: hotel.link?? null
+    }))
+  }
+
 
   // ===============================================================
   // PRICE & SCHEDULE FUNCTIONS
@@ -401,8 +379,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function resetCustomizeSchedule (){
     form.value.schedules.customize = []
   } 
+
   const containsSelectedDates = () => {
-    return form.value.schedules.selected_dates.length > 0
+    return form.value.schedules.selected_dates && form.value.schedules.selected_dates.length > 0
   }
 
   function syncSchedules(values: string[]) {
@@ -410,6 +389,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     values.map((value)=>{
       form.value.schedules.customize.push({
         departure_date: value,
+        return_date: '',
         departure_flight_no: '',
         return_flight_no: '',
         base_price: '',
@@ -424,16 +404,6 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
   function handleCustomizeChange(value: boolean) {
     form.value.schedules.is_customized = value
-
-      console.log('Customize:', value)
-
-      if (value) {
-          // Customize checked
-          console.log('Using customized schedules')
-      } else {
-          // Customize unchecked
-          console.log('Using default schedule details')
-      }
   }
 
   function transformSchedules() {
@@ -447,9 +417,10 @@ export const useTourFormStore = defineStore('tour-form', () => {
         base_price: schedules.def_base_price,
         discounted_price: schedules.def_discounted_price,
         min_pax: schedules.def_min_pax,
-        max_pax: schedules.def_max_pax,
+        max_pax: schedules.def_max_pax ?? null,
 
         departure_date: departureDate,
+        return_date:  getReturnDate(departureDate),
         booking_deadline: schedules.def_booking_deadline,
         airline_name: schedules.def_airline_name,
         departure_flight_no: schedules.def_departure_flight_no,
@@ -458,6 +429,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
       }))
   }
 
+  function getReturnDate(date: string) {
+    const duration = getTourDuration()
+
+    const departureDate = new Date(date)
+    departureDate.setDate(departureDate.getDate() + duration - 1)
+
+    return departureDate.toISOString().split('T')[0]
+  }
   
   // ===============================================================
   // IMAGES & ASSETS FUNCTIONS
@@ -534,6 +513,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
     setSection,
     isCurrentSection,
 
+    transformOverview,
+
 
     getTourDuration,
     containsItineraryType,
@@ -549,6 +530,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     isExeedItineraryDurationConstaint,
     containsItinerary,
     resetItinerary,
+    transformItinerary,
 
 
     addRoute,
@@ -556,11 +538,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
     containsRoute,
     resetRoute,
     isOnRouteLimit,
+    transformRoute,
 
 
     containsHotel,
     addHotel,
     removeHotel,
+    transformHotel,
 
 
     syncSchedules,
