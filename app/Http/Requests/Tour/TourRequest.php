@@ -51,6 +51,13 @@ class TourRequest extends FormRequest
             );
         }
 
+        if ($this->has('schedules')) {
+            $data['schedules'] = json_decode(
+                $this->input('schedules'),
+                true
+            );
+        }
+
         $this->merge($data);
     }
 
@@ -63,29 +70,33 @@ class TourRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        return array_merge(
             // OVERVIEW
-            ...$this->overviewRules(),
+            $this->overviewRules(),
 
             // ITINERARIES
-            ...$this->itineraryRules(),
+            $this->itineraryRules(),
 
             // ROUTES
-            ...$this->routesRules(),
+            $this->routesRules(),
             
             // HOTELS
-            ...$this->hotelRules(),
-        ];
+            $this->hotelRules(),
+
+            // SCHEDULES
+            $this->scheduleRules(),
+        );
     }
 
     public  function messages():  array
     {
-        return [
-            ...$this->overviewErrorMessages(),
-            ...$this->itineraryErrorMessages(),
-            ...$this->routesErrorMessages(),
-            ...$this->hotelMessages(),
-        ];
+        return array_merge(
+            $this->overviewErrorMessages(),
+            $this->itineraryErrorMessages(),
+            $this->routesErrorMessages(),
+            $this->hotelMessages(),
+            $this->scheduleMessages(),
+        );
     }
         
 }

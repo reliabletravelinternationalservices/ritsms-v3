@@ -35,9 +35,10 @@ class EditTourController extends Controller
 
     public function update(TourRequest $request, Tour $tour)
     {
-        
         $validatedData = $request->validated();
         
+        
+
         $tour->update($validatedData['overview']);
 
 
@@ -54,6 +55,11 @@ class EditTourController extends Controller
         $tour->hotels()->forceDelete();
         if (!empty($validatedData['hotels'])) {
             $tour->hotels()->createMany($validatedData['hotels']);
+        }
+
+        $tour->departures()->forceDelete();
+        if (!empty($validatedData['departures'])) {
+            $tour->departures()->createMany($validatedData['schedules']);
         }
         return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])->with('success', 'Tour saved successfully.');
     }

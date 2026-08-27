@@ -71,6 +71,11 @@ trait TourValidationRules
                 'required',
                 'in:round_trip,tri_city,multi_city,one_way',
             ],
+
+            'overview.booking_deadline' => [
+                'nullable',
+                'date',
+            ],
         ];
     }
 
@@ -122,6 +127,9 @@ trait TourValidationRules
             // Itinerary type
             'overview.itinerary_type.required' => 'Itinerary type is required.',
             'overview.itinerary_type.in' => 'Please select a valid itinerary type.',
+
+            'overview.booking_deadline.date' => 'Booking deadline must be a date.',
+
         ];
     }
 
@@ -312,6 +320,103 @@ trait TourValidationRules
 
             'hotels.*.link.url' => 'Hotel link must be a valid URL.',
             'hotels.*.link.max' => 'Hotel link may not exceed 500 characters.',
+        ];
+    }
+
+    protected  function scheduleRules()
+    {
+        return [
+            'schedules' => ['nullable', 'array'],
+
+            'schedules.*.base_price' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+
+            'schedules.*.discounted_price' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'lt:schedules.*.base_price',
+            ],
+
+            'schedules.*.min_pax' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+
+            'schedules.*.max_pax' => [
+                'nullable',
+                'integer',
+                'gte:schedules.*.min_pax',
+            ],
+
+            'schedules.*.departure_date' => [
+                'required',
+                'date',
+            ],
+
+            'schedules.*.airline_name' => [
+                'required',
+                'string',
+            ],
+
+            'schedules.*.departure_flight_no' => [
+                'required',
+                'string',
+            ],
+
+            'schedules.*.return_flight_no' => [
+                'required',
+                'string',
+            ],
+
+            'schedules.*.is_active' => [
+                'nullable',
+                'boolean',
+            ],
+        ];
+    }
+
+    protected function scheduleMessages(): array
+    {
+        return [
+            'schedules.array' => 'Schedules must be a valid list.',
+
+            'schedules.*.base_price.required' => 'Base price is required.',
+            'schedules.*.base_price.numeric' => 'Base price must be a number.',
+            'schedules.*.base_price.min' => 'Base price cannot be negative.',
+
+            'schedules.*.discounted_price.numeric' => 'Discounted price must be a number.',
+            'schedules.*.discounted_price.min' => 'Discounted price cannot be negative.',
+            'schedules.*.discounted_price.lt' => 'Discounted price must be lower than the base price.',
+
+            'schedules.*.min_pax.required' => 'Minimum number of passengers is required.',
+            'schedules.*.min_pax.integer' => 'Minimum number of passengers must be a whole number.',
+            'schedules.*.min_pax.min' => 'Minimum number of passengers must be at least 1.',
+
+            'schedules.*.max_pax.integer' => 'Maximum number of passengers must be a whole number.',
+            'schedules.*.max_pax.gte' => 'Maximum number of passengers must be greater than or equal to the minimum number of passengers.',
+
+            'schedules.*.departure_date.required' => 'Departure date is required.',
+            'schedules.*.departure_date.date' => 'Departure date must be a valid date.',
+
+            'schedules.*.return_date.required' => 'Return date is required.',
+            'schedules.*.return_date.date' => 'Return date must be a valid date.',
+            'schedules.*.return_date.after_or_equal' => 'Return date must be on or after the departure date.',
+
+            'schedules.*.is_active.boolean' => 'Status must be true or false.',
+
+            'schedules.*.airline_name.required' => 'Airline name is required.',
+            'schedules.*.airline_name.string' => 'Airline name must be a valid text.',
+
+            'schedules.*.departure_flight_no.required' => 'Departure flight number is required.',
+            'schedules.*.departure_flight_no.date' => 'Departure flight number must be a date.',
+
+            'schedules.*.return_flight_no.required' => 'Return flight number is required.',
+            'schedules.*.return_flight_no.date' => 'Return flight number must be a date.',
         ];
     }
 }
