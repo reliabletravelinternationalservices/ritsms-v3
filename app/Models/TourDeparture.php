@@ -14,7 +14,7 @@ class TourDeparture extends Model
     protected $fillable = [
         'tour_id',
         'base_price',
-        'sale_price',
+        'discounted_price',
         'min_pax',
         'max_pax',
         'departure_date',
