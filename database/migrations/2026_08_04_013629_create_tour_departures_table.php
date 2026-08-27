@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tour_id')->constrained()->cascadeOnDelete();
             $table->decimal('base_price', 10, 2)->default(0);
-            $table->decimal('sale_price', 10, 2)->nullable();
+            $table->decimal('discounted_price', 10, 2)->nullable();
             $table->unsignedInteger('min_pax')->default(1);
-            $table->unsignedInteger('max_pax')->default(10);
+            $table->unsignedInteger('max_pax')->nullable();
             $table->date('departure_date');
             $table->date('return_date');
-            $table->date('booking_deadline')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
