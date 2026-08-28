@@ -65,12 +65,10 @@ function saveTourChanges() {
         JSON.stringify(tourForm.transformItinerary())
     )
 
-
     formData.append(
         'routes',
         JSON.stringify(tourForm.transformRoute())
     )
-
 
     formData.append(
         'hotels',
@@ -82,6 +80,18 @@ function saveTourChanges() {
         JSON.stringify(tourForm.transformSchedules())
     )
 
+    // IMAGES
+    tourForm.form.assets.images.forEach((file) => {
+        formData.append('images[]', file)
+    })
+
+    // VIDEO
+    if (tourForm.form.assets.video) {
+        formData.append(
+            'video',
+            tourForm.form.assets.video
+        )
+    }
 
     // Laravel method spoofing
     formData.append('_method', 'PUT')
@@ -103,13 +113,16 @@ function saveTourChanges() {
                 tourForm.setErrors(errors)
 
                 toast.error(
-                    'Failed to save the tour. Please check for the form.'
+                    'Failed to save the tour. Please check the form.'
                 )
             },
 
             onSuccess: () => {
                 tourForm.clearErrors()
-                toast.success('Tour saved successfully.')
+
+                toast.success(
+                    'Tour saved successfully.'
+                )
             },
         },
     )
