@@ -13,7 +13,7 @@ class EditTourController extends Controller
 {
     public function edit(string $slug): \Inertia\Response
     {
-        $tour = Tour::with(['itineraries', 'routes', 'hotels'])
+        $tour = Tour::with(['itineraries', 'routes', 'hotels', 'departures'])
             ->where('slug', $slug)
             ->whereNull('deleted_at')
             ->firstOrFail();
