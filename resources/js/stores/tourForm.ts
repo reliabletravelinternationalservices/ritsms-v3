@@ -1,7 +1,7 @@
 // stores/tour-form.ts
 
-import { generateId, isMultipleFlight } from '@/lib/utils'
-import { Tour, TourWithRelationshipTables } from '@/types/tour'
+import { generateId, isEmpty, isMultipleFlight } from '@/lib/utils'
+import { Departure, Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { Itinerary as NewItinerary, Route as NewRoute,  Hotel as NewHotel }  from '@/types/tour'
@@ -58,7 +58,6 @@ interface Schedule{
       def_airline_name: string,
       def_departure_flight_no: string,
       def_return_flight_no: string,
-      def_booking_deadline: string,
       def_min_pax: string,
       def_max_pax?: string,
       customize: CustomSchedule[]
@@ -409,19 +408,35 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function transformSchedules() {
     const schedules = form.value.schedules
 
+    if (!schedules.selected_dates)  return
     if (schedules.is_customized) {
-      return schedules.customize
+      return schedules.customize.map((sched)=>({
+         base_price: sched.base_price,
+          discounted_price: isEmpty(sched.discounted_price)
+            ? null :  sched.discounted_price,
+          min_pax: sched.min_pax!,
+          max_pax: isEmpty(sched.max_pax)
+            ? null : sched.max_pax!,
+
+          departure_date: sched.departure_date,
+          return_date:  getReturnDate(sched.departure_date),
+          airline_name: sched.airline_name,
+          departure_flight_no: sched.departure_flight_no,
+          return_flight_no: sched.return_flight_no,
+          is_active: true,
+      }))
     }
 
     return schedules.selected_dates.map((departureDate) => ({
         base_price: schedules.def_base_price,
-        discounted_price: schedules.def_discounted_price,
+        discounted_price: isEmpty(schedules.def_discounted_price)
+            ? null :  schedules.def_discounted_price!,
         min_pax: schedules.def_min_pax,
-        max_pax: schedules.def_max_pax ?? null,
+        max_pax: isEmpty(schedules.def_max_pax)
+            ? null :  schedules.def_max_pax!,
 
         departure_date: departureDate,
         return_date:  getReturnDate(departureDate),
-        booking_deadline: schedules.def_booking_deadline,
         airline_name: schedules.def_airline_name,
         departure_flight_no: schedules.def_departure_flight_no,
         return_flight_no: schedules.def_return_flight_no,
@@ -437,6 +452,86 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
     return departureDate.toISOString().split('T')[0]
   }
+
+  function fillSchedule(departures: Departure[]) {
+    if (!departures.length) {
+      return {
+        selected_dates: [],
+        is_customized: false,
+        def_departure_date: '',
+        def_base_price: '',
+        def_discounted_price: '',
+        def_airline_name: '',
+        def_departure_flight_no: '',
+        def_return_flight_no: '',
+        def_min_pax: '',
+        def_max_pax: '',
+        customize: [],
+      }
+    }
+
+    const first = departures[0]
+
+    const isCustomized = isCustomizeSchedule(departures)
+
+    form.value.schedules =  {
+      selected_dates: departures.map(
+        departure => departure.departure_date
+      ),
+
+      is_customized: isCustomized,
+
+      def_departure_date: first.departure_date,
+      def_base_price: String(first.base_price),
+      def_discounted_price: first.discounted_price != null
+        ? String(first.discounted_price)
+        : '',
+
+      def_airline_name: '',
+      def_departure_flight_no: '',
+      def_return_flight_no: '',
+
+      def_min_pax: String(first.min_pax),
+      def_max_pax: first.max_pax != null
+        ? String(first.max_pax)
+        : '',
+
+      customize: departures.map(departure => ({
+        departure_date: departure.departure_date,
+        return_date: departure.return_date,
+
+        base_price: String(departure.base_price),
+        discounted_price: departure.discounted_price != null
+          ? String(departure.discounted_price)
+          : '',
+
+        min_pax: String(departure.min_pax),
+        max_pax: departure.max_pax != null
+          ? String(departure.max_pax)
+          : '',
+
+        airline_name: departure.airline_name,
+        departure_flight_no: departure.departure_flight_no,
+        return_flight_no: departure.return_flight_no,
+      })),
+    }
+  }
+
+
+  function isCustomizeSchedule(departures: Departure[]){
+    const first = departures[0]
+
+    return departures.some((departure) =>
+      departure.base_price !== first.base_price ||
+      departure.discounted_price !== first.discounted_price ||
+      departure.min_pax !== first.min_pax ||
+      departure.max_pax !== first.max_pax ||
+      departure.airline_name !== first.airline_name ||
+      departure.departure_flight_no  !== first.departure_flight_no ||
+      departure.return_flight_no !== first.return_flight_no
+    )
+  }
+
   
   // ===============================================================
   // IMAGES & ASSETS FUNCTIONS
@@ -468,6 +563,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillItinerary(tour.itineraries)
     fillRoute(tour.routes)
     fillHotel(tour.hotels)
+    fillSchedule(tour.departures)
     backupOldValues(tour)
   }
 
@@ -552,6 +648,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     containsSelectedDates,
     handleCustomizeChange,
     transformSchedules,
+    fillSchedule,
 
     
     addImage,

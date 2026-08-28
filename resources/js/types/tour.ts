@@ -55,9 +55,24 @@ export interface Hotel {
     link?: string | null
 }
 
+export interface Departure {
+    tour_id:number;
+    base_price: number;
+    discounted_price?: number | null;
+    min_pax: number;
+    max_pax?: number | null;
+    departure_date: string
+    return_date: string;
+    airline_name: string;
+    departure_flight_no: string;
+    return_flight_no: string;
+    is_active: boolean;
+}
+
 export type TourWithRelationshipTables = Tour & {
     itineraries: Itinerary[];
     routes:  Route[];
     hotels:  Hotel[];
+    departures: Departure[];
 };
 
