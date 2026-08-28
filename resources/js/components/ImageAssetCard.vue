@@ -43,15 +43,10 @@ function formatFileSize(size: number) {
 <template>
     <div
         class="group relative flex h-80 w-full flex-col overflow-hidden rounded-xl border border-border bg-background shadow-sm transition-all duration-200 hover:shadow-md"
-        :class="[
-            props.class,
-            isPinned
-                ? 'border-green-500 ring-2 ring-green-500/15'
-                : '',
-        ]"
+        :class="props.class"
     >
         <!-- Image -->
-        <div class="relative h-1/2 w-full overflow-hidden bg-muted">
+        <div class="relative h-2/3 w-full overflow-hidden bg-muted">
             <img
                 :src="previewUrl"
                 :alt="file.name"
@@ -78,7 +73,7 @@ function formatFileSize(size: number) {
                 class="absolute right-2 top-2 flex items-center gap-1.5"
             >
                 <!-- Pin -->
-                <button
+                <!-- <button
                     type="button"
                     class="flex size-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-green-500/10 hover:text-green-600"
                     :class="{
@@ -95,7 +90,7 @@ function formatFileSize(size: number) {
                             'rotate-45': isPinned,
                         }"
                     />
-                </button>
+                </button> -->
 
                 <!-- Delete -->
                 <button
