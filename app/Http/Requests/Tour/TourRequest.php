@@ -58,6 +58,13 @@ class TourRequest extends FormRequest
             );
         }
 
+        if ($this->has('assets')) {
+            $data['assets'] = json_decode(
+                $this->input('assets'),
+                true
+            );
+        }
+
         $this->merge($data);
     }
 
@@ -79,12 +86,15 @@ class TourRequest extends FormRequest
 
             // ROUTES
             $this->routesRules(),
-            
+
             // HOTELS
             $this->hotelRules(),
 
             // SCHEDULES
             $this->scheduleRules(),
+
+            // ASSETS
+            $this->assetsRules(),
         );
     }
 
@@ -94,8 +104,9 @@ class TourRequest extends FormRequest
             $this->overviewErrorMessages(),
             $this->itineraryErrorMessages(),
             $this->routesErrorMessages(),
-            $this->hotelMessages(),
-            $this->scheduleMessages(),
+            $this->hotelErrorMessages(),
+            $this->scheduleErrorMessages(),
+            $this->assetsErrorMessages(),
         );
     }
         
