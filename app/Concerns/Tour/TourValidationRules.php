@@ -305,7 +305,7 @@ trait TourValidationRules
         ];
     }
 
-    protected function hotelMessages(): array
+    protected function hotelErrorMessages(): array
     {
         return [
             'hotels.array' => 'Hotels must be a valid list.',
@@ -386,7 +386,7 @@ trait TourValidationRules
         ];
     }
 
-    protected function scheduleMessages(): array
+    protected function scheduleErrorMessages(): array
     {
         return [
             'schedules.array' => 'Schedules must be a valid list.',
@@ -423,6 +423,43 @@ trait TourValidationRules
 
             'schedules.*.return_flight_no.required' => 'Return flight number is required.',
             'schedules.*.return_flight_no.date' => 'Return flight number must be a date.',
+        ];
+    }
+
+    public function assetsRules(): array
+    {
+        return [
+            'images' => [
+                'nullable',
+                'array',
+            ],
+
+            'images.*' => [
+                'file',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120', // 5 MB in KB
+            ],
+
+            'video' => [
+                'nullable',
+                'file',
+                'mimes:mp4,webm',
+                'max:51200', // 50 MB in KB
+            ],
+        ];
+    }
+
+    public function assetsErrorMessages(): array
+    {
+        return [
+            'images.array' => 'Images must be a valid list of files.',
+            'images.*.file' => 'Each image must be a valid file.',
+            'images.*.mimes' => 'Images must be JPG, PNG, or WebP.',
+            'images.*.max' => 'Each image must not exceed 5 MB.',
+
+            'video.file' => 'The video must be a valid file.',
+            'video.mimes' => 'The video must be MP4 or WebM.',
+            'video.max' => 'The video must not exceed 50 MB.',
         ];
     }
 }
