@@ -40,6 +40,7 @@ export interface MultiDatePickerProps {
      * Text classes
      */
     textClass?: string
+    disabled?: boolean
 }
 
 const props = withDefaults(
@@ -53,6 +54,7 @@ const props = withDefaults(
         calendarClass: '',
         iconClass: '',
         textClass: '',
+        disabled:false,
     }
 )
 
@@ -179,32 +181,52 @@ const displayValue = computed<string>(() => {
 <template>
     <Popover>
         <PopoverTrigger as-child>
-            <Button type="button" variant="outline" :class="cn(
-                'h-9 w-full justify-start gap-2 flex items-center justify-between',
-                triggerClass
-            )">
-                <span :class="cn(
-                    'truncate text-sm',
-                    {
-                        'text-muted-foreground':
-                            props.modelValue.length === 0,
-                    },
-                    textClass
-                )">
+            <Button
+                :disabled="props.disabled"
+                type="button"
+                variant="outline"
+                :class="cn(
+                    'h-9 w-full justify-start gap-2 flex items-center justify-between',
+                    triggerClass
+                )"
+            >
+                <span
+                    :class="cn(
+                        'truncate text-sm',
+                        {
+                            'text-muted-foreground':
+                                props.modelValue.length === 0,
+                        },
+                        textClass
+                    )"
+                >
                     {{ displayValue }}
                 </span>
-                <Icon icon="iconoir:calendar" :class="cn(
-                    'size-4 shrink-0',
-                    iconClass
-                )" />
+
+                <Icon
+                    icon="iconoir:calendar"
+                    :class="cn(
+                        'size-4 shrink-0',
+                        iconClass
+                    )"
+                />
             </Button>
         </PopoverTrigger>
 
-        <PopoverContent align="start" :class="cn(
-            'w-auto p-0',
-            contentClass
-        )">
-            <Calendar v-model="calendarDates" multiple initial-focus :class="calendarClass" />
+        <PopoverContent
+            v-if="!props.disabled"
+            align="start"
+            :class="cn(
+                'w-auto p-0',
+                contentClass
+            )"
+        >
+            <Calendar
+                v-model="calendarDates"
+                multiple
+                initial-focus
+                :class="calendarClass"
+            />
         </PopoverContent>
     </Popover>
 </template>

@@ -12,6 +12,7 @@ interface ComponentProps {
     placeholder?: string
     class?: string
     calendarClass?: string
+    disabled?: boolean
 }
 
 const props = withDefaults(
@@ -21,6 +22,7 @@ const props = withDefaults(
         placeholder: 'Select Date',
         class: '',
         calendarClass: '',
+        disabled: false,
     }
 )
 
@@ -114,7 +116,7 @@ const displayValue = computed(() => {
 <template>
     <Popover>
         <PopoverTrigger as-child>
-            <Button type="button" variant="outline" :class="cn(
+            <Button :disabled="disabled" type="button" variant="outline" :class="cn(
                 'h-9 w-full flex items-center justify-between gap-2',
                 props.class
             )">
