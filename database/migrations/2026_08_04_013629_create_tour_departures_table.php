@@ -20,6 +20,9 @@ return new class extends Migration
             $table->unsignedInteger('max_pax')->nullable();
             $table->date('departure_date');
             $table->date('return_date');
+            $table->string('airline_name');
+            $table->string('departure_flight_no', 90);
+            $table->string('return_flight_no', 90);
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

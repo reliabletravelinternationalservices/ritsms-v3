@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 class TourDeparture extends Model
 {
@@ -19,7 +20,14 @@ class TourDeparture extends Model
         'max_pax',
         'departure_date',
         'return_date',
+        'departure_flight_no',
+        'return_flight_no',
+        'airline_name',
         'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
 
