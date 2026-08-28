@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { Upload } from 'lucide-vue-next'
 
 interface Props {
-  modelValue?: File[]
+  modelValue?: File[] | File | null
   accept?: string
   maxSize?: number
   minSize?: number
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: () => [],
+  modelValue: null,
   accept: 'image/jpeg,image/png,image/webp',
   maxSize: 5,
   minSize: 0.01,
@@ -25,33 +25,73 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [files: File[]]
+  'update:modelValue': [value: File[] | File | null]
   change: [files: File[]]
   error: [message: string]
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
-const error = ref('')
+const message = ref('')
 
-const acceptedExtensions = computed(() => {
+const acceptedTypes = computed(() => {
   return props.accept
     .split(',')
-    .map(type => {
-      const value = type.trim().toLowerCase()
+    .map(type => type.trim().toLowerCase())
+    .filter(Boolean)
+})
 
-      if (value === 'image/jpeg') return 'JPG'
-      if (value === 'image/png') return 'PNG'
-      if (value === 'image/webp') return 'WebP'
-
-      return type.trim()
-    })
+const acceptedExtensions = computed(() => {
+  return acceptedTypes.value
+    .map(formatAcceptType)
     .filter(
       (value, index, array) =>
         array.indexOf(value) === index,
     )
     .join(', ')
 })
+
+const hasRecommendedResolution = computed(() => {
+  return (
+    props.recommendedWidth > 0 &&
+    props.recommendedHeight > 0
+  )
+})
+
+function formatAcceptType(type: string): string {
+  const formats: Record<string, string> = {
+    'image/jpeg': 'JPG',
+    'image/png': 'PNG',
+    'image/webp': 'WebP',
+    'image/gif': 'GIF',
+    'image/svg+xml': 'SVG',
+    'video/mp4': 'MP4',
+    'video/webm': 'WebM',
+    'video/quicktime': 'MOV',
+    'audio/mpeg': 'MP3',
+    'audio/wav': 'WAV',
+    'audio/ogg': 'OGG',
+    'application/pdf': 'PDF',
+    'application/msword': 'DOC',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      'DOCX',
+    'application/vnd.ms-excel': 'XLS',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      'XLSX',
+    'text/plain': 'TXT',
+  }
+
+  if (formats[type]) {
+    return formats[type]
+  }
+
+  if (type === 'image/*') return 'Images'
+  if (type === 'video/*') return 'Videos'
+  if (type === 'audio/*') return 'Audio'
+  if (type === 'application/*') return 'Documents'
+
+  return type
+}
 
 function openFileBrowser() {
   if (props.disabled) {
@@ -107,9 +147,8 @@ function handleDragLeave() {
 }
 
 async function processFiles(files: File[]) {
-  error.value = ''
+  message.value = ''
 
-  // If multiple=false, only use first file
   const filesToProcess = props.multiple
     ? files
     : files.slice(0, 1)
@@ -128,34 +167,33 @@ async function processFiles(files: File[]) {
     return
   }
 
-  /*
-   * Multiple:
-   * Append new files to existing files.
-   *
-   * Single:
-   * Replace existing file.
-   */
-  const newFiles = props.multiple
-    ? [...props.modelValue, ...validFiles]
-    : validFiles
+  if (props.multiple) {
+    const existingFiles = Array.isArray(props.modelValue)
+      ? props.modelValue
+      : []
 
-  emit('update:modelValue', newFiles)
+    const newFiles = [
+      ...existingFiles,
+      ...validFiles,
+    ]
+
+    emit('update:modelValue', newFiles)
+  } else {
+    emit('update:modelValue', validFiles[0] ?? null)
+  }
+
   emit('change', validFiles)
 }
 
 async function validateFile(file: File): Promise<boolean> {
   const fileSizeMB = file.size / (1024 * 1024)
 
-  const acceptedTypes = props.accept
-    .split(',')
-    .map(type => type.trim().toLowerCase())
-
   /*
    * File type
    */
-  if (!acceptedTypes.includes(file.type.toLowerCase())) {
+  if (!isAcceptedType(file.type)) {
     setError(
-      `${file.name}: Invalid file type. Please upload ${acceptedExtensions.value} only.`,
+      `Invalid file type. Please upload ${acceptedExtensions.value} only.`,
     )
 
     return false
@@ -166,7 +204,7 @@ async function validateFile(file: File): Promise<boolean> {
    */
   if (fileSizeMB < props.minSize) {
     setError(
-      `${file.name}: File is too small. Minimum file size is ${props.minSize}MB.`,
+      `File is too small. Minimum file size is ${props.minSize}MB.`,
     )
 
     return false
@@ -177,7 +215,7 @@ async function validateFile(file: File): Promise<boolean> {
    */
   if (fileSizeMB > props.maxSize) {
     setError(
-      `${file.name}: File is too large. Maximum file size is ${props.maxSize}MB.`,
+      `File is too large. Maximum file size is ${props.maxSize}MB.`,
     )
 
     return false
@@ -185,15 +223,35 @@ async function validateFile(file: File): Promise<boolean> {
 
   /*
    * Image resolution
+   *
+   * This is only a warning.
+   * The image will still be accepted.
    */
-  if (file.type.startsWith('image/')) {
-    return await validateImageDimensions(file)
+  if (
+    file.type.startsWith('image/') &&
+    hasRecommendedResolution.value
+  ) {
+    await checkImageDimensions(file)
   }
 
   return true
 }
 
-function validateImageDimensions(file: File): Promise<boolean> {
+function isAcceptedType(fileType: string): boolean {
+  const normalizedFileType = fileType.toLowerCase()
+
+  return acceptedTypes.value.some(type => {
+    if (type.endsWith('/*')) {
+      const category = type.split('/')[0]
+
+      return normalizedFileType.startsWith(`${category}/`)
+    }
+
+    return type === normalizedFileType
+  })
+}
+
+function checkImageDimensions(file: File): Promise<void> {
   return new Promise(resolve => {
     const image = new Image()
     const objectUrl = URL.createObjectURL(file)
@@ -201,44 +259,43 @@ function validateImageDimensions(file: File): Promise<boolean> {
     image.onload = () => {
       URL.revokeObjectURL(objectUrl)
 
-      if (
+      const isTooSmall =
         image.width < props.recommendedWidth ||
         image.height < props.recommendedHeight
-      ) {
-        setError(
-          `${file.name}: Image resolution is too low. Recommended size is ${props.recommendedWidth}×${props.recommendedHeight}px.`,
-        )
 
-        resolve(false)
-        return
+      if (isTooSmall) {
+        setWarning(
+          `Image resolution is below the recommended ${props.recommendedWidth}×${props.recommendedHeight}px. It will still be uploaded.`,
+        )
       }
 
-      resolve(true)
+      resolve()
     }
 
     image.onerror = () => {
       URL.revokeObjectURL(objectUrl)
 
-      setError(
-        `${file.name}: Unable to read the image.`,
-      )
+      setError('Unable to read the image.')
 
-      resolve(false)
+      resolve()
     }
 
     image.src = objectUrl
   })
 }
 
-function setError(message: string) {
-  error.value = message
-  emit('error', message)
+function setError(newMessage: string) {
+  message.value = newMessage
+  emit('error', newMessage)
+}
+
+function setWarning(text: string) {
+  message.value = text
 }
 </script>
 
 <template>
   <div class="w-full">
-    <!-- Upload area -->
     <div
       class="relative flex min-h-[138px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-amber-500 bg-[#faf9f6] px-6 py-5 text-center transition-colors"
       :class="[
@@ -255,7 +312,6 @@ function setError(message: string) {
       @dragleave="handleDragLeave"
       @drop="handleDrop"
     >
-      <!-- Upload icon -->
       <div class="mb-3">
         <Upload
           :size="38"
@@ -264,7 +320,6 @@ function setError(message: string) {
         />
       </div>
 
-      <!-- Main text -->
       <p class="text-sm font-semibold text-foreground">
         Drag and drop
         {{ multiple ? 'files' : 'a file' }}
@@ -282,21 +337,21 @@ function setError(message: string) {
         to begin the upload
       </p>
 
-      <!-- Information -->
       <p class="mt-1.5 text-xs text-muted-foreground">
         Format: {{ acceptedExtensions }}
         |
-        Recommended size:
-        {{ recommendedWidth }}x{{ recommendedHeight }}
-        |
-        Max file size:
+        <template v-if="hasRecommendedResolution">
+          Recommended:
+          {{ recommendedWidth }}×{{ recommendedHeight }}px
+          |
+        </template>
+        Max:
         {{ maxSize }}MB
         |
         Min:
         {{ minSize }}MB
       </p>
 
-      <!-- File input -->
       <input
         ref="fileInput"
         type="file"
@@ -308,12 +363,11 @@ function setError(message: string) {
       />
     </div>
 
-    <!-- Error -->
     <p
-      v-if="error"
-      class="mt-2 text-sm text-destructive"
+      v-if="message"
+      class="mt-2 text-sm italic text-yellow-600 dark:text-yellow-500"
     >
-      {{ error }}
+      {{ message }}
     </p>
   </div>
 </template>
