@@ -6,6 +6,12 @@ import Input from '@/components/ui/input/Input.vue'
 import { useTourFormStore } from '@/stores/tourForm'
 import { Icon } from '@iconify/vue'
 
+interface Props {
+    isLoading?: boolean
+}
+
+defineProps<Props>()
+    
 const tourForm = useTourFormStore()
 
 const ratings: SelectOption[] = [
@@ -63,7 +69,7 @@ const ratings: SelectOption[] = [
                     class="space-y-6 rounded-md border border-border p-8">
                     <span class="text-sm font-bold text-muted-foreground uppercase">
                         <span class="flex items-center justify-end gap-2">
-                            <ButtonIcon @click="tourForm.removeHotel(index)" icon="lucide:trash-2"
+                            <ButtonIcon :disabled="isLoading" @click="tourForm.removeHotel(index)" icon="lucide:trash-2"
                                 class="text-red-600 bg-transparent hover:bg-red-50" />
                         </span>
                     </span>
@@ -75,7 +81,7 @@ const ratings: SelectOption[] = [
                                     Name
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <Input :id="`hotel-${index + 1}-name`" v-model="hotel.name" placeholder="Hotel name"
+                                <Input :disabled="isLoading" :id="`hotel-${index + 1}-name`" v-model="hotel.name" placeholder="Hotel name"
                                     class="font-roboto text-sm" />
                                 <InputError :message="tourForm.errors['hotels.' + index + '.name']" />
                             </div>
@@ -86,7 +92,7 @@ const ratings: SelectOption[] = [
                                     <span class="text-red-600">*</span>
                                 </label>
 
-                                <SelectMenu :id="`hotel-${index + 1}-rate`" v-model="hotel.rate"
+                                <SelectMenu :disabled="isLoading" :id="`hotel-${index + 1}-rate`" v-model="hotel.rate"
                                     placeholder="Select rate" :options="ratings" class="font-roboto text-sm" />
                                 <InputError :message="tourForm.errors['hotels.' + index + '.rate']" />
                             </div>
@@ -96,7 +102,7 @@ const ratings: SelectOption[] = [
                                     Link
                                     <span class="text-muted-foreground text-sm italic">(Optional)</span>
                                 </label>
-                                <Input :id="`hotel-${index + 1}-link`" v-model="hotel.link" placeholder="Hotel link"
+                                <Input :disabled="isLoading" :id="`hotel-${index + 1}-link`" v-model="hotel.link" placeholder="Hotel link"
                                     class="font-roboto text-sm" />
                                 <InputError :message="tourForm.errors['hotels.' + index + '.link']" />
                             </div>
@@ -107,7 +113,7 @@ const ratings: SelectOption[] = [
             </div>
 
             <div class="w-full">
-                <button type="button" @click="tourForm.addHotel()"
+                <button :disabled="isLoading" type="button" @click="tourForm.addHotel()"
                     class="w-full text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.04)] border-2 border-dashed border-border px-4 py-2.5 text-sm font-medium transition-all duration-150 rounded-md hover:bg-[rgb(var(--color-primary)/0.08)]">+
                     Add Hotel</button>
             </div>

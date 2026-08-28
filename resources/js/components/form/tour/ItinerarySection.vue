@@ -7,6 +7,12 @@ import { Icon } from '@iconify/vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTourFormStore } from '@/stores/tourForm'
 
+interface Props {
+    isLoading?: boolean
+}
+
+defineProps<Props>()
+
 const tourForm = useTourFormStore()
 
 function syncDayNumbers() {
@@ -69,6 +75,7 @@ function handleDragEnd() {
                 handle=".drag-handle"
                 class="flex flex-col gap-4 p-4"
                 @end="handleDragEnd"
+                :disabled="isLoading"
             >
                 <div
                     v-for="(itinerary, index) in tourForm.form.itineraries"
@@ -81,6 +88,7 @@ function handleDragEnd() {
 
                             <!-- DRAG HANDLE -->
                             <button
+                                :disabled="isLoading"
                                 type="button"
                                 class="drag-handle cursor-grab touch-none text-muted-foreground hover:text-foreground active:cursor-grabbing"
                                 title="Drag to reorder"
@@ -102,6 +110,7 @@ function handleDragEnd() {
                         <!-- DELETE -->
                         <ButtonIcon
                             type="button"
+                            :disabled="isLoading"
                             @click="
                                 tourForm.removeItineraryDay(
                                     itinerary.day_no
@@ -123,6 +132,7 @@ function handleDragEnd() {
                         </label>
 
                         <Input
+                            :disabled="isLoading"
                             :id="`day-${itinerary._id}-title`"
                             v-model="itinerary.title"
                             placeholder="Enter day title"
@@ -154,6 +164,7 @@ function handleDragEnd() {
                         </label>
 
                         <TextArea
+                            :disabled="isLoading"
                             v-model="itinerary.activities"
                             placeholder="Enter activities"
                             class="font-roboto text-sm"
@@ -178,6 +189,7 @@ function handleDragEnd() {
             <!-- ADD DAY -->
             <div class="w-full" v-if="!tourForm.isExeedItineraryDurationConstaint('max')">
                 <button
+                    :disabled="isLoading"
                     type="button"
                     @click="tourForm.addItineraryDay()"
                     class="w-full rounded-md border-2 border-dashed border-border bg-[rgb(var(--color-primary)/0.04)] px-4 py-2.5 text-sm font-medium text-[rgb(var(--color-primary))] transition-all duration-150 hover:bg-[rgb(var(--color-primary)/0.08)]"

@@ -7,6 +7,12 @@ import { useReferenceDataStore } from '@/stores/referenceData'
 import { useTourFormStore } from '@/stores/tourForm'
 import { Icon } from '@iconify/vue'
 
+interface Props {
+    isLoading?: boolean
+}
+
+defineProps<Props>()
+    
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 </script>
@@ -69,6 +75,7 @@ const referenceData = useReferenceDataStore()
                         </span>
 
                         <ButtonIcon
+                            :disabled="isLoading"
                             @click="tourForm.removeRoute(index)"
                             icon="lucide:trash-2"
                             class="text-red-600 bg-transparent hover:bg-red-50"
@@ -93,6 +100,7 @@ const referenceData = useReferenceDataStore()
                                 </label>
 
                                 <SelectMenu
+                                    :disabled="isLoading"
                                     :id="`departure-route-${index + 1}-country`"
                                     v-model="route.departure_country_id"
                                     placeholder="Select country"
@@ -112,6 +120,7 @@ const referenceData = useReferenceDataStore()
                                 </label>
 
                                 <Input
+                                    :disabled="isLoading"
                                     :id="`departure-route-${index + 1}-location`"
                                     v-model="route.departure_city"
                                     placeholder="Location"
@@ -152,6 +161,7 @@ const referenceData = useReferenceDataStore()
                                 </label>
 
                                 <SelectMenu
+                                    :disabled="isLoading"
                                     :id="`destination-route-${index + 1}-country`"
                                     v-model="route.destination_country_id"
                                     placeholder="Select country"
@@ -171,6 +181,7 @@ const referenceData = useReferenceDataStore()
                                 </label>
 
                                 <Input
+                                    :disabled="isLoading"
                                     :id="`destination-route-${index + 1}-location`"
                                     v-model="route.destination_city"
                                     placeholder="Location"
@@ -188,6 +199,7 @@ const referenceData = useReferenceDataStore()
             <!-- ADD ROUTE -->
             <div v-if="!tourForm.isOnRouteLimit()" class="w-full">
                 <button
+                    :disabled="isLoading"
                     type="button"
                     @click="tourForm.addRoute()"
                     class="w-full text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.04)] border-2 border-dashed border-border px-4 py-2.5 text-sm font-medium transition-all duration-150 rounded-md hover:bg-[rgb(var(--color-primary)/0.08)]"

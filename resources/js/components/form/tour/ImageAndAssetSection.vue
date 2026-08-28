@@ -6,7 +6,11 @@ import FileInput from '@/components/FileInput.vue'
 import ImageAssetCard from '@/components/ImageAssetCard.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
+interface Props {
+    isLoading?: boolean
+}
 
+defineProps<Props>()
 
 const tourForm = useTourFormStore();
 
