@@ -73,6 +73,10 @@ interface CustomSchedule {
     min_pax: string,
     max_pax?: string,
 }
+interface Asset {
+  images: File[],
+  video?:  File
+}
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
 
@@ -92,10 +96,10 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
     schedules: {} as Schedule,
 
-    imageAndAssetItems: {
-      thumbnail: null as number | null,
-      additional_images: [] as File[],
-    },
+    assets: {
+        images: [],
+        video: undefined,
+    } as Asset
   })
 
   const sections = [
@@ -487,9 +491,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
         ? String(first.discounted_price)
         : '',
 
-      def_airline_name: '',
-      def_departure_flight_no: '',
-      def_return_flight_no: '',
+      def_airline_name: first.airline_name,
+      def_departure_flight_no: first.departure_flight_no,
+      def_return_flight_no: first.return_flight_no,
 
       def_min_pax: String(first.min_pax),
       def_max_pax: first.max_pax != null
@@ -538,21 +542,24 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ===============================================================
   
   function addImage(file: File) {
-    form.value.imageAndAssetItems.additional_images.push(file)
+    form.value.assets.images.push(file)
   }
 
   function removeImage(index: number) {
-    form.value.imageAndAssetItems.additional_images.splice(index, 1)
+    form.value.assets.images.splice(index, 1)
   }
 
-  function setThumbnail(index: number) {
-    if (index === form.value.imageAndAssetItems.thumbnail) {
-      form.value.imageAndAssetItems.thumbnail = null
-      return
-    }
-    form.value.imageAndAssetItems.thumbnail = index
+  function addVideo(file: File){
+    form.value.assets.video = file
   }
 
+  function removeVideo(){
+    form.value.assets.video = undefined
+  }
+
+  function  transformAsset(){
+    return form.value.assets
+  }
 
 
   // ==============================================================
@@ -653,7 +660,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     
     addImage,
     removeImage,
-    setThumbnail,
+    addVideo,
+    removeVideo,
+    transformAsset,
 
 
     fillFormWithTourData,
