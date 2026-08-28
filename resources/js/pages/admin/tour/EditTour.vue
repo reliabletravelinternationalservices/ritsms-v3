@@ -140,7 +140,7 @@ function resetFormChanges(){
             <div class="flex justify-end gap-4 border-y py-2 px-6 border-border">
                 <Button variant="default"
                     class="flex items-center gap-2 bg-zinc-600 hover:bg-zinc-400 text-white"
-                    :disabled="isReseting"
+                    :disabled="isReseting || isSaving"
                     @click="resetFormChanges()"
                     >
 
@@ -158,7 +158,7 @@ function resetFormChanges(){
 
                 <Button variant="default"
                     class="flex items-center gap-2 bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary)/0.8)] text-white"
-                    :disabled="isSaving"
+                    :disabled="isReseting || isSaving"
                     @click="saveTourChanges">
                     <Icon
                         v-if="isSaving"
@@ -180,7 +180,7 @@ function resetFormChanges(){
                 <PublishStatusDropdown />
             </div>
             <div class="p-6">
-                <TourForm :is-create-new="false" />
+                <TourForm :is-create-new="false" :is-loading="isSaving || isReseting" />
             </div>
             <ScrollToTopButton />
         </div>
