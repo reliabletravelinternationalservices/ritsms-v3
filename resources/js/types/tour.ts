@@ -1,3 +1,5 @@
+import { Media } from "./media-v2";
+
 export interface Tour {
     id: number;
     code: string;
@@ -74,5 +76,6 @@ export type TourWithRelationshipTables = Tour & {
     routes:  Route[];
     hotels:  Hotel[];
     departures: Departure[];
+    media: Media[]
 };
 

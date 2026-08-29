@@ -96,40 +96,35 @@ class MediaService
         $result = Process::run([
             'ffmpeg',
             '-y',
-
-            // Input
             '-i',
             $inputPath,
 
-            // Keep original aspect ratio and never upscale.
+            // Never upscale, maximum 1920x1080
             '-vf',
-            "scale='min(iw,1920)':'min(ih,1080)':force_original_aspect_ratio=decrease",
+            "scale='if(gt(iw,1920),1920,iw)':'if(gt(ih,1080),1080,ih)':force_original_aspect_ratio=decrease",
 
-            // Video codec
+            // H.264
             '-c:v',
             'libx264',
 
-            // Quality / compression
+            // Quality
             '-crf',
-            '23',
+            '24',
 
-            // Encoding speed
+            // Good balance between speed and compression
             '-preset',
             'medium',
 
-            // Audio codec
+            // Audio
             '-c:a',
             'aac',
-
-            // Audio bitrate
             '-b:a',
             '128k',
 
-            // Better progressive playback
+            // Better web playback
             '-movflags',
             '+faststart',
 
-            // Output
             $outputPath,
         ]);
 

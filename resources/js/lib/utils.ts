@@ -183,6 +183,36 @@ export const getImageUrl = (path: string) => {
 }
 
 
+export function getImagePath(
+    path: string,
+    size: 'thumbnail' | 'medium' | 'large' = 'large',
+): string {
+    const normalizedPath = path.replace(/^\/+|\/+$/g, '')
+
+    const lastSlash = normalizedPath.lastIndexOf('/')
+
+    if (lastSlash === -1) {
+        return `/storage/${size}/${normalizedPath}`
+    }
+
+    const directory = normalizedPath.substring(0, lastSlash)
+    const filename = normalizedPath.substring(lastSlash + 1)
+
+    return `/storage/${directory}/${size}/${filename}`
+}
+
+
+export function getMediaUrl(
+    path: string,
+    disk: 'local' | 'public' | 'cloudinary' | 's3' = 'public',
+): string {
+    if (disk === 'public') {
+        return `/storage/${path}`
+    }
+
+    // Add other disk handling later.
+    return path
+}
 
 
 export function getDestinationIdByCountry(
@@ -197,6 +227,9 @@ export function getDestinationIdByCountry(
     );
 }
 
+export function isFile(value: unknown): value is File {
+    return value instanceof File
+}
 
 export const normalizeText = (value: string | undefined | null) => value?.trim().toLowerCase() ?? '';
 

@@ -5,6 +5,7 @@ import { Departure, Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { Itinerary as NewItinerary, Route as NewRoute,  Hotel as NewHotel }  from '@/types/tour'
+import { MediaAsset } from '@/types/media-v2'
 
 const SECTION = {
   OVERVIEW: 'overview',
@@ -73,9 +74,11 @@ interface CustomSchedule {
     min_pax: string,
     max_pax?: string,
 }
+
+
 interface Asset {
-  images: File[],
-  video?:  File
+  images: MediaAsset[],
+  video?:  MediaAsset
 }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
@@ -541,8 +544,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // IMAGES & ASSETS FUNCTIONS
   // ===============================================================
   
-  function addImage(file: File) {
-    form.value.assets.images.push(file)
+  function addImages(files: File[]) {
+      const images: MediaAsset[] = files.map((file) => ({
+          key: generateId(),
+          status: 'new',
+          file,
+      }))
+
+      form.value.assets.images.push(...images)
   }
 
   function removeImage(index: number) {
@@ -550,7 +559,13 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function addVideo(file: File){
-    form.value.assets.video = file
+    const video: MediaAsset = {
+      key: generateId(),
+      status: 'new',
+      file: file
+    }
+
+    form.value.assets.video = video
   }
 
   function removeVideo(){
@@ -658,7 +673,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillSchedule,
 
     
-    addImage,
+    addImages,
     removeImage,
     addVideo,
     removeVideo,

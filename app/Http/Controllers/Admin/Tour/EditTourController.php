@@ -19,7 +19,7 @@ class EditTourController extends Controller
 
     public function edit(string $slug): \Inertia\Response
     {
-        $tour = Tour::with(['itineraries', 'routes', 'hotels', 'departures'])
+        $tour = Tour::with(['itineraries', 'routes', 'hotels', 'departures',  'media'])
             ->where('slug', $slug)
             ->whereNull('deleted_at')
             ->firstOrFail();
@@ -81,10 +81,10 @@ class EditTourController extends Controller
                     'collection' => 'gallery',
                     'file_name' => basename($path),
                     'file_path' => $path,
+                    'alt_text' => basename($path),
                     'disk' => 'public',
                     'type' => 'image',
                     'mime_type' => 'image/webp',
-                    'size' => Storage::disk('public')->size($path),
                 ]);
             }
 
@@ -99,6 +99,7 @@ class EditTourController extends Controller
                     'collection' => 'video',
                     'file_name' => basename($path),
                     'file_path' => $path,
+                    'alt_text' => basename($path),
                     'disk' => 'public',
                     'type' => 'video',
                     'mime_type' => 'video/mp4',

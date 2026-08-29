@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createObjectURL } from '@/lib/utils'
+import { createObjectURL, getImagePath, isFile } from '@/lib/utils'
 import { useTourFormStore } from '@/stores/tourForm'
 
 import FileInput from '@/components/FileInput.vue'
@@ -33,13 +33,13 @@ function removeVideo() {
 
             <div class="space-y-4 p-4">
                 <FileInput
-                    v-model="tourForm.form.assets.images"
                     accept="image/jpeg,image/png,image/webp"
                     :maxSize="5"
                     :minSize="0.01"
                     :recommendedWidth="1600"
                     :recommendedHeight="900"
                     :multiple="true"
+                    :change="tourForm.addImages"
                 />
 
                 <VueDraggable
@@ -52,11 +52,11 @@ function removeVideo() {
                 >
                     <ImageAssetCard
                         v-for="(value, index) in tourForm.form.assets.images"
-                        :key="`${value.name}-${value.lastModified}`"
+                        :key="`${value.key}`"
                         class="w-full"
-                        :file="value"
+                        :file="value.file"
                         :index="index"
-                        :preview-url="createObjectURL(value)"
+                        :preview-url="isFile(value.file)? createObjectURL(value.file)  : getImagePath(value.file.file_path, 'thumbnail')"
                         @delete="tourForm.removeImage"
                     />
                 </VueDraggable>

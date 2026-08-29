@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import { Media } from '@/types/media-v2'
+import { getImagePath, isFile } from '@/lib/utils'
 
 interface Props {
     class?: string
-    file: File
+    file: File | Media
     index: number
-    isPinned?: boolean
     previewUrl?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    isPinned: false,
     previewUrl: '',
 })
 
@@ -18,10 +18,6 @@ const emit = defineEmits<{
     pin: [index: number]
     delete: [index: number]
 }>()
-
-function handlePin(index: number) {
-    emit('pin', index)
-}
 
 function handleDelete(index: number) {
     emit('delete', index)
@@ -49,7 +45,7 @@ function formatFileSize(size: number) {
         <div class="relative h-2/3 w-full overflow-hidden bg-muted">
             <img
                 :src="previewUrl"
-                :alt="file.name"
+                :alt="isFile(file)? file.name: file.alt_text"
                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
 
@@ -107,7 +103,7 @@ function formatFileSize(size: number) {
             </div>
 
             <!-- Pinned badge -->
-            <div
+            <!-- <div
                 v-if="isPinned"
                 class="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-green-500 px-2.5 py-1 text-xs font-medium text-white shadow-sm"
             >
@@ -117,7 +113,7 @@ function formatFileSize(size: number) {
                 />
 
                 Thumbnail
-            </div>
+            </div> -->
         </div>
 
         <!-- Content -->
@@ -125,9 +121,9 @@ function formatFileSize(size: number) {
             <div class="space-y-1">
                 <p
                     class="truncate text-sm font-medium text-foreground"
-                    :title="file.name"
+                    :title="isFile(file)?  file.name : file.file_name"
                 >
-                    {{ file.name }}
+                    {{ isFile(file)? file.name: file.file_name }}
                 </p>
 
                 <p class="text-xs text-muted-foreground">
