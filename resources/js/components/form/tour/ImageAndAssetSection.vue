@@ -85,11 +85,11 @@ function removeVideo() {
             <div class="space-y-4 p-4">
                 <!-- Upload -->
                 <FileInput
-                    v-model="tourForm.form.assets.video"
                     accept="video/mp4,video/webm"
                     :maxSize="50"
                     :minSize="0.01"
                     :multiple="false"
+                    :change="tourForm.addVideo"
                 />
 
                 <!-- Video Card -->
