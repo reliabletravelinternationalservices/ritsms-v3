@@ -7,19 +7,24 @@ import {
     FileVideo,
 } from 'lucide-vue-next'
 import { Media } from '@/types/media-v2'
-import { isFile } from '@/lib/utils';
+import { getMediaUrl, isFile } from '@/lib/utils';
 
 interface Props {
     file: File | Media
+    hasNewVideo?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    hasNewVideo: false,
+})
 
 const emit = defineEmits<{
     delete: []
 }>()
 
 const videoUrl = ref('')
+const isNewVideo = computed(() => isFile(props.file))
+const canDeleteVideo = computed(() => !props.hasNewVideo || isNewVideo.value)
 
 const fileSize = computed(() => {
     if (!props.file) return ''
@@ -27,7 +32,7 @@ const fileSize = computed(() => {
     if (isFile(props.file)) {
         videoUrl.value = URL.createObjectURL(props.file)
     } else {
-        videoUrl.value = props.file.file_path
+        videoUrl.value = getMediaUrl(props.file.file_path)
     }
 
     const size =  props.file.size / (1024 * 1024)
@@ -76,6 +81,7 @@ onBeforeUnmount(() => {
             </div>
 
             <button
+                v-if="canDeleteVideo"
                 type="button"
                 class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
                 @click="emit('delete')"

@@ -10,7 +10,7 @@ import { BreadcrumbItem } from '@/types';
 import { TourWithRelationshipTables } from '@/types/tour';
 import { Icon } from '@iconify/vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
 import { useReferenceDataStore } from '@/stores/referenceData'
 import { useAlertDialog } from '@/composables/useAlertDialog';
@@ -31,7 +31,17 @@ const isReseting = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
-tourForm.fillFormWithTourData(props.tour)
+watch(
+    () => props.tour,
+    (tour) => {
+        if (!tour) return
+
+        tourForm.clearFormChanges()
+        tourForm.fillFormWithTourData(tour)
+    },
+    { immediate: true, deep: true }
+)
+
 referenceData.setCountries(props.countries)
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,6 +63,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 function saveTourChanges() {
     isSaving.value = true
+    tourForm.syncMediaOrder()
 
     const formData = new FormData()
 
@@ -85,14 +96,24 @@ function saveTourChanges() {
     tourForm.form.assets.images.forEach((image) => {
         if (isFile(image)) {
             formData.append('images[]', image)
-        } else {
-            formData.append('existing_images[]', image.id.toString())
         }
     })
+
+    if (tourForm.form.assets.mediaOrder.length) {
+        formData.append(
+            'media_order',
+            JSON.stringify(tourForm.form.assets.mediaOrder)
+        )
+    }
 
     tourForm.form.assets.video && isFile(tourForm.form.assets.video)
         ? formData.append('video', tourForm.form.assets.video)
         : null
+
+    formData.append(
+        'removed_media_ids',
+        JSON.stringify(tourForm.form.assets.removedMediaIds)
+    )
 
 
 
@@ -128,7 +149,7 @@ function saveTourChanges() {
                 )
                 tourForm.resetFormChanges()
                 router.reload({
-                    only: ['tours'],
+                    only: ['tour'],
                 })
             },
         },

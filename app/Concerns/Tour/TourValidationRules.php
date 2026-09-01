@@ -447,14 +447,31 @@ trait TourValidationRules
                 'max:51200', // 50 MB in KB
             ],
 
-            'existing_images' => [
+            'removed_media_ids' => [
                 'nullable',
                 'array',
             ],
 
-            'existing_images.*' => [
+            'removed_media_ids.*' => [
                 'integer',
                 'exists:media,id',
+            ],
+
+            'media_order' => [
+                'nullable',
+                'array',
+            ],
+
+            'media_order.*.id' => [
+                'required',
+                'integer',
+                'exists:media,id',
+            ],
+
+            'media_order.*.order_number' => [
+                'required',
+                'integer',
+                'min:1',
             ],
         ];
     }
@@ -470,6 +487,16 @@ trait TourValidationRules
             'video.file' => 'The video must be a valid file.',
             'video.mimes' => 'The video must be MP4 or WebM.',
             'video.max' => 'The video must not exceed 50 MB.',
+            'removed_media_ids.array' => 'Removed media IDs must be a valid list.',
+            'removed_media_ids.*.integer' => 'Each removed media ID must be a valid integer.',
+            'removed_media_ids.*.exists' => 'One or more removed media IDs do not exist in the media table.',
+            'media_order.array' => 'Media order must be a valid list.',
+            'media_order.*.id.required' => 'Each ordered image must include an image id.',
+            'media_order.*.id.integer' => 'Each ordered image id must be a valid integer.',
+            'media_order.*.id.exists' => 'One or more ordered image ids do not exist in the media table.',
+            'media_order.*.order_number.required' => 'Each ordered image must include its new position.',
+            'media_order.*.order_number.integer' => 'Each ordered image position must be a valid integer.',
+            'media_order.*.order_number.min' => 'Each ordered image position must be at least 1.',
         ];
     }
 }

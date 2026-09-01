@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { Media } from '@/types/media-v2'
-import { cn, getImagePath, isFile } from '@/lib/utils'
+import { cn, isFile } from '@/lib/utils'
 import { computed } from 'vue'
 
 interface Props {
@@ -9,11 +9,12 @@ interface Props {
     file: File | Media
     index: number
     previewUrl?: string
-    changed?: boolean
+    hasNewImages?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     previewUrl: '',
+    hasNewImages: false,
 })
 
 const emit = defineEmits<{
@@ -25,7 +26,9 @@ function handleDelete(index: number) {
     emit('delete', index)
 }
 
-function formatFileSize(size: number) {
+function formatFileSize(size?: number) {
+    if (!size) return ''
+
     if (size < 1024) {
         return `${size} B`
     }
@@ -38,6 +41,7 @@ function formatFileSize(size: number) {
 }
 
 const isNewImage = computed(() => isFile(props.file))
+const canDeleteImage = computed(() => !props.hasNewImages || isNewImage.value)
 </script>
 
 <template>
@@ -55,7 +59,7 @@ const isNewImage = computed(() => isFile(props.file))
 
             <!-- Image index -->
             <div
-                v-if="!changed && !isNewImage"
+                v-if="!props.hasNewImages && !isNewImage"
                 class="absolute left-2 top-2 flex size-8 items-center justify-center rounded-full bg-background/90 text-sm font-bold text-foreground shadow-md backdrop-blur-sm"
             >
                 <button
@@ -76,7 +80,7 @@ const isNewImage = computed(() => isFile(props.file))
 
                 <!-- Delete -->
                 <button
-                    v-if="changed && isNewImage"
+                    v-if="canDeleteImage"
                     type="button"
                     class="flex size-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-destructive hover:text-destructive-foreground"
                     title="Delete image"

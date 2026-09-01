@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { createObjectURL, getImagePath, isFile } from '@/lib/utils'
 import { useTourFormStore } from '@/stores/tourForm'
 
@@ -15,10 +16,10 @@ interface Props {
 defineProps<Props>()
 
 const tourForm = useTourFormStore()
-
-function removeVideo() {
-    tourForm.form.assets.video = undefined
-}
+const hasNewImages = computed(() => tourForm.form.assets.images.some(image => isFile(image)))
+const hasNewVideo = computed(() => !!tourForm.form.assets.video && isFile(tourForm.form.assets.video))
+const disableAssetSorting = computed(() => hasNewImages.value || hasNewVideo.value)
+const hasImageChanges = computed(() => hasNewImages.value || tourForm.form.assets.removedMediaIds.length > 0)
 </script>
 
 <template>
@@ -28,7 +29,7 @@ function removeVideo() {
             <div
                 class="flex w-full items-center border-b-2 border-foreground py-2 text-md font-bold uppercase"
             >
-                <span>IMAGES</span>
+                <span>IMAGES <span v-if="hasImageChanges" class="text-muted-foreground text-xs italic">(Unsave changes)</span></span>
             </div>
 
             <div class="space-y-4 p-4">
@@ -47,16 +48,17 @@ function removeVideo() {
                     v-model="tourForm.form.assets.images"
                     class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
                     :animation="200"
+                    :disabled="disableAssetSorting"
                     ghost-class="opacity-50"
                     handle=".drag-handle"
                 >
                     <ImageAssetCard
                         v-for="(image, index) in tourForm.form.assets.images"
-                        :changed="true"
                         :key="`${index}`"
                         class="w-full"
                         :file="image"
                         :index="index"
+                        :has-new-images="hasNewImages"
                         :preview-url="isFile(image) ? createObjectURL(image) : getImagePath(image.file_path)"
                         @delete="tourForm.removeImage"
                     />
@@ -90,7 +92,7 @@ function removeVideo() {
                     :maxSize="50"
                     :minSize="0.01"
                     :multiple="false"
-                    :change="tourForm.addVideo"
+                    @change="tourForm.addVideo"
                 />
 
                 <!-- Video Card -->
@@ -100,6 +102,7 @@ function removeVideo() {
                 >
                     <VideoAssetCard
                         :file="tourForm.form.assets.video"
+                        :has-new-video="hasNewVideo"
                         @delete="tourForm.removeVideo"
                     />
                 </div>

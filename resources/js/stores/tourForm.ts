@@ -75,15 +75,12 @@ interface CustomSchedule {
     max_pax?: string,
 }
 
-interface RemovedMedia {
-  id: number,
-  type: 'image' | 'video' | 'document' | 'audio'
-}
 
 interface Asset {
   images: (File | Media) [],
   video?:  File | Media,
-  removedMedia: RemovedMedia[]
+  removedMediaIds: number[]
+  mediaOrder: { id: number; order_number: number }[]
 }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
@@ -109,7 +106,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
         video: undefined,
         newImages: [],
         newVideo: undefined,
-        removedMedia: []
+        removedMediaIds: [],
+        mediaOrder: []
     } as Asset
   })
 
@@ -552,20 +550,43 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // IMAGES & ASSETS FUNCTIONS
   // ===============================================================
   
+  function syncMediaOrder() {
+    form.value.assets.mediaOrder = form.value.assets.images
+      .filter((image): image is Media => !isFile(image))
+      .map((image, index) => ({
+        id: image.id,
+        order_number: index + 1,
+      }))
+  }
+
   function addImages(files: File[]) {
     form.value.assets.images.push(...files)
+    syncMediaOrder()
   }
 
   function removeImage(index: number) {
-      form.value.assets.images.splice(index, 1)
+    const image = form.value.assets.images[index]
+    if (!isFile(image)) {
+      form.value.assets.removedMediaIds.push(image.id)
+    }
+    form.value.assets.images.splice(index, 1)
+    syncMediaOrder()
   }
 
-  function addVideo(file: File){
-    if(!form.value.assets.video) return
+  function addVideo(files: File[] | File) {
+    const file = Array.isArray(files) ? files[0] : files
+
+    if (!file) {
+      return
+    }
+
     form.value.assets.video = file
   }
 
   function removeVideo(){
+    if (form.value.assets.video && !isFile(form.value.assets.video)) {
+      form.value.assets.removedMediaIds.push(form.value.assets.video.id)
+    }
     form.value.assets.video = undefined
   }
 
@@ -576,11 +597,17 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function fillAsset(media: Media[]){
     const images = media.filter((m) => m.type === 'image')
     const video = media.find((m) => m.type === 'video')
+    resetRemovedMediaIds()
 
     form.value.assets.images.push(...images)
     form.value.assets.video = video ?? undefined
+    syncMediaOrder()
   }
 
+
+  function resetRemovedMediaIds(){
+    form.value.assets.removedMediaIds = []
+  }
 
   // ==============================================================
   // FILL FORM WITH EXISTING TOUR DATA
@@ -622,9 +649,11 @@ export const useTourFormStore = defineStore('tour-form', () => {
         video: undefined,
         newImages: [],
         newVideo: undefined,
-        removedMedia: []
+        removedMediaIds: [],
+        mediaOrder: []
       } as Asset
     }
+    errors.value = {}
   }
 
   
@@ -698,6 +727,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     
     addImages,
     removeImage,
+    syncMediaOrder,
     addVideo,
     removeVideo,
     transformAsset,
@@ -706,6 +736,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillFormWithTourData,
     resetFormChanges,
     containsOldFormValues,
+    clearFormChanges,
 
     hasSectionErrors,
     setErrors,

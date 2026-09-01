@@ -41,6 +41,7 @@ class EditTourController extends Controller
 
     public function update(TourRequest $request, Tour $tour)
     {
+
         DB::transaction(function () use (
         $request,
         $tour
@@ -69,8 +70,50 @@ class EditTourController extends Controller
                 $tour->departures()->createMany($validatedData['schedules']);
             }
 
+
+            // Remove media
+            if (!empty($validatedData['removed_media_ids'])) {
+                $media = $tour->media()->whereIn('id', $validatedData['removed_media_ids'])->get();
+                $tour->media()->whereIn('id', $validatedData['removed_media_ids'])->delete();
+
+                foreach ($media as $item) {
+                    if ($item->type === 'image') {
+                        $this->service->deleteImage($item->file_path, $item->disk);
+                        continue;
+                    }
+
+                    if ($item->type === 'video') {
+                        $this->service->deleteVideo($item->file_path, $item->disk);
+                        continue;
+                    }
+
+                    $this->service->delete($item->file_path, $item->disk);
+                }
+            }
+
+            if (!empty($validatedData['media_order'])) {
+                $orderedMedia = collect($validatedData['media_order'])
+                    ->filter(fn ($item) => isset($item['id']))
+                    ->keyBy('id');
+
+                if ($orderedMedia->isNotEmpty()) {
+                    $media = $tour->media()->whereIn('id', $orderedMedia->keys()->all())->get()->keyBy('id');
+
+                    foreach ($orderedMedia as $id => $order) {
+                        if (! isset($media[$id])) {
+                            continue;
+                        }
+
+                        $media[$id]->update([
+                            'order_number' => (int) $order['order_number'],
+                        ]);
+                    }
+                }
+            }
+
             // New images
-            foreach ($request->file('images', []) as $image) {
+            $existingImageCount = $tour->media()->where('type', 'image')->count();
+            foreach ($request->file('images', []) as $index => $image) {
                 $path = $this->service->storeImage(
                     $image,
                     "tours/{$tour->id}/gallery",
@@ -84,6 +127,7 @@ class EditTourController extends Controller
                     'disk' => 'public',
                     'type' => 'image',
                     'mime_type' => 'image/webp',
+                    'order_number' => $existingImageCount + $index + 1,
                 ]);
             }
 

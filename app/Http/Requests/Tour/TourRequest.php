@@ -58,6 +58,19 @@ class TourRequest extends FormRequest
             );
         }
 
+        if ($this->has('removed_media_ids')) {
+            $data['removed_media_ids'] = json_decode(
+                $this->input('removed_media_ids'),
+                true
+            );
+        }
+
+        if ($this->has('media_order')) {
+            $data['media_order'] = json_decode(
+                $this->input('media_order'),
+                true
+            );
+        }
 
         $this->merge($data);
     }
