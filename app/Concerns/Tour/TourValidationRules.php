@@ -446,6 +446,16 @@ trait TourValidationRules
                 'mimes:mp4,webm',
                 'max:51200', // 50 MB in KB
             ],
+
+            'existing_images' => [
+                'nullable',
+                'array',
+            ],
+
+            'existing_images.*' => [
+                'integer',
+                'exists:media,id',
+            ],
         ];
     }
 

@@ -14,6 +14,7 @@ import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 import { useReferenceDataStore } from '@/stores/referenceData'
 import { useAlertDialog } from '@/composables/useAlertDialog';
+import { isFile } from '@/lib/utils';
 
 const { alertDialog } = useAlertDialog()
 
@@ -81,17 +82,19 @@ function saveTourChanges() {
     )
 
     // IMAGES
-    tourForm.form.assets.images.forEach((file) => {
-        formData.append('images[]', file)
+    tourForm.form.assets.images.forEach((image) => {
+        if (isFile(image)) {
+            formData.append('images[]', image)
+        } else {
+            formData.append('existing_images[]', image.id.toString())
+        }
     })
 
-    // VIDEO
-    if (tourForm.form.assets.video) {
-        formData.append(
-            'video',
-            tourForm.form.assets.video
-        )
-    }
+    tourForm.form.assets.video && isFile(tourForm.form.assets.video)
+        ? formData.append('video', tourForm.form.assets.video)
+        : null
+
+
 
     // Laravel method spoofing
     formData.append('_method', 'PUT')
@@ -123,6 +126,10 @@ function saveTourChanges() {
                 toast.success(
                     'Tour saved successfully.'
                 )
+                tourForm.resetFormChanges()
+                router.reload({
+                    only: ['tours'],
+                })
             },
         },
     )

@@ -1,11 +1,11 @@
 // stores/tour-form.ts
 
-import { generateId, isEmpty, isMultipleFlight } from '@/lib/utils'
+import { generateId, isEmpty, isFile, isMultipleFlight } from '@/lib/utils'
 import { Departure, Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { Itinerary as NewItinerary, Route as NewRoute,  Hotel as NewHotel }  from '@/types/tour'
-import { MediaAsset } from '@/types/media-v2'
+import { Media } from '@/types/media-v2'
 
 const SECTION = {
   OVERVIEW: 'overview',
@@ -75,10 +75,15 @@ interface CustomSchedule {
     max_pax?: string,
 }
 
+interface RemovedMedia {
+  id: number,
+  type: 'image' | 'video' | 'document' | 'audio'
+}
 
 interface Asset {
-  images: MediaAsset[],
-  video?:  MediaAsset
+  images: (File | Media) [],
+  video?:  File | Media,
+  removedMedia: RemovedMedia[]
 }
 
 type TourSection = typeof SECTION[keyof typeof SECTION]
@@ -102,6 +107,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
     assets: {
         images: [],
         video: undefined,
+        newImages: [],
+        newVideo: undefined,
+        removedMedia: []
     } as Asset
   })
 
@@ -545,27 +553,16 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ===============================================================
   
   function addImages(files: File[]) {
-      const images: MediaAsset[] = files.map((file) => ({
-          key: generateId(),
-          status: 'new',
-          file,
-      }))
-
-      form.value.assets.images.push(...images)
+    form.value.assets.images.push(...files)
   }
 
   function removeImage(index: number) {
-    form.value.assets.images.splice(index, 1)
+      form.value.assets.images.splice(index, 1)
   }
 
   function addVideo(file: File){
-    const video: MediaAsset = {
-      key: generateId(),
-      status: 'new',
-      file: file
-    }
-
-    form.value.assets.video = video
+    if(!form.value.assets.video) return
+    form.value.assets.video = file
   }
 
   function removeVideo(){
@@ -574,6 +571,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
   function  transformAsset(){
     return form.value.assets
+  }
+
+  function fillAsset(media: Media[]){
+    const images = media.filter((m) => m.type === 'image')
+    const video = media.find((m) => m.type === 'video')
+
+    form.value.assets.images.push(...images)
+    form.value.assets.video = video ?? undefined
   }
 
 
@@ -586,6 +591,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillRoute(tour.routes)
     fillHotel(tour.hotels)
     fillSchedule(tour.departures)
+    fillAsset(tour.media)
     backupOldValues(tour)
   }
 
@@ -595,14 +601,31 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
   function resetFormChanges(){
     if (!containsOldFormValues()) return
+    clearFormChanges()
     fillFormWithTourData(oldValues.value!)
   }
 
   function containsOldFormValues(){
     return !!oldValues.value
   }
+  
 
-
+  function clearFormChanges(){
+    form.value = {
+      overviewItems: {} as TourOverview,
+      itineraries: [] as Itinerary[],
+      routes: [] as Route[],
+      hotels: [] as Hotel[],
+      schedules: {} as Schedule,
+      assets: {
+        images: [],
+        video: undefined,
+        newImages: [],
+        newVideo: undefined,
+        removedMedia: []
+      } as Asset
+    }
+  }
 
   
 

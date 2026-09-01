@@ -6,9 +6,11 @@ import {
     Play,
     FileVideo,
 } from 'lucide-vue-next'
+import { Media } from '@/types/media-v2'
+import { isFile } from '@/lib/utils';
 
 interface Props {
-    file: File
+    file: File | Media
 }
 
 const props = defineProps<Props>()
@@ -17,11 +19,18 @@ const emit = defineEmits<{
     delete: []
 }>()
 
-const videoUrl = ref(URL.createObjectURL(props.file))
+const videoUrl = ref('')
 
 const fileSize = computed(() => {
-    const size = props.file.size / (1024 * 1024)
+    if (!props.file) return ''
 
+    if (isFile(props.file)) {
+        videoUrl.value = URL.createObjectURL(props.file)
+    } else {
+        videoUrl.value = props.file.file_path
+    }
+
+    const size =  props.file.size / (1024 * 1024)
     return `${size.toFixed(2)} MB`
 })
 
@@ -56,9 +65,9 @@ onBeforeUnmount(() => {
             <div class="min-w-0">
                 <p
                     class="truncate text-sm font-medium"
-                    :title="file.name"
+                    :title="isFile(props.file) ? props.file.name : props.file.file_name"
                 >
-                    {{ file.name }}
+                    {{ isFile(props.file) ? props.file.name : props.file.file_name }}
                 </p>
 
                 <p class="mt-0.5 text-xs text-muted-foreground">

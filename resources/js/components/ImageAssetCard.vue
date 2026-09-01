@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { Media } from '@/types/media-v2'
-import { getImagePath, isFile } from '@/lib/utils'
+import { cn, getImagePath, isFile } from '@/lib/utils'
+import { computed } from 'vue'
 
 interface Props {
     class?: string
     file: File | Media
     index: number
     previewUrl?: string
+    changed?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -34,6 +36,8 @@ function formatFileSize(size: number) {
 
     return `${(size / 1024 / 1024).toFixed(2)} MB`
 }
+
+const isNewImage = computed(() => isFile(props.file))
 </script>
 
 <template>
@@ -45,12 +49,13 @@ function formatFileSize(size: number) {
         <div class="relative h-2/3 w-full overflow-hidden bg-muted">
             <img
                 :src="previewUrl"
-                :alt="isFile(file)? file.name: file.alt_text"
+                :alt="isFile(props.file) ? props.file.name : props.file.alt_text"
                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
 
             <!-- Image index -->
             <div
+                v-if="!changed && !isNewImage"
                 class="absolute left-2 top-2 flex size-8 items-center justify-center rounded-full bg-background/90 text-sm font-bold text-foreground shadow-md backdrop-blur-sm"
             >
                 <button
@@ -68,28 +73,10 @@ function formatFileSize(size: number) {
             <div
                 class="absolute right-2 top-2 flex items-center gap-1.5"
             >
-                <!-- Pin -->
-                <!-- <button
-                    type="button"
-                    class="flex size-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-green-500/10 hover:text-green-600"
-                    :class="{
-                        'bg-green-500 text-white hover:bg-green-500 hover:text-white':
-                            isPinned,
-                    }"
-                    :title="isPinned ? 'Pinned image' : 'Pin image'"
-                    @click="handlePin(index)"
-                >
-                    <Icon
-                        icon="lucide:pin"
-                        class="size-4 transition-transform"
-                        :class="{
-                            'rotate-45': isPinned,
-                        }"
-                    />
-                </button> -->
 
                 <!-- Delete -->
                 <button
+                    v-if="changed && isNewImage"
                     type="button"
                     class="flex size-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-destructive hover:text-destructive-foreground"
                     title="Delete image"
@@ -102,18 +89,6 @@ function formatFileSize(size: number) {
                 </button>
             </div>
 
-            <!-- Pinned badge -->
-            <!-- <div
-                v-if="isPinned"
-                class="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-green-500 px-2.5 py-1 text-xs font-medium text-white shadow-sm"
-            >
-                <Icon
-                    icon="lucide:pin"
-                    class="size-3"
-                />
-
-                Thumbnail
-            </div> -->
         </div>
 
         <!-- Content -->
@@ -136,9 +111,21 @@ function formatFileSize(size: number) {
                 class="flex items-center justify-end border-t border-border pt-3"
             >
                 <span
-                    class="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary"
-                >
-                    Ready
+                    class="rounded-full flex items-center justify-center px-2 py-1 text-xs font-medium"
+                    :class="cn({
+                        'bg-zinc-500/10 text-muted-foreground': !isNewImage,
+                        'bg-red-500/10 text-red-800': isNewImage,
+                    })"
+                >   
+                    <Icon
+                        :icon="isNewImage ? 'lucide:circle-dot' : 'lucide:check-circle'"
+                        class="size-4 mr-1"
+                        :class="cn({
+                            'text-muted-foreground': !isNewImage,
+                            'text-red-800': isNewImage,
+                        })"
+                    />
+                    {{ isNewImage ? 'Unsaved' : 'Saved' }}
                 </span>
             </div>
         </div>

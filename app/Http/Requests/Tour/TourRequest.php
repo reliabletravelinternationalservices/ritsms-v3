@@ -58,12 +58,6 @@ class TourRequest extends FormRequest
             );
         }
 
-        if ($this->has('assets')) {
-            $data['assets'] = json_decode(
-                $this->input('assets'),
-                true
-            );
-        }
 
         $this->merge($data);
     }

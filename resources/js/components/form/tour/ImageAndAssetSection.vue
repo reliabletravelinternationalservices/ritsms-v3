@@ -39,7 +39,7 @@ function removeVideo() {
                     :recommendedWidth="1600"
                     :recommendedHeight="900"
                     :multiple="true"
-                    :change="tourForm.addImages"
+                    @change="tourForm.addImages"
                 />
 
                 <VueDraggable
@@ -51,12 +51,13 @@ function removeVideo() {
                     handle=".drag-handle"
                 >
                     <ImageAssetCard
-                        v-for="(value, index) in tourForm.form.assets.images"
-                        :key="`${value.key}`"
+                        v-for="(image, index) in tourForm.form.assets.images"
+                        :changed="true"
+                        :key="`${index}`"
                         class="w-full"
-                        :file="value.file"
+                        :file="image"
                         :index="index"
-                        :preview-url="isFile(value.file)? createObjectURL(value.file)  : getImagePath(value.file.file_path, 'thumbnail')"
+                        :preview-url="isFile(image) ? createObjectURL(image) : getImagePath(image.file_path)"
                         @delete="tourForm.removeImage"
                     />
                 </VueDraggable>
@@ -99,7 +100,7 @@ function removeVideo() {
                 >
                     <VideoAssetCard
                         :file="tourForm.form.assets.video"
-                        @delete="removeVideo"
+                        @delete="tourForm.removeVideo"
                     />
                 </div>
 

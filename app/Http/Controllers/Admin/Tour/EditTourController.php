@@ -41,7 +41,6 @@ class EditTourController extends Controller
 
     public function update(TourRequest $request, Tour $tour)
     {
-
         DB::transaction(function () use (
         $request,
         $tour
