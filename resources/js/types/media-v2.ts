@@ -11,10 +11,3 @@ export interface Media {
     order_number: number
 }
 
-
-
-export interface MediaAsset {
-  key: string
-  status: 'new' | 'existing'
-  file: File | Media
-}
