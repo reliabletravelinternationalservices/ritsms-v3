@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Image\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
@@ -175,5 +176,14 @@ class MediaService
         string $disk = 'public',
     ): void {
         Storage::disk($disk)->delete($filePath);
+    }
+
+
+
+
+    // PATHS
+    public function getTourFolderPath(int $tourId, Collection $collection): string
+    {
+        return "tours/{$tourId}/{$collection->value}";
     }
 }
