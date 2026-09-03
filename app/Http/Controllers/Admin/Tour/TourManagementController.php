@@ -7,18 +7,26 @@ use App\Services\Tour\TourService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Country;
 
 class TourManagementController extends Controller
 {
-    public function __construct(protected TourService $tourService) {
-    }
+    public function __construct(protected TourService $tourService) {}
     //
 
     public function index(): Response
     {
         $tours = $this->tourService->getTours(['itineraries', 'routes', 'hotels', 'departures',  'media']);
         $stats = $this->stats();
-        return Inertia::render('admin/tour/TourManagement', compact('stats', 'tours'));
+        $countries = Country::query()
+            ->select([
+                'id',
+                'name',
+            ])
+            ->orderBy('name')
+            ->get();
+
+        return Inertia::render('admin/tour/TourManagement', compact('stats', 'tours', 'countries'));
     }
 
 

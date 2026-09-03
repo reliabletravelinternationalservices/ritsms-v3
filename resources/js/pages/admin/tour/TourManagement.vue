@@ -6,18 +6,28 @@ import DataCardWithIcon from '@/components/statistic/DataCardWithIcon.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
-import {  ref } from 'vue';
+import { computed, ref } from 'vue';
 import TourTable from '@/components/table/tour/TourTable.vue';
-import {  TourWithRelationshipTables } from '@/types/tour';
+import { TourWithRelationshipTables } from '@/types/tour';
+import { useReferenceDataStore } from '@/stores/referenceData';
 
-interface Props{
+interface Props {
     stats: {
         totalTour: number,
         totalPublishedTour: number,
     },
     tours: TourWithRelationshipTables[]
+    countries: {
+        id: number,
+        name: string,
+    }[]
 }
 const props = defineProps<Props>();
+
+
+const useReference = useReferenceDataStore();
+
+useReference.setCountries(props.countries);
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,15 +63,15 @@ const categoryOptions: SelectOption[] = [
 const state = ref<string>('all');
 const stateOptions: SelectOption[] = [
     {
-        label: 'All State',
+        label: 'Published & Draft',
         value: 'all',
     },
     {
-        label: 'Draft',
+        label: 'Draft Only',
         value: 'draft',
     },
     {
-        label: 'Published',
+        label: 'Published Only',
         value: 'published',
     },
     {
@@ -86,25 +96,15 @@ const visibilityOptions: SelectOption[] = [
     }
 ]
 
-const destination = ref<string>('all');
-const destinationOptions: SelectOption[] = [
+const destination = ref<string>('0');
+
+const destinationOptions = computed<SelectOption[]>(() => [
     {
         label: 'All Destinations',
-        value: 'all',
+        value: '0',
     },
-    {
-        label: 'Philippines',
-        value: 'philippines',
-    },
-    {
-        label: 'China',
-        value: 'china',
-    },
-    {
-        label: 'Japan',
-        value: 'japan',
-    }
-]
+    ...useReference.countryOptions,
+])
 
 
 
@@ -124,7 +124,8 @@ const createTour = () => router.visit(route('admin.tours.create'));
                     icon="lucide:map-pinned" title="Tours" :value="stats.totalTour" :with-button="false" />
 
                 <DataCardWithIcon icon-background="bg-[var(--color-green)]" icon-color="text-white"
-                    icon="lucide:globe-check" title="Active Tours" :value="stats.totalPublishedTour" :with-button="false" />
+                    icon="lucide:globe-check" title="Active Tours" :value="stats.totalPublishedTour"
+                    :with-button="false" />
             </div>
             <div>
                 <div class="flex flex-col gap-4">

@@ -3,27 +3,30 @@ import Table from '@/components/Table.vue'
 import { TourWithRelationshipTables } from '@/types/tour'
 import { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
-import CodeCell from './cells/CodeCell.vue';
-import TourNameAndImageCell from './cells/TourNameAndImageCell.vue';
 import { getFirstImage } from '@/lib/utils.js';
 import CategoryCell from './cells/CategoryCell.vue';
-import StateCell from './cells/StateCell.vue';
+import RouteCell from './cells/RouteCell.vue';
+import TourCell from './cells/TourCell.vue';
+import StatusCell from './cells/StatusCell.vue';
 
 defineProps<{
     tours: TourWithRelationshipTables[]
 }>()
 
 const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
+
     {
-        id: 'name',
-        header: 'Tour Name',
+        id: 'code',
+        header: 'TOUR',
 
         cell: ({ row }) => {
             const tour = row.original;
             return h(
-                TourNameAndImageCell,
+                TourCell,
                 {
-                    name:  tour.name,
+                    code: tour.code,
+                    name: tour.name,
+                    description: tour.description,
                     image: getFirstImage(tour.media, 'image')
                 }
             )
@@ -31,22 +34,22 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
     },
 
     {
-        accessorKey: 'code',
-        header: 'Code',
+        accessorKey: 'route',
+        header: 'ROUTE',
 
         cell: ({ row }) =>
             h(
-                CodeCell,
+                RouteCell,
                 {
-                    tourID:  row.original.id,
-                    code: row.original.code
+                    routes: row.original.routes,
+                    itinerary_type: row.original.itinerary_type
                 }
             ),
     },
 
     {
         accessorKey: 'category',
-        header: 'Category',
+        header: 'CATEGORY',
 
         cell: ({ row }) =>
             h(
@@ -58,27 +61,27 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
     },
 
     {
-        accessorKey: 'state',
-        header: 'State',
+        accessorKey: 'status',
+        header: 'STATUS',
 
         cell: ({ row }) => {
             return h(
-                StateCell,
+                StatusCell,
                 {
-                    label: row.original.state
+                    state: row.original.state,
+                    visibility: row.original.visibility
                 }
             )
         },
     },
+
+
+
 ]
 </script>
 
 <template>
     <div>
-        <Table
-            :columns="columns"
-            :data="tours"
-            class="w-full text-foreground"
-        />
+        <Table :columns="columns" :data="tours" class="w-full text-foreground" />
     </div>
 </template>
