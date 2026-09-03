@@ -237,7 +237,8 @@ class TourService
     {
         return Tour::with($relationships)
             ->whereNull('deleted_at')
-            ->firstOrFail();
+            ->where('state', '!=', 'archived')
+            ->get();
     }
 
     public function getTourBySlug(string $slug, array $relationships)
@@ -246,5 +247,24 @@ class TourService
             ->where('slug', $slug)
             ->whereNull('deleted_at')
             ->firstOrFail();
+    }
+
+
+
+    /*
+    |------------------------------------------------------------------------------------------
+    | GET TOUR STATS
+    |------------------------------------------------------------------------------------------
+    */
+
+    public function getTourTotalCount(bool $activeOnly = false)
+    {
+        if ($activeOnly) {
+            return Tour::where('state', 'published')
+                ->where('visibility', 'public')
+                ->count();
+        }
+
+        return Tour::count();
     }
 }

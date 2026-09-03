@@ -74,8 +74,8 @@ const table = useVueTable({
         </div>
 
         <!-- Pagination -->
-        <div v-if="table.getPageCount() > 1" class="flex items-center justify-between mt-4">
-            <!-- Page -->
+        <!-- <div v-if="table.getPageCount() > 1" class="flex items-center justify-between mt-4">
+
             <span class="text-sm text-muted-foreground">
                 Page
                 {{ table.getState().pagination.pageIndex + 1 }}
@@ -83,7 +83,6 @@ const table = useVueTable({
                 {{ table.getPageCount() }}
             </span>
 
-            <!-- Buttons -->
             <div class="flex items-center gap-2">
                 <button type="button"
                     class="border px-3 py-1.5 rounded-sm text-sm transition hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
@@ -97,6 +96,6 @@ const table = useVueTable({
                     Next
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>

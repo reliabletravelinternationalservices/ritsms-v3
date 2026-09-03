@@ -16,7 +16,17 @@ class TourManagementController extends Controller
 
     public function index(): Response
     {
-        $tour = $this->tourService->getTours();
-        return Inertia::render('admin/tour/TourManagement', compact('tour'));
+        $tours = $this->tourService->getTours(['itineraries', 'routes', 'hotels', 'departures',  'media']);
+        $stats = $this->stats();
+        return Inertia::render('admin/tour/TourManagement', compact('stats', 'tours'));
+    }
+
+
+    private function stats()
+    {
+        return [
+            'totalTour' =>  $this->tourService->getTourTotalCount(),
+            'totalPublishedTour' => $this->tourService->getTourTotalCount(true)
+        ];
     }
 }

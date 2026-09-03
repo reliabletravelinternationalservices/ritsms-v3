@@ -4,6 +4,7 @@ import type { Ref } from "vue"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import type { Destination } from '@/types/destination';
+import { Media } from "@/types/media-v2"
 const appUrl = import.meta.env.VITE_APP_URL
 
 export function cn(...inputs: ClassValue[]) {
@@ -316,4 +317,14 @@ export function isEmpty(value: unknown): boolean {
   }
 
   return false
+}
+
+
+
+
+export function getFirstImage(
+    media: Media[],
+    type: 'image' | 'video'
+): Media | null {
+    return media.find(item => item.type === type) ?? null
 }
