@@ -24,10 +24,7 @@ class EditTourController extends Controller
 
     public function edit(string $slug): \Inertia\Response
     {
-        $tour = Tour::with(['itineraries', 'routes', 'hotels', 'departures',  'media'])
-            ->where('slug', $slug)
-            ->whereNull('deleted_at')
-            ->firstOrFail();
+        $tour = $this->tourService->getTourBySlug($slug, ['itineraries', 'routes', 'hotels', 'departures',  'media']);
     
         $countries = Country::query()
             ->select([
@@ -88,11 +85,7 @@ class EditTourController extends Controller
 
             // New video
             if ($request->hasFile('video')) {
-                $this->tourService->createVideo(
-                    $tour, 
-                    $request->file('video'), 
-                    Collection::VIDEO
-                );
+                $this->tourService->createVideo($tour, $request->file('video'));
             }
         });
         

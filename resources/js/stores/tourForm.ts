@@ -23,6 +23,8 @@ interface TourOverview {
       description: string,
       highlights: string,
       terms_and_conditions: string,
+      visibility : 'public' |  'private',
+      state: 'draft' | 'published' | 'archived';
       inclusions: string,
       exclusions: string,
       category: string,
@@ -182,6 +184,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
           inclusions: tour.inclusions ?? '',
           exclusions: tour.exclusions ?? '',
           category: tour.category,
+          visibility: tour.visibility?? 'private',
+          state: tour.state?? 'draft',
           duration: String(tour.duration),
           itinerary_type: tour.itinerary_type,
           booking_deadline: tour.booking_deadline?? undefined

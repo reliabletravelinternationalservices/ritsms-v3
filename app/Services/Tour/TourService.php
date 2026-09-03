@@ -85,9 +85,6 @@ class TourService
     }
 
 
-
-
-    // ======================================================================================================
     
 
     /*
@@ -107,7 +104,6 @@ class TourService
                 $tour, 
                 $image,
                 $directory,
-                $collection,
                 'image',
                 $orderNumber
             );
@@ -121,10 +117,15 @@ class TourService
     | CREATE VIDEO
     |--------------------------------------------------------------------------------------
     */
-    public function createVideo(Tour $tour, UploadedFile $file, Collection $collection, int $orderNumber = 1)
+    public function createVideo(Tour $tour, UploadedFile $file, int $orderNumber = 1)
     {
-        $directory = $this->mediaService->getTourFolderPath($tour->id, Collection::VIDEO);
-       
+        $this->createMedia(
+            $tour,
+            $file,
+            'video',
+            $orderNumber,
+            true,
+        );
     }
 
 
@@ -176,7 +177,7 @@ class TourService
             'file_name'  => basename($path),
             'file_path'  => $path,
             'alt_text'   => basename($path),
-            'disk'       => $disk,
+            'disk'       => 'public',
             'type'       => $type,
             'mime_type'  => $file->getMimeType(),
             'size'       => $size,
@@ -235,6 +236,31 @@ class TourService
 
             $this->mediaService->delete($item->file_path, $item->disk);
         }
+    }
+
+
+
+
+    /*
+    |------------------------------------------------------------------------------------------
+    | GET TOURS
+    |------------------------------------------------------------------------------------------
+    */
+
+    public function getTours(array $relationships)
+    {
+        return Tour::with($relationships)
+            ->whereNull('deleted_at')
+            ->firstOrFail();
+    }
+
+
+    public function getTourBySlug(string $slug, array $relationships)
+    {
+        return Tour::with($relationships)
+            ->where('slug', $slug)
+            ->whereNull('deleted_at')
+            ->firstOrFail();
     }
 
 }

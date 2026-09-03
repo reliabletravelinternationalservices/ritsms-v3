@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import { Button } from '@/components/ui/button'
@@ -10,119 +10,264 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-type PublishStatus = 'draft' | 'public' | 'private'
+export type TourState = 'draft' | 'published' | 'archived'
+export type TourVisibility = 'public' | 'private'
 
-const status = ref<PublishStatus>('draft')
+export interface PublishStatus {
+    state: TourState
+    visibility: TourVisibility
+}
 
-const buttonLabel = computed(() => {
-    switch (status.value) {
-        case 'public':
-            return 'Unpublish'
-        case 'private':
-            return 'Private'
-        default:
-            return 'Publish'
+const model = defineModel<PublishStatus>({
+    default: () => ({
+        state: 'draft',
+        visibility: 'private',
+    }),
+})
+
+const emit = defineEmits<{
+    change: [value: PublishStatus]
+}>()
+
+const statusLabel = computed(() => {
+    if (
+        model.value.state === 'draft' &&
+        model.value.visibility === 'private'
+    ) {
+        return 'Draft'
     }
+
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'private'
+    ) {
+        return 'Published'
+    }
+
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'public'
+    ) {
+        return 'Live'
+    }
+
+    if (model.value.state === 'archived') {
+        return 'Archived'
+    }
+
+    return 'Draft'
+})
+
+const statusDescription = computed(() => {
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'private'
+    ) {
+        return 'Published · Hidden'
+    }
+
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'public'
+    ) {
+        return 'Live publicly'
+    }
+
+    if (model.value.state === 'archived') {
+        return 'Archived'
+    }
+
+    return 'Still being prepared'
 })
 
 const buttonIcon = computed(() => {
-    switch (status.value) {
-        case 'public':
-            return 'lucide:eye-off'
-        case 'private':
-            return 'lucide:lock'
-        default:
-            return 'lucide:globe'
+    if (model.value.state === 'draft') {
+        return 'lucide:file-pen'
     }
+
+    if (model.value.state === 'published' && model.value.visibility === 'private') {
+        return 'lucide:link'
+    }
+
+    if (model.value.state === 'published' && model.value.visibility === 'public') {
+        return 'lucide:globe'
+    }
+
+    return 'lucide:archive'
 })
 
 const buttonClass = computed(() => {
-    switch (status.value) {
-        case 'public':
-            return 'bg-red-600 hover:bg-red-700'
-
-        case 'private':
-            return 'bg-blue-600 hover:bg-blue-700'
-
-        default:
-            return 'bg-[var(--color-green)] hover:bg-green-700'
+    if (model.value.state === 'draft') {
+        return 'bg-zinc-600 hover:bg-zinc-700'
     }
+
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'private'
+    ) {
+        return 'bg-blue-600 hover:bg-blue-700'
+    }
+
+    if (
+        model.value.state === 'published' &&
+        model.value.visibility === 'public'
+    ) {
+        return 'bg-green-600 hover:bg-green-700'
+    }
+
+    return 'bg-gray-600 hover:bg-gray-700'
 })
 
 const actions = computed(() => {
-    switch (status.value) {
-        case 'public':
-            return [
-                {
-                    label: 'Unpublish',
-                    value: 'draft' as PublishStatus,
-                    icon: 'lucide:eye-off',
-                },
-                {
-                    label: 'Publish as Private',
-                    value: 'private' as PublishStatus,
-                    icon: 'lucide:lock',
-                },
-            ]
+    const current = model.value
 
-        case 'private':
-            return [
-                {
-                    label: 'Unpublish',
-                    value: 'draft' as PublishStatus,
-                    icon: 'lucide:eye-off',
-                },
-                {
-                    label: 'Publish as Public',
-                    value: 'public' as PublishStatus,
-                    icon: 'lucide:globe',
-                },
-            ]
-
-        default:
-            return [
-                {
-                    label: 'Publish as Public',
-                    value: 'public' as PublishStatus,
-                    icon: 'lucide:globe',
-                },
-                {
-                    label: 'Publish as Private',
-                    value: 'private' as PublishStatus,
-                    icon: 'lucide:lock',
-                },
-            ]
+    // DRAFT
+    if (current.state === 'draft') {
+        return [
+            {
+                label: 'Publish as Public',
+                description: 'Live publicly on website',
+                value: {
+                    state: 'published',
+                    visibility: 'public',
+                } satisfies PublishStatus,
+                icon: 'lucide:globe',
+            },
+            {
+                label: 'Publish as Private',
+                description: 'Published but hidden',
+                value: {
+                    state: 'published',
+                    visibility: 'private',
+                } satisfies PublishStatus,
+                icon: 'lucide:link',
+            },
+        ]
     }
+
+    // PUBLISHED + PRIVATE
+    if (
+        current.state === 'published' &&
+        current.visibility === 'private'
+    ) {
+        return [
+            {
+                label: 'Make Public',
+                description: 'Show on website',
+                value: {
+                    state: 'published',
+                    visibility: 'public',
+                } satisfies PublishStatus,
+                icon: 'lucide:globe',
+            },
+            {
+                label: 'Unpublish',
+                description: 'Return to draft',
+                value: {
+                    state: 'draft',
+                    visibility: 'private',
+                } satisfies PublishStatus,
+                icon: 'lucide:eye-off',
+            },
+        ]
+    }
+
+    // PUBLISHED + PUBLIC
+    if (
+        current.state === 'published' &&
+        current.visibility === 'public'
+    ) {
+        return [
+            {
+                label: 'Make Private',
+                description: 'Hide from website',
+                value: {
+                    state: 'published',
+                    visibility: 'private',
+                } satisfies PublishStatus,
+                icon: 'lucide:lock',
+            },
+            {
+                label: 'Unpublish',
+                description: 'Return to draft',
+                value: {
+                    state: 'draft',
+                    visibility: 'private',
+                } satisfies PublishStatus,
+                icon: 'lucide:eye-off',
+            },
+        ]
+    }
+
+    // ARCHIVED
+    if (current.state === 'archived') {
+        return [
+            {
+                label: 'Restore as Draft',
+                description: 'Move back to draft',
+                value: {
+                    state: 'draft',
+                    visibility: 'private',
+                } satisfies PublishStatus,
+                icon: 'lucide:archive-restore',
+            },
+        ]
+    }
+
+    return []
 })
 
 function selectAction(value: PublishStatus) {
-    status.value = value
+    model.value = value
+
+    emit('change', value)
 }
 </script>
 
 <template>
     <DropdownMenu>
         <DropdownMenuTrigger as-child>
-            <Button variant="default" :class="[
-                'flex items-center gap-2 text-white',
-                buttonClass,
-            ]">
-                <span class="flex items-center gap-2">
-                    <Icon :icon="buttonIcon" class="text-xl" />
+            <Button
+                variant="default"
+                :class="[
+                    'flex items-center gap-2 text-white',
+                    buttonClass,
+                ]"
+            >
+                <Icon :icon="buttonIcon" class="text-xl" />
 
-                    <span>{{ buttonLabel }}</span>
-                </span>
+                <div class="flex flex-col items-start">
+                    <span>{{ statusLabel }}</span>
+                </div>
 
-                <Icon icon="lucide:chevron-down" class="text-xl" />
+                <Icon
+                    icon="lucide:chevron-down"
+                    class="ml-1 text-xl"
+                />
             </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" class="w-52">
-            <DropdownMenuItem v-for="action in actions" :key="action.value"
-                class="flex cursor-pointer items-center gap-2" @click="selectAction(action.value)">
-                <Icon :icon="action.icon" class="text-lg" />
+        <DropdownMenuContent align="end" class="w-64">
+            <DropdownMenuItem
+                v-for="action in actions"
+                :key="action.label"
+                class="flex cursor-pointer items-start gap-3 py-3"
+                @click="selectAction(action.value)"
+            >
+                <Icon
+                    :icon="action.icon"
+                    class="mt-0.5 text-lg"
+                />
 
-                <span>{{ action.label }}</span>
+                <div class="flex flex-col">
+                    <span class="font-medium">
+                        {{ action.label }}
+                    </span>
+
+                    <span class="text-xs text-muted-foreground">
+                        {{ action.description }}
+                    </span>
+                </div>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>

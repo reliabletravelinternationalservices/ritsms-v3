@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // import TourTable from '@/components/table/tour/TourTable.vue';
 import TourForm from '@/components/form/tour/TourForm.vue';
-import PublishStatusDropdown from '@/components/PublishStatusDropdown.vue';
+import PublishStatusDropdown, { TourVisibility } from '@/components/PublishStatusDropdown.vue';
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue';
 import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -28,6 +28,7 @@ const props = defineProps<{
 
 const isSaving = ref(false)
 const isReseting = ref(false)
+const isChangingStatus = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
@@ -170,6 +171,14 @@ function resetFormChanges(){
         }
     })
 }
+
+
+function updateStatus(status: TourVisibility){
+    isChangingStatus.value = true
+    tourForm.syncMediaOrder()
+    
+    const formData = new FormData()
+}
 </script>
 
 
@@ -218,7 +227,10 @@ function resetFormChanges(){
                     </span>
                 </Button>
 
-                <PublishStatusDropdown />
+                <PublishStatusDropdown
+                    v-model:state="tourForm.form.overviewItems.state"
+                    v-model:visibility="tourForm.form.overviewItems.visibility"
+                    @change="()=>{}" />
             </div>
             <div class="p-6">
                 <TourForm :is-create-new="false" :is-loading="isSaving || isReseting" />
