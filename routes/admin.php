@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\AccountAccessController;
+use App\Http\Controllers\Admin\AccountForgotPassword;
+use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\Destination\DeleteLocationController;
 use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
+use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\Inquiry\ClientsInquiryController;
 use App\Http\Controllers\Admin\Inquiry\InquiryDetailController;
 use App\Http\Controllers\Admin\Log\ActivityLogController;
@@ -27,6 +29,10 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
+use App\Http\Controllers\Admin\QuotationController;
+use App\Http\Controllers\Admin\Tour\CreateTourController;
+use App\Http\Controllers\Admin\Tour\EditTourController;
+use App\Http\Controllers\Admin\Tour\TourManagementController;
 use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\ClientManagementController;
@@ -34,14 +40,7 @@ use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
 use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
-use App\Http\Controllers\Admin\InboxController;
-use App\Http\Controllers\Admin\QuotationController;
-use App\Http\Controllers\Admin\Tour\CreateTourController;
-use App\Http\Controllers\Admin\Tour\TourManagementController;
-use App\Http\Controllers\Admin\Booking\BookingController;
-use App\Http\Controllers\Admin\Tour\EditTourController;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +55,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 /*
     |--------------------------------------------------------------------------
     | Admin REDIRECT
@@ -66,7 +64,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('admin.dashboard');
 });
-
 
 /*
     |--------------------------------------------------------------------------
@@ -81,7 +78,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
-
         /*
             |--------------------------------------------------------------------------
             | Inbox
@@ -92,7 +88,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::get('/', 'index')->name('inbox');
         });
 
-
         /*
             |--------------------------------------------------------------------------
             | Quotations
@@ -102,7 +97,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
         Route::prefix('quotations')->controller(QuotationController::class)->group(function () {
             Route::get('/', 'index')->name('quotations');
         });
-
 
         /*
             |--------------------------------------------------------------------------
@@ -124,10 +118,10 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(EditTourController::class)->group(function () {
                 Route::get('/{slug}/edit', 'edit')->name('tours.edit');
                 Route::put('/{tour}/update', 'update')->name('tours.update');
+                Route::patch('/{tour}/status', 'updateStatus')->name('tours.update.status');
             });
         });
 
-        
         /*
             |--------------------------------------------------------------------------
             | BOOKINGS
@@ -142,7 +136,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
         });
     });
-
 
     /*
         |--------------------------------------------------------------------------
@@ -173,7 +166,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
         Route::delete('/destroy/{id}', [DeletePackageController::class, 'destroy'])
             ->name('admin.packages.destroy');
 
-
         Route::prefix('images')->group(function () {
 
             Route::post('/store/{id}', [PackageImageController::class, 'store'])
@@ -182,7 +174,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::put('/update/{id}', [PackageImageController::class, 'update'])
                 ->name('admin.packages.images.update');
         });
-
 
         Route::prefix('{id}/travelBatches')->group(function () {
 
@@ -202,7 +193,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 ->name('admin.packages.batches.destroy');
         });
     });
-
 
     /*
         |--------------------------------------------------------------------------
@@ -240,7 +230,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             ->name('admin.packages.groups.pin.update');
     });
 
-
     /*
         |--------------------------------------------------------------------------
         | Destinations
@@ -270,7 +259,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
         Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])
             ->name('admin.destinations.destroy');
 
-
         Route::prefix('{destID}/locations')->group(function () {
 
             Route::get('/create', [CreateLocationController::class, 'index'])
@@ -289,7 +277,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 ->name('admin.destinations.locations.destroy');
         });
     });
-
 
     /*
         |--------------------------------------------------------------------------
@@ -311,7 +298,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
         Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])
             ->name('admin.inquiries.destroy');
     });
-
 
     /*
         |--------------------------------------------------------------------------
@@ -348,14 +334,12 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 ->name('admin.users.admins.update');
         });
 
-
         Route::prefix('clients')->group(function () {
 
             Route::get('/', [ClientManagementController::class, 'index'])
                 ->name('admin.users.clients');
         });
     });
-
 
     /*
         |--------------------------------------------------------------------------
@@ -369,7 +353,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             ->name('admin.bookings');
     });
 
-
     /*
         |--------------------------------------------------------------------------
         | Activity Logs
@@ -382,7 +365,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             ->name('admin.logs');
     });
 
-
     /*
         |--------------------------------------------------------------------------
         | Email Verification
@@ -392,7 +374,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
     Route::post('/verify/email', [VerifyAdminEmailController::class, 'send'])
         ->name('admin.verify.email.send');
 });
-
 
 /*
     |--------------------------------------------------------------------------

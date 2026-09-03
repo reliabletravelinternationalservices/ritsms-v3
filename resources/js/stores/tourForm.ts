@@ -3,7 +3,7 @@
 import { generateId, isEmpty, isFile, isMultipleFlight } from '@/lib/utils'
 import { Departure, Tour, TourWithRelationshipTables } from '@/types/tour'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Itinerary as NewItinerary, Route as NewRoute,  Hotel as NewHotel }  from '@/types/tour'
 import { Media } from '@/types/media-v2'
 
@@ -91,6 +91,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   const currentSection = ref<TourSection>(SECTION.OVERVIEW)
   const errors = ref<Record<string, string>>({})
   const oldValues = ref<TourWithRelationshipTables>()
+  const initialFormSnapshot = ref('')
 
   const form = ref({
     overviewItems: {} as TourOverview,
@@ -112,6 +113,10 @@ export const useTourFormStore = defineStore('tour-form', () => {
         mediaOrder: []
     } as Asset
   })
+
+  const hasChanges = computed(() => (
+    initialFormSnapshot.value !== JSON.stringify(form.value)
+  ))
 
   const sections = [
     {
@@ -624,6 +629,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillSchedule(tour.departures)
     fillAsset(tour.media)
     backupOldValues(tour)
+    initialFormSnapshot.value = JSON.stringify(form.value)
   }
 
   function backupOldValues(tour: TourWithRelationshipTables){
@@ -683,6 +689,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     SECTION,
     currentSection,
     form,
+    hasChanges,
     sections,
     setSection,
     isCurrentSection,

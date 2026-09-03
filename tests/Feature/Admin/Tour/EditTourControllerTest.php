@@ -31,6 +31,7 @@ test('admin can save tour media in the correct order', function () {
         'exclusions' => 'Exclusions',
         'terms_and_conditions' => 'Terms',
         'category' => 'domestic',
+        'tour_type' => 'regular',
         'duration' => 4,
         'itinerary_type' => 'round_trip',
         'booking_deadline' => now()->addDays(10)->toDateString(),
@@ -111,4 +112,37 @@ test('admin can save tour media in the correct order', function () {
     expect($gallery->pluck('order_number')->all())->toBe([1, 2, 3, 4]);
     expect($gallery->last()->file_name)->toContain('jpg');
     expect($gallery->first()->id)->toBe($existingMedia->id);
+});
+
+test('admin can update tour status', function () {
+    $user = User::create([
+        'code' => 'ADM-STATUS-001',
+        'email' => 'status-admin@example.com',
+        'password' => bcrypt('password'),
+        'display_name' => 'Status Admin',
+        'is_active' => true,
+    ]);
+
+    $tour = Tour::create([
+        'name' => 'Status Tour',
+        'category' => 'domestic',
+        'tour_type' => 'regular',
+        'duration' => 4,
+        'itinerary_type' => 'round_trip',
+        'state' => 'draft',
+        'visibility' => 'private',
+    ]);
+
+    $response = $this->actingAs($user)->patch(
+        route('admin.tours.update.status', ['tour' => $tour->id]),
+        [
+            'state' => 'published',
+            'visibility' => 'public',
+        ]
+    );
+
+    $response->assertRedirect(route('admin.tours.edit', ['slug' => $tour->slug]));
+
+    expect($tour->refresh()->state->value)->toBe('published');
+    expect($tour->visibility->value)->toBe('public');
 });

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Enums\Image;
 
 enum Collection: string

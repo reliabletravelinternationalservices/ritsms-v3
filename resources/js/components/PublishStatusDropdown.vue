@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import { Button } from '@/components/ui/button'
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export type TourState = 'draft' | 'published' | 'archived'
+
 export type TourVisibility = 'public' | 'private'
 
 export interface PublishStatus {
@@ -18,99 +20,170 @@ export interface PublishStatus {
     visibility: TourVisibility
 }
 
-const model = defineModel<PublishStatus>({
-    default: () => ({
-        state: 'draft',
-        visibility: 'private',
-    }),
+/*
+|--------------------------------------------------------------------------
+| Models
+|--------------------------------------------------------------------------
+*/
+
+const state = defineModel<TourState>('state', {
+    default: 'draft',
 })
+
+const visibility = defineModel<TourVisibility>('visibility', {
+    default: 'private',
+})
+
+/*
+|--------------------------------------------------------------------------
+| Props
+|--------------------------------------------------------------------------
+*/
+
+const props = defineProps<{
+    loading?: boolean
+}>()
+
+/*
+|--------------------------------------------------------------------------
+| Emits
+|--------------------------------------------------------------------------
+*/
 
 const emit = defineEmits<{
     change: [value: PublishStatus]
 }>()
 
+/*
+|--------------------------------------------------------------------------
+| Current Status
+|--------------------------------------------------------------------------
+*/
+
+const currentStatus = computed<PublishStatus>(() => ({
+    state: state.value,
+    visibility: visibility.value,
+}))
+
+/*
+|--------------------------------------------------------------------------
+| Status Label
+|--------------------------------------------------------------------------
+*/
+
 const statusLabel = computed(() => {
     if (
-        model.value.state === 'draft' &&
-        model.value.visibility === 'private'
+        state.value === 'draft' &&
+        visibility.value === 'private'
     ) {
         return 'Draft'
     }
 
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'private'
+        state.value === 'published' &&
+        visibility.value === 'private'
     ) {
         return 'Published'
     }
 
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'public'
+        state.value === 'published' &&
+        visibility.value === 'public'
     ) {
         return 'Live'
     }
 
-    if (model.value.state === 'archived') {
+    if (state.value === 'archived') {
         return 'Archived'
     }
 
     return 'Draft'
 })
 
+/*
+|--------------------------------------------------------------------------
+| Status Description
+|--------------------------------------------------------------------------
+*/
+
 const statusDescription = computed(() => {
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'private'
+        state.value === 'draft' &&
+        visibility.value === 'private'
+    ) {
+        return 'Still being prepared'
+    }
+
+    if (
+        state.value === 'published' &&
+        visibility.value === 'private'
     ) {
         return 'Published · Hidden'
     }
 
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'public'
+        state.value === 'published' &&
+        visibility.value === 'public'
     ) {
         return 'Live publicly'
     }
 
-    if (model.value.state === 'archived') {
+    if (state.value === 'archived') {
         return 'Archived'
     }
 
-    return 'Still being prepared'
+    return ''
 })
 
+/*
+|--------------------------------------------------------------------------
+| Button Icon
+|--------------------------------------------------------------------------
+*/
+
 const buttonIcon = computed(() => {
-    if (model.value.state === 'draft') {
+    if (state.value === 'draft') {
         return 'lucide:file-pen'
     }
 
-    if (model.value.state === 'published' && model.value.visibility === 'private') {
+    if (
+        state.value === 'published' &&
+        visibility.value === 'private'
+    ) {
         return 'lucide:link'
     }
 
-    if (model.value.state === 'published' && model.value.visibility === 'public') {
+    if (
+        state.value === 'published' &&
+        visibility.value === 'public'
+    ) {
         return 'lucide:globe'
     }
 
     return 'lucide:archive'
 })
 
+/*
+|--------------------------------------------------------------------------
+| Button Color
+|--------------------------------------------------------------------------
+*/
+
 const buttonClass = computed(() => {
-    if (model.value.state === 'draft') {
-        return 'bg-zinc-600 hover:bg-zinc-700'
+    if (state.value === 'draft') {
+        return 'bg-orange-600 hover:bg-orange-700'
     }
 
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'private'
+        state.value === 'published' &&
+        visibility.value === 'private'
     ) {
         return 'bg-blue-600 hover:bg-blue-700'
     }
 
     if (
-        model.value.state === 'published' &&
-        model.value.visibility === 'public'
+        state.value === 'published' &&
+        visibility.value === 'public'
     ) {
         return 'bg-green-600 hover:bg-green-700'
     }
@@ -118,11 +191,20 @@ const buttonClass = computed(() => {
     return 'bg-gray-600 hover:bg-gray-700'
 })
 
-const actions = computed(() => {
-    const current = model.value
+/*
+|--------------------------------------------------------------------------
+| Available Actions
+|--------------------------------------------------------------------------
+*/
 
-    // DRAFT
-    if (current.state === 'draft') {
+const actions = computed(() => {
+    /*
+    |--------------------------------------------------------------------------
+    | DRAFT
+    |--------------------------------------------------------------------------
+    */
+
+    if (state.value === 'draft') {
         return [
             {
                 label: 'Publish as Public',
@@ -145,10 +227,15 @@ const actions = computed(() => {
         ]
     }
 
-    // PUBLISHED + PRIVATE
+    /*
+    |--------------------------------------------------------------------------
+    | PUBLISHED + PRIVATE
+    |--------------------------------------------------------------------------
+    */
+
     if (
-        current.state === 'published' &&
-        current.visibility === 'private'
+        state.value === 'published' &&
+        visibility.value === 'private'
     ) {
         return [
             {
@@ -172,10 +259,15 @@ const actions = computed(() => {
         ]
     }
 
-    // PUBLISHED + PUBLIC
+    /*
+    |--------------------------------------------------------------------------
+    | PUBLISHED + PUBLIC
+    |--------------------------------------------------------------------------
+    */
+
     if (
-        current.state === 'published' &&
-        current.visibility === 'public'
+        state.value === 'published' &&
+        visibility.value === 'public'
     ) {
         return [
             {
@@ -199,8 +291,13 @@ const actions = computed(() => {
         ]
     }
 
-    // ARCHIVED
-    if (current.state === 'archived') {
+    /*
+    |--------------------------------------------------------------------------
+    | ARCHIVED
+    |--------------------------------------------------------------------------
+    */
+
+    if (state.value === 'archived') {
         return [
             {
                 label: 'Restore as Draft',
@@ -217,9 +314,26 @@ const actions = computed(() => {
     return []
 })
 
-function selectAction(value: PublishStatus) {
-    model.value = value
+/*
+|--------------------------------------------------------------------------
+| Select Action
+|--------------------------------------------------------------------------
+*/
 
+function selectAction(value: PublishStatus) {
+    if (props.loading) {
+        return
+    }
+
+    /*
+     * Update both v-model values
+     */
+    state.value = value.state
+    visibility.value = value.visibility
+
+    /*
+     * Notify parent
+     */
     emit('change', value)
 }
 </script>
@@ -229,28 +343,50 @@ function selectAction(value: PublishStatus) {
         <DropdownMenuTrigger as-child>
             <Button
                 variant="default"
+                :disabled="loading"
                 :class="[
                     'flex items-center gap-2 text-white',
                     buttonClass,
                 ]"
             >
-                <Icon :icon="buttonIcon" class="text-xl" />
+                <!-- Loading -->
+                <Icon
+                    v-if="loading"
+                    icon="lucide:loader-2"
+                    class="size-5 animate-spin"
+                />
 
+                <!-- Normal Icon -->
+                <Icon
+                    v-else
+                    :icon="buttonIcon"
+                    class="text-xl"
+                />
+
+                <!-- Label -->
                 <div class="flex flex-col items-start">
-                    <span>{{ statusLabel }}</span>
+                    <span>
+                        {{ statusLabel }}
+                    </span>
                 </div>
 
+                <!-- Dropdown Icon -->
                 <Icon
+                    v-if="!loading"
                     icon="lucide:chevron-down"
                     class="ml-1 text-xl"
                 />
             </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" class="w-64">
+        <DropdownMenuContent
+            align="end"
+            class="w-64"
+        >
             <DropdownMenuItem
                 v-for="action in actions"
                 :key="action.label"
+                :disabled="loading"
                 class="flex cursor-pointer items-start gap-3 py-3"
                 @click="selectAction(action.value)"
             >

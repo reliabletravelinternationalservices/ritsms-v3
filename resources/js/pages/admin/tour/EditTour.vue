@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // import TourTable from '@/components/table/tour/TourTable.vue';
 import TourForm from '@/components/form/tour/TourForm.vue';
-import PublishStatusDropdown, { TourVisibility } from '@/components/PublishStatusDropdown.vue';
+import PublishStatusDropdown, { PublishStatus } from '@/components/PublishStatusDropdown.vue';
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue';
 import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -172,12 +172,44 @@ function resetFormChanges(){
     })
 }
 
-
-function updateStatus(status: TourVisibility){
+function updateStatus(status: PublishStatus) {
     isChangingStatus.value = true
-    tourForm.syncMediaOrder()
-    
+
     const formData = new FormData()
+
+    formData.append('state', status.state)
+    formData.append('visibility', status.visibility)
+
+    router.patch(route('admin.tours.update.status', {
+            tour: props.tour.id,
+        }),
+        formData,
+        {
+            onBefore:() => {
+                saveTourChanges()
+            },
+            onFinish: () => {
+                isChangingStatus.value = false
+            },
+            onError: () => {
+                toast.error(
+                    'Failed to change tour status.'
+                )
+            },
+
+            onSuccess: () => {
+                tourForm.clearErrors()
+                tourForm.resetFormChanges()
+
+                toast.success(
+                    'Tour status changed.'
+                )
+                router.reload({
+                    only: ['tour'],
+                })
+            },
+        }
+    );
 }
 </script>
 
@@ -187,50 +219,85 @@ function updateStatus(status: TourVisibility){
 
         <Head title="Edit Tour" />
         <div class="text-foreground">
-            <div class="flex justify-end gap-4 border-y py-2 px-6 border-border">
-                <Button variant="default"
-                    class="flex items-center gap-2 bg-zinc-600 hover:bg-zinc-400 text-white"
-                    :disabled="isReseting || isSaving"
-                    @click="resetFormChanges()"
-                    >
-
-                    <Icon
-                        v-if="isReseting"
-                        icon="lucide:loader-2"
-                        class="size-5 animate-spin"
-                    />
-                    <Icon
-                        v-else
-                        icon="lucide:refresh-ccw"
-                        class="size-5"
-                    />
-                </Button>
-
-                <Button variant="default"
-                    class="flex items-center gap-2 bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary)/0.8)] text-white"
-                    :disabled="isReseting || isSaving"
-                    @click="saveTourChanges">
-                    <Icon
-                        v-if="isSaving"
-                        icon="lucide:loader-2"
-                        class="size-5 animate-spin"
-                    />
-
-                    <Icon
-                        v-else
-                        icon="lucide:save-check"
-                        class="size-5"
-                    />
-
-                    <span>
-                        {{ isSaving ? 'Saving...' : 'Save Changes' }}
+            <div
+                class="flex items-center justify-between border-y border-border bg-background px-6 py-3"
+            >
+                <!-- Left -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-muted-foreground">
+                        {{ tourForm.hasChanges ? 'Unsaved changes' : 'All changes saved' }}
                     </span>
-                </Button>
+                </div>
 
-                <PublishStatusDropdown
-                    v-model:state="tourForm.form.overviewItems.state"
-                    v-model:visibility="tourForm.form.overviewItems.visibility"
-                    @change="()=>{}" />
+                <!-- Right -->
+                <div class="flex items-center gap-2">
+
+                    <!-- Reset -->
+                    <Button
+                        variant="outline"
+                        class="flex items-center gap-2"
+                        :disabled="isReseting || isSaving || isChangingStatus || !tourForm.hasChanges"
+                        @click="resetFormChanges"
+                    >
+                        <Icon
+                            v-if="isReseting"
+                            icon="lucide:loader-2"
+                            class="size-4 animate-spin"
+                        />
+
+                        <Icon
+                            v-else
+                            icon="lucide:rotate-ccw"
+                            class="size-4"
+                        />
+
+                        <span class="hidden sm:inline">
+                            {{ isReseting ? 'Resetting...' : 'Reset' }}
+                        </span>
+                    </Button>
+
+                    <!-- Save -->
+                    <Button
+                        class="flex items-center gap-2 text-white transition-colors"
+                        :class="
+                            tourForm.hasChanges
+                                ? 'bg-yellow-600 hover:bg-yellow-700'
+                                : 'bg-muted text-muted-foreground'
+                        "
+                        :disabled="
+                            isReseting ||
+                            isSaving ||
+                            isChangingStatus ||
+                            !tourForm.hasChanges
+                        "
+                        @click="saveTourChanges"
+                    >
+                        <Icon
+                            v-if="isSaving"
+                            icon="lucide:loader-2"
+                            class="size-4 animate-spin"
+                        />
+
+                        <Icon
+                            v-else
+                            icon="lucide:save"
+                            class="size-4"
+                        />
+
+                        <span>
+                            {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                        </span>
+                    </Button>
+
+                    <!-- Status -->
+                    <PublishStatusDropdown
+                        v-model:state="tourForm.form.overviewItems.state"
+                        v-model:visibility="tourForm.form.overviewItems.visibility"
+                        :loading="isChangingStatus"
+                        @change="updateStatus"
+                    />
+
+                </div>
             </div>
             <div class="p-6">
                 <TourForm :is-create-new="false" :is-loading="isSaving || isReseting" />
