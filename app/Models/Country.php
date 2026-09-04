@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $name
@@ -44,19 +45,21 @@ class Country extends Model
     }
 
     
-    public function departureRoutes(): HasMany
+    public function departures(): HasMany
     {
         return $this->hasMany(
             TourRoute::class,
-            'departure_country_id'
+            'departure_country_id',
+            'id'
         );
     }
 
-    public function destinationRoutes(): HasMany
+    public function destinations(): HasMany
     {
         return $this->hasMany(
             TourRoute::class,
-            'destination_country_id'
+            'destination_country_id',
+            'id'
         );
     }
 }

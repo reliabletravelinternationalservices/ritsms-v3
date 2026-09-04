@@ -1,3 +1,4 @@
+import { Country } from "./country-v2";
 import { Media } from "./media-v2";
 
 export interface Tour {
@@ -43,6 +44,8 @@ export interface Route {
     destination_country_id: number;
     departure_city: string;
     destination_city: string;
+    departure_country: Country;
+    destination_country: Country;
     sequence: number;
     deleted_at?: string | null;
     created_at?: string | null;

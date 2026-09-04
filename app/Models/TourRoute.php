@@ -23,7 +23,7 @@ class TourRoute extends Model
 
     public function tour(): BelongsTo
     {
-        return $this->belongsTo(Tour::class);
+        return $this->belongsTo(Tour::class, 'tour_id');
     }
 
     public function departureCountry(): BelongsTo

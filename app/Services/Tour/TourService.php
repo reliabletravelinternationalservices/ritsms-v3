@@ -233,13 +233,55 @@ class TourService
     |------------------------------------------------------------------------------------------
     */
 
-    public function getTours(array $relationships = [])
-    {
+   public function getTours(
+        array $relationships = [],
+        array $filters = []
+    ) {
+        $perPage = $filters['per_page'] ?? 10;
+
         return Tour::with($relationships)
-            ->whereNull('deleted_at')
-            ->where('state', '!=', 'archived')
-            ->get();
+            ->when(
+                isset($filters['search']) && $filters['search'] !== '',
+                function ($query) use ($filters) {
+                    $search = $filters['search'];
+
+                    $query->where(function ($query) use ($search) {
+                        $query
+                            ->where('name', 'like', "%{$search}%")
+                            ->orWhere('code', 'like', "%{$search}%");
+                    });
+                }
+            )
+            ->when(
+                isset($filters['state']) && $filters['state'] !== 'all',
+                fn ($query) =>
+                    $query->where('state', $filters['state'])
+            )
+            ->when(
+                isset($filters['category']) && $filters['category'] !== 'all',
+                fn ($query) =>
+                    $query->where('category', $filters['category'])
+            )
+            ->when(
+                isset($filters['visibility']) && $filters['visibility'] !== 'all',
+                fn ($query) =>
+                    $query->where('visibility', $filters['visibility'])
+            )
+            ->when(
+                isset($filters['destination']) && $filters['destination'] !== '0',
+                fn ($query) =>
+                    $query->whereHas('routes', function ($query) use ($filters) {
+                        $query->where(
+                            'destination_country_id',
+                            (int) $filters['destination']
+                        );
+                    })
+            )
+            ->paginate($perPage)
+            ->withQueryString();
     }
+
+
 
     public function getTourBySlug(string $slug, array $relationships)
     {
