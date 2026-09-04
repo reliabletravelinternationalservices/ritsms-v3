@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Table from '@/components/Table.vue'
-import { TourWithRelationshipTables } from '@/types/tour'
+import { Tour, TourWithRelationshipTables } from '@/types/tour'
 import { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
 import { getFirstImage } from '@/lib/utils.js';
@@ -13,7 +13,7 @@ import MenuCell from './cells/MenuCell.vue';
 import { router } from '@inertiajs/vue3';
 import DurationCell from './cells/DurationCell.vue';
 import { Pagination } from '@/types/pagination.js';
-import ButtonIcon from '@/components/ButtonIcon.vue';
+import { useAlertDialog } from '@/composables/useAlertDialog.js';
 
 defineProps<{
     tours: Pagination<TourWithRelationshipTables>
@@ -102,7 +102,7 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
             return h(
                 DateCreatedCell,
                 {
-                    created_at:  row.original.created_at
+                    created_at: row.original.created_at
                 }
             )
         },
@@ -118,9 +118,9 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
             return h(
                 MenuCell,
                 {
-                    onView: ()=>{},
-                    onEdit: ()=> edit(tour.slug),
-                    onDelete: ()=>{}
+                    onView: () => { },
+                    onEdit: () => edit(tour.slug),
+                    onDelete: () => deleteTour(tour)
                 }
             )
         },
@@ -134,6 +134,25 @@ function edit(slug: string) {
         'noopener,noreferrer'
     )
 }
+
+
+
+const deleteTour = (tour: Tour) => {
+    const alert = useAlertDialog();
+    alert.alertDialog({
+        variant: 'danger',
+        title: 'Delete Tour',
+        description: `Are you sure you want to delete the tour "${tour.name}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        onConfirm: () => {
+            router.delete(route('admin.tours.destroy', { id: tour.id }), {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        },
+    });
+};
 
 </script>
 

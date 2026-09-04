@@ -11,8 +11,9 @@ import { computed, reactive } from 'vue';
 import TourTable from '@/components/table/tour/TourTable.vue';
 import { TourWithRelationshipTables } from '@/types/tour';
 import { useReferenceDataStore } from '@/stores/referenceData';
-import PaginationButton from '@/components/table/pagination/pagination.vue';
+import PaginationButton from '@/components/table/pagination/Pagination.vue';
 import { Pagination } from '@/types/pagination';
+
 
 interface Props {
     stats: {
@@ -178,6 +179,8 @@ const handlePerPageChange = (value: string) => {
 
 
 const createTour = () => router.visit(route('admin.tours.create'));
+
+
 </script>
 
 
@@ -191,23 +194,12 @@ const createTour = () => router.visit(route('admin.tours.create'));
             <!-- STATISTICS -->
             <div class="grid grid-cols-4 lg:grid-cols-5 gap-2 w-full items-center p-4">
 
-                <DataCardWithIcon
-                    icon-background="bg-[var(--color-deepYellow)]"
-                    icon-color="text-white"
-                    icon="lucide:map-pinned"
-                    title="Tours"
-                    :value="stats.totalTour"
-                    :with-button="false"
-                />
+                <DataCardWithIcon icon-background="bg-[var(--color-deepYellow)]" icon-color="text-white"
+                    icon="lucide:map-pinned" title="Tours" :value="stats.totalTour" :with-button="false" />
 
-                <DataCardWithIcon
-                    icon-background="bg-[var(--color-green)]"
-                    icon-color="text-white"
-                    icon="lucide:globe-check"
-                    title="Active Tours"
-                    :value="stats.totalPublishedTour"
-                    :with-button="false"
-                />
+                <DataCardWithIcon icon-background="bg-[var(--color-green)]" icon-color="text-white"
+                    icon="lucide:globe-check" title="Active Tours" :value="stats.totalPublishedTour"
+                    :with-button="false" />
 
             </div>
 
@@ -217,48 +209,23 @@ const createTour = () => router.visit(route('admin.tours.create'));
 
                 <div class="grid grid-cols-4 gap-2 w-full items-center p-4">
 
-                    <div
-                        class="col-span-3 grid grid-cols-6 h-full rounded-xl text-foreground w-full gap-2"
-                    >
+                    <div class="col-span-3 grid grid-cols-6 h-full rounded-xl text-foreground w-full gap-2">
 
-                        <SearchInput
-                            v-model="filters.search"
-                            placeholder="Search name or code..."
-                            class="w-full border border-muted-foreground col-span-2"
-                            @keyup.enter="applyFilters"
-                        />
+                        <SearchInput v-model="filters.search" placeholder="Search name or code..."
+                            class="w-full border border-muted-foreground col-span-2" @keyup.enter="applyFilters" />
 
-                        <SelectMenu
-                            v-model="filters.category"
-                            :options="categoryOptions"
-                            placeholder="Category"
-                            class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters"
-                        />
+                        <SelectMenu v-model="filters.category" :options="categoryOptions" placeholder="Category"
+                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu
-                            v-model="filters.state"
-                            :options="stateOptions"
-                            placeholder="State"
-                            class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters"
-                        />
+                        <SelectMenu v-model="filters.state" :options="stateOptions" placeholder="State"
+                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu
-                            v-model="filters.visibility"
-                            :options="visibilityOptions"
-                            placeholder="Visibility"
-                            class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters"
-                        />
+                        <SelectMenu v-model="filters.visibility" :options="visibilityOptions" placeholder="Visibility"
+                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu
-                            v-model="filters.destination"
-                            :options="destinationOptions"
-                            placeholder="Select Destinations"
-                            class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters"
-                        />
+                        <SelectMenu v-model="filters.destination" :options="destinationOptions"
+                            placeholder="Select Destinations" class="w-full border border-muted-foreground"
+                            @update:model-value="applyFilters" />
 
                     </div>
 
@@ -266,12 +233,8 @@ const createTour = () => router.visit(route('admin.tours.create'));
                     <!-- CREATE TOUR -->
                     <div class="flex justify-end items-center">
 
-                        <ButtonIcon
-                            @click="createTour"
-                            icon="lucide:plus"
-                            label="Create Tour"
-                            class="text-white bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/80"
-                        />
+                        <ButtonIcon @click="createTour" icon="lucide:plus" label="Create Tour"
+                            class="text-white bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/80" />
 
                     </div>
 
@@ -283,17 +246,10 @@ const createTour = () => router.visit(route('admin.tours.create'));
             <!-- TABLE + PAGINATION -->
             <div class="flex flex-col gap-4 p-4">
 
-                <TourTable
-                    class="w-full"
-                    :tours="props.tours"
-                />
+                <TourTable class="w-full" :tours="props.tours" />
 
-                <PaginationButton
-                    :pagination="props.tours"
-                    :per-page="filters.per_page"
-                    @page-change="handlePageChange"
-                    @update:per-page="handlePerPageChange"
-                />
+                <PaginationButton :pagination="props.tours" :per-page="filters.per_page" @page-change="handlePageChange"
+                    @update:per-page="handlePerPageChange" />
 
             </div>
 

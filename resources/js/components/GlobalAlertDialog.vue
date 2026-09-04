@@ -55,11 +55,17 @@ const actionClass = computed(() => {
       return 'bg-blue-600 text-white hover:bg-blue-700'
   }
 })
+
+const handleOpenChange = (open: boolean) => {
+  if (!open) {
+    cancel()
+  }
+}
 </script>
 
 <template>
-  <AlertDialog v-model:open="isOpen">
-    <AlertDialogContent>
+  <AlertDialog v-model:open="isOpen" @update:open="handleOpenChange">
+    <AlertDialogContent :disable-outside-pointer-events="false">
       <AlertDialogHeader>
         <AlertDialogTitle :class="titleClass">
           {{ options.title }}
@@ -71,14 +77,11 @@ const actionClass = computed(() => {
       </AlertDialogHeader>
 
       <AlertDialogFooter>
-        <AlertDialogCancel @click="cancel">
+        <AlertDialogCancel>
           {{ options.cancelText }}
         </AlertDialogCancel>
 
-        <AlertDialogAction
-          :class="actionClass"
-          @click="confirm"
-        >
+        <AlertDialogAction :class="actionClass" @click="confirm">
           {{ options.confirmText }}
         </AlertDialogAction>
       </AlertDialogFooter>
