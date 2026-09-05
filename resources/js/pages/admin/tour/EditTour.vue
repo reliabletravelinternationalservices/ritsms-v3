@@ -107,9 +107,9 @@ function saveTourChanges() {
         )
     }
 
-    tourForm.form.assets.video && isFile(tourForm.form.assets.video)
-        ? formData.append('video', tourForm.form.assets.video)
-        : null
+    if (tourForm.form.assets.video && isFile(tourForm.form.assets.video)) {
+        formData.append('video', tourForm.form.assets.video)
+    }
 
     formData.append(
         'removed_media_ids',
@@ -158,16 +158,16 @@ function saveTourChanges() {
 }
 
 
-function resetFormChanges(){
+function resetFormChanges() {
     alertDialog({
-    variant: 'warning',
-    title: 'Reset Changes',
-    description: 'All your changes will be gone. Are you sure you want to reset?',
-    confirmText: 'Reset',
-    onConfirm: () =>  {
-        isReseting.value = true
-        tourForm.resetFormChanges()
-        isReseting.value = false
+        variant: 'warning',
+        title: 'Reset Changes',
+        description: 'All your changes will be gone. Are you sure you want to reset?',
+        confirmText: 'Reset',
+        onConfirm: () => {
+            isReseting.value = true
+            tourForm.resetFormChanges()
+            isReseting.value = false
         }
     })
 }
@@ -181,11 +181,11 @@ function updateStatus(status: PublishStatus) {
     formData.append('visibility', status.visibility)
 
     router.patch(route('admin.tours.update.status', {
-            tour: props.tour.id,
-        }),
+        tour: props.tour.id,
+    }),
         formData,
         {
-            onBefore:() => {
+            onBefore: () => {
                 saveTourChanges()
             },
             onFinish: () => {
@@ -219,9 +219,7 @@ function updateStatus(status: PublishStatus) {
 
         <Head title="Edit Tour" />
         <div class="text-foreground">
-            <div
-                class="flex items-center justify-between border-y border-border bg-background px-6 py-3"
-            >
+            <div class="flex items-center justify-between border-y border-border bg-background px-6 py-3">
                 <!-- Left -->
                 <div class="flex items-center gap-2">
                     <span class="text-sm text-muted-foreground">
@@ -233,23 +231,12 @@ function updateStatus(status: PublishStatus) {
                 <div class="flex items-center gap-2">
 
                     <!-- Reset -->
-                    <Button
-                        variant="outline"
-                        class="flex items-center gap-2"
+                    <Button variant="outline" class="flex items-center gap-2"
                         :disabled="isReseting || isSaving || isChangingStatus || !tourForm.hasChanges"
-                        @click="resetFormChanges"
-                    >
-                        <Icon
-                            v-if="isReseting"
-                            icon="lucide:loader-2"
-                            class="size-4 animate-spin"
-                        />
+                        @click="resetFormChanges">
+                        <Icon v-if="isReseting" icon="lucide:loader-2" class="size-4 animate-spin" />
 
-                        <Icon
-                            v-else
-                            icon="lucide:rotate-ccw"
-                            class="size-4"
-                        />
+                        <Icon v-else icon="lucide:rotate-ccw" class="size-4" />
 
                         <span class="hidden sm:inline">
                             {{ isReseting ? 'Resetting...' : 'Reset' }}
@@ -257,32 +244,17 @@ function updateStatus(status: PublishStatus) {
                     </Button>
 
                     <!-- Save -->
-                    <Button
-                        class="flex items-center gap-2 text-white transition-colors"
-                        :class="
-                            tourForm.hasChanges
-                                ? 'bg-yellow-600 hover:bg-yellow-700'
-                                : 'bg-muted text-muted-foreground'
-                        "
-                        :disabled="
-                            isReseting ||
+                    <Button class="flex items-center gap-2 text-white transition-colors" :class="tourForm.hasChanges
+                        ? 'bg-yellow-600 hover:bg-yellow-700'
+                        : 'bg-muted text-muted-foreground'
+                        " :disabled="isReseting ||
                             isSaving ||
                             isChangingStatus ||
                             !tourForm.hasChanges
-                        "
-                        @click="saveTourChanges"
-                    >
-                        <Icon
-                            v-if="isSaving"
-                            icon="lucide:loader-2"
-                            class="size-4 animate-spin"
-                        />
+                            " @click="saveTourChanges">
+                        <Icon v-if="isSaving" icon="lucide:loader-2" class="size-4 animate-spin" />
 
-                        <Icon
-                            v-else
-                            icon="lucide:save"
-                            class="size-4"
-                        />
+                        <Icon v-else icon="lucide:save" class="size-4" />
 
                         <span>
                             {{ isSaving ? 'Saving...' : 'Save Changes' }}
@@ -290,12 +262,9 @@ function updateStatus(status: PublishStatus) {
                     </Button>
 
                     <!-- Status -->
-                    <PublishStatusDropdown
-                        v-model:state="tourForm.form.overviewItems.state"
-                        v-model:visibility="tourForm.form.overviewItems.visibility"
-                        :loading="isChangingStatus"
-                        @change="updateStatus"
-                    />
+                    <PublishStatusDropdown v-model:state="tourForm.form.overviewItems.state"
+                        v-model:visibility="tourForm.form.overviewItems.visibility" :loading="isChangingStatus"
+                        @change="updateStatus" />
 
                 </div>
             </div>

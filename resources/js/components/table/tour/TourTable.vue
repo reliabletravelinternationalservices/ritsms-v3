@@ -8,12 +8,12 @@ import CategoryCell from './cells/CategoryCell.vue';
 import RouteCell from './cells/RouteCell.vue';
 import TourCell from './cells/TourCell.vue';
 import StatusCell from './cells/StatusCell.vue';
-import DateCreatedCell from './cells/DateCreatedCell.vue';
 import MenuCell from './cells/MenuCell.vue';
 import { router } from '@inertiajs/vue3';
 import DurationCell from './cells/DurationCell.vue';
 import { Pagination } from '@/types/pagination.js';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
+import NextDepartureCell from './cells/NextDepartureCell.vue';
 
 defineProps<{
     tours: Pagination<TourWithRelationshipTables>
@@ -95,14 +95,14 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
     },
 
     {
-        accessorKey: 'created_at',
-        header: 'CREATED',
+        accessorKey: 'next_departure_date',
+        header: 'NEXT DEPARTURE',
 
         cell: ({ row }) => {
             return h(
-                DateCreatedCell,
+                NextDepartureCell,
                 {
-                    created_at: row.original.created_at
+                    departures: row.original.departures
                 }
             )
         },
@@ -145,6 +145,7 @@ const deleteTour = (tour: Tour) => {
         description: `Are you sure you want to delete the tour "${tour.name}"? This action cannot be undone.`,
         confirmText: 'Delete',
         cancelText: 'Cancel',
+
         onConfirm: () => {
             router.delete(route('admin.tours.destroy', { id: tour.id }), {
                 preserveState: true,

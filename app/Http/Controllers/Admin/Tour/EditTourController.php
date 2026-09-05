@@ -60,8 +60,8 @@ class EditTourController extends Controller
                 $this->tourService->updateHotels($tour, $validatedData['hotels']);
             }
 
-            if (! empty($validatedData['departures'])) {
-                $this->tourService->updateDepartures($tour, $validatedData['departures']);
+            if (! empty($validatedData['schedules'])) {
+                $this->tourService->updateDepartures($tour, $validatedData['schedules']);
             }
 
             // Remove media
@@ -93,12 +93,11 @@ class EditTourController extends Controller
             'state' => 'required|string|in:draft,published,archived',
             'visibility' => 'required|string|in:public,private',
         ]);
-        DB::transaction(function () use ($tour, $validatedData){
+        DB::transaction(function () use ($tour, $validatedData) {
             $this->tourService->updateStatus($tour, $validatedData);
         });
 
         return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])
             ->with('success', 'Tour status changed.');
-        
     }
 }

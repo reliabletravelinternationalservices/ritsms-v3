@@ -25,11 +25,11 @@ defineProps<Props>()
     <HoverCard>
         <HoverCardTrigger class="w-fit h-fit cursor-default">
             <div class="flex items-center gap-2 w-fit h-fit">
-                <div class="w-14 h-10">
+                <div class="w-14 h-10 bg-zinc-200 rounded-sm overflow-hidden">
                     <img v-if="image" :src="getImagePath(image.file_path, 'thumbnail')" :alt="image.alt_text"
                         class="w-full h-full rounded-sm">
                     <div v-else class="flex item-center justify-center bg-zinc-200 w-full h-full rounded-sm">
-                        <Icon icon="lucide:image-off" class="size-5 text-zinc-600" />
+                        <Icon icon="lucide:image-off" class="size-5 text-zinc-600 self-center" />
                     </div>
                 </div>
                 <div>
@@ -48,7 +48,7 @@ defineProps<Props>()
                     <img v-if="image" :src="getImagePath(image.file_path, 'thumbnail')" :alt="image.alt_text"
                         class="w-full h-full rounded-sm">
                     <div v-else class="flex item-center justify-center bg-zinc-200 w-full h-full rounded-sm">
-                        <Icon icon="lucide:image-off" class="size-5 text-zinc-600" />
+                        <Icon icon="lucide:image-off" class="size-8 text-zinc-600 self-center" />
                     </div>
                 </div>
                 <div class="font-bold text-base">

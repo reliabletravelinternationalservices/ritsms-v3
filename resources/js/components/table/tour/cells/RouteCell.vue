@@ -23,12 +23,13 @@ const icon = computed(() => {
 <template>
     <div class="w-fit">
         <div v-if="routes.length > 0" class="flex items-center gap-2">
-            <div>{{ routes[0].departure_country.name}}</div>
+            <div>{{ routes[0].departure_country.name }}</div>
             <Icon :icon="icon" class="size-4 text-zinc-600" />
             <div>{{ routes[0].destination_country.name }}</div>
-            <div v-if="props.routes.length > 2" class="text-zinc-600">+{{ props.routes.length - 2 }} more</div>
+            <div v-if="props.routes.length > 2" class="text-gray-500 text-xs italic">+{{ props.routes.length - 2 }} more
+            </div>
         </div>
-        <div v-else >
+        <div v-else>
             <span>N/A</span>
         </div>
     </div>
