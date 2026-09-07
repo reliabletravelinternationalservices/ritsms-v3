@@ -60,10 +60,10 @@ const emit = defineEmits<{
 |--------------------------------------------------------------------------
 */
 
-const currentStatus = computed<PublishStatus>(() => ({
-    state: state.value,
-    visibility: visibility.value,
-}))
+// const currentStatus = computed<PublishStatus>(() => ({
+//     state: state.value,
+//     visibility: visibility.value,
+// }))
 
 /*
 |--------------------------------------------------------------------------
@@ -106,34 +106,34 @@ const statusLabel = computed(() => {
 |--------------------------------------------------------------------------
 */
 
-const statusDescription = computed(() => {
-    if (
-        state.value === 'draft' &&
-        visibility.value === 'private'
-    ) {
-        return 'Still being prepared'
-    }
+// const statusDescription = computed(() => {
+//     if (
+//         state.value === 'draft' &&
+//         visibility.value === 'private'
+//     ) {
+//         return 'Still being prepared'
+//     }
 
-    if (
-        state.value === 'published' &&
-        visibility.value === 'private'
-    ) {
-        return 'Published · Hidden'
-    }
+//     if (
+//         state.value === 'published' &&
+//         visibility.value === 'private'
+//     ) {
+//         return 'Published · Hidden'
+//     }
 
-    if (
-        state.value === 'published' &&
-        visibility.value === 'public'
-    ) {
-        return 'Live publicly'
-    }
+//     if (
+//         state.value === 'published' &&
+//         visibility.value === 'public'
+//     ) {
+//         return 'Live publicly'
+//     }
 
-    if (state.value === 'archived') {
-        return 'Archived'
-    }
+//     if (state.value === 'archived') {
+//         return 'Archived'
+//     }
 
-    return ''
-})
+//     return ''
+// })
 
 /*
 |--------------------------------------------------------------------------
@@ -341,27 +341,15 @@ function selectAction(value: PublishStatus) {
 <template>
     <DropdownMenu>
         <DropdownMenuTrigger as-child>
-            <Button
-                variant="default"
-                :disabled="loading"
-                :class="[
-                    'flex items-center gap-2 text-white',
-                    buttonClass,
-                ]"
-            >
+            <Button variant="default" :disabled="loading" :class="[
+                'flex items-center gap-2 text-white',
+                buttonClass,
+            ]">
                 <!-- Loading -->
-                <Icon
-                    v-if="loading"
-                    icon="lucide:loader-2"
-                    class="size-5 animate-spin"
-                />
+                <Icon v-if="loading" icon="lucide:loader-2" class="size-5 animate-spin" />
 
                 <!-- Normal Icon -->
-                <Icon
-                    v-else
-                    :icon="buttonIcon"
-                    class="text-xl"
-                />
+                <Icon v-else :icon="buttonIcon" class="text-xl" />
 
                 <!-- Label -->
                 <div class="flex flex-col items-start">
@@ -371,29 +359,14 @@ function selectAction(value: PublishStatus) {
                 </div>
 
                 <!-- Dropdown Icon -->
-                <Icon
-                    v-if="!loading"
-                    icon="lucide:chevron-down"
-                    class="ml-1 text-xl"
-                />
+                <Icon v-if="!loading" icon="lucide:chevron-down" class="ml-1 text-xl" />
             </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent
-            align="end"
-            class="w-64"
-        >
-            <DropdownMenuItem
-                v-for="action in actions"
-                :key="action.label"
-                :disabled="loading"
-                class="flex cursor-pointer items-start gap-3 py-3"
-                @click="selectAction(action.value)"
-            >
-                <Icon
-                    :icon="action.icon"
-                    class="mt-0.5 text-lg"
-                />
+        <DropdownMenuContent align="end" class="w-64">
+            <DropdownMenuItem v-for="action in actions" :key="action.label" :disabled="loading"
+                class="flex cursor-pointer items-start gap-3 py-3" @click="selectAction(action.value)">
+                <Icon :icon="action.icon" class="mt-0.5 text-lg" />
 
                 <div class="flex flex-col">
                     <span class="font-medium">

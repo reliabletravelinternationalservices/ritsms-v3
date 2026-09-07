@@ -2,8 +2,6 @@
 import { onBeforeUnmount } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import UniqueID from '@tiptap/extension-unique-id'
 
@@ -68,22 +66,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div
-        class="
+    <div class="
             w-full rounded-md border bg-background
             transition-colors
             focus-within:ring-2
             focus-within:ring-ring
             focus-within:ring-offset-2
-        "
-        :class="{
+        " :class="{
             'cursor-not-allowed opacity-50': disabled,
-        }"
-    >
-        <EditorContent
-            :editor="editor"
-            class="tiptap-textarea p-3"
-        />
+        }">
+        <EditorContent :editor="editor" class="tiptap-textarea p-3" />
     </div>
 </template>
 
