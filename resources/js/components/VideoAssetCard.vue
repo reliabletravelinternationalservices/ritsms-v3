@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount } from 'vue'
 import {
     Trash2,
     FileVideo,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { Media } from '@/types/media-v2'
 import { getMediaUrl, isFile } from '@/lib/utils';
 

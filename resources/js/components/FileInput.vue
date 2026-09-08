@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Upload } from 'lucide-vue-next'
+import { Upload } from '@lucide/vue'
 
 interface Props {
   modelValue?: File[] | File | null

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Bell, Check, Info, CheckCircle2, AlertTriangle, XCircle, ArrowRight } from 'lucide-vue-next'
+import { Bell, Check, Info, CheckCircle2, AlertTriangle, XCircle, ArrowRight } from '@lucide/vue'
 import {
   DropdownMenu,
   DropdownMenuContent,
