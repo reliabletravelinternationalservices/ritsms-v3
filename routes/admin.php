@@ -148,6 +148,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(CreateClientController::class)->group(function () {
                 Route::get('/create', 'create')->name('clients.create');
+                Route::post('/store', 'store')->name('clients.store');
             });
 
             Route::controller(ClientManagementController::class)->group(function () {
