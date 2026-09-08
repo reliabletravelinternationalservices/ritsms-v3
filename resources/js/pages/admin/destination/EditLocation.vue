@@ -25,7 +25,7 @@ import {
     Save,
     Compass,
     RefreshCcw
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import { toast } from 'vue-sonner';
 import { DestinationLocation } from '@/types/destination-location';
 

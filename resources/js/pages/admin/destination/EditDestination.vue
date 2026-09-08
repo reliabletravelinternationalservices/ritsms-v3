@@ -24,7 +24,7 @@ import {
     ChevronLeft,
     Save,
     RefreshCcw,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import { toast } from 'vue-sonner';
 
 const props = defineProps<{ destination: Destination }>();

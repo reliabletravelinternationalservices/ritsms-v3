@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { Image } from 'lucide-vue-next';
+import { Image } from '@lucide/vue';
 import { Icon as Iconify } from '@iconify/vue'; 
 import { Button } from '@/components/ui/button';
 import PackageMediaModal from '@/components/PackageMediaModal.vue'; 

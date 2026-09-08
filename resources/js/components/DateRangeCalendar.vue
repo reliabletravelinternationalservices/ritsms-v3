@@ -5,7 +5,7 @@ import {
     getLocalTimeZone,
 } from '@internationalized/date'
 import type { DateRange } from 'radix-vue'
-import { CalendarIcon, ChevronDown } from 'lucide-vue-next'
+import { CalendarIcon, ChevronDown } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
 import {

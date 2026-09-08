@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatCurrency, getPackageDurationLabel } from '@/lib/utils';
-import { Clock, CloudSun, DollarSign } from 'lucide-vue-next';
+import { Clock, CloudSun, DollarSign } from '@lucide/vue';
 
 interface Props {
     duration: number;

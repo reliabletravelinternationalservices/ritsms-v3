@@ -11,7 +11,7 @@ import {
     XCircle, 
     FileText,
     Pencil,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 interface Props {
     packageId: number;
     itineraries: Array<{

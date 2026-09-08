@@ -9,7 +9,7 @@ import PackagePinToolbar from '@/components/admin/package/PackagePinToolbar.vue'
 import PinnedPackageList from '@/components/admin/package/PinnedPackageList.vue';
 import PackageCatalogList from '@/components/admin/package/PackageCatalogList.vue';
 import { Badge } from '@/components/ui/badge';
-import { Pin } from 'lucide-vue-next';
+import { Pin } from '@lucide/vue';
 import { formatDateString } from '@/lib/utils';
 import { toast } from 'vue-sonner';
 import { Destination } from '@/types/destination';

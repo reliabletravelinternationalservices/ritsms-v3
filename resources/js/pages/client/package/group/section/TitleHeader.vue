@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { Image } from 'lucide-vue-next';
+import { Image } from '@lucide/vue';
 import { useShareModal } from '@/stores/shareModal';
 import { getImageUrl } from '@/lib/utils';
 import { GroupedPackage } from '@/types/grouped-package';

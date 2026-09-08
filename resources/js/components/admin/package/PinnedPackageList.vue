@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { Compass, GripVertical, PinOff } from 'lucide-vue-next';
+import { Compass, GripVertical, PinOff } from '@lucide/vue';
 import { type Package } from '@/types/package';
 
 const props = defineProps<{

@@ -10,7 +10,7 @@ import { formatDateString } from '@/lib/utils';
 import { openDeleteDialog } from '@/stores/deleteDialog';
 import { type BreadcrumbItem, SharedData, type User } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
-import { ArrowLeft, CheckCircle2, CircleAlert, CircleMinus, CirclePlus, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from 'lucide-vue-next';
+import { ArrowLeft, CheckCircle2, CircleAlert, CircleMinus, CirclePlus, Mail, Pencil, Phone, Shield, ShieldAlert, Trash2, User as UserIcon } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
-import { UploadCloud, X, CheckCircle2, AlertCircle } from 'lucide-vue-next'
+import { UploadCloud, X, CheckCircle2, AlertCircle } from '@lucide/vue'
 
 interface LocalUploadFile {
   id: string

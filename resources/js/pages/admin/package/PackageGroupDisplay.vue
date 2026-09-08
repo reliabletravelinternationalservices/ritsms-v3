@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 // Icons
-import { Plus, Sparkles, Compass, Search, X } from 'lucide-vue-next';
+import { Plus, Sparkles, Compass, Search, X } from '@lucide/vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('admin.dashboard') },

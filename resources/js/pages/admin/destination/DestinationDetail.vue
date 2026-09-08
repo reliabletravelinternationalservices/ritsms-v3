@@ -26,7 +26,7 @@ import {
     Trash2,
     Plus,
     ChevronLeft
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 interface Props {
     destination: Destination;

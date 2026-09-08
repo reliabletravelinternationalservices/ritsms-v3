@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { Save, Loader2 } from 'lucide-vue-next';
+import { Save, Loader2 } from '@lucide/vue';
 
 const props = defineProps<{
   isDirty: boolean;
