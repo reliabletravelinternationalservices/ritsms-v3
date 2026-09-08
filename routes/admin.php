@@ -35,7 +35,8 @@ use App\Http\Controllers\Admin\Tour\EditTourController;
 use App\Http\Controllers\Admin\Tour\TourManagementController;
 use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
-use App\Http\Controllers\Admin\User\ClientManagementController;
+use App\Http\Controllers\Admin\Client\ClientManagementController;
+use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
@@ -132,6 +133,25 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(BookingController::class)->group(function () {
                 Route::get('/', 'index')->name('bookings');
+            });
+
+        });
+
+
+        /*
+            |--------------------------------------------------------------------------
+            | CLIENTS
+            |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('clients')->group(function () {
+
+            Route::controller(CreateClientController::class)->group(function () {
+                Route::get('/create', 'create')->name('clients.create');
+            });
+
+            Route::controller(ClientManagementController::class)->group(function () {
+                Route::get('/', 'index')->name('clients');
             });
 
         });
@@ -334,11 +354,11 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 ->name('admin.users.admins.update');
         });
 
-        Route::prefix('clients')->group(function () {
+        // Route::prefix('clients')->group(function () {
 
-            Route::get('/', [ClientManagementController::class, 'index'])
-                ->name('admin.users.clients');
-        });
+        //     Route::get('/', [ClientManagementController::class, 'index'])
+        //         ->name('admin.users.clients');
+        // });
     });
 
     /*

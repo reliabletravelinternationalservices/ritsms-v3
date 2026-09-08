@@ -85,7 +85,7 @@ function createDraftTour() {
             </div>
 
             <div class="p-6">
-                <TourForm :is-create-new="true" />
+                <TourForm :is-create-new="true" :is-loading="isSaving" />
             </div>
 
             <ScrollToTopButton />

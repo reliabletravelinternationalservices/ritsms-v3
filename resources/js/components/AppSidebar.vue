@@ -35,6 +35,12 @@ const statisticsNavItems: NavItem[] = [
         url: route('admin.bookings', undefined, false),
         icon: 'lucide:book-marked',
     },
+    {
+        title: 'Clients',
+        href: route('admin.clients'),
+        url: route('admin.clients', undefined, false),
+        icon: 'lucide:square-user-round',
+    },
 ];
 
 const toursNavItems: NavItem[] = [

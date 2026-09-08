@@ -10,6 +10,7 @@ class ClientManagementController extends Controller
 {
     public function index()
     {
-        return Inertia::render('admin/user/client/ClientManagement');
+        
+        return Inertia::render('admin/client/ClientManagement');
     }
 }

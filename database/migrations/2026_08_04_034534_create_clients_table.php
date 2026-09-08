@@ -32,7 +32,7 @@ return new class extends Migration
                     'cancelled',
                     'disqualified'
                 ]
-            )->nullable();
+            );
 
             $table->enum(
                 'source',
@@ -48,14 +48,14 @@ return new class extends Migration
                     'youtube',
                     'other'
                 ]
-            )->nullable();
+            );
 
-            $table->enum('gender', ['male', 'female', 'transgender', 'other'])->nullable();
+            $table->enum('type', ['personal', 'business', 'partner', 'other'])->default('other');
+            $table->enum('gender', ['male', 'female', 'transgender', 'lesbian', 'other'])->default('other');
             $table->boolean('accept_marketing')->default(false);
             $table->string('website_link', 255)->nullable();
             $table->string('facebook_link', 255)->nullable();
             $table->dateTime('last_contacted_at')->nullable();
-
 
             $table->text('notes')->nullable();
 

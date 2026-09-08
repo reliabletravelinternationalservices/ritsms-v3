@@ -8,11 +8,13 @@ import HotelSection from './HotelSection.vue';
 import PriceAndSchedule from './PriceAndSchedule.vue';
 import ImageAndAssetSection from './ImageAndAssetSection.vue';
 
-
-defineProps<{
+withDefaults(defineProps<{
     isCreateNew: boolean;
     isLoading: boolean;
-}>()
+}>(), {
+  isLoading: false
+})
+
 
 const tourForm = useTourFormStore()
 

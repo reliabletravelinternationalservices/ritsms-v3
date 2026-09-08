@@ -7,32 +7,18 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { computed, reactive } from 'vue';
-import TourTable from '@/components/table/tour/TourTable.vue';
-import { TourWithRelationshipTables } from '@/types/tour';
-import { useReferenceDataStore } from '@/stores/referenceData';
 import PaginationButton from '@/components/table/pagination/Pagination.vue';
 import { Pagination } from '@/types/pagination';
-
+import ClientTable from '@/components/table/client/ClientTable.vue';
+import { Client } from '@/types/client';
 
 interface Props {
     stats: {
-        totalTour: number,
-        totalPublishedTour: number,
+        totalClient: number,
     },
-    tours: Pagination<TourWithRelationshipTables>,
-    countries: {
-        id: number,
-        name: string,
-    }[]
+    clients: Pagination<Client>
 }
-
-const props = defineProps<Props>();
-
-
-const useReference = useReferenceDataStore();
-
-useReference.setCountries(props.countries);
-
+const props = defineProps<Props>()
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,8 +29,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const filters = reactive({
-    page: props.tours.current_page.toString() ?? '1',
-    per_page: props.tours.per_page.toString() ?? '10',
+    page:'1',
+    per_page: '10',
     state: 'all',
     category: 'all',
     visibility: 'all',
@@ -113,8 +99,7 @@ const destinationOptions = computed<SelectOption[]>(() => [
     {
         label: 'All Destinations',
         value: '0',
-    },
-    ...useReference.countryOptions,
+    }
 ]);
 
 
@@ -177,7 +162,7 @@ const handlePerPageChange = (value: string) => {
 };
 
 
-const createTour = () => router.visit(route('admin.tours.create'));
+const createClient = () => router.visit(route('admin.clients.create'));
 
 
 </script>
@@ -186,7 +171,7 @@ const createTour = () => router.visit(route('admin.tours.create'));
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
 
-        <Head title="Tour Management" />
+        <Head title="Client Management" />
 
         <div class="flex flex-col gap-4">
 
@@ -194,11 +179,7 @@ const createTour = () => router.visit(route('admin.tours.create'));
             <div class="grid grid-cols-4 lg:grid-cols-5 gap-2 w-full items-center p-4">
 
                 <DataCardWithIcon icon-background="bg-[var(--color-deepYellow)]" icon-color="text-white"
-                    icon="lucide:map-pinned" title="Tours" :value="stats.totalTour" :with-button="false" />
-
-                <DataCardWithIcon icon-background="bg-[var(--color-green)]" icon-color="text-white"
-                    icon="lucide:globe-check" title="Active Tours" :value="stats.totalPublishedTour"
-                    :with-button="false" />
+                    icon="lucide:square-user-round" title="Clients" :value="props.stats.totalClient" :with-button="false" />
 
             </div>
 
@@ -222,17 +203,13 @@ const createTour = () => router.visit(route('admin.tours.create'));
                         <SelectMenu v-model="filters.visibility" :options="visibilityOptions" placeholder="Visibility"
                             class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu v-model="filters.destination" :options="destinationOptions"
-                            placeholder="Select Destinations" class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters" />
-
                     </div>
 
 
                     <!-- CREATE TOUR -->
                     <div class="flex justify-end items-center">
 
-                        <ButtonIcon @click="createTour" icon="lucide:plus" label="Create Tour"
+                        <ButtonIcon @click="createClient" icon="lucide:plus" label="Create Client"
                             class="text-white bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/80" />
 
                     </div>
@@ -245,9 +222,9 @@ const createTour = () => router.visit(route('admin.tours.create'));
             <!-- TABLE + PAGINATION -->
             <div class="flex flex-col gap-4 p-4">
 
-                <TourTable class="w-full" :tours="props.tours" />
+                <ClientTable class="w-full" :clients="props.clients" />
 
-                <PaginationButton :pagination="props.tours" :per-page="filters.per_page" @page-change="handlePageChange"
+                <PaginationButton :pagination="props.clients" :per-page="filters.per_page" @page-change="handlePageChange"
                     @update:per-page="handlePerPageChange" />
 
             </div>

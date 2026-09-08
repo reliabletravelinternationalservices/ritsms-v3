@@ -8,7 +8,7 @@ import CategoryCell from './cells/CategoryCell.vue';
 import RouteCell from './cells/RouteCell.vue';
 import TourCell from './cells/TourCell.vue';
 import StatusCell from './cells/StatusCell.vue';
-import MenuCell from './cells/MenuCell.vue';
+import MenuCell from '../reusable/MenuCell.vue';
 import { router } from '@inertiajs/vue3';
 import DurationCell from './cells/DurationCell.vue';
 import { Pagination } from '@/types/pagination.js';
