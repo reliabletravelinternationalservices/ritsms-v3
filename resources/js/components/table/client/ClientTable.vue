@@ -121,23 +121,23 @@ function edit(slug: string) {
 
 
 
-// const deleteTour = (tour: Tour) => {
-//     const alert = useAlertDialog();
-//     alert.alertDialog({
-//         variant: 'danger',
-//         title: 'Delete Tour',
-//         description: `Are you sure you want to delete the tour "${tour.name}"? This action cannot be undone.`,
-//         confirmText: 'Delete',
-//         cancelText: 'Cancel',
+const deleteTour = (client: Client) => {
+    const alert = useAlertDialog();
+    alert.alertDialog({
+        variant: 'danger',
+        title: 'Delete Client',
+        description: `Are you sure you want to delete a Client "${client.name}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
 
-//         onConfirm: () => {
-//             router.delete(route('admin.tours.destroy', { id: tour.id }), {
-//                 preserveState: true,
-//                 preserveScroll: true,
-//             });
-//         },
-//     });
-// };
+        onConfirm: () => {
+            router.delete(route('admin.tours.destroy', { id: client.id }), {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        },
+    });
+};
 
 </script>
 

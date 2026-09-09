@@ -4,14 +4,26 @@ namespace App\Http\Controllers\Admin\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Services\Client\ClientService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ClientManagementController extends Controller
 {
-    public function index(): Response
+    public function __construct(protected ClientService $service) {
+    }
+    public function index(Request $request): Response
     {
-        $clients = Client::latest()->paginate(10);
+        $clients = $this->service->getClients([], $request->only([
+                'page',
+                'per_page',
+                'type',
+                'source',
+                'status',
+                'search',
+            ]),);
+            
         $stats = $this->stats();
     
         return Inertia::render('admin/client/ClientManagement', compact('clients', 'stats'));
@@ -20,7 +32,7 @@ class ClientManagementController extends Controller
     private function stats(): array
     {
         return [
-            'totalClient' => Client::count()
+            'totalClient' => $this->service->getClientTotalCount()
         ];
     }
 }

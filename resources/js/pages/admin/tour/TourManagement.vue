@@ -90,6 +90,10 @@ const stateOptions: SelectOption[] = [
         label: 'Archived',
         value: 'archived',
     },
+    {
+        label: 'Deleted',
+        value: 'deleted',
+    },
 ];
 
 

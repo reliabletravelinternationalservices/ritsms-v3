@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\Client\ClientManagementController;
 use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\EditClientController;
+use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
@@ -121,6 +122,11 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 Route::get('/{slug}/edit', 'edit')->name('tours.edit');
                 Route::put('/{tour}/update', 'update')->name('tours.update');
                 Route::patch('/{tour}/status', 'updateStatus')->name('tours.update.status');
+            });
+
+            Route::controller(DeleteTourController::class)->group(function () {
+                Route::delete('/{tour}/delete', 'delete')->name('tours.delete');
+                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy');
             });
         });
 

@@ -14,6 +14,7 @@ import DurationCell from './cells/DurationCell.vue';
 import { Pagination } from '@/types/pagination.js';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import NextDepartureCell from './cells/NextDepartureCell.vue';
+import { toast } from 'vue-sonner';
 
 defineProps<{
     tours: Pagination<TourWithRelationshipTables>
@@ -147,9 +148,15 @@ const deleteTour = (tour: Tour) => {
         cancelText: 'Cancel',
 
         onConfirm: () => {
-            router.delete(route('admin.tours.destroy', { id: tour.id }), {
+            router.delete(route('admin.tours.delete', { tour: tour.id }), {
                 preserveState: true,
                 preserveScroll: true,
+            onError: (e) => {
+                toast.error('Failed to delete tour. Somethings went wrong.')
+            },
+            onSuccess: () => {
+                toast.success('Tour deleted successfully.')
+            },
             });
         },
     });

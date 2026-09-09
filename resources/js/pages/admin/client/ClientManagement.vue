@@ -162,7 +162,7 @@ const loadTours = (page = 1) => {
     }
 
     if (filters.type !== 'all') {
-        params.state = filters.type
+        params.type = filters.type
     }
 
     if (filters.status !== 'all') {
@@ -236,7 +236,7 @@ const createClient = () => router.visit(route('admin.clients.create'));
 
                     <div class="col-span-3 grid grid-cols-6 h-full rounded-xl text-foreground w-full gap-2">
 
-                        <SearchInput v-model="filters.search" placeholder="Search name or code..."
+                        <SearchInput v-model="filters.search" placeholder="Search name | email | code..."
                             class="w-full border border-muted-foreground col-span-2" @keyup.enter="applyFilters" />
 
                         <SelectMenu v-model="filters.type" :options="typeOptions" placeholder="Type"

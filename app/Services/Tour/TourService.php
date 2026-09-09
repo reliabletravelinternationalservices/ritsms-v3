@@ -239,7 +239,9 @@ class TourService
     ) {
         $perPage = $filters['per_page'] ?? 10;
 
+    if (isset($filters['state']) && $filters['state'] === 'deleted') {
         return Tour::with($relationships)
+            ->whereNotNull('deleted_at')
             ->when(
                 isset($filters['search']) && $filters['search'] !== '',
                 function ($query) use ($filters) {
@@ -277,8 +279,52 @@ class TourService
                         );
                     })
             )
+            ->withTrashed()
             ->paginate($perPage)
             ->withQueryString();
+    }
+
+
+    return Tour::with($relationships)
+        ->when(
+            isset($filters['search']) && $filters['search'] !== '',
+            function ($query) use ($filters) {
+                $search = $filters['search'];
+
+                $query->where(function ($query) use ($search) {
+                    $query
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                });
+            }
+        )
+        ->when(
+            isset($filters['state']) && $filters['state'] !== 'all',
+            fn ($query) =>
+                $query->where('state', $filters['state'])
+        )
+        ->when(
+            isset($filters['category']) && $filters['category'] !== 'all',
+            fn ($query) =>
+                $query->where('category', $filters['category'])
+        )
+        ->when(
+            isset($filters['visibility']) && $filters['visibility'] !== 'all',
+            fn ($query) =>
+                $query->where('visibility', $filters['visibility'])
+        )
+        ->when(
+            isset($filters['destination']) && $filters['destination'] !== '0',
+            fn ($query) =>
+                $query->whereHas('routes', function ($query) use ($filters) {
+                    $query->where(
+                        'destination_country_id',
+                        (int) $filters['destination']
+                    );
+                })
+        )
+        ->paginate($perPage)
+        ->withQueryString();
     }
 
 
