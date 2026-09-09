@@ -3,12 +3,23 @@ import ClientForm from '@/components/form/client/ClientForm.vue'
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue'
 import Button from '@/components/ui/button/Button.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
+import { truncateText } from '@/lib/utils'
 import { useClientFormStore } from '@/stores/clientForm'
 import { BreadcrumbItem } from '@/types'
+import { Client } from '@/types/client'
 import { Icon } from '@iconify/vue'
 import { Head, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
+
+
+
+interface Props {
+    client:  Client;
+}
+
+const props = defineOptions<Props>();
+
 
 const clientForm = useClientFormStore()
 const isSaving = ref(false)
@@ -19,8 +30,8 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.clients'),
     },
     {
-        title: 'Create',
-        href: route('admin.clients.create'),
+        title: 'Edit',
+        href: route('admin.clients.edit'),
     },
 ]
 

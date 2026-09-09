@@ -31,77 +31,125 @@ const breadcrumbs: BreadcrumbItem[] = [
 const filters = reactive({
     page:'1',
     per_page: '10',
-    state: 'all',
-    category: 'all',
-    visibility: 'all',
-    destination: '0',
+    type: 'all',
+    status: 'all',
+    source: 'all',
     search: '',
 });
 
 
-const categoryOptions: SelectOption[] = [
+const typeOptions: SelectOption[] = [
     {
-        label: 'All Category',
+        label: 'All Types',
         value: 'all',
     },
     {
-        label: 'Inbound',
-        value: 'inbound',
+        label: 'Personal',
+        value: 'personal',
     },
     {
-        label: 'Outbound',
-        value: 'outbound',
+        label: 'Business',
+        value: 'business',
     },
     {
-        label: 'Domestic',
-        value: 'domestic',
+        label: 'Partner',
+        value: 'partner',
     },
-];
+    {
+        label: 'Other',
+        value: 'other',
+    },
+]
 
-
-const stateOptions: SelectOption[] = [
+const statusOptions: SelectOption[] = [
     {
-        label: 'Published & Draft',
+        label: 'All Statuses',
         value: 'all',
     },
     {
-        label: 'Draft Only',
-        value: 'draft',
+        label: 'New',
+        value: 'new',
     },
     {
-        label: 'Published Only',
-        value: 'published',
+        label: 'Contacted',
+        value: 'contacted',
     },
     {
-        label: 'Archived',
-        value: 'archived',
+        label: 'Qualified',
+        value: 'qualified',
     },
-];
+    {
+        label: 'Quotation Sent',
+        value: 'quotation_sent',
+    },
+    {
+        label: 'Booked',
+        value: 'booked',
+    },
+    {
+        label: 'Completed',
+        value: 'completed',
+    },
+    {
+        label: 'Unresponsive',
+        value: 'unresponsive',
+    },
+    {
+        label: 'Cancelled',
+        value: 'cancelled',
+    },
+    {
+        label: 'Disqualified',
+        value: 'disqualified',
+    },
+]
 
-
-const visibilityOptions: SelectOption[] = [
+const sourceOptions: SelectOption[] = [
     {
-        label: 'Public & Private',
+        label: 'All Sources',
         value: 'all',
     },
     {
-        label: 'Public Only',
-        value: 'public',
+        label: 'Website',
+        value: 'website',
     },
     {
-        label: 'Private Only',
-        value: 'private',
+        label: 'Manual',
+        value: 'manual',
     },
-];
-
-
-const destinationOptions = computed<SelectOption[]>(() => [
     {
-        label: 'All Destinations',
-        value: '0',
-    }
-]);
-
+        label: 'Gmail',
+        value: 'gmail',
+    },
+    {
+        label: 'Walk In',
+        value: 'walk_in',
+    },
+    {
+        label: 'Google Ads',
+        value: 'google_ads',
+    },
+    {
+        label: 'Facebook',
+        value: 'facebook',
+    },
+    {
+        label: 'Instagram',
+        value: 'instagram',
+    },
+    {
+        label: 'TikTok',
+        value: 'tiktok',
+    },
+    {
+        label: 'YouTube',
+        value: 'youtube',
+    },
+    {
+        label: 'Other',
+        value: 'other',
+    },
+]
 
 const loadTours = (page = 1) => {
     const params: Record<string, string | number> = {}
@@ -113,27 +161,24 @@ const loadTours = (page = 1) => {
         params.per_page = filters.per_page
     }
 
-    if (filters.state !== 'all') {
-        params.state = filters.state
+    if (filters.type !== 'all') {
+        params.state = filters.type
     }
 
-    if (filters.category !== 'all') {
-        params.category = filters.category
+    if (filters.status !== 'all') {
+        params.status = filters.status
     }
 
-    if (filters.visibility !== 'all') {
-        params.visibility = filters.visibility
+    if (filters.source !== 'all') {
+        params.source = filters.source
     }
 
-    if (filters.destination !== '0') {
-        params.destination = filters.destination
-    }
 
     if (filters.search.trim() !== '') {
         params.search = filters.search.trim()
     }
 
-    router.get(route('admin.tours'), params, {
+    router.get(route('admin.clients'), params, {
         preserveState: true,
         preserveScroll: true,
     })
@@ -194,13 +239,13 @@ const createClient = () => router.visit(route('admin.clients.create'));
                         <SearchInput v-model="filters.search" placeholder="Search name or code..."
                             class="w-full border border-muted-foreground col-span-2" @keyup.enter="applyFilters" />
 
-                        <SelectMenu v-model="filters.category" :options="categoryOptions" placeholder="Category"
+                        <SelectMenu v-model="filters.type" :options="typeOptions" placeholder="Type"
                             class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu v-model="filters.state" :options="stateOptions" placeholder="State"
+                        <SelectMenu v-model="filters.status" :options="statusOptions" placeholder="Status"
                             class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
-                        <SelectMenu v-model="filters.visibility" :options="visibilityOptions" placeholder="Visibility"
+                        <SelectMenu v-model="filters.source" :options="sourceOptions" placeholder="Source"
                             class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
 
                     </div>

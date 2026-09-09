@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\Client\ClientManagementController;
 use App\Http\Controllers\Admin\Client\CreateClientController;
+use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
@@ -149,6 +150,11 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(CreateClientController::class)->group(function () {
                 Route::get('/create', 'create')->name('clients.create');
                 Route::post('/store', 'store')->name('clients.store');
+            });
+
+            Route::controller(EditClientController::class)->group(function () {
+                Route::get('{slug}/edit', 'edit')->name('clients.edit');
+                // Route::post('/store', 'store')->name('clients.store');
             });
 
             Route::controller(ClientManagementController::class)->group(function () {

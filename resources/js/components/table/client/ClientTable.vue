@@ -8,6 +8,10 @@ import { Pagination } from '@/types/pagination.js';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import MenuCell from '../reusable/MenuCell.vue';
 import ClientCell from './cells/ClientCell.vue';
+import ContactCell from '../admin/ContactCell.vue';
+import StatusCell from './cells/StatusCell.vue';
+import TypeCell from './cells/TypeCell.vue';
+import LastContactedCell from './cells/LastContactedCell.vue';
 
 
 defineProps<{
@@ -18,7 +22,7 @@ const columns: ColumnDef<Client, unknown>[] = [
 
     {
         id: 'code',
-        header: 'Client',
+        header: 'CLIENT',
 
         cell: ({ row }) => {
             const client = row.original;
@@ -29,6 +33,62 @@ const columns: ColumnDef<Client, unknown>[] = [
                     name: client.name,
                 }
             )
+        },
+    },
+
+    {
+        accessorKey: 'type',
+        header: 'TYPE',
+
+        cell: ({ row }) => {
+            const client = row.original
+
+            return h(TypeCell, {
+                type: client.type,
+            })
+        },
+    },
+
+    {
+        accessorKey: 'contact',
+        header: 'CONTACTS',
+
+        cell: ({ row }) => {
+            const client = row.original;
+            return h(
+                ContactCell,
+                {
+                    phone: client.phone,
+                    email: client.email,
+                }
+            )
+        },
+    },
+
+
+    {
+        accessorKey: 'status',
+        header: 'STATUS',
+
+        cell: ({ row }) => {
+            const client = row.original
+
+            return h(StatusCell, {
+                status: client.status,
+            })
+        },
+    },
+    
+    {
+        accessorKey: 'last_contacted',
+        header: 'CONTACT AT',
+
+        cell: ({ row }) => {
+            const client = row.original
+
+            return h(LastContactedCell, {
+                datetime: client.last_contacted_at,
+            })
         },
     },
 
@@ -43,7 +103,7 @@ const columns: ColumnDef<Client, unknown>[] = [
                 MenuCell,
                 {
                     onView: () => { },
-                    onEdit: () => {},
+                    onEdit: () => { edit(client.slug) },
                     onDelete: () =>  {}
                 }
             )
@@ -51,13 +111,13 @@ const columns: ColumnDef<Client, unknown>[] = [
     },
 ]
 
-// function edit(slug: string) {
-//     window.open(
-//         route('admin.tours.edit', { slug }),
-//         '_blank',
-//         'noopener,noreferrer'
-//     )
-// }
+function edit(slug: string) {
+    window.open(
+        route('admin.clients.edit', { slug }),
+        '_blank',
+        'noopener,noreferrer'
+    )
+}
 
 
 

@@ -13,7 +13,7 @@ class ClientManagementController extends Controller
     {
         $clients = Client::latest()->paginate(10);
         $stats = $this->stats();
-
+    
         return Inertia::render('admin/client/ClientManagement', compact('clients', 'stats'));
     }
 

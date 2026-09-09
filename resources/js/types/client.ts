@@ -43,6 +43,7 @@ export interface Client {
     email: string;
     phone: string | null;
     address: string | null;
+    type: ClientType;
 
     status: ClientStatus;
     source: ClientSource;

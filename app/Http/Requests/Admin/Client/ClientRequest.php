@@ -28,20 +28,6 @@ class ClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => [
-                'required',
-                'string',
-                'max:20',
-                Rule::unique('clients', 'code')->ignore($this->client),
-            ],
-
-            'slug' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('clients', 'slug')->ignore($this->client),
-            ],
-
             'name' => [
                 'required',
                 'string',
@@ -122,13 +108,6 @@ class ClientRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code.required' => 'Client code is required.',
-            'code.max' => 'Client code must not exceed 20 characters.',
-            'code.unique' => 'This client code is already in use.',
-
-            'slug.required' => 'Client slug is required.',
-            'slug.max' => 'Client slug must not exceed 100 characters.',
-            'slug.unique' => 'This client slug is already in use.',
 
             'name.required' => 'Client name is required.',
             'name.max' => 'Client name must not exceed 100 characters.',
