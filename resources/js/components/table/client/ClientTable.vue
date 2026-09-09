@@ -113,7 +113,7 @@ const columns: ColumnDef<Client, unknown>[] = [
 
 function edit(slug: string) {
     window.open(
-        route('admin.clients.edit', { slug }),
+        route('admin.clients.edit', { slug: slug }),
         '_blank',
         'noopener,noreferrer'
     )

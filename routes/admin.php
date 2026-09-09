@@ -154,7 +154,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(EditClientController::class)->group(function () {
                 Route::get('{slug}/edit', 'edit')->name('clients.edit');
-                // Route::post('/store', 'store')->name('clients.store');
+                Route::put('{client}/update', 'update')->name('clients.update');
             });
 
             Route::controller(ClientManagementController::class)->group(function () {

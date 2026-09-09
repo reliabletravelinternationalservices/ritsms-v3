@@ -266,7 +266,9 @@ const statuses: SelectOption[] = [
                 <InputError :message="clientForm.errors['notes']" />
             </div>
             <div class="flex gap-2 w-full">
-                <Checkbox v-model="clientForm.form.followup.accept_marketing"
+                <Checkbox 
+                    :checked="clientForm.form.followup.accept_marketing"
+                    @update:checked="(value) => clientForm.form.followup.accept_marketing = value"
                     placeholder="accept marketing" id="accept_marketing" />
                 <label for="accept_marketing" class="text-sm font-semibold text-zinc-600">Accept Marketing</label>
             </div>

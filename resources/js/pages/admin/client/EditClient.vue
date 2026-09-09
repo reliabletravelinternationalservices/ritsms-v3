@@ -12,17 +12,17 @@ import { Head, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 
-
-
 interface Props {
-    client:  Client;
+    client: Client;
 }
 
-const props = defineOptions<Props>();
+const props = defineProps<Props>()
 
 
 const clientForm = useClientFormStore()
 const isSaving = ref(false)
+
+clientForm.fillForm(props.client)
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -30,16 +30,20 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.clients'),
     },
     {
+        title: truncateText(props.client.name, 20),
+        href: '',
+    },
+    {
         title: 'Edit',
-        href: route('admin.clients.edit'),
+        href: route('admin.clients.edit', { slug: props.client.slug}),
     },
 ]
 
 function saveClientInformnation() {
     isSaving.value = true
 
-    router.post(
-        route('admin.clients.store'),
+    router.put(
+        route('admin.clients.update', { client: props.client.id}),
         {
            ...clientForm.form.basicInformation,
            ...clientForm.form.classification,
@@ -56,7 +60,7 @@ function saveClientInformnation() {
             },
             onSuccess: () => {
                 clientForm.clearErrors()
-                toast.success('Client recorded successfully.')
+                toast.success('Client save successfully.')
             },
         },
     )
@@ -67,7 +71,7 @@ function saveClientInformnation() {
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
 
-        <Head title="Create Client" />
+        <Head title="Edit Client" />
 
         <div class="text-foreground">
 
