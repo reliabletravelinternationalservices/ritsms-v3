@@ -15,6 +15,7 @@ import { Pagination } from '@/types/pagination.js';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import NextDepartureCell from './cells/NextDepartureCell.vue';
 import { toast } from 'vue-sonner';
+import DeletedAtCell from './cells/DeletedAtCell.vue';
 
 defineProps<{
     tours: Pagination<TourWithRelationshipTables>
@@ -25,7 +26,7 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
     {
         id: 'code',
         header: 'TOUR',
-
+        
         cell: ({ row }) => {
             const tour = row.original;
             return h(
@@ -116,14 +117,24 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
 
         cell: ({ row }) => {
             const tour = row.original
-            return h(
-                MenuCell,
-                {
-                    onView: () => { },
-                    onEdit: () => edit(tour.slug),
-                    onDelete: () => deleteTour(tour)
-                }
-            )
+            if(tour.deleted_at){
+                return h(
+                    DeletedAtCell,
+                    {
+                        deleted_at: tour.deleted_at
+                    }
+                )
+            }else{
+                return h(
+                    MenuCell,
+                    {
+                        onView: () => { },
+                        onEdit: () => edit(tour.slug),
+                        onDelete: () => deleteTour(tour)
+                    }
+                )
+            
+            }
         },
     },
 ]

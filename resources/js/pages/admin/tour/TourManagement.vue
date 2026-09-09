@@ -23,7 +23,14 @@ interface Props {
     countries: {
         id: number,
         name: string,
-    }[]
+    }[],
+    filters: {
+        state?: string,
+        category?: string,
+        visibility?: string,
+        destination?: string,
+        search?: string,
+    }
 }
 
 const props = defineProps<Props>();
@@ -43,13 +50,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const filters = reactive({
-    page: props.tours.current_page.toString() ?? '1',
-    per_page: props.tours.per_page.toString() ?? '10',
-    state: 'all',
-    category: 'all',
-    visibility: 'all',
-    destination: '0',
-    search: '',
+    page: props.tours.current_page.toString() || '1',
+    per_page: props.tours.per_page.toString() || '10',
+
+    state: props.filters.state ?? 'all',
+    category: props.filters.category ?? 'all',
+    visibility: props.filters.visibility ?? 'all',
+    destination: props.filters.destination ?? '0',
+    search: props.filters.search ?? '',
 });
 
 
@@ -85,10 +93,6 @@ const stateOptions: SelectOption[] = [
     {
         label: 'Published Only',
         value: 'published',
-    },
-    {
-        label: 'Archived',
-        value: 'archived',
     },
     {
         label: 'Deleted',
@@ -182,7 +186,6 @@ const handlePerPageChange = (value: string) => {
 
 
 const createTour = () => router.visit(route('admin.tours.create'));
-
 
 </script>
 

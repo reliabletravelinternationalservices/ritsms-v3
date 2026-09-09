@@ -16,7 +16,18 @@ class TourManagementController extends Controller
     ) {}
 
     public function index(Request $request): Response
-    {
+    {   
+        $filters = $request->only([
+                'page',
+                'per_page',
+                'state',
+                'category',
+                'visibility',
+                'destination',
+                'search',
+            ]);
+
+
         $tours = $this->tourService->getTours(
             [
                 'itineraries',
@@ -27,15 +38,7 @@ class TourManagementController extends Controller
                 'departures',
                 'media',
             ],
-            $request->only([
-                'page',
-                'per_page',
-                'state',
-                'category',
-                'visibility',
-                'destination',
-                'search',
-            ]),
+            $filters
         );
 
         $stats = $this->stats();
@@ -53,7 +56,8 @@ class TourManagementController extends Controller
             compact(
                 'stats',
                 'tours',
-                'countries'
+                'countries',
+                'filters'
             )
         );
     }

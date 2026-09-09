@@ -255,19 +255,9 @@ class TourService
                 }
             )
             ->when(
-                isset($filters['state']) && $filters['state'] !== 'all',
-                fn ($query) =>
-                    $query->where('state', $filters['state'])
-            )
-            ->when(
                 isset($filters['category']) && $filters['category'] !== 'all',
                 fn ($query) =>
                     $query->where('category', $filters['category'])
-            )
-            ->when(
-                isset($filters['visibility']) && $filters['visibility'] !== 'all',
-                fn ($query) =>
-                    $query->where('visibility', $filters['visibility'])
             )
             ->when(
                 isset($filters['destination']) && $filters['destination'] !== '0',
