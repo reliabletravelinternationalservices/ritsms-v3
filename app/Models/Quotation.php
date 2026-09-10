@@ -24,6 +24,10 @@ class Quotation extends Model
         'accepted_at'
     ];
 
+    public function items()
+    {
+        return $this->hasMany(QuotationItem::class);
+    }
 
     public function client(): BelongsTo
     {

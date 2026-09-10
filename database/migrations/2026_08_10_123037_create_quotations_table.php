@@ -27,14 +27,16 @@ return new class extends Migration
                 'cancelled'
             ])->default('draft');
             $table->date('valid_until')->nullable();
+
             $table->decimal('subtotal', 10,2)->default(0);
             $table->decimal('discount_total', 10,2)->default(0);
             $table->decimal('tax_total', 10,2)->default(0);
             $table->decimal('grand_total', 10,2)->default(0);
-            $table->text('notes')->nullable();
+            
             $table->datetime('sent_at')->nullable();
             $table->dateTime('viewed_at')->nullable();
             $table->dateTime('accepted_at')->nullable();
+            $table->text('notes')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
