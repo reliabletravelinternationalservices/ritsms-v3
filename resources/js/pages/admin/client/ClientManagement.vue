@@ -6,7 +6,7 @@ import DataCardWithIcon from '@/components/statistic/DataCardWithIcon.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import PaginationButton from '@/components/table/pagination/Pagination.vue';
 import { Pagination } from '@/types/pagination';
 import ClientTable from '@/components/table/client/ClientTable.vue';

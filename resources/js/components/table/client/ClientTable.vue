@@ -148,7 +148,7 @@ const deleteClient= (client: Client) => {
             router.delete(route('admin.clients.delete', { client: client.id }), {
                 preserveState: true,
                 preserveScroll: true,
-                onError: (e) => {
+                onError: () => {
                     toast.error('Failed to delete tour. Somethings went wrong.')
                 },
                 onSuccess: () => {

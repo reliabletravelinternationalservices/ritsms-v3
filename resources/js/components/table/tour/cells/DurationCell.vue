@@ -1,7 +1,6 @@
 ```vue
 <script setup lang="ts">
 import { getPackageDurationLabel } from '@/lib/utils';
-import { Icon } from '@iconify/vue';
 
 interface Props {
     duration: number

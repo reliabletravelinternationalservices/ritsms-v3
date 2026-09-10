@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Banner from '@/components/Banner.vue';
-import { Icon } from '@iconify/vue';
 
 interface Props {
     label: string
