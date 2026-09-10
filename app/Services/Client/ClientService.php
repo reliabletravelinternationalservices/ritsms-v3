@@ -39,13 +39,25 @@ class ClientService
     |------------------------------------------------------------------------------------------
     */
 
-   public function getClients(
+    public function getClients(
         array $relationships = [],
         array $filters = []
     ) {
         $perPage = $filters['per_page'] ?? 10;
 
         return Client::with($relationships)
+            ->when(
+                isset($filters['status']) && $filters['status'] !== 'all',
+                function ($query) use ($filters) {
+
+                    if ($filters['status'] === 'deleted') {
+                        $query->onlyTrashed();
+                    } else {
+                        $query->where('status', $filters['status']);
+                    }
+
+                }
+            )
             ->when(
                 isset($filters['search']) && $filters['search'] !== '',
                 function ($query) use ($filters) {
@@ -61,23 +73,15 @@ class ClientService
             )
             ->when(
                 isset($filters['type']) && $filters['type'] !== 'all',
-                fn ($query) =>
-                    $query->where('type', $filters['type'])
+                fn ($query) => $query->where('type', $filters['type'])
             )
             ->when(
                 isset($filters['source']) && $filters['source'] !== 'all',
-                fn ($query) =>
-                    $query->where('source', $filters['source'])
-            )
-            ->when(
-                isset($filters['status']) && $filters['status'] !== 'all',
-                fn ($query) =>
-                    $query->where('status', $filters['status'])
+                fn ($query) => $query->where('source', $filters['source'])
             )
             ->paginate($perPage)
             ->withQueryString();
     }
-
 
 
     public function getClientBySlug(string $slug, array $relationships)

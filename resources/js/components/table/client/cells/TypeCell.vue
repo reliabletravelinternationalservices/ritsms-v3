@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import Banner from '@/components/Banner.vue'
-import { computed } from 'vue'
-import type { IconProps } from '@iconify/vue'
-import { ClientType } from '@/types/client';
-
-
+import { Icon } from '@iconify/vue'
+import { ClientType } from '@/types/client'
 
 interface Props {
     type: ClientType
+    deleted_at?: string | null
 }
 
-const props = defineProps<Props>()
-
+defineProps<Props>()
 </script>
 
 <template>
     <div class="w-fit">
-        <span class="uppercase text-xs text-muted-foreground font-bold">{{ type }}</span>
+        <div
+            class="flex items-center gap-1.5 uppercase text-xs font-bold"
+            :class="deleted_at ? 'text-zinc-500 opacity-60' : 'text-muted-foreground'"
+        >
+            <span>{{ type }}</span>
+        </div>
     </div>
 </template>

@@ -17,6 +17,12 @@ interface Props {
         totalClient: number,
     },
     clients: Pagination<Client>
+    filters: {
+        type?: string,
+        status?: string,
+        source?: string,
+        search?: string,
+    }
 }
 const props = defineProps<Props>()
 
@@ -29,12 +35,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const filters = reactive({
-    page:'1',
-    per_page: '10',
-    type: 'all',
-    status: 'all',
-    source: 'all',
-    search: '',
+    page: props.clients.current_page.toString() || '1',
+    per_page: props.clients.per_page.toString() || '10',
+
+    type: props.filters.type ??  'all',
+    status: props.filters.status ??  'all',
+    source: props.filters.source ??  'all',
+    search: props.filters.search ??  '',
 });
 
 
@@ -101,6 +108,10 @@ const statusOptions: SelectOption[] = [
     {
         label: 'Disqualified',
         value: 'disqualified',
+    },
+    {
+        label: 'Deleted',
+        value: 'deleted',
     },
 ]
 

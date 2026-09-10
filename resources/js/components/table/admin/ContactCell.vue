@@ -14,6 +14,7 @@ import {
 interface Props {
     email: string
     phone?: string | null
+    deleted_at?: string | null
 }
 
 defineProps<Props>()
@@ -31,11 +32,9 @@ const handleCopy = async (
     }
 
     try {
-        // Try VueUse clipboard first
         if (isSupported.value) {
             await copy(text)
         } else {
-            // Fallback for HTTP / unsupported Clipboard API
             const textarea = document.createElement('textarea')
 
             textarea.value = text
@@ -74,7 +73,10 @@ const handleCopy = async (
 
 <template>
     <TooltipProvider :delay-duration="100">
-        <div class="flex flex-col gap-1">
+        <div
+            class="flex flex-col gap-1"
+            :class="{ 'opacity-60': deleted_at }"
+        >
             <!-- EMAIL -->
             <div class="group flex items-center gap-2">
                 <Icon
@@ -84,12 +86,13 @@ const handleCopy = async (
 
                 <span
                     class="min-w-0 max-w-52 truncate text-sm"
+                    :class="deleted_at ? 'text-zinc-500' : ''"
                     :title="email"
                 >
                     {{ email }}
                 </span>
 
-                <Tooltip>
+                <Tooltip v-if="!deleted_at">
                     <TooltipTrigger as-child>
                         <Button
                             type="button"
@@ -138,12 +141,13 @@ const handleCopy = async (
 
                 <span
                     class="min-w-0 max-w-52 truncate text-xs text-muted-foreground"
+                    :class="deleted_at ? 'text-zinc-500' : ''"
                     :title="phone"
                 >
                     {{ phone }}
                 </span>
 
-                <Tooltip>
+                <Tooltip v-if="!deleted_at">
                     <TooltipTrigger as-child>
                         <Button
                             type="button"

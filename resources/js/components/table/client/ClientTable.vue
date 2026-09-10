@@ -13,6 +13,7 @@ import StatusCell from './cells/StatusCell.vue';
 import TypeCell from './cells/TypeCell.vue';
 import LastContactedCell from './cells/LastContactedCell.vue';
 import { toast } from 'vue-sonner';
+import DeletedAtCell from '../reusable/DeletedAtCell.vue';
 
 
 defineProps<{
@@ -32,6 +33,7 @@ const columns: ColumnDef<Client, unknown>[] = [
                 {
                     code: client.code,
                     name: client.name,
+                    deleted_at: client.deleted_at,
                 }
             )
         },
@@ -48,6 +50,7 @@ const columns: ColumnDef<Client, unknown>[] = [
                 {
                     phone: client.phone,
                     email: client.email,
+                    deleted_at: client.deleted_at,
                 }
             )
         },
@@ -62,6 +65,7 @@ const columns: ColumnDef<Client, unknown>[] = [
 
             return h(TypeCell, {
                 type: client.type,
+                deleted_at: client.deleted_at,
             })
         },
     },
@@ -75,6 +79,7 @@ const columns: ColumnDef<Client, unknown>[] = [
 
             return h(StatusCell, {
                 status: client.status,
+                deleted_at: client.deleted_at,
             })
         },
     },
@@ -99,15 +104,24 @@ const columns: ColumnDef<Client, unknown>[] = [
 
         cell: ({ row }) => {
             const client = row.original
-            return h(
-                MenuCell,
-                {
-                    onView: () => { },
-                    onEdit: () => { edit(client.slug) },
-                    onDelete: () =>  { deleteClient(client) }
-                }
-            )
-        },
+            if(client.deleted_at){
+                return h(
+                    DeletedAtCell,
+                    {
+                        deleted_at: client.deleted_at
+                    }
+                )
+            }else{
+                return h(
+                    MenuCell,
+                    {
+                        onView: () => { },
+                        onEdit: () => { edit(client.slug) },
+                        onDelete: () =>  { deleteClient(client) }
+                    }
+                )
+            }
+        }
     },
 ]
 

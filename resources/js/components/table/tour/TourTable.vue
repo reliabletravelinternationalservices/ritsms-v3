@@ -15,7 +15,7 @@ import { Pagination } from '@/types/pagination.js';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import NextDepartureCell from './cells/NextDepartureCell.vue';
 import { toast } from 'vue-sonner';
-import DeletedAtCell from './cells/DeletedAtCell.vue';
+import DeletedAtCell from '../reusable/DeletedAtCell.vue';
 
 defineProps<{
     tours: Pagination<TourWithRelationshipTables>

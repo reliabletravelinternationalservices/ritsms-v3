@@ -13,9 +13,29 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
+            
             $table->string('code', 20)->unique();
-
-            $table->string('name');
+            $table->string('slug', 100)->unique();
+            $table->enum('status',  [
+                'draft', 
+                'sent', 
+                'viewed', 
+                'accepted', 
+                'rejected', 
+                'expired', 
+                'cancelled'
+            ])->default('draft');
+            $table->date('valid_until')->nullable();
+            $table->decimal('subtotal', 10,2)->default(0);
+            $table->decimal('discount_total', 10,2)->default(0);
+            $table->decimal('tax_total', 10,2)->default(0);
+            $table->decimal('grand_total', 10,2)->default(0);
+            $table->text('notes')->nullable();
+            $table->datetime('sent_at')->nullable();
+            $table->dateTime('viewed_at')->nullable();
+            $table->dateTime('accepted_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

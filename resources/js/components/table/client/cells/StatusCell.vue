@@ -4,9 +4,9 @@ import { computed } from 'vue'
 import type { IconProps } from '@iconify/vue'
 import { ClientStatus } from '@/types/client'
 
-
 interface Props {
     status: ClientStatus
+    deleted_at?: string | null
 }
 
 interface ClientStatusConfig {
@@ -18,6 +18,17 @@ interface ClientStatusConfig {
 const props = defineProps<Props>()
 
 const status = computed<ClientStatusConfig>(() => {
+    if (props.deleted_at) {
+        return {
+            label: 'Deleted',
+            icon: {
+                icon: 'lucide:trash-2',
+                class: 'text-sm',
+            },
+            class: 'rounded-sm border-0 bg-red-600 text-white opacity-70',
+        }
+    }
+
     switch (props.status) {
         case 'new':
             return {
