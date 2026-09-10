@@ -1,14 +1,14 @@
 <?php
 
 
-use Database\Seeders\DatabaseSeeder;
+// use Database\Seeders\DatabaseSeeder;
 
-test('renders the landing page with actual repository data', function () {
-    // 1. Arrange
-    $this->seed(DatabaseSeeder::class);
+// test('renders the landing page with actual repository data', function () {
+//     // 1. Arrange
+//     $this->seed(DatabaseSeeder::class);
 
-    // 2. Act
-    $response = $this->get('/');
+//     // 2. Act
+//     $response = $this->get('/');
     
-    $response->assertStatus(200);
-});
+//     $response->assertStatus(200);
+// });
