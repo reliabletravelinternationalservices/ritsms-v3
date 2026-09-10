@@ -3,10 +3,14 @@
 namespace App\Services\Tour;
 
 use App\Enums\Image\Collection;
+use App\Enums\Tour\State;
+use App\Enums\Tour\Visibility;
 use App\Models\Tour;
 use App\Services\MediaService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+
+use function PHPSTORM_META\map;
 
 class TourService
 {
@@ -40,6 +44,30 @@ class TourService
         ]);
     }
 
+
+    
+    /*
+    |------------------------------------------------------------------------------------------
+    | DELETE TOUR
+    |------------------------------------------------------------------------------------------
+    */
+    public function delete(Tour $tour)
+    {
+        $tour->load('media');
+
+        $mediaIDs = $tour->media->pluck('id')->toArray();
+
+        $tour->update([
+            'state' => State::ARCHIVED->value,
+            'visibility' => Visibility::PRIVATE->value,
+        ]);
+
+        $tour->delete();
+
+        $this->deleteMediaById($tour, $mediaIDs);
+    }
+
+    
     /*
     |--------------------------------------------------------------------------------------
     | UPDATE ITINERARIES
@@ -345,4 +373,6 @@ class TourService
 
         return Tour::count();
     }
+
+
 }

@@ -12,6 +12,7 @@ import ContactCell from '../admin/ContactCell.vue';
 import StatusCell from './cells/StatusCell.vue';
 import TypeCell from './cells/TypeCell.vue';
 import LastContactedCell from './cells/LastContactedCell.vue';
+import { toast } from 'vue-sonner';
 
 
 defineProps<{
@@ -37,19 +38,6 @@ const columns: ColumnDef<Client, unknown>[] = [
     },
 
     {
-        accessorKey: 'type',
-        header: 'TYPE',
-
-        cell: ({ row }) => {
-            const client = row.original
-
-            return h(TypeCell, {
-                type: client.type,
-            })
-        },
-    },
-
-    {
         accessorKey: 'contact',
         header: 'CONTACTS',
 
@@ -65,6 +53,18 @@ const columns: ColumnDef<Client, unknown>[] = [
         },
     },
 
+    {
+        accessorKey: 'type',
+        header: 'TYPE',
+
+        cell: ({ row }) => {
+            const client = row.original
+
+            return h(TypeCell, {
+                type: client.type,
+            })
+        },
+    },
 
     {
         accessorKey: 'status',
@@ -104,7 +104,7 @@ const columns: ColumnDef<Client, unknown>[] = [
                 {
                     onView: () => { },
                     onEdit: () => { edit(client.slug) },
-                    onDelete: () =>  {}
+                    onDelete: () =>  { deleteClient(client) }
                 }
             )
         },
@@ -121,7 +121,7 @@ function edit(slug: string) {
 
 
 
-const deleteTour = (client: Client) => {
+const deleteClient= (client: Client) => {
     const alert = useAlertDialog();
     alert.alertDialog({
         variant: 'danger',
@@ -131,9 +131,15 @@ const deleteTour = (client: Client) => {
         cancelText: 'Cancel',
 
         onConfirm: () => {
-            router.delete(route('admin.tours.destroy', { id: client.id }), {
+            router.delete(route('admin.clients.delete', { client: client.id }), {
                 preserveState: true,
                 preserveScroll: true,
+                onError: (e) => {
+                    toast.error('Failed to delete tour. Somethings went wrong.')
+                },
+                onSuccess: () => {
+                    toast.success('Tour deleted successfully.')
+                },
             });
         },
     });

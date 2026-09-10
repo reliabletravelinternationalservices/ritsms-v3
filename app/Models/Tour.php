@@ -137,11 +137,13 @@ class Tour extends Model
         $counter = 2;
 
         while (
-            static::where('slug', $slug)
+            static::withTrashed()
+                ->where('slug', $slug)
                 ->where('id', '!=', $this->id)
                 ->exists()
         ) {
             $suffix = "-{$counter}";
+
             $slug = Str::limit(
                 $baseSlug,
                 20 - strlen($suffix),

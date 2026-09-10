@@ -35,7 +35,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
                     code: tour.code,
                     name: tour.name,
                     description: tour.description,
-                    image: getFirstImage(tour.media, 'image')
+                    image: getFirstImage(tour.media, 'image'),
+                    deleted_at: tour.deleted_at,
                 }
             )
         },
@@ -49,7 +50,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
             h(
                 DurationCell,
                 {
-                    duration: row.original.duration
+                    duration: row.original.duration,
+                    deleted_at: row.original.deleted_at
                 }
             ),
     },
@@ -63,7 +65,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
                 RouteCell,
                 {
                     routes: row.original.routes,
-                    itinerary_type: row.original.itinerary_type
+                    itinerary_type: row.original.itinerary_type,
+                    deleted_at: row.original.deleted_at
                 }
             ),
     },
@@ -76,7 +79,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
             h(
                 CategoryCell,
                 {
-                    label: row.original.category
+                    label: row.original.category,
+                    deleted_at: row.original.deleted_at
                 }
             ),
     },
@@ -90,7 +94,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
                 StatusCell,
                 {
                     state: row.original.state,
-                    visibility: row.original.visibility
+                    visibility: row.original.visibility,
+                    deleted_at: row.original.deleted_at
                 }
             )
         },
@@ -104,7 +109,8 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
             return h(
                 NextDepartureCell,
                 {
-                    departures: row.original.departures
+                    departures: row.original.departures,
+                    deleted_at: row.original.deleted_at
                 }
             )
         },
@@ -162,12 +168,12 @@ const deleteTour = (tour: Tour) => {
             router.delete(route('admin.tours.delete', { tour: tour.id }), {
                 preserveState: true,
                 preserveScroll: true,
-            onError: (e) => {
-                toast.error('Failed to delete tour. Somethings went wrong.')
-            },
-            onSuccess: () => {
-                toast.success('Tour deleted successfully.')
-            },
+                onError: (e) => {
+                    toast.error('Failed to delete tour. Somethings went wrong.')
+                },
+                onSuccess: () => {
+                    toast.success('Tour deleted successfully.')
+                },
             });
         },
     });

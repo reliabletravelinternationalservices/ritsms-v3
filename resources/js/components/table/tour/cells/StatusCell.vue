@@ -9,6 +9,7 @@ type TourVisibility = 'public' | 'private'
 interface Props {
     state: TourState
     visibility: TourVisibility
+    deleted_at?: string | null
 }
 
 interface TourStatus {
@@ -20,6 +21,17 @@ interface TourStatus {
 const props = defineProps<Props>()
 
 const status = computed<TourStatus>(() => {
+    if (props.deleted_at) {
+        return {
+            label: 'Deleted',
+            icon: {
+                icon: 'lucide:trash-2',
+                class: 'text-xs',
+            },
+            class: 'rounded-sm border-0 text-white bg-red-600 opacity-70',
+        }
+    }
+
     if (props.state === 'draft') {
         return {
             label: 'Draft',
@@ -66,6 +78,10 @@ const status = computed<TourStatus>(() => {
 
 <template>
     <div class="w-fit">
-        <Banner :title="status.label" :icon="status.icon" :class="status.class" />
+        <Banner
+            :title="status.label"
+            :icon="status.icon"
+            :class="status.class"
+        />
     </div>
 </template>

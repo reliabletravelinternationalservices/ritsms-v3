@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Departure } from '@/types/tour'
-import { formatDateString } from '@/lib/utils';
+import { formatDateString } from '@/lib/utils'
 
 interface Props {
     departures: Departure[]
+    deleted_at?: string | null
 }
 
 const props = defineProps<Props>()
@@ -68,15 +69,37 @@ const departureLabel = computed(() => {
 </script>
 
 <template>
-    <div v-if="nextDeparture" class="space-y-0.5">
-        <div class="font-medium">
+    <div
+        v-if="nextDeparture"
+        class="space-y-0.5"
+        :class="{ 'opacity-60': deleted_at }"
+    >
+        <div
+            class="font-medium"
+            :class="deleted_at ? 'text-zinc-500' : ''"
+        >
             {{ formatDateString(nextDeparture.departure_date) }}
         </div>
 
-        <div class="text-xs text-green-600">
+        <div
+            class="text-xs"
+            :class="deleted_at ? 'text-zinc-500' : 'text-green-600'"
+        >
             {{ departureLabel }}
+        </div>
+
+        <div
+            v-if="deleted_at"
+            class="text-[10px] font-semibold uppercase text-red-600"
+        >
+            Deleted
         </div>
     </div>
 
-    <span v-else>N/A</span>
+    <span
+        v-else
+        :class="{ 'opacity-60': deleted_at }"
+    >
+        N/A
+    </span>
 </template>
