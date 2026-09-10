@@ -13,19 +13,34 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->string('mediable_id');
-            $table->string('mediable_type');
+
+            $table->morphs('mediable');
+
+            $table->string('collection')->default('default');
 
             $table->string('file_name');
             $table->string('file_path');
-            $table->string('url')->nullable();
-            $table->enum('disk', ['local', 'public', 'cloudinary', 's3'])->default('public');
-            $table->enum('type', ['image', 'video', 'document', 'audio'])->default('image');
+
+            $table->enum('disk', [
+                'local',
+                'public',
+                'cloudinary',
+                's3',
+            ])->default('public');
+
+            $table->enum('type', [
+                'image',
+                'video',
+                'document',
+                'audio',
+            ])->default('image');
+
             $table->string('mime_type')->nullable();
-            $table->bigInteger('size')->nullable();
-            $table->string('alt_text');
-            $table->integer('order_number')->default(0);
-            $table->boolean('is_primary')->default(false);
+            $table->unsignedBigInteger('size')->nullable();
+
+            $table->string('alt_text')->nullable();
+            $table->unsignedInteger('order_number')->default(0);
+
             $table->timestamps();
         });
     }

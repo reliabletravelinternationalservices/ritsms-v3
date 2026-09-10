@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useShareModal } from '@/stores/shareModal';
-import { X, Copy, Check } from 'lucide-vue-next';
+import { X, Copy, Check } from '@lucide/vue';
 import { Icon } from '@iconify/vue';
 
 const { isOpen, shareUrl, close } = useShareModal();

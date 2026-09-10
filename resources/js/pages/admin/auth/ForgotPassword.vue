@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { SharedData } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { LoaderCircle, CheckCircle2 } from 'lucide-vue-next';
+import { LoaderCircle, CheckCircle2 } from '@lucide/vue';
 import { computed } from 'vue';
 
 const page = usePage<SharedData>();

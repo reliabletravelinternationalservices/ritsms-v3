@@ -4,6 +4,7 @@ import type { Ref } from "vue"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import type { Destination } from '@/types/destination';
+import { Media } from "@/types/media-v2"
 const appUrl = import.meta.env.VITE_APP_URL
 
 export function cn(...inputs: ClassValue[]) {
@@ -183,6 +184,36 @@ export const getImageUrl = (path: string) => {
 }
 
 
+export function getImagePath(
+    path: string,
+    size: 'thumbnail' | 'medium' | 'large' = 'large',
+): string {
+    const normalizedPath = path.replace(/^\/+|\/+$/g, '')
+
+    const lastSlash = normalizedPath.lastIndexOf('/')
+
+    if (lastSlash === -1) {
+        return `/storage/${size}/${normalizedPath}`
+    }
+
+    const directory = normalizedPath.substring(0, lastSlash)
+    const filename = normalizedPath.substring(lastSlash + 1)
+
+    return `/storage/${directory}/${size}/${filename}`
+}
+
+
+export function getMediaUrl(
+    path: string,
+    disk: 'local' | 'public' | 'cloudinary' | 's3' = 'public',
+): string {
+    if (disk === 'public') {
+        return `/storage/${path}`
+    }
+
+    // Add other disk handling later.
+    return path
+}
 
 
 export function getDestinationIdByCountry(
@@ -197,6 +228,9 @@ export function getDestinationIdByCountry(
     );
 }
 
+export function isFile(value: unknown): value is File {
+    return value instanceof File
+}
 
 export const normalizeText = (value: string | undefined | null) => value?.trim().toLowerCase() ?? '';
 
@@ -210,3 +244,87 @@ export const toTitleCase = (value: string) => {
 };
 
 
+
+
+export const isMultipleFlight = (value: string) => {
+    switch (value) {
+        case 'tri_city':
+            return true;
+        case 'multi_city':
+            return true;
+        default:
+            return false;
+    }
+}
+
+
+export function parseStringDate(value: string, addDay?: number): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (addDay ?? 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
+export function parseStringDateWithDuration(value: string, duration?: string): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (duration ? parseInt(duration) : 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
+
+export const createObjectURL = (file: File) => {
+    return URL.createObjectURL(file)
+}
+
+export const generateId = () => {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
+
+export function isEmpty(value: unknown): boolean {
+  if (value === undefined || value === null) {
+    return true
+  }
+
+  if (typeof value === 'string') {
+    return value.trim() === ''
+  }
+
+  if (Array.isArray(value)) {
+    return value.length === 0
+  }
+
+  return false
+}
+
+
+
+
+export function getFirstImage(
+    media: Media[],
+    type: 'image' | 'video'
+): Media | null {
+    return media.find(item => item.type === type) ?? null
+}

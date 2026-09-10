@@ -11,7 +11,7 @@ import CurrencyInput from '@/components/CurrencyInput.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
 import { Button } from '@/components/ui/button';
-import { LoaderCircle } from 'lucide-vue-next';
+import { LoaderCircle } from '@lucide/vue';
 import { toast } from 'vue-sonner'
 
 

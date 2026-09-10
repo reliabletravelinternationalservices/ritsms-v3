@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const props = defineProps<{
   searchQuery: string;

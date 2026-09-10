@@ -22,7 +22,7 @@ import {
     Star,
     FolderPlus,
     RefreshCcw
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import { type PackageGroup } from '@/types/group-package';
 import { toast } from 'vue-sonner';
 

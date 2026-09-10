@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\AccountAccessController;
+use App\Http\Controllers\Admin\AccountForgotPassword;
+use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\Destination\DeleteLocationController;
 use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
+use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\Inquiry\ClientsInquiryController;
 use App\Http\Controllers\Admin\Inquiry\InquiryDetailController;
 use App\Http\Controllers\Admin\Log\ActivityLogController;
@@ -27,138 +29,414 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
+use App\Http\Controllers\Admin\QuotationController;
+use App\Http\Controllers\Admin\Tour\CreateTourController;
+use App\Http\Controllers\Admin\Tour\EditTourController;
+use App\Http\Controllers\Admin\Tour\TourManagementController;
 use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
-use App\Http\Controllers\Admin\User\ClientManagementController;
+use App\Http\Controllers\Admin\Client\ClientManagementController;
+use App\Http\Controllers\Admin\Client\CreateClientController;
+use App\Http\Controllers\Admin\Client\DeleteClientController;
+use App\Http\Controllers\Admin\Client\EditClientController;
+use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
 use App\Http\Controllers\Admin\User\VerifyAdminEmailController;
 use Illuminate\Support\Facades\Route;
 
-// OUTBOUND DESTINATIONS
-Route::prefix('admin')->middleware(['adminAuth', 'accountAccess'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| ADMIN DOMAIN
+|--------------------------------------------------------------------------
+|
+| Local:
+| admin.reliabletravel.test
+|
+| Production:
+| admin.reliabletravel.com
+|
+*/
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+/*
+    |--------------------------------------------------------------------------
+    | Admin REDIRECT
+    |--------------------------------------------------------------------------
+    */
+
+Route::get('/', function () {
+    return redirect()->route('admin.dashboard');
+});
+
+/*
+    |--------------------------------------------------------------------------
+    | Protected Admin Routes
+    |--------------------------------------------------------------------------
+    */
+
+Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
+
+    Route::name('admin.')->group(function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        /*
+            |--------------------------------------------------------------------------
+            | Inbox
+            |--------------------------------------------------------------------------
+            */
+
+        Route::prefix('inbox')->controller(InboxController::class)->group(function () {
+            Route::get('/', 'index')->name('inbox');
+        });
+
+        /*
+            |--------------------------------------------------------------------------
+            | Quotations
+            |--------------------------------------------------------------------------
+            */
+
+        Route::prefix('quotations')->controller(QuotationController::class)->group(function () {
+            Route::get('/', 'index')->name('quotations');
+        });
+
+        /*
+            |--------------------------------------------------------------------------
+            | Tours
+            |--------------------------------------------------------------------------
+            */
+
+        Route::prefix('tours')->group(function () {
+
+            Route::controller(TourManagementController::class)->group(function () {
+                Route::get('/', 'index')->name('tours');
+            });
+
+            Route::controller(CreateTourController::class)->group(function () {
+                Route::get('/create', 'create')->name('tours.create');
+                Route::post('/store', 'store')->name('tours.store');
+            });
+
+            Route::controller(EditTourController::class)->group(function () {
+                Route::get('/{slug}/edit', 'edit')->name('tours.edit');
+                Route::put('/{tour}/update', 'update')->name('tours.update');
+                Route::patch('/{tour}/status', 'updateStatus')->name('tours.update.status');
+            });
+
+            Route::controller(DeleteTourController::class)->group(function () {
+                Route::delete('/{tour}/delete', 'delete')->name('tours.delete');
+                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy');
+            });
+        });
+
+        /*
+            |--------------------------------------------------------------------------
+            | BOOKINGS
+            |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('bookings')->group(function () {
+
+            Route::controller(BookingController::class)->group(function () {
+                Route::get('/', 'index')->name('bookings');
+            });
+
+        });
+
+
+        /*
+            |--------------------------------------------------------------------------
+            | CLIENTS
+            |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('clients')->group(function () {
+
+            Route::controller(CreateClientController::class)->group(function () {
+                Route::get('/create', 'create')->name('clients.create');
+                Route::post('/store', 'store')->name('clients.store');
+            });
+
+            Route::controller(EditClientController::class)->group(function () {
+                Route::get('{slug}/edit', 'edit')->name('clients.edit');
+                Route::put('{client}/update', 'update')->name('clients.update');
+            });
+
+            Route::controller(DeleteClientController::class)->group(function () {
+                Route::delete('{client}/delete', 'delete')->name('clients.delete');
+                Route::delete('{client}/destroy', 'destroy')->name('clients.destroy');
+            });
+
+            Route::controller(ClientManagementController::class)->group(function () {
+                Route::get('/', 'index')->name('clients');
+            });
+
+        });
+    });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Packages
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('packages')->group(function () {
-        Route::get('/', [ServicePackageController::class, 'index'])->name('admin.packages');
 
-        Route::get('/{id}/details', [PackageDetailsController::class, 'index'])->name('admin.packages.details');
+        Route::get('/', [ServicePackageController::class, 'index'])
+            ->name('admin.packages');
 
-        Route::get('/create', [CreatePackageController::class, 'index'])->name('admin.packages.create');
-        Route::post('/store', [CreatePackageController::class, 'store'])->name('admin.packages.store');
+        Route::get('/{id}/details', [PackageDetailsController::class, 'index'])
+            ->name('admin.packages.details');
 
-        Route::get('/edit/{id}', [EditPackageController::class, 'index'])->name('admin.packages.edit');
-        Route::put('/update/{id}', [EditPackageController::class, 'update'])->name('admin.packages.update');
+        Route::get('/create', [CreatePackageController::class, 'index'])
+            ->name('admin.packages.create');
 
-        Route::delete('/destroy/{id}', [DeletePackageController::class, 'destroy'])->name('admin.packages.destroy');
+        Route::post('/store', [CreatePackageController::class, 'store'])
+            ->name('admin.packages.store');
+
+        Route::get('/edit/{id}', [EditPackageController::class, 'index'])
+            ->name('admin.packages.edit');
+
+        Route::put('/update/{id}', [EditPackageController::class, 'update'])
+            ->name('admin.packages.update');
+
+        Route::delete('/destroy/{id}', [DeletePackageController::class, 'destroy'])
+            ->name('admin.packages.destroy');
 
         Route::prefix('images')->group(function () {
-            Route::post('/store/{id}', [PackageImageController::class, 'store'])->name('admin.packages.images.store');
-            Route::put('/update/{id}', [PackageImageController::class, 'update'])->name('admin.packages.images.update');
+
+            Route::post('/store/{id}', [PackageImageController::class, 'store'])
+                ->name('admin.packages.images.store');
+
+            Route::put('/update/{id}', [PackageImageController::class, 'update'])
+                ->name('admin.packages.images.update');
         });
 
         Route::prefix('{id}/travelBatches')->group(function () {
-            Route::get('/create', [UpdateTravelBatchController::class, 'create'])->name('admin.packages.batches.create');
-            Route::post('/store', [UpdateTravelBatchController::class, 'store'])->name('admin.packages.batches.store');
-            Route::get('/{scheduleId}/edit', [UpdateTravelBatchController::class, 'edit'])->name('admin.packages.batches.edit');
-            Route::put('/{scheduleId}', [UpdateTravelBatchController::class, 'update'])->name('admin.packages.batches.update');
-            Route::delete('/{scheduleId}', [UpdateTravelBatchController::class, 'destroy'])->name('admin.packages.batches.destroy');
+
+            Route::get('/create', [UpdateTravelBatchController::class, 'create'])
+                ->name('admin.packages.batches.create');
+
+            Route::post('/store', [UpdateTravelBatchController::class, 'store'])
+                ->name('admin.packages.batches.store');
+
+            Route::get('/{scheduleId}/edit', [UpdateTravelBatchController::class, 'edit'])
+                ->name('admin.packages.batches.edit');
+
+            Route::put('/{scheduleId}', [UpdateTravelBatchController::class, 'update'])
+                ->name('admin.packages.batches.update');
+
+            Route::delete('/{scheduleId}', [UpdateTravelBatchController::class, 'destroy'])
+                ->name('admin.packages.batches.destroy');
         });
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Package Groups
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('packageGroups')->group(function () {
-        Route::get('/', [PackageGroupDisplayController::class, 'index'])->name('admin.packages.groups');
-        Route::get('/create', [CreatePackageGroupController::class, 'index'])->name('admin.packages.groups.create');
-        Route::post('/store', [CreatePackageGroupController::class, 'store'])->name('admin.packages.groups.store');
 
-        Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])->name('admin.packages.groups.edit');
-        Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])->name('admin.packages.groups.update');
-        Route::put('/feature/{id}', [FeaturePackageGroupController::class, 'toggle'])->name('admin.packages.groups.feature');
-        Route::delete('/destroy/{id}', [DeletePackageGroupController::class, 'destroy'])->name('admin.packages.groups.destroy');
+        Route::get('/', [PackageGroupDisplayController::class, 'index'])
+            ->name('admin.packages.groups');
 
-        Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])->name('admin.packages.groups.pin');
-        Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])->name('admin.packages.groups.pin.update');
+        Route::get('/create', [CreatePackageGroupController::class, 'index'])
+            ->name('admin.packages.groups.create');
+
+        Route::post('/store', [CreatePackageGroupController::class, 'store'])
+            ->name('admin.packages.groups.store');
+
+        Route::get('/edit/{id}', [EditPackageGroupController::class, 'index'])
+            ->name('admin.packages.groups.edit');
+
+        Route::put('/update/{id}', [EditPackageGroupController::class, 'update'])
+            ->name('admin.packages.groups.update');
+
+        Route::put('/feature/{id}', [FeaturePackageGroupController::class, 'toggle'])
+            ->name('admin.packages.groups.feature');
+
+        Route::delete('/destroy/{id}', [DeletePackageGroupController::class, 'destroy'])
+            ->name('admin.packages.groups.destroy');
+
+        Route::get('/pin/{id}', [PackageGroupPinController::class, 'index'])
+            ->name('admin.packages.groups.pin');
+
+        Route::put('/pin/update/{id}', [PackageGroupPinController::class, 'update'])
+            ->name('admin.packages.groups.pin.update');
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Destinations
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('destinations')->group(function () {
-        Route::get('/', [ServiceCountryController::class, 'index'])->name('admin.destinations');
-        Route::get('/{id}/details', [ServiceCountryController::class, 'show'])->name('admin.destinations.details');
 
-        Route::get('/create', [CreateDestinationController::class, 'index'])->name('admin.destinations.create');
-        Route::post('/store', [CreateDestinationController::class, 'store'])->name('admin.destinations.store');
+        Route::get('/', [ServiceCountryController::class, 'index'])
+            ->name('admin.destinations');
 
-        Route::get('/edit/{id}', [EditDestinationController::class, 'index'])->name('admin.destinations.edit');
-        Route::put('/update/{id}', [EditDestinationController::class, 'update'])->name('admin.destinations.update');
+        Route::get('/{id}/details', [ServiceCountryController::class, 'show'])
+            ->name('admin.destinations.details');
 
-        Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])->name('admin.destinations.destroy');
+        Route::get('/create', [CreateDestinationController::class, 'index'])
+            ->name('admin.destinations.create');
+
+        Route::post('/store', [CreateDestinationController::class, 'store'])
+            ->name('admin.destinations.store');
+
+        Route::get('/edit/{id}', [EditDestinationController::class, 'index'])
+            ->name('admin.destinations.edit');
+
+        Route::put('/update/{id}', [EditDestinationController::class, 'update'])
+            ->name('admin.destinations.update');
+
+        Route::delete('/destroy/{id}', [DeleteDestinationController::class, 'destroy'])
+            ->name('admin.destinations.destroy');
 
         Route::prefix('{destID}/locations')->group(function () {
-            Route::get('/create', [CreateLocationController::class, 'index'])->name('admin.destinations.locations.create');
-            Route::post('/store', [CreateLocationController::class, 'store'])->name('admin.destinations.locations.store');
 
-            Route::get('/edit/{id}', [EditLocationController::class, 'index'])->name('admin.destinations.locations.edit');
-            Route::put('/update/{id}', [EditLocationController::class, 'update'])->name('admin.destinations.locations.update');
+            Route::get('/create', [CreateLocationController::class, 'index'])
+                ->name('admin.destinations.locations.create');
 
-            Route::delete('/destroy/{id}', [DeleteLocationController::class, 'destroy'])->name('admin.destinations.locations.destroy');
+            Route::post('/store', [CreateLocationController::class, 'store'])
+                ->name('admin.destinations.locations.store');
+
+            Route::get('/edit/{id}', [EditLocationController::class, 'index'])
+                ->name('admin.destinations.locations.edit');
+
+            Route::put('/update/{id}', [EditLocationController::class, 'update'])
+                ->name('admin.destinations.locations.update');
+
+            Route::delete('/destroy/{id}', [DeleteLocationController::class, 'destroy'])
+                ->name('admin.destinations.locations.destroy');
         });
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Inquiries
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('inquiries')->group(function () {
-        Route::get('/', [ClientsInquiryController::class, 'index'])->name('admin.inquiries');
-        Route::get('/{id}/details', [InquiryDetailController::class, 'index'])->name('admin.inquiries.details');
-        Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])->name('admin.inquiries.status.update');
-        Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])->name('admin.inquiries.destroy');
+
+        Route::get('/', [ClientsInquiryController::class, 'index'])
+            ->name('admin.inquiries');
+
+        Route::get('/{id}/details', [InquiryDetailController::class, 'index'])
+            ->name('admin.inquiries.details');
+
+        Route::patch('/{id}/patch', [ClientsInquiryController::class, 'patch'])
+            ->name('admin.inquiries.status.update');
+
+        Route::delete('/destroy/{id}', [ClientsInquiryController::class, 'destroy'])
+            ->name('admin.inquiries.destroy');
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Users
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('users')->group(function () {
+
         Route::prefix('admins')->group(function () {
-            Route::get('/', [AdminManagementController::class, 'index'])->name('admin.users.admins');
-            Route::get('/create', [CreateAdminAccountController::class, 'index'])->name('admin.users.admins.create');
-            Route::post('/store', [CreateAdminAccountController::class, 'store'])->name('admin.users.admins.store');
-            Route::delete('/destroy/{id}', [DeleteAdminAccountController::class, 'destroy'])->name('admin.users.admins.destroy');
 
-            Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])->name('admin.users.admins.details');
-            Route::patch('/details/{id}/update', [AdminAccountDetailController::class, 'update'])->name('admin.users.admins.details.update');
-            
-            Route::get('/details/{id}/edit', [EditAdminAccountController::class, 'index'])->name('admin.users.admins.edit');
-            Route::put('/details/{id}/update', [EditAdminAccountController::class, 'update'])->name('admin.users.admins.update');
+            Route::get('/', [AdminManagementController::class, 'index'])
+                ->name('admin.users.admins');
+
+            Route::get('/create', [CreateAdminAccountController::class, 'index'])
+                ->name('admin.users.admins.create');
+
+            Route::post('/store', [CreateAdminAccountController::class, 'store'])
+                ->name('admin.users.admins.store');
+
+            Route::delete('/destroy/{id}', [DeleteAdminAccountController::class, 'destroy'])
+                ->name('admin.users.admins.destroy');
+
+            Route::get('/details/{id}', [AdminAccountDetailController::class, 'index'])
+                ->name('admin.users.admins.details');
+
+            Route::patch('/details/{id}/update', [AdminAccountDetailController::class, 'update'])
+                ->name('admin.users.admins.details.update');
+
+            Route::get('/details/{id}/edit', [EditAdminAccountController::class, 'edit'])
+                ->name('admin.users.admins.edit');
+
+            Route::put('/details/{id}/update', [EditAdminAccountController::class, 'update'])
+                ->name('admin.users.admins.update');
         });
 
-        Route::prefix('clients')->group(function () {
-            Route::get('/', [ClientManagementController::class, 'index'])->name('admin.users.clients');
-        });
+        // Route::prefix('clients')->group(function () {
+
+        //     Route::get('/', [ClientManagementController::class, 'index'])
+        //         ->name('admin.users.clients');
+        // });
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Bookings
+        |--------------------------------------------------------------------------
+        */
 
     Route::prefix('bookings')->group(function () {
-        Route::get('/', [BookingManagementController::class, 'index'])->name('admin.bookings');
+
+        Route::get('/', [BookingManagementController::class, 'index'])
+            ->name('admin.bookings');
     });
 
+    /*
+        |--------------------------------------------------------------------------
+        | Activity Logs
+        |--------------------------------------------------------------------------
+        */
+
     Route::prefix('logs')->group(function () {
-        Route::get('/', [ActivityLogController::class, 'index'])->name('admin.logs');
+
+        Route::get('/', [ActivityLogController::class, 'index'])
+            ->name('admin.logs');
     });
+
+    /*
+        |--------------------------------------------------------------------------
+        | Email Verification
+        |--------------------------------------------------------------------------
+        */
 
     Route::post('/verify/email', [VerifyAdminEmailController::class, 'send'])
         ->name('admin.verify.email.send');
 });
 
-Route::prefix('admin')->group(function () {
-    Route::get('/verify/{hash}', [VerifyAdminEmailController::class, 'verify'])
-        ->name('admin.verification.verify');
+/*
+    |--------------------------------------------------------------------------
+    | Public Admin Account Routes
+    |--------------------------------------------------------------------------
+    |
+    | These are accessible without adminAuth.
+    |
+    */
 
-    Route::get ('/accessDenied', [AccountAccessController::class, 'index'])
-        ->name('admin.access.denied');
+Route::get('/verify/{hash}', [VerifyAdminEmailController::class, 'verify'])
+    ->name('admin.verification.verify');
 
-    Route::get('/forgot-password', [AccountForgotPassword::class, 'forgotAdminPassword'])
-        ->name('admin.forgot.password');
+Route::get('/access_restricted', [AccountAccessController::class, 'index'])
+    ->name('admin.access.denied');
 
-    Route::post('/forgot-password', [AccountForgotPassword::class, 'sendAdminPasswordResetLink'])
-        ->name('admin.forgot.password.send');
-    
-    Route::get('/reset-password/{token}', [AccountForgotPassword::class, 'createAdminPasswordResetForm'])
-        ->name('admin.forgot.password.reset');
+Route::get('/forgot-password', [AccountForgotPassword::class, 'forgotAdminPassword'])
+    ->name('admin.forgot.password');
 
-    Route::post('/reset-password', [AccountForgotPassword::class, 'resetAdminPassword'])
-        ->name('admin.password.store');
-});
+Route::post('/forgot-password', [AccountForgotPassword::class, 'sendAdminPasswordResetLink'])
+    ->name('admin.forgot.password.send');
+
+Route::get('/reset-password/{token}', [AccountForgotPassword::class, 'createAdminPasswordResetForm'])
+    ->name('admin.forgot.password.reset');
+
+Route::post('/reset-password', [AccountForgotPassword::class, 'resetAdminPassword'])
+    ->name('admin.password.store');

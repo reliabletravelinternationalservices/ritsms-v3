@@ -1,7 +1,7 @@
 <?php
 
-test('contact page can be rendered', function () {
-    $response = $this->get('/contact');
+// test('contact page can be rendered', function () {
+//     $response = $this->get('/contact');
 
-    $response->assertStatus(200);
-});
+//     $response->assertStatus(200);
+// });

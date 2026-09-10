@@ -22,7 +22,7 @@ import {
     Tag, 
     ChevronLeft,
     Save
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [

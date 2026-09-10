@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import PasswordInput from '@/components/PasswordInput.vue';
 import InfoTooltip from '@/components/InfoTooltip.vue';
 import InputError from '@/components/InputError.vue';
-import { Camera, X } from 'lucide-vue-next';
+import { Camera, X } from '@lucide/vue';
 import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [

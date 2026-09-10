@@ -4,27 +4,32 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Auth\LoginRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Services\Auth\LoginService;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
-    public function create(Request $request)
+    public function __construct(
+        protected LoginService $service
+    ) {}
+
+
+    public function login(): Response
     {
-        return Inertia::render('admin/auth/Login', [
-            'canResetPassword' => Route::has('admin.forgot.password.send'),
-            'status' => $request->session()->get('status'),
-        ]);
+        return Inertia::render('admin/auth/Login');
     }
 
-    public function store(LoginRequest $request)
+
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+
+        $this->service->authenticate(
+            $request->validated(),
+            $request->boolean('remember')
+        );
         $request->session()->regenerate();
-
-        return redirect()->intended(route('admin.dashboard', absolute: false));
+        return to_route('admin.dashboard');
     }
-
-
 }

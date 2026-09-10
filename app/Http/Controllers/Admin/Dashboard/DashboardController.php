@@ -12,8 +12,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return Inertia::render('admin/dashboard/DashboardPage', [
-            'dashboardData' => $this->dashboardRepository->getDashboardData(),
-        ]);
+        return Inertia::render('admin/dashboard/Dashboard');
     }
 }

@@ -9,7 +9,7 @@ import Input from '@/components/ui/input/Input.vue';
 import InputError from '@/components/InputError.vue';
 import SwitchWithLabel from '@/components/SwitchWithLabel.vue';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft } from '@lucide/vue';
 import { toast } from 'vue-sonner';
 import { truncateText } from '@/lib/utils';
 

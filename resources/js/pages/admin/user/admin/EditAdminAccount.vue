@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import InfoTooltip from '@/components/InfoTooltip.vue';
 import InputError from '@/components/InputError.vue';
-import { Camera, X, AlertTriangle } from 'lucide-vue-next';
+import { Camera, X, AlertTriangle } from '@lucide/vue';
 import { toast } from 'vue-sonner';
 import { truncateText } from '@/lib/utils';
 

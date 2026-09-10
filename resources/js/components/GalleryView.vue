@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Pin, Trash2, GripVertical } from 'lucide-vue-next'
+import { Pin, Trash2, GripVertical } from '@lucide/vue'
 import { Media } from '@/types/media'
 
 const props = defineProps<{

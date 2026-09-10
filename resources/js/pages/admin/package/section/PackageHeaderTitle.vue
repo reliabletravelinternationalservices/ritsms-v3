@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { formatCurrency, getSeasonColor } from '@/lib/utils';
 import { Package } from '@/types/package';
-import { MapPin, Star } from 'lucide-vue-next';
+import { MapPin, Star } from '@lucide/vue';
 
 interface Props {
     package: Package

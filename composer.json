@@ -11,9 +11,11 @@
     "require": {
         "php": "^8.2",
         "inertiajs/inertia-laravel": "^2.0",
+        "intervention/image-laravel": "4.1",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "4.3",
         "laravel/tinker": "^2.10.1",
+        "predis/predis": "^3.5",
         "spatie/laravel-sitemap": "7.4",
         "tightenco/ziggy": "^2.4"
     },

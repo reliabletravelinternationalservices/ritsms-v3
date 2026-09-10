@@ -28,14 +28,13 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'code',
         'email',
         'password',
         'display_name',
         'phone',
-        'role',
-        'avatar',
-        'status',
+        'is_active',
+        'password',
     ];
 
     /**
@@ -58,6 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -74,11 +74,10 @@ class User extends Authenticatable implements MustVerifyEmail
         );
 
 
-     try {
+        try {
             Mail::to($this->email)->send(
                 new VerifyEmployeeEmail($this->name, $verificationUrl)
             );
-
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
         }

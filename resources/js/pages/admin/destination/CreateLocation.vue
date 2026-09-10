@@ -24,7 +24,7 @@ import {
     ChevronLeft,
     Save,
     Compass
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import { toast } from 'vue-sonner';
 
 interface Props {

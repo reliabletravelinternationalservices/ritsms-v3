@@ -21,7 +21,7 @@ import {
     PlaneLanding,
     Star, 
     FolderPlus 
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('admin.dashboard') },
     { title: 'Package Groups', href: route('admin.packages.groups') },

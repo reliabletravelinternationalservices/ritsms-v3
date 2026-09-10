@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 
-interface Option {
+export interface Option {
   label: string;
   value: string | number | null;
 }
@@ -53,53 +53,33 @@ onUnmounted(() => window.removeEventListener('click', closeDropdown));
 <template>
   <div class="relative w-full" :class="props.class" ref="dropdownRef">
     <!-- Trigger -->
-    <button
-      @click="toggleDropdown"
-      type="button"
-      class="w-full flex items-center justify-between gap-2 px-4 py-3 bg-[var(--primary-custom)] border border-[var(--shadow-custom)] transition-all duration-200 focus:outline-none"
-    >
-      <span
-        class="text-sm font-roboto"
-        :class="modelValue ? 'text-black' : 'text-gray-400'"
-      >
+    <button @click="toggleDropdown" type="button"
+      class="w-full flex items-center justify-between gap-2 px-4 py-3 bg-[var(--primary-custom)] border border-[var(--shadow-custom)] transition-all duration-200 focus:outline-none">
+      <span class="text-sm font-roboto" :class="modelValue ? 'text-black' : 'text-gray-400'">
         {{
           computedOptions.find(o => o.value === modelValue)?.label || placeholder
         }}
       </span>
 
-      <Icon
-        icon="ri:arrow-down-s-line"
-        class="text-xl transition-transform duration-200 text-[var(--shadow-custom)]"
-        :class="{ 'rotate-180': isOpen }"
-      />
+      <Icon icon="ri:arrow-down-s-line" class="text-xl transition-transform duration-200 text-[var(--shadow-custom)]"
+        :class="{ 'rotate-180': isOpen }" />
     </button>
 
     <!-- Dropdown -->
-    <Transition
-      enter-active-class="transition duration-100 ease-out"
-      enter-from-class="transform opacity-0 -translate-y-2"
-      enter-to-class="transform opacity-100 translate-y-0"
-      leave-active-class="transition duration-75 ease-in"
-      leave-from-class="transform opacity-100 translate-y-0"
-      leave-to-class="transform opacity-0 -translate-y-2"
-    >
-      <div
-        v-if="isOpen"
-        class="absolute left-0 z-50 mt-1 w-full max-h-60 overflow-y-auto bg-white shadow-xl border border-gray-100"
-      >
+    <Transition enter-active-class="transition duration-100 ease-out"
+      enter-from-class="transform opacity-0 -translate-y-2" enter-to-class="transform opacity-100 translate-y-0"
+      leave-active-class="transition duration-75 ease-in" leave-from-class="transform opacity-100 translate-y-0"
+      leave-to-class="transform opacity-0 -translate-y-2">
+      <div v-if="isOpen"
+        class="absolute left-0 z-50 mt-1 w-full max-h-60 overflow-y-auto bg-white shadow-xl border border-gray-100">
         <div class="py-1">
-          <button
-            v-for="option in computedOptions"
-            :key="option.value ?? 'empty'"
-            @click="selectOption(option)"
-            type="button"
-            :class="[
+          <button v-for="option in computedOptions" :key="option.value ?? 'empty'" @click="selectOption(option)"
+            type="button" :class="[
               'w-full text-left px-4 py-3 text-sm font-roboto transition-colors',
               modelValue === option.value
                 ? 'bg-[var(--tertiary-custom)] text-white'
                 : 'text-gray-700 hover:bg-gray-50'
-            ]"
-          >
+            ]">
             {{ option.label }}
           </button>
         </div>

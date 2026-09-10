@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff } from 'lucide-vue-next';
+import { Eye, EyeOff } from '@lucide/vue';
 
 // Forwarding models and attributes
 const modelValue = defineModel<string>();
