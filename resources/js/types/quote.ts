@@ -1,10 +1,31 @@
+import { Client } from "./client";
 
+
+export type QuotationStatus =
+    | 'draft'
+    | 'sent'
+    | 'viewed'
+    | 'accepted'
+    | 'rejected'
+    | 'expired'
+    | 'cancelled'
+
+export type QuotationItemType =
+    | 'tour'
+    | 'hotel'
+    | 'flight'
+    | 'visa'
+    | 'insurance'
+    | 'transport'
+    | 'fee'
+    | 'other'
 
 export interface Quote {
     id: number;
+    client: Client;
     code: string;
     slug: string;
-    status: 'Draft' | 'Sent' | 'Viewed' | 'Accepted' | 'Rejected' | 'Expired' | 'Cancelled';
+    status: QuotationStatus;
     valid_until?: string | null;
     subtotal: number;
     discount_total: number;
@@ -14,33 +35,31 @@ export interface Quote {
     sent_at?: string | null;
     viewed_at?: string | null;
     accepted_at?: string | null;
+    items: QuoteItem[];
+    deleted_at?: string | null;
     created_at: string;
     updated_at: string;
 }
 
 
-export interface Guest {
-    guest_id: number;
-    guest_name: string;
-    guest_email: string;
-    guest_phone: string;
-}
 
-
-export interface Client {
+export interface QuoteItem {
     id: number;
-    code: string;
-    slug: string;
-    name: string;
-    email: string;
-    phone: string;
+    quotation_id: number;
+    item_type: QuotationItemType;
+    title: string;
+    desciption: string;
+    details: string;
+
+    quantity: number;
+    unit_price: number;
+    discount: number;
+    tax: number;
+    total: number;
+
+    remarks: Text;
+    sort_order: number;
+    deleted_at?: string | null;
+    created_at: string;
+    updated_at: string;
 }
-
-
-
-export type QuoteWithClient = Quote & { client?: Client | null }
-
-export type QuoteWithGuest = Quote & { guest?: Guest | null }
-
-
-export type QuoteWithClientAndGuest = QuoteWithClient & { guest?: Guest | null }
