@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import type { SelectOption } from '@/components/SelectMenu.vue'
 import { Client } from '@/types/client'
 import { TourWithDepartures } from '@/types/tour'
-import { formatDateRange } from '@/lib/utils'
+import { formatDateRange, formatDateString } from '@/lib/utils'
 
 export interface Country {
     id: number
@@ -64,14 +64,14 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
 
             return (
                 tour?.departures?.map((dep) => ({
-                    label: formatDateRange(
-                        dep.departure_date,
-                        dep.return_date
-                    ),
+                    label: formatDateString(dep.departure_date),
                     value: String(dep.id),
                 })) ?? [] as SelectOption[]
             )
         })
+
+    const getTourByID = (id?: number) =>
+        computed<TourWithDepartures>(() => tours.value.find((tour) => tour.id === id) as TourWithDepartures)
 
     return {
         countries,
@@ -86,5 +86,6 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         tourOptions,
         setTours,
         getTourDepartureOptions,
+        getTourByID,
     }
 })

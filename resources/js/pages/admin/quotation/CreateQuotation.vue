@@ -13,6 +13,8 @@ import Button from '@/components/ui/button/Button.vue'
 import { Input } from '@/components/ui/input'
 import InputError from '@/components/InputError.vue'
 import { TourWithDepartures } from '@/types/tour'
+import { Checkbox } from '@/components/ui/checkbox'
+import NewDatePicker from '@/components/NewDatePicker.vue'
 const quotationForm = useQuotationFormStore()
 const isSaving = ref(false)
 const refData = useReferenceDataStore();
@@ -201,16 +203,14 @@ function createDraftTour() {
 
                                 <div class="flex items-start gap-4">
                                     <div class="space-y-2 w-1/2">
-                                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email <span
-                                                class="text-red-600">*</span></label>
+                                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email </label>
                                         <Input v-model="quotationForm.form.client.email" name="email"
                                             placeholder="Enter tour name" class="font-roboto text-sm" readonly />
                                         <InputError :message="quotationForm.errors['email']" />
                                     </div>
 
                                     <div class="space-y-2 w-1/2">
-                                        <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Client phone <span
-                                                class="text-red-600">*</span></label>
+                                        <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Client phone </label>
                                         <Input v-model="quotationForm.form.client.phone" name="phone"
                                             placeholder="Enter tour name" class="font-roboto text-sm" readonly />
                                         <InputError :message="quotationForm.errors['phone']" />
@@ -229,16 +229,22 @@ function createDraftTour() {
                                         <label for="tour" class="block text-sm font-medium leading-6 text-gray-900">Tours <span
                                                 class="text-red-600">*</span></label>
                                         <SelectMenu v-model="quotationForm.form.tour.id" :options="refData.tourOptions" name="tour"
-                                            placeholder="Select tour" class="font-roboto text-sm" />
+                                            placeholder="Select tour" class="font-roboto text-sm" @change="(value) => {quotationForm.getTourDuration(refData.getTourByID(Number(value)).value) }" />
                                         <InputError :message="quotationForm.errors['tour']" />
                                     </div>
 
                                     <div class="space-y-2 w-1/2">
-                                        <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Departure <span
-                                                class="text-red-600">*</span></label>
-                                        <SelectMenu v-model="quotationForm.form.tour.departure_id" :options="refData.getTourDepartureOptions(Number(quotationForm.form.tour.id)).value" name="status"
-                                            placeholder="Select status" class="font-roboto text-sm" />
-                                        <InputError :message="quotationForm.errors['status']" />
+                                        <div class="flex justify-between">
+                                            <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Departure </label>
+                                            <span class="flex gap-1">
+                                                <Checkbox id="custom" @update:checked="quotationForm.changeAsCustomDate" :checked="quotationForm.form.tour.custom_date" /> 
+                                                <label for="custom" name="custom">Custom</label>
+                                            </span>
+                                        </div>
+                                            <SelectMenu v-if="!quotationForm.form.tour.custom_date" v-model="quotationForm.form.tour.departure_id" :options="refData.getTourDepartureOptions(Number(quotationForm.form.tour.id)).value" name="status"
+                                                placeholder="Select status" class="font-roboto text-sm" />
+                                            <NewDatePicker v-else v-model="quotationForm.form.tour.departure_date" @change="(value)=> {}" />
+                                            <InputError :message="quotationForm.errors['status']" />
                                     </div>
                                 </div>
 

@@ -1,6 +1,8 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { Client as NewClient } from "@/types/client";
+import { parseStringDateWithDuration } from "@/lib/utils";
+import { TourWithDepartures } from "@/types/tour";
 interface Client {
   id: string;
   name: string;
@@ -13,8 +15,10 @@ interface Tour {
   name:string;
   total_pax:string;
   departure_date:string;
+  duration: string;
   return_date:string;
-  departure_id: string 
+  departure_id: string; 
+  custom_date: boolean;
 }
 
 
@@ -40,7 +44,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
 
   const form = ref({  
       client: {} as Client,
-      tour: {} as Tour,
+      tour: { custom_date: false,} as Tour,
       status: '',
       valid_until: '',
       subtotal: '',
@@ -58,6 +62,36 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   // ))
 
 
+  function changeAsCustomDate (value?: boolean) {
+      if(value === form.value.tour.custom_date) return
+      clearTourDeoarture()
+      form.value.tour.custom_date = value!
+  }
+
+
+  function changeCustomDate (value?: string) {
+    if(!value) return ''
+    const tour = form.value.tour
+    form.value.tour  = {
+      departure_date: value,
+      return_date: parseStringDateWithDuration(value, tour.duration)
+    }as Tour
+  }
+
+  function getTourDuration(tour:TourWithDepartures){
+    form.value.tour = {
+      id: tour.id.toString(),
+      name: tour.name,
+      duration: tour.duration.toString(),
+    }as Tour
+  }
+
+  function clearTourDeoarture(){
+    form.value.tour.departure_date = '';
+    form.value.tour.return_date = '';
+    form.value.tour.departure_id = '';
+    form.value.tour.duration = '';
+  }
   
   // CLIENT
   function getClient(id?: number, clients?: NewClient[]) {
@@ -149,6 +183,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     errors,
 
     getClient,
-    
+    changeAsCustomDate,
+    getTourDuration,
   }
 })
