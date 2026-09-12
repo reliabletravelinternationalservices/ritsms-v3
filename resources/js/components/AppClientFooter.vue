@@ -1,0 +1,133 @@
+<script setup lang="ts">
+import { Icon } from '@iconify/vue';
+import { Link } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
+
+const appUrl = import.meta.env.VITE_APP_URL;
+
+interface Props {
+    email?: string;
+    inquiryLink?: string;
+    instagramLink?: string;
+    facebookLink?: string;
+    tiktokLink?: string;
+    youtubeLink?: string;
+}
+
+withDefaults(defineProps<Props>(), {
+    email: 'inquiry@reliabletravelph.com',
+    inquiryLink: route('client.contact'),
+    facebookLink: 'https://www.facebook.com/reliableinternationaltravelservices',
+    instagramLink: 'https://www.instagram.com/reliabletravelph/',
+    tiktokLink: 'https://www.tiktok.com/@reliabletravelph',
+    youtubeLink: 'https://www.youtube.com/@reliabletravelservices',
+});
+
+
+</script>
+
+<template>
+    <footer class="w-full bg-[var(--secondary-custom)] px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-12 md:py-24">
+            
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2">
+                    <img :src="appUrl + '/storage/upload/agency/logo.png'" alt="Agency Logo" class="w-28 h-28 object-cover" />
+                    <Link :href="route('client.contact')"><button class="w-28 bg-[var(--tertiary-custom)] py-2 text-[var(--secondary-custom)] font-bold hover:bg-[var(--tertiary-hover-custom)] duration-75 ease-in" type="button">Inquire Now</button></Link>
+                </div>
+                <div>
+                    <h1 class="text-[var(--primary-custom)] font-normal font-roboto text-sm">
+                        <span class="text-[var(--tertiary-custom)]">GUARANTEED</span> professionally curated itineraries and a 
+                        <span class="text-[var(--tertiary-custom)]">RELIABLE TRAVEL AGENCY</span>
+                    </h1>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-[var(--primary-custom)] font-bold font-roboto text-sm">PAYMENT GATEWAYS</h3>
+                    <span class="flex items-center justify-start gap-2">
+                        <img :src="appUrl + '/storage/upload/agency/visa_logo.png'" alt="visa" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/paypal_logo.png'" alt="paypal" class="w-12 h-8 object-cover" />
+                        <img :src="appUrl + '/storage/upload/agency/gcash_logo.png'" alt="gcash" class="w-12 h-8 object-cover" />
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <h2 class="text-[var(--primary-custom)] font-bold font-roboto text-sm uppercase">QUICK LINKS</h2>
+                <ul class="flex flex-col gap-2 text-[var(--primary-custom)] font-roboto text-xs w-min">
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.landing')">Home</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.destination')">Destinations</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.contact')">Contact Us</a></li>
+                    <li class="hover:text-[var(--tertiary-custom)] duration-75 ease-in"><a :href="route('client.about')">About Us</a></li>
+                </ul>
+            </div>
+
+            <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-4">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-[var(--primary-custom)] font-bold font-roboto text-sm uppercase">CALL US NOW</h2>
+                    <span class="flex flex-col gap-2 w-full">
+                        <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
+                            <Icon icon="material-symbols:call" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <a href="tel:09085721338" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 908 572 1338</a>
+                        </span>
+                        <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
+                            <Icon icon="material-symbols:call" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <a href="tel:09279275207" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">+63 927 927 5207</a>
+                        </span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-[var(--primary-custom)] font-bold font-roboto text-sm uppercase">SEND US EMAIL</h2>
+                    <span class="flex flex-col gap-2">
+                        <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
+                            <Icon icon="ic:baseline-email" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <a href="mailto:inquiry@reliabletravelph.com" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">{{ email }}</a>
+                        </span>
+                        <span class="flex items-center gap-2 text-[var(--primary-custom)] font-roboto text-xs">
+                            <Icon icon="ic:baseline-email" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <a href="mailto:reliabletravelinfo@gmail.com" class="underline hover:text-[var(--tertiary-custom)] duration-75 ease-in">reliabletravelinfo@gmail.com</a>
+                        </span>
+                    </span>
+                </div>
+
+                <div class="sm:col-span-2 flex flex-col gap-6 lg:gap-4">
+                    <span class="flex flex-col gap-1 text-[var(--primary-custom)] font-roboto text-xs">
+                        <span class="flex items-center gap-2">
+                            <Icon icon="mdi:location" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <h4 class="font-bold font-roboto text-sm uppercase">CAVITE BRANCH</h4>
+                        </span>
+                        <a target="_blank" href="https://maps.app.goo.gl/sTjrppGkWkyQxLVd6" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">JJSS Commercial Building Brgy Navarro General Trias, Cavite, Philippines</a>
+                    </span>
+
+                    <span class="flex flex-col gap-1 text-[var(--primary-custom)] font-roboto text-xs">
+                        <span class="flex items-center gap-2">
+                            <Icon icon="mdi:location" width="20" height="20" class="text-[var(--tertiary-custom)]" />
+                            <h4 class="font-bold font-roboto text-sm uppercase">PANGASINAN BRANCH</h4>
+                        </span>
+                        <a target="_blank" href="https://maps.app.goo.gl/3VPzYr8CHG1usV2d8" class="ml-6 underline hover:text-[var(--tertiary-custom)] duration-75 ease-in leading-relaxed">Nomangonan, San Manuel, Pangasinan</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-5xl mx-auto py-8 border-t border-[var(--shadow-custom)] flex flex-col md:flex-row items-center justify-between gap-6">
+            <span class="flex space-x-4 items-center font-roboto text-xs order-2 md:order-1">
+                <a :href="instagramLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our Instagram page">
+                    <Icon icon="mdi:instagram" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+                <a :href="facebookLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook page">
+                    <Icon icon="basil:facebook-solid" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+                <a :href="tiktokLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our TikTok page">
+                    <Icon icon="ic:baseline-tiktok" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+                <a :href="youtubeLink" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">
+                    <Icon icon="mdi:youtube" width="24" height="24" class="text-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] duration-75" />
+                </a>
+            </span>
+            <span class="text-center md:text-right order-1 md:order-2">
+                <h2 class="text-[var(--muted-custom)] font-medium font-roboto text-xs md:text-sm">Copyright © 2026 Reliable International Travel Services. All rights reserved.</h2>
+            </span>
+        </div>
+    </footer>
+</template>

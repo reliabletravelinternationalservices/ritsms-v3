@@ -1,0 +1,389 @@
+import type { Updater } from "@tanstack/vue-table"
+import type { ClassValue } from "clsx"
+import type { Ref } from "vue"
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+import type { Destination } from '@/types/destination';
+import { Media } from "@/types/media-v2"
+const appUrl = import.meta.env.VITE_APP_URL
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
+  ref.value
+    = typeof updaterOrValue === "function"
+      ? updaterOrValue(ref.value)
+      : updaterOrValue
+}
+
+
+
+/**
+ * Formats a number into a USD currency string.
+ * @param amount - The numeric value to format
+ * @returns A formatted string (e.g., "$1,234.56")
+ */
+export const formatCurrency = (amount: number, currency: string = 'PHP', fractions: number = 0): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    // Optional: Use 'minimumFractionDigits: 0' if you don't want decimals for whole numbers
+    minimumFractionDigits: fractions,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+
+// Helper to format date strings
+export const formatDateString = (dateStr?: string, includeTime: boolean = false) => {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        ...(includeTime && { hour: 'numeric', minute: 'numeric' }),
+    });
+};
+
+
+export const getPackageDurationLabel = (days: number): string => {
+  if (days > 1) {
+    return `${days}D${days - 1}N`;
+  } else {
+    return `${days} day`;
+  }
+};
+
+export const formatPackageDateRange = (
+    startDate?: string | null,
+    endDate?: string | null
+): string => {
+    const singleFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    };
+
+    const rangeStartFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+    };
+
+    const rangeEndFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    };
+
+    // No start date → show only end date
+    if (!startDate && endDate) {
+        return `Ends at ${new Date(endDate).toLocaleDateString('en-US', singleFormat)}`;
+    }
+
+    const start = new Date(startDate!);
+    const end = endDate ? new Date(endDate) : start;
+
+    const isSameDate =
+        start.getDate() === end.getDate() &&
+        start.getMonth() === end.getMonth() &&
+        start.getFullYear() === end.getFullYear();
+
+    if (!endDate || isSameDate) {
+        return start.toLocaleDateString('en-US', singleFormat);
+    }
+
+    return `${start.toLocaleDateString('en-US', rangeStartFormat)} - ${end.toLocaleDateString('en-US', rangeEndFormat)}`;
+};
+
+
+export const truncateText = (
+    text: string,
+    maxLength: number = 20
+): string => {
+    if (text.length <= maxLength) {
+        return text;
+    }
+
+    return `${text.slice(0, maxLength)}...`;
+};
+
+
+export const packageSellingStatus = (endDate: string): string => {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    return today > end ? 'ENDED' : 'SELLING';
+};
+
+export const getSeasonColor = (season: string): string => {
+    switch (season) {
+        case 'spring':
+            return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+
+        case 'summer':
+            return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
+
+        case 'autumn':
+            return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400';
+
+        case 'winter':
+            return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+
+        default:
+            return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+    }
+};
+
+
+
+
+export const scrollToSection = (id:string) => {
+    const element = document.getElementById(id);
+
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
+    }
+};
+
+
+export const formatItinerariesForEdit = (
+    itineraries: Array<{
+        day: number;
+        title: string;
+        activity: string[];
+    }>,
+    unescapeJsonString: (val: string) => string
+): string => {
+    if (!Array.isArray(itineraries) || itineraries.length === 0) {
+        return '';
+    }
+
+    return itineraries
+        .map((item) => {
+            const title = unescapeJsonString(item.title ?? '');
+
+            const activities = Array.isArray(item.activity)
+                ? item.activity.map(unescapeJsonString).join('\n')
+                : unescapeJsonString(item.activity ?? '');
+
+            return `${title}\n${activities}`;
+        })
+        .join('\n\n');
+};
+
+
+
+
+export const getImageUrl = (path: string) => {
+    return `${appUrl}/storage/${path}`;
+}
+
+
+export function getImagePath(
+    path: string,
+    size: 'thumbnail' | 'medium' | 'large' = 'large',
+): string {
+    const normalizedPath = path.replace(/^\/+|\/+$/g, '')
+
+    const lastSlash = normalizedPath.lastIndexOf('/')
+
+    if (lastSlash === -1) {
+        return `/storage/${size}/${normalizedPath}`
+    }
+
+    const directory = normalizedPath.substring(0, lastSlash)
+    const filename = normalizedPath.substring(lastSlash + 1)
+
+    return `/storage/${directory}/${size}/${filename}`
+}
+
+
+export function getMediaUrl(
+    path: string,
+    disk: 'local' | 'public' | 'cloudinary' | 's3' = 'public',
+): string {
+    if (disk === 'public') {
+        return `/storage/${path}`
+    }
+
+    // Add other disk handling later.
+    return path
+}
+
+
+export function getDestinationIdByCountry(
+    destinations: Destination[],
+    country: string
+): number | null {
+    return (
+        destinations.find(
+            destination =>
+                destination.country?.toLowerCase() === country.toLowerCase()
+        )?.id ?? null
+    );
+}
+
+export function isFile(value: unknown): value is File {
+    return value instanceof File
+}
+
+export const normalizeText = (value: string | undefined | null) => value?.trim().toLowerCase() ?? '';
+
+
+export const toTitleCase = (value: string) => {
+  return value
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+};
+
+
+
+
+export const isMultipleFlight = (value: string) => {
+    switch (value) {
+        case 'tri_city':
+            return true;
+        case 'multi_city':
+            return true;
+        default:
+            return false;
+    }
+}
+
+
+export function parseStringDate(value: string, addDay?: number): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (addDay ?? 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
+export function parseStringDateWithDuration(value: string, duration?: string): string {
+    if (!value) return ''
+
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(year, month - 1, day + (duration ? parseInt(duration) : 0))
+
+    if (Number.isNaN(date.getTime())) {
+        return ''
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })
+}
+
+
+export const createObjectURL = (file: File) => {
+    return URL.createObjectURL(file)
+}
+
+export const generateId = () => {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
+
+export function isEmpty(value: unknown): boolean {
+  if (value === undefined || value === null) {
+    return true
+  }
+
+  if (typeof value === 'string') {
+    return value.trim() === ''
+  }
+
+  if (Array.isArray(value)) {
+    return value.length === 0
+  }
+
+  return false
+}
+
+
+
+
+export function getFirstImage(
+    media: Media[],
+    type: 'image' | 'video'
+): Media | null {
+    return media.find(item => item.type === type) ?? null
+}
+
+export const formatDateRange = (
+    startDate?: string | null,
+    endDate?: string | null
+): string => {
+    if (!startDate && !endDate) {
+        return '—'
+    }
+
+    const singleFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }
+
+    const rangeFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }
+
+    // Only end date
+    if (!startDate && endDate) {
+        return `Ends ${new Date(endDate).toLocaleDateString('en-US', singleFormat)}`
+    }
+
+    const start = new Date(startDate!)
+    const end = endDate ? new Date(endDate) : start
+
+    if (
+        Number.isNaN(start.getTime()) ||
+        Number.isNaN(end.getTime())
+    ) {
+        return '—'
+    }
+
+    const isSameDate =
+        start.getDate() === end.getDate() &&
+        start.getMonth() === end.getMonth() &&
+        start.getFullYear() === end.getFullYear()
+
+    // Same date or only start date
+    if (!endDate || isSameDate) {
+        return start.toLocaleDateString('en-US', singleFormat)
+    }
+
+    // Same year: Sep 12 - Oct 15, 2026
+    if (start.getFullYear() === end.getFullYear()) {
+        const startFormat: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: 'short',
+        }
+
+        return `${start.toLocaleDateString('en-US', startFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
+    }
+
+    // Different years: Dec 20, 2026 - Jan 05, 2027
+    return `${start.toLocaleDateString('en-US', rangeFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
+}

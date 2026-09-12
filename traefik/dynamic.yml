@@ -1,0 +1,19 @@
+http:
+  routers:
+    public:
+      rule: 'Host(`reliabletravelph.test`)'
+      entryPoints:
+        - web
+      service: laravel
+
+    admin:
+      rule: 'Host(`admin.reliabletravelph.test`)'
+      entryPoints:
+        - web
+      service: laravel
+
+  services:
+    laravel:
+      loadBalancer:
+        servers:
+          - url: 'http://host.docker.internal:8000'

@@ -1,0 +1,63 @@
+import '../css/app.css';
+import 'vue-sonner/style.css';
+
+import { createInertiaApp } from '@inertiajs/vue3';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import type { DefineComponent } from 'vue';
+import { createApp, h } from 'vue';
+import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { initializeTheme } from './composables/useAppearance';
+import { Toaster } from '@/components/ui/sonner';
+import DeleteDialog from '@/components/ui/DeleteDialog.vue';
+import { imageViewer } from "@/lib/imageViewer"
+import { appModal } from "@/lib/app-modal"
+import ShareModal from './components/ShareModal.vue';
+import VueApexCharts from 'vue3-apexcharts';
+import { createPinia } from 'pinia'
+
+const pinia = createPinia()
+
+// Extend ImportMeta interface for Vite...
+declare module 'vite/client' {
+    interface ImportMetaEnv {
+        readonly VITE_APP_NAME: string;
+        [key: string]: string | boolean | undefined;
+    }
+
+    interface ImportMeta {
+        readonly env: ImportMetaEnv;
+        readonly glob: <T>(pattern: string) => Record<string, () => Promise<T>>;
+    }
+}
+
+const appName = import.meta.env.VITE_APP_NAME || 'Reliable International Travel Services';
+
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    setup({ el, App, props, plugin }) {
+            createApp({ render: () => [
+                    h(App, props),
+                    h(Toaster, {
+                        richColors: true,
+                        position: 'top-right',
+                    }),
+                    h(DeleteDialog),
+                    h(ShareModal),
+                ], })
+            .use(imageViewer)
+            .use(appModal)
+            .use(plugin)
+            .use(ZiggyVue)
+            .use(pinia)
+            .use(VueApexCharts)
+            .component('ApexCharts', VueApexCharts)
+            .mount(el);
+    },
+    progress: {
+        color: '#4B5563',
+    },
+});
+
+// This will set light / dark mode on page load...
+initializeTheme();

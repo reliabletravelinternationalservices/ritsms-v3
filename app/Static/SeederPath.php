@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Static;
+
+class SeederPath
+{
+    public const PACKAGES = __DIR__.'/../../database/data/packages.json';
+
+    public const PACKAGE_GROUPS = __DIR__.'/../../database/data/package_groups.json';
+
+    public const PACKAGE_GROUP_ITEMS = __DIR__.'/../../database/data/package_group_items.json';
+
+    public const SETTINGS = __DIR__.'/../../database/data/settings.json';
+
+    public const PACKAGE_SCHEDULES = __DIR__.'/../../database/data/package_schedules.json';
+    public const DESTINATIONS = __DIR__.'/../../database/data/destinations.json';
+
+    public const DESTINATION_LOCATIONS = __DIR__.'/../../database/data/destination_locations.json';
+
+    public const COUNTRIES = __DIR__.'/../../database/data/countries.json';
+}
