@@ -1,4 +1,3 @@
-import { QuotationStatus } from "@/types/quote";
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { Client as NewClient } from "@/types/client";
@@ -20,20 +19,20 @@ interface Tour {
 
 
 
-interface Quotation {
-  client: Client;
-  tour: Tour;
-  status: QuotationStatus;
-  valid_until: string;
-  subtotal: string;
-  discount_total: string;
-  tax_total: string;
-  grand_total: string;
-  notes: string;
-  sent_at: string;
-  viewed_at: string;
-  accepted_at: string;
-}
+// interface Quotation {
+//   client: Client;
+//   tour: Tour;
+//   status: QuotationStatus;
+//   valid_until: string;
+//   subtotal: string;
+//   discount_total: string;
+//   tax_total: string;
+//   grand_total: string;
+//   notes: string;
+//   sent_at: string;
+//   viewed_at: string;
+//   accepted_at: string;
+// }
 
 export const useQuotationFormStore = defineStore('quotation-form', () => {
   const errors = ref<Record<string, string>>({})
@@ -86,8 +85,8 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   // ==============================================================
   // FILL FORM functions
   // ==============================================================
-  function fillForm(client: Client){
-
+  function fillForm(){
+    
     resetForm()
     
     // const basic = {

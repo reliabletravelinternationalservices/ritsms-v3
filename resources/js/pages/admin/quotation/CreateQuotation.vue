@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue'
-import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue'
+import SelectMenu from '@/components/SelectMenu.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useQuotationFormStore } from '@/stores/quotationForm'
 import { BreadcrumbItem } from '@/types'
 import { Icon } from '@iconify/vue'
-import { Head, router } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { toast } from 'vue-sonner'
-import NewDatePicker from '@/components/NewDatePicker.vue'
 import { Client } from '@/types/client'
 import { useReferenceDataStore } from '@/stores/referenceData'
 import Button from '@/components/ui/button/Button.vue'
-import AppModal from '@/components/AppModal.vue'
 import { Input } from '@/components/ui/input'
 import InputError from '@/components/InputError.vue'
 import { TourWithDepartures } from '@/types/tour'
@@ -44,72 +41,72 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 
-const status: SelectOption[] = [
-    {
-        label: 'Draft',
-        value: 'draft',
-    },
-    {
-        label: 'Sent',
-        value: 'sent',
-    },
-    {
-        label: 'Viewed',
-        value: 'viewed',
-    },
-    {
-        label: 'Accepted',
-        value: 'accepted',
-    },
-    {
-        label: 'Rejected',
-        value: 'rejected',
-    },
-    {
-        label: 'Expired',
-        value: 'expired',
-    },
-    {
-        label: 'Cancelled',
-        value: 'cancelled',
-    },
-];
+// const status: SelectOption[] = [
+//     {
+//         label: 'Draft',
+//         value: 'draft',
+//     },
+//     {
+//         label: 'Sent',
+//         value: 'sent',
+//     },
+//     {
+//         label: 'Viewed',
+//         value: 'viewed',
+//     },
+//     {
+//         label: 'Accepted',
+//         value: 'accepted',
+//     },
+//     {
+//         label: 'Rejected',
+//         value: 'rejected',
+//     },
+//     {
+//         label: 'Expired',
+//         value: 'expired',
+//     },
+//     {
+//         label: 'Cancelled',
+//         value: 'cancelled',
+//     },
+// ];
 
 
-const item_type: SelectOption[] = [
-    {
-        label: 'Travel Service',
-        value: 'travel_service',
-    },
-    {
-        label: 'Visa Assistance',
-        value: 'passport_assistance',
-    },
-    {
-        label: 'Passport Assistance',
-        value: 'passport_assistance',
-    },
-    {
-        label: 'Airport Transfer',
-        value: 'airport_transfer',
-    },
-    {
-        label: 'Hotel',
-        value: 'hotel_booking',
-    },
-    {
-        label: 'Flight',
-        value: 'flight',
-    },
-    {
-        label: 'Travel Insurance',
-        value: 'travel_insurance',
-    },
-    {
-        label: 'Other',
-        value: 'other',
-    },
-];
+// const item_type: SelectOption[] = [
+//     {
+//         label: 'Travel Service',
+//         value: 'travel_service',
+//     },
+//     {
+//         label: 'Visa Assistance',
+//         value: 'passport_assistance',
+//     },
+//     {
+//         label: 'Passport Assistance',
+//         value: 'passport_assistance',
+//     },
+//     {
+//         label: 'Airport Transfer',
+//         value: 'airport_transfer',
+//     },
+//     {
+//         label: 'Hotel',
+//         value: 'hotel_booking',
+//     },
+//     {
+//         label: 'Flight',
+//         value: 'flight',
+//     },
+//     {
+//         label: 'Travel Insurance',
+//         value: 'travel_insurance',
+//     },
+//     {
+//         label: 'Other',
+//         value: 'other',
+//     },
+// ];
 
 
 function createDraftTour() {
@@ -137,8 +134,6 @@ function createDraftTour() {
 }
 
 
-
-const isModalOpen = ref(false)
 
 </script>
 

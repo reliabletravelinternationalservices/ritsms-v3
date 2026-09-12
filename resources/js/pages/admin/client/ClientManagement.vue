@@ -2,7 +2,6 @@
 import ButtonIcon from '@/components/ButtonIcon.vue';
 import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import DataCardWithIcon from '@/components/statistic/DataCardWithIcon.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';

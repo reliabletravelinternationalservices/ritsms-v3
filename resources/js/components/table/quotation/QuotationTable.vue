@@ -107,7 +107,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
         accessorKey: 'menu',
         header: '',
 
-        cell: ({ row }) =>
+        cell: ({  }) =>
             h(
                 MenuCell,
                 {

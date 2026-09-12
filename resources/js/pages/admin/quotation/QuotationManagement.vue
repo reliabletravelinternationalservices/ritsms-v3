@@ -91,11 +91,11 @@ const loadTours = (page = 1) => {
 }
 
 
-const applyFilters = () => {
-    filters.page = '1';
+// const applyFilters = () => {
+//     filters.page = '1';
 
-    loadTours();
-};
+//     loadTours();
+// };
 
 
 const handlePageChange = (page: string) => {

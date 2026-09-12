@@ -7,7 +7,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { AcceptableValue } from 'reka-ui'
-import { X, ChevronDown } from '@lucide/vue'
+import { X } from '@lucide/vue'
 
 export interface SelectOption {
     label: string
