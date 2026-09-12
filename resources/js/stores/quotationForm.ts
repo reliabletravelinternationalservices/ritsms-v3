@@ -1,4 +1,3 @@
-import { QuotationStatus } from "@/types/quote";
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import { Client as NewClient } from "@/types/client";
@@ -9,19 +8,31 @@ interface Client {
   phone: string;
 }
 
-interface Quotation {
-  client: Client;
-  status: QuotationStatus;
-  valid_until: string;
-  subtotal: string;
-  discount_total: string;
-  tax_total: string;
-  grand_total: string;
-  notes: string;
-  sent_at: string;
-  viewed_at: string;
-  accepted_at: string;
+interface Tour {
+  id:string;
+  name:string;
+  total_pax:string;
+  departure_date:string;
+  return_date:string;
+  departure_id: string 
 }
+
+
+
+// interface Quotation {
+//   client: Client;
+//   tour: Tour;
+//   status: QuotationStatus;
+//   valid_until: string;
+//   subtotal: string;
+//   discount_total: string;
+//   tax_total: string;
+//   grand_total: string;
+//   notes: string;
+//   sent_at: string;
+//   viewed_at: string;
+//   accepted_at: string;
+// }
 
 export const useQuotationFormStore = defineStore('quotation-form', () => {
   const errors = ref<Record<string, string>>({})
@@ -29,6 +40,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
 
   const form = ref({  
       client: {} as Client,
+      tour: {} as Tour,
       status: '',
       valid_until: '',
       subtotal: '',
@@ -50,11 +62,13 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   // CLIENT
   function getClient(id?: number, clients?: NewClient[]) {
       if (!clients?.length) {
-          return undefined;
+          form.value.client = {} as Client
+          return
       }
 
       if (!id) {
-          return clients[0];
+          form.value.client = {} as Client
+          return 
       }
 
       const client = clients.find(client => client.id === id);
@@ -71,8 +85,8 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   // ==============================================================
   // FILL FORM functions
   // ==============================================================
-  function fillForm(client: Client){
-
+  function fillForm(){
+    
     resetForm()
     
     // const basic = {

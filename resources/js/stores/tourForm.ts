@@ -430,7 +430,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function transformSchedules() {
     const schedules = form.value.schedules
 
-    if (!schedules.selected_dates)  return
+    if (!schedules.selected_dates)  return 
     if (schedules.is_customized) {
       return schedules.customize.map((sched)=>({
          base_price: sched.base_price,

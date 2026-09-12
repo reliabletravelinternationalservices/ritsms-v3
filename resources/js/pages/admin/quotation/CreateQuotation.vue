@@ -1,31 +1,31 @@
 <script setup lang="ts">
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue'
-import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue'
+import SelectMenu from '@/components/SelectMenu.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useQuotationFormStore } from '@/stores/quotationForm'
 import { BreadcrumbItem } from '@/types'
 import { Icon } from '@iconify/vue'
-import { Head, router } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { toast } from 'vue-sonner'
-import NewDatePicker from '@/components/NewDatePicker.vue'
 import { Client } from '@/types/client'
 import { useReferenceDataStore } from '@/stores/referenceData'
 import Button from '@/components/ui/button/Button.vue'
-import AppModal from '@/components/AppModal.vue'
 import { Input } from '@/components/ui/input'
 import InputError from '@/components/InputError.vue'
+import { TourWithDepartures } from '@/types/tour'
 const quotationForm = useQuotationFormStore()
 const isSaving = ref(false)
 const refData = useReferenceDataStore();
 
 interface Props {
     clients: Client[];
+    tours: TourWithDepartures[];
 }
 const props = defineProps<Props>()
 
 
 refData.setClients(props.clients);
+refData.setTours(props.tours);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -41,72 +41,72 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 
-const status: SelectOption[] = [
-    {
-        label: 'Draft',
-        value: 'draft',
-    },
-    {
-        label: 'Sent',
-        value: 'sent',
-    },
-    {
-        label: 'Viewed',
-        value: 'viewed',
-    },
-    {
-        label: 'Accepted',
-        value: 'accepted',
-    },
-    {
-        label: 'Rejected',
-        value: 'rejected',
-    },
-    {
-        label: 'Expired',
-        value: 'expired',
-    },
-    {
-        label: 'Cancelled',
-        value: 'cancelled',
-    },
-];
+// const status: SelectOption[] = [
+//     {
+//         label: 'Draft',
+//         value: 'draft',
+//     },
+//     {
+//         label: 'Sent',
+//         value: 'sent',
+//     },
+//     {
+//         label: 'Viewed',
+//         value: 'viewed',
+//     },
+//     {
+//         label: 'Accepted',
+//         value: 'accepted',
+//     },
+//     {
+//         label: 'Rejected',
+//         value: 'rejected',
+//     },
+//     {
+//         label: 'Expired',
+//         value: 'expired',
+//     },
+//     {
+//         label: 'Cancelled',
+//         value: 'cancelled',
+//     },
+// ];
 
 
-const item_type: SelectOption[] = [
-    {
-        label: 'Travel Service',
-        value: 'travel_service',
-    },
-    {
-        label: 'Visa Assistance',
-        value: 'passport_assistance',
-    },
-    {
-        label: 'Passport Assistance',
-        value: 'passport_assistance',
-    },
-    {
-        label: 'Airport Transfer',
-        value: 'airport_transfer',
-    },
-    {
-        label: 'Hotel',
-        value: 'hotel_booking',
-    },
-    {
-        label: 'Flight',
-        value: 'flight',
-    },
-    {
-        label: 'Travel Insurance',
-        value: 'travel_insurance',
-    },
-    {
-        label: 'Other',
-        value: 'other',
-    },
-];
+// const item_type: SelectOption[] = [
+//     {
+//         label: 'Travel Service',
+//         value: 'travel_service',
+//     },
+//     {
+//         label: 'Visa Assistance',
+//         value: 'passport_assistance',
+//     },
+//     {
+//         label: 'Passport Assistance',
+//         value: 'passport_assistance',
+//     },
+//     {
+//         label: 'Airport Transfer',
+//         value: 'airport_transfer',
+//     },
+//     {
+//         label: 'Hotel',
+//         value: 'hotel_booking',
+//     },
+//     {
+//         label: 'Flight',
+//         value: 'flight',
+//     },
+//     {
+//         label: 'Travel Insurance',
+//         value: 'travel_insurance',
+//     },
+//     {
+//         label: 'Other',
+//         value: 'other',
+//     },
+// ];
 
 
 function createDraftTour() {
@@ -134,8 +134,6 @@ function createDraftTour() {
 }
 
 
-
-const isModalOpen = ref(false)
 
 </script>
 
@@ -228,19 +226,19 @@ const isModalOpen = ref(false)
 
                                 <div class="flex items-start gap-4">
                                     <div class="space-y-2 w-1/2">
-                                        <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status <span
+                                        <label for="tour" class="block text-sm font-medium leading-6 text-gray-900">Tours <span
                                                 class="text-red-600">*</span></label>
-                                        <SelectMenu v-model="quotationForm.form.status" :options="status" name="status"
-                                            placeholder="Select status" class="font-roboto text-sm" />
-                                        <InputError :message="quotationForm.errors['status']" />
+                                        <SelectMenu v-model="quotationForm.form.tour.id" :options="refData.tourOptions" name="tour"
+                                            placeholder="Select tour" class="font-roboto text-sm" />
+                                        <InputError :message="quotationForm.errors['tour']" />
                                     </div>
 
                                     <div class="space-y-2 w-1/2">
-                                        <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Client Name <span
+                                        <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Departure <span
                                                 class="text-red-600">*</span></label>
-                                        <Input v-model="quotationForm.form.client.name" name="name"
-                                            placeholder="Enter tour name" class="font-roboto text-sm" readonly />
-                                        <InputError :message="quotationForm.errors['name']" />
+                                        <SelectMenu v-model="quotationForm.form.tour.departure_id" :options="refData.getTourDepartureOptions(Number(quotationForm.form.tour.id)).value" name="status"
+                                            placeholder="Select status" class="font-roboto text-sm" />
+                                        <InputError :message="quotationForm.errors['status']" />
                                     </div>
                                 </div>
 

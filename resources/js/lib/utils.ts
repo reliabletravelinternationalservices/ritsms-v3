@@ -328,3 +328,62 @@ export function getFirstImage(
 ): Media | null {
     return media.find(item => item.type === type) ?? null
 }
+
+export const formatDateRange = (
+    startDate?: string | null,
+    endDate?: string | null
+): string => {
+    if (!startDate && !endDate) {
+        return '—'
+    }
+
+    const singleFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }
+
+    const rangeFormat: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }
+
+    // Only end date
+    if (!startDate && endDate) {
+        return `Ends ${new Date(endDate).toLocaleDateString('en-US', singleFormat)}`
+    }
+
+    const start = new Date(startDate!)
+    const end = endDate ? new Date(endDate) : start
+
+    if (
+        Number.isNaN(start.getTime()) ||
+        Number.isNaN(end.getTime())
+    ) {
+        return '—'
+    }
+
+    const isSameDate =
+        start.getDate() === end.getDate() &&
+        start.getMonth() === end.getMonth() &&
+        start.getFullYear() === end.getFullYear()
+
+    // Same date or only start date
+    if (!endDate || isSameDate) {
+        return start.toLocaleDateString('en-US', singleFormat)
+    }
+
+    // Same year: Sep 12 - Oct 15, 2026
+    if (start.getFullYear() === end.getFullYear()) {
+        const startFormat: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: 'short',
+        }
+
+        return `${start.toLocaleDateString('en-US', startFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
+    }
+
+    // Different years: Dec 20, 2026 - Jan 05, 2027
+    return `${start.toLocaleDateString('en-US', rangeFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
+}

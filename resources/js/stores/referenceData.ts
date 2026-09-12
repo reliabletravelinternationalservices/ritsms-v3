@@ -2,6 +2,8 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { SelectOption } from '@/components/SelectMenu.vue'
 import { Client } from '@/types/client'
+import { TourWithDepartures } from '@/types/tour'
+import { formatDateRange } from '@/lib/utils'
 
 export interface Country {
     id: number
@@ -11,6 +13,7 @@ export interface Country {
 export const useReferenceDataStore = defineStore('reference-data', () => {
     const countries = ref<Country[]>([])
     const clients = ref<Client[]>([])
+    const tours = ref<TourWithDepartures[]>([])
 
     // COUNTRIES
     function setCountries(data: Country[]) {
@@ -24,6 +27,10 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         }))
     })
     
+
+
+
+    // FOR CLIENTS
     function setClients(data: Client[]) {
         clients.value = data
     }
@@ -35,6 +42,37 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         }))
     })
 
+
+    // FOR TOURS
+    function setTours(data: TourWithDepartures[]){
+        tours.value = data
+    }
+    
+
+    const tourOptions = computed<SelectOption[]>(() => {
+        return tours.value.map((tour) => ({
+            label: `(${tour.code}) ${tour.name}`,
+            value: String(tour.id),
+        }))
+    })
+
+    const getTourDepartureOptions = (id?: number) =>
+        computed<SelectOption[]>(() => {
+            if(!id) return []
+            
+            const tour = tours.value.find((tour) => tour.id === id)
+
+            return (
+                tour?.departures?.map((dep) => ({
+                    label: formatDateRange(
+                        dep.departure_date,
+                        dep.return_date
+                    ),
+                    value: String(dep.id),
+                })) ?? [] as SelectOption[]
+            )
+        })
+
     return {
         countries,
         countryOptions,
@@ -43,5 +81,10 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         clients,
         clientOptions,
         setClients,
+
+        tours,
+        tourOptions,
+        setTours,
+        getTourDepartureOptions,
     }
 })
