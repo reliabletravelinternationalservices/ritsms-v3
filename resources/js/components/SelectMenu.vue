@@ -7,6 +7,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { AcceptableValue } from 'reka-ui'
+import { X } from '@lucide/vue'
 
 export interface SelectOption {
     label: string
@@ -33,19 +34,52 @@ const emit = defineEmits<{
 }>()
 
 const handleChange = (value: AcceptableValue) => {
-    emit('update:model-value', value as string)
-    emit('change', value as string)
+    const newValue = value as string
+
+    emit('update:model-value', newValue)
+    emit('change', newValue)
+}
+
+const clearValue = (event: MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    emit('update:model-value', '')
+    emit('change', '')
 }
 </script>
 
 <template>
-    <Select :model-value="props.modelValue" :disabled="props.disabled" @update:model-value="handleChange">
-        <SelectTrigger class="w-full" :class="props.class">
+    <Select
+        :model-value="props.modelValue"
+        :disabled="props.disabled"
+        @update:model-value="handleChange"
+    >
+        <SelectTrigger
+            class="w-full"
+            :class="props.class"
+        >
             <SelectValue :placeholder="props.placeholder" />
+
+            <button
+                v-if="props.modelValue"
+                type="button"
+                class="ml-auto shrink-0 opacity-50 transition-opacity hover:opacity-100"
+                :disabled="props.disabled"
+                @pointerdown.stop
+                @click="clearValue"
+            >
+                <X class="size-4" />
+            </button>
+
         </SelectTrigger>
 
         <SelectContent>
-            <SelectItem v-for="(option, index) in props.options" :key="index" :value="option.value">
+            <SelectItem
+                v-for="(option, index) in props.options"
+                :key="index"
+                :value="option.value"
+            >
                 {{ option.label }}
             </SelectItem>
         </SelectContent>

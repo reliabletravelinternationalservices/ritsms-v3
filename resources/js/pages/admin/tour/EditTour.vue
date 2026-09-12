@@ -32,15 +32,21 @@ const isChangingStatus = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
+function fillTourForm(tour: TourWithRelationshipTables) {
+    tourForm.clearFormChanges()
+    tourForm.fillFormWithTourData(tour)
+}
+
 watch(
-    () => props.tour,
-    (tour) => {
+    () => props.tour.id,
+    () => {
+        const tour = props.tour
+
         if (!tour) return
 
-        tourForm.clearFormChanges()
-        tourForm.fillFormWithTourData(tour)
+        fillTourForm(tour)
     },
-    { immediate: true, deep: true }
+    { immediate: true }
 )
 
 referenceData.setCountries(props.countries)
@@ -128,13 +134,14 @@ function saveTourChanges() {
         formData,
         {
             forceFormData: true,
+            preserveState: 'errors',
+            preserveScroll: true,
 
             onFinish: () => {
                 isSaving.value = false
             },
 
             onError: (errors) => {
-                console.error(errors)
                 tourForm.setErrors(errors)
 
                 toast.error(
@@ -148,9 +155,9 @@ function saveTourChanges() {
                 toast.success(
                     'Tour saved successfully.'
                 )
-                tourForm.resetFormChanges()
                 router.reload({
                     only: ['tour'],
+                    onSuccess: (page) => fillTourForm(page.props.tour as TourWithRelationshipTables),   
                 })
             },
         },

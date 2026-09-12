@@ -8,6 +8,7 @@ use App\Models\Country;
 use App\Models\Tour;
 use App\Services\MediaService;
 use App\Services\Tour\TourService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -38,7 +39,7 @@ class EditTourController extends Controller
         ]);
     }
 
-    public function update(TourRequest $request, Tour $tour)
+    public function update(TourRequest $request, Tour $tour): RedirectResponse
     {
 
         DB::transaction(function () use (
@@ -48,19 +49,19 @@ class EditTourController extends Controller
             $validatedData = $request->validated();
             $this->tourService->update($tour, $validatedData['overview']);
 
-            if (! empty($validatedData['itineraries'])) {
+            if (array_key_exists('itineraries', $validatedData)) {
                 $this->tourService->updateItineraries($tour, $validatedData['itineraries']);
             }
 
-            if (! empty($validatedData['routes'])) {
+            if (array_key_exists('routes', $validatedData)) {
                 $this->tourService->updateRoutes($tour, $validatedData['routes']);
             }
 
-            if (! empty($validatedData['hotels'])) {
+            if (array_key_exists('hotels', $validatedData)) {
                 $this->tourService->updateHotels($tour, $validatedData['hotels']);
             }
 
-            if (! empty($validatedData['schedules'])) {
+            if (array_key_exists('schedules', $validatedData)) {
                 $this->tourService->updateDepartures($tour, $validatedData['schedules']);
             }
 
@@ -84,10 +85,12 @@ class EditTourController extends Controller
             }
         });
 
-        return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])->with('success', 'Tour saved successfully.');
+        return to_route('admin.tours.edit', ['slug' => $tour->slug])
+            ->setStatusCode(303)
+            ->with('success', 'Tour saved successfully.');
     }
 
-    public function updateStatus(Request $request, Tour $tour)
+    public function updateStatus(Request $request, Tour $tour): RedirectResponse
     {
         $validatedData = $request->validate([
             'state' => 'required|string|in:draft,published,archived',
@@ -97,7 +100,7 @@ class EditTourController extends Controller
             $this->tourService->updateStatus($tour, $validatedData);
         });
 
-        return redirect()->route('admin.tours.edit', ['slug' => $tour->slug])
+        return to_route('admin.tours.edit', ['slug' => $tour->slug])
             ->with('success', 'Tour status changed.');
     }
 }

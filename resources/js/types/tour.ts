@@ -61,6 +61,7 @@ export interface Hotel {
 }
 
 export interface Departure {
+    id: number;
     tour_id:number;
     base_price: number;
     discounted_price?: number | null;
@@ -82,3 +83,7 @@ export type TourWithRelationshipTables = Tour & {
     media: Media[]
 };
 
+
+export type TourWithDepartures = Tour & {
+    departures: Departure[];
+}

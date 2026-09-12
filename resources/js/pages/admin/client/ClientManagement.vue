@@ -2,7 +2,6 @@
 import ButtonIcon from '@/components/ButtonIcon.vue';
 import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import DataCardWithIcon from '@/components/statistic/DataCardWithIcon.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
@@ -28,8 +27,8 @@ const props = defineProps<Props>()
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Tour Management',
-        href: route('admin.tours'),
+        title: 'Client Management',
+        href: route('admin.clients'),
     },
 ];
 
@@ -232,12 +231,12 @@ const createClient = () => router.visit(route('admin.clients.create'));
         <div class="flex flex-col gap-4">
 
             <!-- STATISTICS -->
-            <div class="grid grid-cols-4 lg:grid-cols-5 gap-2 w-full items-center p-4">
+            <!-- <div class="grid grid-cols-4 lg:grid-cols-5 gap-2 w-full items-center p-4">
 
                 <DataCardWithIcon icon-background="bg-[var(--color-deepYellow)]" icon-color="text-white"
                     icon="lucide:square-user-round" title="Clients" :value="props.stats.totalClient" :with-button="false" />
 
-            </div>
+            </div> -->
 
 
             <!-- FILTERS -->

@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { QuoteWithClientAndGuest } from '@/types/quote'
+import Table from '@/components/Table.vue';
+import { Quote } from '@/types/quote'
 import { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
+import MenuCell from '../reusable/MenuCell.vue';
 
 defineProps<{
-    quotes: QuoteWithClientAndGuest[]
+    quotes: Quote[]
 }>()
 
-const columns: ColumnDef<QuoteWithClientAndGuest, unknown>[] = [
+const columns: ColumnDef<Quote, unknown>[] = [
     {
         accessorKey: 'id',
         header: 'ID',
@@ -24,7 +26,7 @@ const columns: ColumnDef<QuoteWithClientAndGuest, unknown>[] = [
 
     {
         accessorKey: 'code',
-        header: 'Code',
+        header: 'CODE',
 
         cell: ({ row }) =>
             h(
@@ -38,32 +40,24 @@ const columns: ColumnDef<QuoteWithClientAndGuest, unknown>[] = [
 
     {
         id: 'customer',
-        header: 'Client',
+        header: 'CLIENT',
 
         cell: ({ row }) => {
             const quote = row.original
 
-            const value =
-                quote.client?.name ??
-                quote.guest?.guest_name ??
-                'N/A'
-
             return h(
                 'span',
                 {
-                    class:
-                        value === 'N/A'
-                            ? 'text-muted-foreground'
-                            : 'font-semibold',
+                    class: 'font-semibold',
                 },
-                value
+                quote.client.code
             )
         },
     },
 
     {
         accessorKey: 'grand_total',
-        header: 'Total',
+        header: 'TOTAL',
 
         cell: ({ row }) =>
             h(
@@ -76,22 +70,8 @@ const columns: ColumnDef<QuoteWithClientAndGuest, unknown>[] = [
     },
 
     {
-        accessorKey: 'valid_until',
-        header: 'Expiration',
-
-        cell: ({ row }) =>
-            h(
-                'span',
-                {
-                    class: 'font-medium',
-                },
-                row.original.valid_until ?? 'N/A'
-            ),
-    },
-
-    {
         accessorKey: 'status',
-        header: 'Status',
+        header: 'STATUS',
 
         cell: ({ row }) => {
             const status = row.original.status
@@ -110,16 +90,31 @@ const columns: ColumnDef<QuoteWithClientAndGuest, unknown>[] = [
     },
 
     {
-        accessorKey: 'created_at',
-        header: 'Created',
+        accessorKey: 'valid_until',
+        header: 'EXPIRATION',
 
         cell: ({ row }) =>
             h(
                 'span',
                 {
-                    class: 'font-medium text-muted-foreground',
+                    class: 'font-medium',
                 },
-                row.original.created_at
+                row.original.valid_until ?? 'N/A'
+            ),
+    },
+
+    {
+        accessorKey: 'menu',
+        header: '',
+
+        cell: ({  }) =>
+            h(
+                MenuCell,
+                {
+                    onView: ()=>{},
+                    onEdit: ()=>{},
+                    onDelete: ()=>{},
+                },
             ),
     },
 ]

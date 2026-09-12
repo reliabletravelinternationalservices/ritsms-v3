@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
-use App\Http\Controllers\Admin\QuotationController;
 use App\Http\Controllers\Admin\Tour\CreateTourController;
 use App\Http\Controllers\Admin\Tour\EditTourController;
 use App\Http\Controllers\Admin\Tour\TourManagementController;
@@ -39,6 +38,8 @@ use App\Http\Controllers\Admin\Client\ClientManagementController;
 use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\DeleteClientController;
 use App\Http\Controllers\Admin\Client\EditClientController;
+use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
+use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
 use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
@@ -98,9 +99,16 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             |--------------------------------------------------------------------------
             */
 
-        Route::prefix('quotations')->controller(QuotationController::class)->group(function () {
-            Route::get('/', 'index')->name('quotations');
+        Route::prefix('quotations')->group(function (){
+            Route::controller(QuotationManagementController::class)->group(function () {
+                Route::get('/', 'index')->name('quotations');
+            });
+
+            Route::controller(CreateQuotationController::class)->group(function () {
+                Route::get('/create', 'create')->name('quotations.create');
+            });
         });
+    
 
         /*
             |--------------------------------------------------------------------------
@@ -144,6 +152,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
         });
+
 
 
         /*
