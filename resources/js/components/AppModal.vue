@@ -52,7 +52,8 @@ function handleBackdropClick(event: MouseEvent) {
             <Transition name="modal-backdrop">
                 <div
                     class="absolute inset-0 h-full w-full bg-black/70"
-                />
+                >
+                </div>
             </Transition>
 
             <!-- Modal -->
