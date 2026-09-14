@@ -2,8 +2,8 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { SelectOption } from '@/components/SelectMenu.vue'
 import { Client } from '@/types/client'
-import { Departure, TourWithDepartures } from '@/types/tour'
-import { formatDateRange, formatDateString } from '@/lib/utils'
+import { TourWithDepartures } from '@/types/tour'
+import { formatDateString } from '@/lib/utils'
 
 export interface Country {
     id: number

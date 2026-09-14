@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import {  ref } from "vue"
 import { Client as NewClient } from "@/types/client";
 import { parseStringDateWithDuration } from "@/lib/utils";
 import { TourWithDepartures } from "@/types/tour";

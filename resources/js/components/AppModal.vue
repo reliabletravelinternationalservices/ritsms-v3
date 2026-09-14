@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import { computed } from 'vue'
 
 interface Props {
@@ -13,8 +14,8 @@ const props = withDefaults(defineProps<Props>(), {
     open: false,
     dismissable: true,
     showDismiss: true,
-    title: "Show Modal",
-    description: "This is a sample desc."
+    title: 'Show Modal',
+    description: 'This is a sample desc.',
 })
 
 const emit = defineEmits<{
@@ -39,6 +40,7 @@ function handleBackdropClick(event: MouseEvent) {
         close()
     }
 }
+
 </script>
 
 <template>
@@ -49,12 +51,9 @@ function handleBackdropClick(event: MouseEvent) {
             @click="handleBackdropClick"
         >
             <!-- Backdrop -->
-            <Transition name="modal-backdrop">
-                <div
-                    class="absolute inset-0 h-full w-full bg-black/70"
-                >
-                </div>
-            </Transition>
+            <div
+                class="absolute inset-0 h-full w-full bg-black/70"
+            />
 
             <!-- Modal -->
             <div
@@ -119,16 +118,6 @@ function handleBackdropClick(event: MouseEvent) {
 
 .modal-enter-from,
 .modal-leave-to {
-    opacity: 0;
-}
-
-.modal-backdrop-enter-active,
-.modal-backdrop-leave-active {
-    transition: opacity 0.2s ease;
-}
-
-.modal-backdrop-enter-from,
-.modal-backdrop-leave-to {
     opacity: 0;
 }
 </style>

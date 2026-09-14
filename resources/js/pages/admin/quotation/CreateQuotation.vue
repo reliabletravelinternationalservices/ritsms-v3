@@ -15,7 +15,6 @@ import InputError from '@/components/InputError.vue'
 import { TourWithDepartures } from '@/types/tour'
 import { Checkbox } from '@/components/ui/checkbox'
 import NewDatePicker from '@/components/NewDatePicker.vue'
-import AppModal from '@/components/AppModal.vue'
 import { Textarea } from '@/components/ui/textarea'
 const quotationForm = useQuotationFormStore()
 const isSaving = ref(false)
