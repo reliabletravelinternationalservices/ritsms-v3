@@ -19,6 +19,7 @@ interface Tour {
   return_date:string;
   departure_id: string; 
   custom_date: boolean;
+  request: string;
 }
 
 
@@ -64,7 +65,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
 
   function changeAsCustomDate (value?: boolean) {
       if(value === form.value.tour.custom_date) return
-      clearTourDeoarture()
+      clearTourDeparture()
       form.value.tour.custom_date = value!
   }
 
@@ -73,12 +74,15 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     if(!value) return ''
     const tour = form.value.tour
     form.value.tour  = {
+      ...tour,
+      departure_id: '',
       departure_date: value,
       return_date: parseStringDateWithDuration(value, tour.duration)
     }as Tour
   }
 
   function getTourDuration(tour:TourWithDepartures){
+    clearTourForm()
     form.value.tour = {
       id: tour.id.toString(),
       name: tour.name,
@@ -86,12 +90,22 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     }as Tour
   }
 
-  function clearTourDeoarture(){
-    form.value.tour.departure_date = '';
-    form.value.tour.return_date = '';
-    form.value.tour.departure_id = '';
-    form.value.tour.duration = '';
-  }
+function clearTourDeparture() {
+    form.value.tour.departure_id = ''
+    form.value.tour.departure_date = ''
+    form.value.tour.return_date = ''
+}
+
+
+function clearTourForm(){
+      form.value.tour.duration = ''
+      form.value.tour.id = ''
+      clearTourDeparture()
+}
+
+function setUnitPrice(price?: number){
+  form.value.subtotal = price?.toString()?? '';
+}
   
   // CLIENT
   function getClient(id?: number, clients?: NewClient[]) {
@@ -185,5 +199,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     getClient,
     changeAsCustomDate,
     getTourDuration,
+    changeCustomDate,
+    setUnitPrice,
   }
 })

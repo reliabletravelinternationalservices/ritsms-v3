@@ -15,6 +15,8 @@ import InputError from '@/components/InputError.vue'
 import { TourWithDepartures } from '@/types/tour'
 import { Checkbox } from '@/components/ui/checkbox'
 import NewDatePicker from '@/components/NewDatePicker.vue'
+import AppModal from '@/components/AppModal.vue'
+import { Textarea } from '@/components/ui/textarea'
 const quotationForm = useQuotationFormStore()
 const isSaving = ref(false)
 const refData = useReferenceDataStore();
@@ -111,9 +113,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 // ];
 
 
-function createDraftTour() {
-    isSaving.value = true
+const isShowModal = ref(false);
 
+
+function createDraftTour() {
+
+    isShowModal.value =true;
     // router.post(
     //     route('admin.tours.store', { absolute:true }),
     //     {
@@ -134,7 +139,6 @@ function createDraftTour() {
     //     },
     // )
 }
-
 
 
 </script>
@@ -185,34 +189,29 @@ function createDraftTour() {
 
                                 <div class="flex items-start gap-4">
                                     <div class="space-y-2 w-1/2">
-                                        <label for="id" class="block text-sm font-medium leading-6 text-gray-900">Client <span
-                                                class="text-red-600">*</span></label>
+                                        <label for="id" class="block text-sm font-medium leading-6 text-gray-900">Client </label>
                                         <SelectMenu v-model="quotationForm.form.client.id" @change="(value)=> quotationForm.getClient(Number(value), refData.clients)" :options="refData.clientOptions" name="id"
                                             placeholder="Select client" class="font-roboto text-sm" />
                                         <InputError :message="quotationForm.errors['client_id']" />
                                     </div>
 
                                     <div class="space-y-2 w-1/2">
-                                        <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Client Name <span
+                                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email <span v-if="!quotationForm.form.client.id"
                                                 class="text-red-600">*</span></label>
-                                        <Input v-model="quotationForm.form.client.name" name="name"
-                                            placeholder="Enter tour name" class="font-roboto text-sm" readonly />
-                                        <InputError :message="quotationForm.errors['name']" />
+                                        <Input v-model="quotationForm.form.client.email" name="email"
+                                            placeholder="Enter client email" class="font-roboto text-sm"
+                                            :readonly="quotationForm.form.client.id" />
+                                        <InputError :message="quotationForm.errors['email']" />
                                     </div>
                                 </div>
 
                                 <div class="flex items-start gap-4">
                                     <div class="space-y-2 w-1/2">
-                                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email </label>
-                                        <Input v-model="quotationForm.form.client.email" name="email"
-                                            placeholder="Enter tour name" class="font-roboto text-sm" readonly />
-                                        <InputError :message="quotationForm.errors['email']" />
-                                    </div>
-
-                                    <div class="space-y-2 w-1/2">
-                                        <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Client phone </label>
+                                        <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Client phone <span v-if="!quotationForm.form.client.id"
+                                                class="text-zinc-500 italic text-xs">(optional)</span></label>
                                         <Input v-model="quotationForm.form.client.phone" name="phone"
-                                            placeholder="Enter tour name" class="font-roboto text-sm" readonly />
+                                            placeholder="Enter client phone" class="font-roboto text-sm" 
+                                            :readonly="quotationForm.form.client.id" />
                                         <InputError :message="quotationForm.errors['phone']" />
                                     </div>
                                 </div>
@@ -220,7 +219,7 @@ function createDraftTour() {
 
                             <!-- QUOTATION INFO -->
                             <div class="uppercase text-md font-bold border-b-2 border-foreground w-full py-2">
-                                <span>Services</span>
+                                <span>Tour & Departure</span>
                             </div>
                             <div class="flex flex-col gap-4 p-4">
 
@@ -235,35 +234,89 @@ function createDraftTour() {
 
                                     <div class="space-y-2 w-1/2">
                                         <div class="flex justify-between">
-                                            <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Departure </label>
+                                            <label for="departure_id" class="block text-sm font-medium leading-6 text-gray-900">Departure </label>
                                             <span class="flex gap-1">
                                                 <Checkbox id="custom" @update:checked="quotationForm.changeAsCustomDate" :checked="quotationForm.form.tour.custom_date" /> 
                                                 <label for="custom" name="custom">Custom</label>
                                             </span>
                                         </div>
-                                            <SelectMenu v-if="!quotationForm.form.tour.custom_date" v-model="quotationForm.form.tour.departure_id" :options="refData.getTourDepartureOptions(Number(quotationForm.form.tour.id)).value" name="status"
-                                                placeholder="Select status" class="font-roboto text-sm" />
-                                            <NewDatePicker v-else v-model="quotationForm.form.tour.departure_date" @change="(value)=> {}" />
-                                            <InputError :message="quotationForm.errors['status']" />
+                                            <SelectMenu v-if="!quotationForm.form.tour.custom_date" v-model="quotationForm.form.tour.departure_id" 
+                                                :options="refData.getTourDepartureOptions(Number(quotationForm.form.tour.id)).value" 
+                                                name="departure_id"
+                                                placeholder="Select status" class="font-roboto text-sm"
+                                                :disabled="!quotationForm.form.tour.id" 
+                                                @change="(id)=> {
+                                                    quotationForm.setUnitPrice(
+                                                        refData.getSelectedDeparturePrice(
+                                                        Number(quotationForm.form.tour.id),
+                                                        Number(id)
+                                                    ).value)
+                                                }"/>
+                                            <NewDatePicker v-else v-model="quotationForm.form.tour.departure_date" @change="quotationForm.changeCustomDate" />
+                                            <InputError :message="quotationForm.errors['departure_id']" />
                                     </div>
                                 </div>
 
                                 <div class="flex items-start gap-4">
                                     <div class="space-y-2 w-1/2">
-                                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email <span
-                                                class="text-red-600">*</span></label>
-                                        <Input v-model="quotationForm.form.client.email" name="email"
+                                        <label for="duration" class="block text-sm font-medium leading-6 text-gray-900">Duration <span
+                                                class="text-zinc-600 text-xs italic">(days)</span></label>
+                                        <Input v-model="quotationForm.form.tour.duration" type="number" name="duration"
                                             placeholder="Enter tour name" class="font-roboto text-sm" readonly />
-                                        <InputError :message="quotationForm.errors['email']" />
+                                        <InputError :message="quotationForm.errors['duration']" />
                                     </div>
 
                                     <div class="space-y-2 w-1/2">
-                                        <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Client phone <span
+                                        <label for="total_pax" class="block text-sm font-medium leading-6 text-gray-900">Total Pax <span
                                                 class="text-red-600">*</span></label>
-                                        <Input v-model="quotationForm.form.client.phone" name="phone"
-                                            placeholder="Enter tour name" class="font-roboto text-sm" readonly />
-                                        <InputError :message="quotationForm.errors['phone']" />
+                                        <Input v-model="quotationForm.form.tour.total_pax" type="number" min="0"
+                                            name="total_pax"
+                                            placeholder="0" class="font-roboto text-sm"  />
+                                        <InputError :message="quotationForm.errors['total_pax']" />
                                     </div>
+                                                                                                            
+                                </div>
+                                <div class="space-y-2 w-1/2">
+                                    <label for="request" class="block text-sm font-medium leading-6 text-gray-900">Customer Request <span
+                                            class="text-zinc-500 text-xs italic">(optional)</span></label>
+                                    <Textarea v-model="quotationForm.form.tour.request"
+                                        name="request"
+                                        placeholder="Special request, meals preferences, etc." class="font-roboto text-sm"  />
+                                    <InputError :message="quotationForm.errors['request']" />
+                                </div>
+                            </div>
+
+                            <!-- PAYMENT AND SUMMARY -->
+                            <div class="uppercase text-md font-bold border-b-2 border-foreground w-full py-2">
+                                <span>PAYMENT & SUMMARY</span>
+                            </div>
+                            <div class="flex gap-4 p-4">
+
+                                <div class="flex items-start gap-4 w-full">
+                                    <div class="flex items-start gap-4 w-full">
+                                        <div class="space-y-2 w-1/2">
+                                            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Unit Price <span
+                                                    class="text-red-600">*</span></label>
+                                            <Input v-model="quotationForm.form.subtotal" name="email"
+                                                placeholder="Enter client email" class="font-roboto text-sm"
+                                                :readonly="quotationForm.form.client.id" />
+                                            <InputError :message="quotationForm.errors['email']" />
+                                        </div>
+
+                                        <div class="space-y-2 w-1/2">
+                                            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Client Email <span v-if="!quotationForm.form.client.id"
+                                                    class="text-red-600">*</span></label>
+                                            <Input v-model="quotationForm.form.client.email" name="email"
+                                                placeholder="Enter client email" class="font-roboto text-sm"
+                                                :readonly="quotationForm.form.client.id" />
+                                            <InputError :message="quotationForm.errors['email']" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-4 w-2/3 border-2 border-foreground rounded-md p-2">
+                                    Summary
+                                                                                                            
                                 </div>
                             </div>
                         </div>
@@ -273,9 +326,7 @@ function createDraftTour() {
             </div>
 
             <ScrollToTopButton />
-        
+  
         </div>
-
-        
     </AppLayout>
 </template>
