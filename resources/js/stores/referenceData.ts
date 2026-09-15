@@ -71,7 +71,7 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         })
 
     const getTourByID = (id?: number) =>
-        computed<TourWithDepartures>(() => tours.value.find((tour) => tour.id === id) as TourWithDepartures)
+        computed<TourWithDepartures | undefined>(() => tours.value.find((tour) => tour.id === id) as TourWithDepartures)
 
     const getSelectedDeparturePrice = (tourID?: number, departureID?: number) =>
         computed<number | undefined>(() => {

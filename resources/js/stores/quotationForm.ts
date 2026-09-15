@@ -1,61 +1,69 @@
 import { defineStore } from "pinia"
-import {  ref } from "vue"
+import {  computed, ref } from "vue"
 import { Client as NewClient } from "@/types/client";
-import { parseStringDateWithDuration } from "@/lib/utils";
+import { getDateWithDuration, parseStringDateWithDuration } from "@/lib/utils";
 import { TourWithDepartures } from "@/types/tour";
+import { QuotationStatus } from "@/types/quote";
 interface Client {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
+  client_id: string;
+  primary_client_name: string;
+  primary_client_email: string;
+  primary_client_phone: string;
 }
 
 interface Tour {
-  id:string;
-  name:string;
-  total_pax:string;
-  departure_date:string;
-  duration: string;
-  return_date:string;
-  departure_id: string; 
-  custom_date: boolean;
-  request: string;
+  tour_id:string;
+  tour_name:string;
+  tour_duration: string;
 }
 
+interface Departure {
+  tour_departure_id:string;
+  departure_date:string;
+  return_date:string;
+  total_pax:string;
+  is_custom_date: boolean;
+}
 
+interface Other {
+  status?: QuotationStatus;
+  valid_until: string;
+  remarks: string;
+  notes: string;
 
-// interface Quotation {
-//   client: Client;
-//   tour: Tour;
-//   status: QuotationStatus;
-//   valid_until: string;
-//   subtotal: string;
-//   discount_total: string;
-//   tax_total: string;
-//   grand_total: string;
-//   notes: string;
-//   sent_at: string;
-//   viewed_at: string;
-//   accepted_at: string;
-// }
+  sent_at: string;
+  viewed_at: string;
+  accepted_at: string;
+}
+
+interface Pricing {
+  subtotal: string;
+  discount_total: string;
+  tax_total: string;
+  grand_total: string;
+
+  discount_percentage: string;
+  tax_percentage: string;
+}
+
+interface Quotation {
+  client: Client;
+  tour: Tour;
+  departure: Departure;
+  pricing: Pricing;
+  other: Other;
+}
 
 export const useQuotationFormStore = defineStore('quotation-form', () => {
   const errors = ref<Record<string, string>>({})
 
 
-  const form = ref({  
+  const form = ref<Quotation>({  
       client: {} as Client,
-      tour: { custom_date: false,} as Tour,
-      status: '',
-      valid_until: '',
-      subtotal: '',
-      discount_total: '',
-      tax_total: '',
-      grand_total: '',
-      notes: '',
-      sent_at: '',
-      viewed_at: '',
-      accepted_at: '',
+      tour: {} as Tour,
+      departure: { is_custom_date: false } as Departure,
+      pricing: {} as Pricing,
+      other: {} as Other,
   })
 
   // const hasChanges = computed(() => (
@@ -63,52 +71,83 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   // ))
 
 
-  function changeAsCustomDate (value?: boolean) {
-      if(value === form.value.tour.custom_date) return
-      clearTourDeparture()
-      form.value.tour.custom_date = value!
+  function toggleCustomDate (value?: boolean) {
+      if(value === form.value.departure.is_custom_date) return
+      clearSelectedDepartureDates()
+      form.value.departure.is_custom_date = value!
   }
 
 
-  function changeCustomDate (value?: string) {
-    if(!value) return ''
-    const tour = form.value.tour
-    form.value.tour  = {
-      ...tour,
-      departure_id: '',
-      departure_date: value,
-      return_date: parseStringDateWithDuration(value, tour.duration)
-    }as Tour
+
+  function addCustomDate (departureDate: string, returnDate:string) {
+    form.value.departure.tour_departure_id = ''
+    form.value.departure.departure_date = departureDate
+    form.value.departure.return_date = returnDate
   }
 
-  function getTourDuration(tour:TourWithDepartures){
-    clearTourForm()
-    form.value.tour = {
-      id: tour.id.toString(),
-      name: tour.name,
-      duration: tour.duration.toString(),
-    }as Tour
+  function getTourDuration(tour?:TourWithDepartures){
+    clearTour()
+    if(!tour) return
+    form.value.tour.tour_duration = tour.duration.toString()
+    form.value.tour.tour_id = tour.id.toString()
+    form.value.tour.tour_name = tour.name
   }
 
-function clearTourDeparture() {
-    form.value.tour.departure_id = ''
-    form.value.tour.departure_date = ''
-    form.value.tour.return_date = ''
+function clearSelectedDepartureDates() {
+    form.value.departure.tour_departure_id = ''
+    form.value.departure.departure_date = ''
+    form.value.departure.return_date = ''
 }
 
 
-function clearTourForm(){
-      form.value.tour.duration = ''
-      form.value.tour.id = ''
-      clearTourDeparture()
+function clearTour(){
+    form.value.tour.tour_duration = ''
+    form.value.tour.tour_id = ''
+    form.value.tour.tour_name = ''
 }
 
-function setUnitPrice(price?: number){
-  form.value.subtotal = price?.toString()?? '';
+function setSubtotalPrice(price?: number){
+  form.value.pricing.subtotal = price?.toString()?? '';
+  calculatePricing()
 }
-  
+
+
+function calculatePricing() {
+    
+    const subtotal = Number(form.value.pricing.subtotal) || 0
+    if(!subtotal || subtotal < 0 ){
+      clearCalculation()
+    }
+    const discountPercentage = Number(form.value.pricing.discount_percentage) || 0
+    const taxPercentage = Number(form.value.pricing.tax_percentage) || 0
+
+    // Discount
+    const discountTotal = subtotal * (discountPercentage / 100)
+
+    // Amount after discount
+    const taxableAmount = subtotal - discountTotal
+
+    // Tax
+    const taxTotal = taxableAmount * (taxPercentage / 100)
+
+    // Final total
+    const total = taxableAmount + taxTotal
+
+    form.value.pricing.discount_total = discountTotal.toString()
+    form.value.pricing.tax_total = taxTotal.toString()
+    form.value.pricing.grand_total = total.toString()
+}
+
+
+function clearCalculation(){
+    form.value.pricing.subtotal= ''
+    form.value.pricing.discount_total = ''
+    form.value.pricing.tax_total =''
+    form.value.pricing.grand_total =''
+
+}
   // CLIENT
-  function getClient(id?: number, clients?: NewClient[]) {
+  function getSelectedClient(id?: number, clients?: NewClient[]) {
       if (!clients?.length) {
           form.value.client = {} as Client
           return
@@ -122,13 +161,17 @@ function setUnitPrice(price?: number){
       const client = clients.find(client => client.id === id);
 
       form.value.client = {
-        id: client?.id?.toString(),
-        name: client?.name,
-        email: client?.email,
-        phone: client?.phone, 
+        client_id: client?.id?.toString(),
+        primary_client_name: client?.name,
+        primary_client_email: client?.email,
+        primary_client_phone: client?.phone, 
       } as Client
   }
-    
+  
+
+  const isCustomDate = computed<boolean>(() => form.value.departure.is_custom_date)
+  const hasSelectedTour  = computed<boolean>(()=> !!form.value.tour.tour_id)
+  const hasSelectedClient = computed<boolean>(()=> !!form.value.client.client_id)
 
   // ==============================================================
   // FILL FORM functions
@@ -196,10 +239,16 @@ function setUnitPrice(price?: number){
     clearErrors,
     errors,
 
-    getClient,
-    changeAsCustomDate,
+    getSelectedClient,
+    hasSelectedClient,
+    // 
+    toggleCustomDate,
+    isCustomDate,
+
+    hasSelectedTour,
     getTourDuration,
-    changeCustomDate,
-    setUnitPrice,
+    addCustomDate,
+    setSubtotalPrice,
+    calculatePricing,
   }
 })
