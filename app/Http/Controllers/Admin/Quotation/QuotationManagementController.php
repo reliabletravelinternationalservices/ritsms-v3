@@ -12,7 +12,7 @@ class QuotationManagementController extends Controller
 {
     public function index(): Response
     {
-        $quotations = Quotation::latest()->paginate(10);
+        $quotations = Quotation::with(['client', 'departure', 'tour'])->latest()->paginate(10);
         $filters = [
             'search' => ''
         ];

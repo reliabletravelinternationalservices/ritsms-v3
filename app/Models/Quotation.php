@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Quotation extends Model
 {
+    use SoftDeletes;
     protected $table = 'quotations';
     protected $fillable = [
         // client
@@ -64,5 +67,39 @@ class Quotation extends Model
     public function departure(): BelongsTo
     {
         return $this->belongsTo(TourDeparture::class, 'tour_departure_id');
+    }
+
+    public function generateSlug(): string
+    {
+        do {
+            $slug = Str::lower(Str::random(20));
+        } while (
+            static::withTrashed()
+                ->where('slug', $slug)
+                ->where('id', '!=', $this->id)
+                ->exists()
+        );
+
+        return $slug;
+    }
+
+    public function generateCode(): string
+    {
+        do {
+            $code = 'QT-' . now()->format('Ymd') . '-' . random_int(1000, 9999);
+        } while (self::where('code', $code)->exists());
+
+        return $code;
+    }
+
+
+
+    protected static function booted(): void
+    {
+        static::creating(function (Quotation $quotation) {
+            $quotation->code = $quotation->generateCode();
+            $quotation->slug = $quotation->generateSlug();
+        });
+        
     }
 }

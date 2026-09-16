@@ -62,7 +62,12 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
       client: {} as Client,
       tour: {} as Tour,
       departure: { is_custom_date: false } as Departure,
-      pricing: {} as Pricing,
+      pricing: {
+        subtotal: '0',
+        discount_total: '0',
+        tax_total: '0',
+        grand_total: '0'
+      } as Pricing,
       other: {} as Other,
   })
 
@@ -185,7 +190,6 @@ function clearCalculation(){
   // ==============================================================
   function fillForm(){
     
-    resetForm()
     
     // const basic = {
     //   type: client.type,
@@ -219,11 +223,17 @@ function clearCalculation(){
 
   }
 
-  function resetForm(){
-    // form.value.basicInformation = {} as BasicInformation
-    // form.value.classification = {} as Classification
-    // form.value.followup = {} as Followup
-    // form.value.profile = {} as Profile
+  function clearForm(){
+      form.value.client = {} as Client
+      form.value.tour = {} as Tour
+      form.value.departure = { is_custom_date: false } as Departure
+      form.value.pricing = {
+        subtotal: '0',
+        discount_total: '0',
+        tax_total: '0',
+        grand_total: '0'
+      } as Pricing
+      form.value.other = {} as Other
   }
   
 
@@ -245,6 +255,7 @@ function clearCalculation(){
     setErrors,
     clearErrors,
     errors,
+    clearForm,
 
     getSelectedClient,
     hasSelectedClient,

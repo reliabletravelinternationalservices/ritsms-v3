@@ -4,6 +4,12 @@ import { Quote } from '@/types/quote'
 import { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
 import MenuCell from '../reusable/MenuCell.vue';
+import CodeCell from './cells/CodeCell.vue';
+import StatusCell from './cells/StatusCell.vue';
+import PriceCell from './cells/PriceCell.vue';
+import TourCell from './cells/TourCell.vue';
+import ClientCell from './cells/ClientCell.vue';
+import ExpirationCell from './cells/ExpirationCell.vue';
 
 defineProps<{
     quotes: Quote[]
@@ -11,46 +17,47 @@ defineProps<{
 
 const columns: ColumnDef<Quote, unknown>[] = [
     {
-        accessorKey: 'id',
-        header: 'ID',
-
-        cell: ({ row }) =>
-            h(
-                'span',
-                {
-                    class: 'font-semibold',
-                },
-                row.original.id
-            ),
-    },
-
-    {
-        accessorKey: 'code',
+        id: 'code',
         header: 'CODE',
 
         cell: ({ row }) =>
             h(
-                'span',
+                CodeCell,
                 {
-                    class: 'font-semibold',
-                },
-                row.original.code
+                    code: row.original.code,
+                    link: "#"
+                }
             ),
     },
 
     {
-        id: 'customer',
+        accessorKey: 'tour',
+        header: 'TOUR',
+
+        cell: ({ row }) => {
+            return h(
+                TourCell,
+                {
+                    code: row.original.tour.code,
+                    name: row.original.tour_name,
+                    duration: row.original.tour_duration,
+
+                }
+            )
+        },
+    },
+    
+    {
+        accessorKey: 'customer',
         header: 'CLIENT',
 
         cell: ({ row }) => {
-            const quote = row.original
-
             return h(
-                'span',
+                ClientCell,
                 {
-                    class: 'font-semibold',
-                },
-                quote.client.code
+                    code: row.original.client.code,
+                    name: row.original.client.name,
+                }
             )
         },
     },
@@ -61,11 +68,10 @@ const columns: ColumnDef<Quote, unknown>[] = [
 
         cell: ({ row }) =>
             h(
-                'span',
+                PriceCell,
                 {
-                    class: 'text-muted-foreground',
-                },
-                row.original.grand_total
+                    total: row.original.grand_total
+                }
             ),
     },
 
@@ -74,17 +80,11 @@ const columns: ColumnDef<Quote, unknown>[] = [
         header: 'STATUS',
 
         cell: ({ row }) => {
-            const status = row.original.status
-
             return h(
-                'span',
+                StatusCell,
                 {
-                    class:
-                        status === 'Accepted'
-                            ? 'font-medium text-green-600'
-                            : 'font-medium text-muted-foreground',
-                },
-                status
+                    status: row.original.status
+                }
             )
         },
     },
@@ -95,11 +95,10 @@ const columns: ColumnDef<Quote, unknown>[] = [
 
         cell: ({ row }) =>
             h(
-                'span',
+                ExpirationCell,
                 {
-                    class: 'font-medium',
-                },
-                row.original.valid_until ?? 'N/A'
+                    date: row.original.valid_until?? undefined,
+                }
             ),
     },
 

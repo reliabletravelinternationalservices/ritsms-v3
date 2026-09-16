@@ -1,4 +1,5 @@
 import { Client } from "./client";
+import { Departure, Tour } from "./tour";
 
 
 export type QuotationStatus =
@@ -23,6 +24,15 @@ export type QuotationItemType =
 export interface Quote {
     id: number;
     client: Client;
+    tour: Tour;
+    tour_id: number;
+    tour_name: string;
+    tour_duration: number;
+    departure: Departure;
+    tour_departure_id: number;
+    departure_date: string;
+    return_date: string;
+    total_pax: number;
     code: string;
     slug: string;
     status: QuotationStatus;
