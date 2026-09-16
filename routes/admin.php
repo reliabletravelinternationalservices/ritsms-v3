@@ -106,6 +106,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(CreateQuotationController::class)->group(function () {
                 Route::get('/create', 'create')->name('quotations.create');
+                Route::post('/store', 'store')->name('quotations.store');
             });
         });
     

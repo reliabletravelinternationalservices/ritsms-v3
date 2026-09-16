@@ -32,9 +32,24 @@ const isChangingStatus = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
+const {
+    setCountries
+} = referenceData
+
+const {
+    clearFormChanges,
+    fillFormWithTourData,
+    syncMediaOrder,
+    clearErrors,
+    clearForm,
+    setErrors,
+} = tourForm
+
+setCountries(props.countries)
+
 function fillTourForm(tour: TourWithRelationshipTables) {
-    tourForm.clearFormChanges()
-    tourForm.fillFormWithTourData(tour)
+    clearFormChanges()
+    fillFormWithTourData(tour)
 }
 
 watch(
@@ -49,7 +64,6 @@ watch(
     { immediate: true }
 )
 
-referenceData.setCountries(props.countries)
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -70,7 +84,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 function saveTourChanges() {
     isSaving.value = true
-    tourForm.syncMediaOrder()
+    syncMediaOrder()
 
     const formData = new FormData()
 
@@ -142,7 +156,7 @@ function saveTourChanges() {
             },
 
             onError: (errors) => {
-                tourForm.setErrors(errors)
+                setErrors(errors)
 
                 toast.error(
                     'Failed to save the tour. Please check the form.'
@@ -150,8 +164,8 @@ function saveTourChanges() {
             },
 
             onSuccess: () => {
-                tourForm.clearErrors()
-
+                clearErrors()
+                clearForm()
                 toast.success(
                     'Tour saved successfully.'
                 )
@@ -173,7 +187,7 @@ function resetFormChanges() {
         confirmText: 'Reset',
         onConfirm: () => {
             isReseting.value = true
-            tourForm.resetFormChanges()
+            resetFormChanges()
             isReseting.value = false
         }
     })
@@ -205,8 +219,7 @@ function updateStatus(status: PublishStatus) {
             },
 
             onSuccess: () => {
-                tourForm.clearErrors()
-                tourForm.resetFormChanges()
+                clearErrors()
 
                 toast.success(
                     'Tour status changed.'
@@ -276,7 +289,7 @@ function updateStatus(status: PublishStatus) {
                 </div>
             </div>
             <div class="p-6">
-                <TourForm :is-create-new="false" :is-loading="isSaving || isReseting" />
+                <TourForm :new="false" :loading="isSaving || isReseting" />
             </div>
             <ScrollToTopButton />
         </div>

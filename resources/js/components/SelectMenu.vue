@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/select'
 import { AcceptableValue } from 'reka-ui'
 import { X } from '@lucide/vue'
+import { computed } from 'vue'
 
 export interface SelectOption {
     label: string
@@ -19,6 +20,7 @@ interface Props {
     placeholder?: string
     modelValue?: string
     disabled?: boolean
+    enableClear?: boolean
     class?: string
 }
 
@@ -26,6 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
     placeholder: 'Select...',
     modelValue: '',
     disabled: false,
+    enableClear: true,
 })
 
 const emit = defineEmits<{
@@ -41,12 +44,14 @@ const handleChange = (value: AcceptableValue) => {
 }
 
 const clearValue = (event: MouseEvent) => {
+    console.log(props.enableClear)
     event.preventDefault()
     event.stopPropagation()
 
     emit('update:model-value', '')
     emit('change', '')
 }
+
 </script>
 
 <template>
@@ -62,7 +67,7 @@ const clearValue = (event: MouseEvent) => {
             <SelectValue :placeholder="props.placeholder" />
 
             <button
-                v-if="props.modelValue"
+                v-if="props.enableClear && props.modelValue"
                 type="button"
                 class="ml-auto shrink-0 opacity-50 transition-opacity hover:opacity-100"
                 :disabled="props.disabled"

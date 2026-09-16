@@ -8,9 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useClientFormStore } from '@/stores/clientForm';
 
 withDefaults(defineProps<{
-    isLoading: boolean;
+    loading: boolean;
 }>(), {
-  isLoading: false
+  loading: false
 })
 
 
@@ -144,6 +144,10 @@ const statuses: SelectOption[] = [
 ]
 
 
+function changeAcceptMarketing(value?:boolean){
+     clientForm.form.followup.accept_marketing = value?? false
+}
+
 </script>
 
 <template>
@@ -268,7 +272,7 @@ const statuses: SelectOption[] = [
             <div class="flex gap-2 w-full">
                 <Checkbox 
                     :checked="clientForm.form.followup.accept_marketing"
-                    @update:checked="(value) => clientForm.form.followup.accept_marketing = value"
+                    @update:checked="changeAcceptMarketing"
                     placeholder="accept marketing" id="accept_marketing" />
                 <label for="accept_marketing" class="text-sm font-semibold text-zinc-600">Accept Marketing</label>
             </div>

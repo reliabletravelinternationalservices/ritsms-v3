@@ -3,6 +3,7 @@ import {  computed, ref } from "vue"
 import { Client as NewClient } from "@/types/client";
 import { TourWithDepartures } from "@/types/tour";
 import { QuotationStatus } from "@/types/quote";
+import { Departure as NewDeparture } from "@/types/tour";
 interface Client {
   client_id: string;
   primary_client_name: string;
@@ -78,11 +79,18 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
 
 
 
-  function addCustomDate (departureDate: string, returnDate:string) {
+  function addCustomDate(departureDate: string, returnDate:string) {
     form.value.departure.tour_departure_id = ''
     form.value.departure.departure_date = departureDate
     form.value.departure.return_date = returnDate
   }
+
+  function addDeparture(departure: NewDeparture){
+    form.value.departure.tour_departure_id = departure.id.toString()
+    form.value.departure.departure_date = departure.departure_date
+    form.value.departure.return_date = departure.return_date
+    setSubtotalPrice(departure.base_price)
+  } 
 
   function getTourDuration(tour?:TourWithDepartures){
     clearTour()
@@ -243,6 +251,7 @@ function clearCalculation(){
     // 
     toggleCustomDate,
     isCustomDate,
+    addDeparture,
 
     hasSelectedTour,
     getTourDuration,

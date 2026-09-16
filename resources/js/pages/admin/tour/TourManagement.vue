@@ -220,18 +220,33 @@ const createTour = () => router.visit(route('admin.tours.create'));
                         <SearchInput v-model="filters.search" placeholder="Search name or code..."
                             class="w-full border border-muted-foreground col-span-2" @keyup.enter="applyFilters" />
 
-                        <SelectMenu v-model="filters.category" :options="categoryOptions" placeholder="Category"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.category" 
+                            :options="categoryOptions" 
+                            placeholder="Category"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters"
+                            :enable-clear="false" />
 
-                        <SelectMenu v-model="filters.state" :options="stateOptions" placeholder="State"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.state" 
+                            :options="stateOptions" 
+                            placeholder="State"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters"
+                            :enable-clear="false" />
 
-                        <SelectMenu v-model="filters.visibility" :options="visibilityOptions" placeholder="Visibility"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.visibility" 
+                            :options="visibilityOptions" 
+                            placeholder="Visibility"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters"
+                            :enable-clear="false" />
 
-                        <SelectMenu v-model="filters.destination" :options="destinationOptions"
-                            placeholder="Select Destinations" class="w-full border border-muted-foreground"
-                            @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.destination" 
+                            :options="destinationOptions"
+                            placeholder="Select Destinations" 
+                            class="w-full border border-muted-foreground"
+                            @update:model-value="applyFilters" 
+                            :enable-clear="false" />
 
                     </div>
 

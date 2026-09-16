@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import { useQuotationFormStore } from '@/stores/quotationForm'
 import { BreadcrumbItem } from '@/types'
 import { Icon } from '@iconify/vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import { Client } from '@/types/client'
 import { useReferenceDataStore } from '@/stores/referenceData'
@@ -17,6 +17,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import NewDatePicker from '@/components/NewDatePicker.vue'
 import { Textarea } from '@/components/ui/textarea'
 import { formatCurrency, getDateWithDuration } from '@/lib/utils'
+import { toast } from 'vue-sonner'
 
 
 interface Props {
@@ -47,6 +48,7 @@ const {
     getTourDuration,
     setSubtotalPrice,
     calculatePricing,
+    addDeparture,
 } = quotationForm
 const {
     setClients,
@@ -102,10 +104,6 @@ const getDepartureOptions = computed<SelectOption[]>(
 
 
 
-
-const isShowModal = ref(false);
-
-
 function changeSelectedClientValue (id?:string) {
     getSelectedClient(Number(id), refData.clients);
 } 
@@ -115,11 +113,12 @@ function changeSelectedTourDuration(id?:string){
     getTourDuration(tour.value)
 }
 
-function changeDepartureUnitPrice(id?:string){
+function changeDepartureDate(id?:string){
     const tourId = Number(quotationForm.form.tour.tour_id);
     const depID = Number(id);
-    const depPrice = getSelectedDeparturePrice(tourId,depID)
-    setSubtotalPrice(depPrice.value)
+    const departure = getSelectedDeparturePrice(tourId,depID)
+    if (!departure.value) return
+    addDeparture(departure.value)
 }
 
 function changeCustomDateValue(departureDate?:string){
@@ -136,37 +135,30 @@ function calculateChangedValue(){
 
 function createQuotation() {
 
-    // const quotation_item = {
-    //     'item_type' : 'tour',
-    //     'title' : quotationForm.form.tour.name,
-    //     'quantity' : 1,
-    //     'unit_price': quotationForm.form.subtotal,
-    //     'total': quotationForm.form.subtotal,
-    //     'remarks' : quotationForm.form.remarks,
-    // }
-    
-    isShowModal.value =true;
-    // router.post(
-    //     route('admin.quotations.store', { absolute:true }),
-    //     {
-    //         client: JSON.stringify(quotationForm.form.client),
-    //         tour: JSON.stringify(quotationForm.form.tour)
-    //         quotation:  JSON.stringify()
-    //     },
-    //     {
-    //         onFinish: () => {
-    //             isSaving.value = false
-    //         },
-    //         onError: (e) => {
-    //             tourForm.setErrors(e)
-    //             toast.error('Failed to save the tour. Please check for required forms.')
-    //         },
-    //         onSuccess: () => {
-    //             tourForm.clearErrors()
-    //             toast.success('Tour saved successfully.')
-    //         },
-    //     },
-    // )
+    router.post(
+        route('admin.quotations.store', { absolute:true }),
+        {
+            ...quotationForm.form.client,
+            ...quotationForm.form.tour,
+            ...quotationForm.form.departure,
+            ...quotationForm.form.pricing,
+            ...quotationForm.form.other,
+        },
+        {
+            onFinish: () => {
+                isSaving.value = false
+            },
+            onError: (e) => {
+                console.log(e)
+                quotationForm.setErrors(e)
+                toast.error('Failed to save the tour. Please check for required forms.')
+            },
+            onSuccess: () => {
+                quotationForm.clearErrors()
+                toast.success('Quotation saved successfully.')
+            },
+        },
+    )
 }
 
 
@@ -310,12 +302,13 @@ function createQuotation() {
                                                 <label for="is_custom_date" name="is_custom_date">Custom</label>
                                             </span>
                                         </div>
-                                            <SelectMenu v-if="!quotationForm.isCustomDate" v-model="quotationForm.form.departure.tour_departure_id" 
+                                            <SelectMenu v-if="!quotationForm.isCustomDate" 
+                                                v-model="quotationForm.form.departure.tour_departure_id" 
                                                 :options="getDepartureOptions" 
                                                 name="departure_id"
                                                 placeholder="Select status" class="font-roboto text-sm"
                                                 :disabled="!quotationForm.form.tour.tour_id" 
-                                                @change="changeDepartureUnitPrice"/>
+                                                @change="changeDepartureDate"/>
                                             <NewDatePicker v-else v-model="quotationForm.form.departure.departure_date" @change="changeCustomDateValue" />
                                             <InputError :message="quotationForm.errors['departure_id']" />
                                     </div>

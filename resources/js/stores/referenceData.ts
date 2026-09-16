@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { SelectOption } from '@/components/SelectMenu.vue'
 import { Client } from '@/types/client'
-import { TourWithDepartures } from '@/types/tour'
+import { Departure, TourWithDepartures } from '@/types/tour'
 import { formatDateString } from '@/lib/utils'
 
 export interface Country {
@@ -74,13 +74,13 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         computed<TourWithDepartures | undefined>(() => tours.value.find((tour) => tour.id === id) as TourWithDepartures)
 
     const getSelectedDeparturePrice = (tourID?: number, departureID?: number) =>
-        computed<number | undefined>(() => {
+        computed<Departure | undefined>(() => {
             if (!tourID || !departureID) return undefined
 
             const tour = tours.value.find(tour => tour.id === tourID)
             return tour?.departures.find(
                 departure => departure.id === departureID
-            )?.base_price
+            )
         }) 
 
     return {
