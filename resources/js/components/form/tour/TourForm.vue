@@ -9,9 +9,10 @@ import PriceAndSchedule from './PriceAndSchedule.vue';
 import ImageAndAssetSection from './ImageAndAssetSection.vue';
 
 withDefaults(defineProps<{
-    new: boolean;
-    loading: boolean;
+    newEntry?: boolean;
+    loading?: boolean;
 }>(), {
+  newEntry: false,
   loading: false
 })
 
@@ -23,7 +24,7 @@ const { isCurrentSection, setSection, SECTION } = tourForm
 
 <template>
     <div class="flex gap-2">
-        <NavButton :is-loading="loading" v-if="new" :key="tourForm.sections[0].key"
+        <NavButton v-if="newEntry" :is-loading="loading"  :key="tourForm.sections[0].key"
             :label="tourForm.sections[0].label" :active="tourForm.currentSection === tourForm.sections[0].key"
             @click="setSection(tourForm.sections[0].key)"
             :is-error="tourForm.hasSectionErrors(tourForm.sections[0].key)" />
@@ -33,7 +34,7 @@ const { isCurrentSection, setSection, SECTION } = tourForm
             :is-error="tourForm.hasSectionErrors(section.key)" />
 
     </div>
-    <div v-if="new" class="mt-4 p-4 text-foreground">
+    <div v-if="newEntry" class="mt-4 p-4 text-foreground">
         <div v-if="isCurrentSection(SECTION.OVERVIEW)">
             <OverviewForm :is-loading="loading" />
         </div>

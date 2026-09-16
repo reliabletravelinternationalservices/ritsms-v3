@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/select'
 import { AcceptableValue } from 'reka-ui'
 import { X } from '@lucide/vue'
-import { computed } from 'vue'
 
 export interface SelectOption {
     label: string

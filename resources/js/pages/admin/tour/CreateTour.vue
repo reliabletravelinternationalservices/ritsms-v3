@@ -14,7 +14,6 @@ const tourForm = useTourFormStore()
 const {
     setErrors,
     clearErrors,
-    clearForm,
 } = tourForm
 
 const isSaving = ref(false)
@@ -93,7 +92,7 @@ function createDraftTour() {
             </div>
 
             <div class="p-6">
-                <TourForm :new="true" :loading="isSaving" />
+                <TourForm :newEntry="true" :loading="isSaving" />
             </div>
 
             <ScrollToTopButton />

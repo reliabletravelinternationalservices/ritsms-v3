@@ -289,7 +289,7 @@ function updateStatus(status: PublishStatus) {
                 </div>
             </div>
             <div class="p-6">
-                <TourForm :new="false" :loading="isSaving || isReseting" />
+                <TourForm :newEntry="false" :loading="isSaving || isReseting" />
             </div>
             <ScrollToTopButton />
         </div>

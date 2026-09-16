@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { getImagePath, getPackageDurationLabel } from '@/lib/utils';
-import { Media } from '@/types/media-v2';
-import { Icon } from '@iconify/vue';
 import { Link } from '@inertiajs/vue3';
 
 interface Props {

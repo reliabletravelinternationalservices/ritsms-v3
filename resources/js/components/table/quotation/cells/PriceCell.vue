@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatCurrency } from '@/lib/utils';
-import { Link } from '@inertiajs/vue3';
 
     interface Props{
        total?: number;
