@@ -10,6 +10,7 @@ import PriceCell from './cells/PriceCell.vue';
 import TourCell from './cells/TourCell.vue';
 import ClientCell from './cells/ClientCell.vue';
 import ExpirationCell from './cells/ExpirationCell.vue';
+import { router } from '@inertiajs/vue3';
 
 defineProps<{
     quotes: Quote[]
@@ -106,17 +107,28 @@ const columns: ColumnDef<Quote, unknown>[] = [
         accessorKey: 'menu',
         header: '',
 
-        cell: ({  }) =>
+        cell: ({ row }) =>
             h(
                 MenuCell,
                 {
                     onView: ()=>{},
-                    onEdit: ()=>{},
+                    onEdit: ()=> edit(row.original.slug),
                     onDelete: ()=>{},
                 },
             ),
     },
 ]
+
+
+function edit(slug: string) {
+    window.open(
+        route('admin.quotations.edit', { slug }),
+        '_blank',
+        'noopener,noreferrer'
+    )
+}
+
+
 </script>
 
 <template>

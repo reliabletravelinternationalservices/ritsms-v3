@@ -24,6 +24,10 @@ export type QuotationItemType =
 export interface Quote {
     id: number;
     client: Client;
+    client_id: number;
+    primary_client_name: string;
+    primary_client_email: string;
+    primary_client_phone: string;
     tour: Tour;
     tour_id: number;
     tour_name: string;
@@ -41,6 +45,7 @@ export interface Quote {
     discount_total: number;
     tax_total:number;
     grand_total:number;
+    remarks?: string | null;
     notes?: string | null;
     sent_at?: string | null;
     viewed_at?: string | null;

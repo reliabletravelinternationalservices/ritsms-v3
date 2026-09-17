@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import {  computed, ref } from "vue"
 import { Client as NewClient } from "@/types/client";
 import { TourWithDepartures } from "@/types/tour";
-import { QuotationStatus } from "@/types/quote";
+import { QuotationStatus, Quote } from "@/types/quote";
 import { Departure as NewDeparture } from "@/types/tour";
 interface Client {
   client_id: string;
@@ -188,39 +188,90 @@ function clearCalculation(){
   // ==============================================================
   // FILL FORM functions
   // ==============================================================
-  function fillForm(){
-    
-    
-    // const basic = {
-    //   type: client.type,
-    //   name: client.name,
-    //   email: client.email,
-    //   phone: client.phone,
-    //   address: client.address,
-    //   gender: client.gender,
-    // } as BasicInformation
+  function fillForm(quote: Quote) {
+    clearForm()
+    fillClient(quote)
+    fillTour(quote)
+    fillDeparture(quote)
+    fillPricing(quote)
+    fillOther(quote)
 
-    // const classification = {
-    //   status: client.status,
-    //   source: client.source
-    // } as Classification
+}
 
-    // const profile = {
-    //   facebook_link: client.facebook_link,
-    //   website_link: client.website_link
-    // } as Profile
+function fillClient(quote:Quote){
+      const client = {
+        client_id: quote.client_id.toString(),
+        primary_client_name: quote.client.name,
+        primary_client_email: quote.client.email,
+        primary_client_phone: quote.client.phone,
+    } as Client
 
-    // const followup = {
-    //   last_contacted: client.last_contacted_at,
-    //   notes: client.note,
-    //   accept_marketing: client.accept_marketing,
-    // } as Followup
+    form.value.client=client
+}
 
-    // form.value.basicInformation = basic;
-    // form.value.classification = classification;
-    // form.value.followup = followup;
-    // form.value.profile = profile;
+  function fillTour(quote: Quote){
+    const tour = {
+        tour_id: quote.tour_id.toString(),
+        tour_name: quote.tour_name,
+        tour_duration: quote.tour_duration.toString()
+    } as Tour
 
+    form.value.tour=tour
+  }
+
+  function fillDeparture(quote: Quote){
+      const departure = {
+        tour_departure_id: quote.tour_departure_id.toString(),
+        departure_date: quote.departure_date,
+        return_date: quote.return_date,
+        total_pax: quote.total_pax.toString(),
+        is_custom_date: !quote.tour_departure_id
+    } as Departure
+
+    form.value.departure = departure
+  }
+
+  function fillPricing(quote: Quote){
+      const subtotal = Number(quote.subtotal) || 0
+      const discountTotal = Number(quote.discount_total) || 0
+      const taxTotal = Number(quote.tax_total) || 0
+
+      // Discount percentage
+      const discountPercentage = subtotal > 0
+          ? (discountTotal / subtotal) * 100
+          : 0
+
+      // Tax is calculated after discount
+      const taxableAmount = subtotal - discountTotal
+
+      const taxPercentage = taxableAmount > 0
+          ? (taxTotal / taxableAmount) * 100
+          : 0
+
+      const pricing = {
+          subtotal: subtotal.toString(),
+          discount_total: discountTotal.toString(),
+          tax_total: taxTotal.toString(),
+          discount_percentage: discountPercentage.toString(),
+          tax_percentage: taxPercentage.toString(),
+      } as Pricing
+
+      form.value.pricing=pricing
+  }
+
+  function fillOther(quote:Quote){
+    const other = {
+      status: quote.status,
+      valid_until: quote.valid_until,
+      remarks:quote.remarks,
+      notes: quote.notes,
+
+      sent_at: quote.sent_at,
+      viewed_at:quote.viewed_at,
+      accepted_at:quote.accepted_at
+    } as Other
+
+    form.value.other=other
   }
 
   function clearForm(){

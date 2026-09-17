@@ -12,9 +12,11 @@ import Button from '@/components/ui/button/Button.vue'
 import { TourWithDepartures } from '@/types/tour'
 import { toast } from 'vue-sonner'
 import QuotationForm from '@/components/form/quotation/QuotationForm.vue'
+import { Quote } from '@/types/quote'
 
 
 interface Props {
+    quotation: Quote;
     clients: Client[];
     tours: TourWithDepartures[];
 }
@@ -39,6 +41,7 @@ const {
     clearErrors,
     setErrors,
     clearForm,
+    fillForm,
 } = quotationForm
 const {
     setClients,
@@ -48,7 +51,7 @@ const {
 
 setClients(props.clients);
 setTours(props.tours);
-
+fillForm(props.quotation)
 const isSaving = ref(false)
 
 

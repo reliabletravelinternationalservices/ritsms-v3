@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\DeleteClientController;
 use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
+use App\Http\Controllers\Admin\Quotation\EditQuotationController;
 use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
 use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
@@ -107,6 +108,11 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(CreateQuotationController::class)->group(function () {
                 Route::get('/create', 'create')->name('quotations.create');
                 Route::post('/store', 'store')->name('quotations.store');
+            });
+
+            Route::controller(EditQuotationController::class)->group(function () {
+                Route::get('/{slug}/edit', 'edit')->name('quotations.edit');
+                Route::post('/update', 'update')->name('quotations.update');
             });
         });
     
