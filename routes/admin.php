@@ -112,7 +112,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(EditQuotationController::class)->group(function () {
                 Route::get('/{slug}/edit', 'edit')->name('quotations.edit');
-                Route::post('/update', 'update')->name('quotations.update');
+                Route::put('/{quotation}/update', 'update')->name('quotations.update');
             });
         });
     

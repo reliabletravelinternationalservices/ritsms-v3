@@ -56,7 +56,7 @@ interface Quotation {
 
 export const useQuotationFormStore = defineStore('quotation-form', () => {
   const errors = ref<Record<string, string>>({})
-
+  const initialFormSnapshot = ref('')
 
   const form = ref<Quotation>({  
       client: {} as Client,
@@ -71,10 +71,13 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
       other: {} as Other,
   })
 
-  // const hasChanges = computed(() => (
-  //   initialFormSnapshot.value !== JSON.stringify(form.value)
-  // ))
+  const hasChanges = computed(() => (
+    initialFormSnapshot.value !== JSON.stringify(form.value)
+  ))
 
+  function clearHasChanges(){
+    initialFormSnapshot.value = ''
+  }
 
   function toggleCustomDate (value?: boolean) {
       if(value === form.value.departure.is_custom_date) return
@@ -195,15 +198,15 @@ function clearCalculation(){
     fillDeparture(quote)
     fillPricing(quote)
     fillOther(quote)
-
+    initialFormSnapshot.value = JSON.stringify(form.value)
 }
 
 function fillClient(quote:Quote){
       const client = {
-        client_id: quote.client_id.toString(),
-        primary_client_name: quote.client.name,
-        primary_client_email: quote.client.email,
-        primary_client_phone: quote.client.phone,
+        client_id: quote.client_id?.toString()?? '',
+        primary_client_name: quote.primary_client_name,
+        primary_client_email: quote.primary_client_email,
+        primary_client_phone: quote.primary_client_phone,
     } as Client
 
     form.value.client=client
@@ -211,7 +214,7 @@ function fillClient(quote:Quote){
 
   function fillTour(quote: Quote){
     const tour = {
-        tour_id: quote.tour_id.toString(),
+        tour_id: quote.tour_id?.toString()?? '',
         tour_name: quote.tour_name,
         tour_duration: quote.tour_duration.toString()
     } as Tour
@@ -221,7 +224,7 @@ function fillClient(quote:Quote){
 
   function fillDeparture(quote: Quote){
       const departure = {
-        tour_departure_id: quote.tour_departure_id.toString(),
+        tour_departure_id: quote.tour_departure_id?.toString()??'',
         departure_date: quote.departure_date,
         return_date: quote.return_date,
         total_pax: quote.total_pax.toString(),
@@ -254,6 +257,7 @@ function fillClient(quote:Quote){
           tax_total: taxTotal.toString(),
           discount_percentage: discountPercentage.toString(),
           tax_percentage: taxPercentage.toString(),
+          grand_total: quote.grand_total.toString(),
       } as Pricing
 
       form.value.pricing=pricing
@@ -307,6 +311,8 @@ function fillClient(quote:Quote){
     clearErrors,
     errors,
     clearForm,
+    hasChanges,
+    clearHasChanges,
 
     getSelectedClient,
     hasSelectedClient,

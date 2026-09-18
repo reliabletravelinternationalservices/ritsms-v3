@@ -24,16 +24,16 @@ export type QuotationItemType =
 export interface Quote {
     id: number;
     client: Client;
-    client_id: number;
+    client_id?: number | null;
     primary_client_name: string;
     primary_client_email: string;
     primary_client_phone: string;
     tour: Tour;
-    tour_id: number;
+    tour_id?: number | null;
     tour_name: string;
     tour_duration: number;
     departure: Departure;
-    tour_departure_id: number;
+    tour_departure_id?: number | null;
     departure_date: string;
     return_date: string;
     total_pax: number;
