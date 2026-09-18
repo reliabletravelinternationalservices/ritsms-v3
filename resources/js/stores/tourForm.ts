@@ -666,6 +666,24 @@ export const useTourFormStore = defineStore('tour-form', () => {
     errors.value = {}
   }
 
+  function clearForm(){
+    form.value = {
+      overviewItems: {} as TourOverview,
+      itineraries: [] as Itinerary[],
+      routes: [] as Route[],
+      hotels: [] as Hotel[],
+      schedules: {} as Schedule,
+      assets: {
+        images: [],
+        video: undefined,
+        newImages: [],
+        newVideo: undefined,
+        removedMediaIds: [],
+        mediaOrder: []
+      } as Asset
+    }
+  }
+  
   
 
   // ==============================================================
@@ -748,6 +766,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     resetFormChanges,
     containsOldFormValues,
     clearFormChanges,
+    clearForm,
 
     hasSectionErrors,
     setErrors,

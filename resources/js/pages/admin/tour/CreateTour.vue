@@ -11,6 +11,11 @@ import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 
 const tourForm = useTourFormStore()
+const {
+    setErrors,
+    clearErrors,
+} = tourForm
+
 const isSaving = ref(false)
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,15 +38,17 @@ function createDraftTour() {
             overview: JSON.stringify(tourForm.form.overviewItems),
         },
         {
+            preserveScroll:true,
+            preserveState:true,
             onFinish: () => {
                 isSaving.value = false
             },
             onError: (e) => {
-                tourForm.setErrors(e)
+                setErrors(e)
                 toast.error('Failed to save the tour. Please check for required forms.')
             },
             onSuccess: () => {
-                tourForm.clearErrors()
+                clearErrors()
                 toast.success('Tour saved successfully.')
             },
         },
@@ -85,7 +92,7 @@ function createDraftTour() {
             </div>
 
             <div class="p-6">
-                <TourForm :is-create-new="true" :is-loading="isSaving" />
+                <TourForm :newEntry="true" :loading="isSaving" />
             </div>
 
             <ScrollToTopButton />

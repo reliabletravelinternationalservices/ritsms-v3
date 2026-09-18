@@ -12,14 +12,15 @@ import Button from '@/components/ui/button/Button.vue'
 import { TourWithDepartures } from '@/types/tour'
 import { toast } from 'vue-sonner'
 import QuotationForm from '@/components/form/quotation/QuotationForm.vue'
+import { Quote } from '@/types/quote'
 
 
 interface Props {
+    quotation: Quote;
     clients: Client[];
     tours: TourWithDepartures[];
 }
 const props = defineProps<Props>()
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,8 +28,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.quotations'),
     },
     {
-        title: 'Create',
-        href: route('admin.quotations.create'),
+        title: props.quotation.code,
+        href: '',
+    },
+    {
+        title: 'Edit',
+        href: route('admin.quotations.edit', {slug: props.quotation.slug}),
     },
 ]
 
@@ -38,7 +43,8 @@ const refData = useReferenceDataStore();
 const { 
     clearErrors,
     setErrors,
-    clearForm,
+    clearHasChanges,
+    fillForm,
 } = quotationForm
 const {
     setClients,
@@ -48,17 +54,17 @@ const {
 
 setClients(props.clients);
 setTours(props.tours);
-
+fillForm(props.quotation)
 const isSaving = ref(false)
 
 
 
 
 
-function createQuotation() {
+function updateQuotation() {
 
-    router.post(
-        route('admin.quotations.store', { absolute:true }),
+    router.put(
+        route('admin.quotations.update', { quotation: props.quotation.id }),
         {
             ...quotationForm.form.client,
             ...quotationForm.form.tour,
@@ -72,12 +78,16 @@ function createQuotation() {
             },
             onError: (e) => {
                 setErrors(e)
-                toast.error('Failed to save the tour. Please check for required forms.')
+                toast.error('Failed to update the quotation. Please check the form.')
             },
             onSuccess: () => {
                 clearErrors()
-                clearForm()
-                toast.success('Quotation saved successfully.')
+                clearHasChanges()
+                router.reload({
+                    only: ['quotation'],
+                    onSuccess: (page) => fillForm(page.props.quotation as Quote),   
+                })
+                toast.success('Quotation updated successfully.')
             },
         },
     )
@@ -91,20 +101,22 @@ function createQuotation() {
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
 
-        <Head title="Create Quotation" />
+        <Head title="Edit Quotation" />
 
         <div class="text-foreground relative overflow-none">
 
             <div
                 class="flex justify-end gap-4 border-y border-border px-6 py-2"
             >
-            
+                <div>
+
+                </div>
                 <Button
                     type="button"
                     variant="default"
-                    :disabled="isSaving"
+                    :disabled="isSaving || !quotationForm.hasChanges"
                     class="flex items-center gap-2 bg-[rgb(var(--color-primary))] text-white hover:bg-[rgb(var(--color-primary)/0.8)]"
-                    @click="createQuotation"
+                    @click="updateQuotation"
                 >
                     <Icon
                         v-if="isSaving"
@@ -119,7 +131,7 @@ function createQuotation() {
                     />
 
                     <span>
-                        {{ isSaving ? 'Saving...' : 'Save as Draft' }}
+                        {{ isSaving ? 'Saving...' : 'Update Quotation' }}
                     </span>
                 </Button>
 

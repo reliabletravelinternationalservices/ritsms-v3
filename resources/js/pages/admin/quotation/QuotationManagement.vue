@@ -32,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const options: SelectOption[] = [
-    { label: 'All', value: 'all' },
+    { label: 'All Status', value: 'all' },
     { label: 'Draft', value: 'draft' },
     { label: 'Sent', value: 'sent' },
     { label: 'Viewed', value: 'viewed' },
@@ -118,6 +118,7 @@ function createQuotation () { router.visit(route('admin.quotations.create')) }
 
 
 
+
 </script>
 
 
@@ -130,7 +131,7 @@ function createQuotation () { router.visit(route('admin.quotations.create')) }
             <div class="relative grid grid-cols-2 gap-2 w-full items-center p-4">
                 <div class="col-span-1 flex h-full rounded-xl text-foreground w-full gap-2">
                     <SearchInput placeholder="Search code..." class="w-full" />
-                    <SelectMenu v-model="selectedStatus" :options="options" placeholder="Status" class="w-1/3" />
+                    <SelectMenu v-model="selectedStatus" :options="options" placeholder="Status" class="w-1/3" :enable-clear="false" />
                 </div>
                 <div class="col-span-1 flex justify-end items-center">
                     <ButtonIcon @click="createQuotation"  icon="lucide:plus" label="Create Quote"

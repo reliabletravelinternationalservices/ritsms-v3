@@ -105,11 +105,19 @@ export const useClientFormStore = defineStore('client-form', () => {
       errors.value = {}
   }
 
+  function clearForm() {
+      form.value.basicInformation = {} as BasicInformation
+      form.value.classification = {} as Classification
+      form.value.profile = {} as Profile
+      form.value.followup =  {} as Followup
+  }
+
   return {
     form,
     fillForm,
     setErrors,
     clearErrors,
+    clearForm,
     errors,
 
 

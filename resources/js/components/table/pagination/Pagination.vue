@@ -118,6 +118,7 @@ const goToLastPage = () => goToPage(lastPage.value.toString())
                 :options="perPageOptions"
                 class="text-foreground"
                 @update:model-value="emit('update:perPage', $event)"
+                :enable-clear="false" 
             />
         </div>
     </div>
