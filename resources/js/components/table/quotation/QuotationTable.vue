@@ -11,6 +11,8 @@ import TourCell from './cells/TourCell.vue';
 import ClientCell from './cells/ClientCell.vue';
 import ExpirationCell from './cells/ExpirationCell.vue';
 import { router } from '@inertiajs/vue3';
+import { useAlertDialog } from '@/composables/useAlertDialog.js';
+import { toast } from 'vue-sonner';
 
 defineProps<{
     quotes: Quote[]
@@ -113,7 +115,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
                 {
                     onView: ()=>{},
                     onEdit: ()=> edit(row.original.slug),
-                    onDelete: ()=>{},
+                    onDelete: ()=> deleteQuote(row.original),
                 },
             ),
     },
@@ -127,6 +129,30 @@ function edit(slug: string) {
         'noopener,noreferrer'
     )
 }
+
+const deleteQuote = (quote: Quote) => {
+    const alert = useAlertDialog();
+    alert.alertDialog({
+        variant: 'danger',
+        title: 'Delete Quote',
+        description: `Are you sure you want to delete this quote "${quote.code}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+
+        onConfirm: () => {
+            router.delete(route('admin.quotations.delete', { quotation: quote.id }), {
+                preserveState: true,
+                preserveScroll: true,
+                onError: () => {
+                    toast.error('Failed to delete quote. Somethings went wrong.')
+                },
+                onSuccess: () => {
+                    toast.success('Quote deleted successfully.')
+                },
+            });
+        },
+    });
+};
 
 
 </script>

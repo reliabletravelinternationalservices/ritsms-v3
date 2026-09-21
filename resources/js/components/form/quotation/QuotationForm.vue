@@ -35,36 +35,36 @@ const getDepartureOptions = computed<SelectOption[]>(
 
 
 
-// const status: SelectOption[] = [
-//     {
-//         label: 'Draft',
-//         value: 'draft',
-//     },
-//     {
-//         label: 'Sent',
-//         value: 'sent',
-//     },
-//     {
-//         label: 'Viewed',
-//         value: 'viewed',
-//     },
-//     {
-//         label: 'Accepted',
-//         value: 'accepted',
-//     },
-//     {
-//         label: 'Rejected',
-//         value: 'rejected',
-//     },
-//     {
-//         label: 'Expired',
-//         value: 'expired',
-//     },
-//     {
-//         label: 'Cancelled',
-//         value: 'cancelled',
-//     },
-// ];
+const statusOptions: SelectOption[] = [
+    {
+        label: 'Draft',
+        value: 'draft',
+    },
+    {
+        label: 'Sent',
+        value: 'sent',
+    },
+    {
+        label: 'Viewed',
+        value: 'viewed',
+    },
+    {
+        label: 'Accepted',
+        value: 'accepted',
+    },
+    {
+        label: 'Rejected',
+        value: 'rejected',
+    },
+    {
+        label: 'Expired',
+        value: 'expired',
+    },
+    {
+        label: 'Cancelled',
+        value: 'cancelled',
+    },
+];
 
 
 
@@ -298,16 +298,30 @@ function calculateChangedValue(){
                             <InputError :message="quotationForm.errors['tax_total']" />
                         </div>
                     </div>
+                    <div class="flex flex-col items-start gap-4 w-full">
+                        <div class="space-y-2 w-1/2">
+                            <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status <span
+                                    class="text-red-600">*</span></label>
+                            <SelectMenu v-model="quotationForm.form.other.status" 
+                                :options="statusOptions" 
+                                name="status"
+                                placeholder="Select status" 
+                                class="font-roboto text-sm" 
+                                />
+                            <InputError :message="quotationForm.errors['status']" />
+                        </div>
 
-                    <div class="space-y-2 w-full">
-                        <label for="remarks" class="block text-sm font-medium leading-6 text-gray-900">Quotaion Remarks <span
-                                class="text-zinc-500 text-xs italic">(optional)</span></label>
-                        <Textarea v-model="quotationForm.form.other.remarks"
-                            name="remarks"
-                            placeholder="Special request, meals preferences, noices, etc." 
-                            class="font-roboto text-sm"  />
-                        <InputError :message="quotationForm.errors['remarks']" />
+                        <div class="space-y-2 w-full">
+                            <label for="remarks" class="block text-sm font-medium leading-6 text-gray-900">Quotation Remarks <span
+                                    class="text-zinc-500 text-xs italic">(optional)</span></label>
+                            <Textarea v-model="quotationForm.form.other.remarks"
+                                name="remarks"
+                                placeholder="Special request, meals preferences, noices, etc." 
+                                class="font-roboto text-sm"  />
+                            <InputError :message="quotationForm.errors['remarks']" />
+                        </div>
                     </div>
+                
                 </div>
                 
 
