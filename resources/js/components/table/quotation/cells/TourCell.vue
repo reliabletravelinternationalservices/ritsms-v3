@@ -16,12 +16,15 @@ defineProps<Props>()
         <div>
             <!-- Active -->
             <Link
+                v-if="code"
                 href="#"
                 class="uppercase font-bold text-sm text-yellow-600 underline"
             >
                 {{ code }}
             </Link>
-
+            <div v-else class="font-bold text-zinc-400 text-sm">
+                No code
+            </div>
             <div
                 class="font-medium text-sm self-center max-w-48 overflow-hidden line-clamp-1"
             >

@@ -45,7 +45,7 @@ const status = computed<TourStatus>(() => {
 
     if (props.state === 'published' && props.visibility === 'public') {
         return {
-            label: 'Live',
+            label: 'Public',
             icon: {
                 icon: 'lucide:globe',
                 class: 'text-xs',
@@ -56,7 +56,7 @@ const status = computed<TourStatus>(() => {
 
     if (props.state === 'published' && props.visibility === 'private') {
         return {
-            label: 'Published',
+            label: 'Private',
             icon: {
                 icon: 'lucide:link',
                 class: 'text-xs',

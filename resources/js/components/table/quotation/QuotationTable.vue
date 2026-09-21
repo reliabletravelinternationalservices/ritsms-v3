@@ -41,7 +41,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             return h(
                 TourCell,
                 {
-                    code: row.original.tour.code,
+                    code: row.original.tour?.code,
                     name: row.original.tour_name,
                     duration: row.original.tour_duration,
 

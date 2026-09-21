@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { getImagePath } from '@/lib/utils';
+import { formatDateString, getImagePath } from '@/lib/utils';
 import { Media } from '@/types/media-v2';
 import { Icon } from '@iconify/vue';
 import {
@@ -30,7 +30,7 @@ defineProps<Props>()
             >
                 <div class="relative w-14 h-10 bg-zinc-200 rounded-sm overflow-hidden">
                     <img
-                        v-if="image"
+                        v-if="image && !deleted_at"
                         :src="getImagePath(image.file_path, 'thumbnail')"
                         :alt="image.alt_text"
                         class="w-full h-full rounded-sm"
@@ -95,7 +95,7 @@ defineProps<Props>()
                                 icon="lucide:trash-2"
                                 class="size-3"
                             />
-                            Deleted
+                            Deleted at: {{ formatDateString(deleted_at, true) }} 
                         </span>
                     </div>
                 </div>
@@ -106,7 +106,7 @@ defineProps<Props>()
             <div class="flex flex-col gap-2 w-full">
                 <div class="relative w-full h-28">
                     <img
-                        v-if="image"
+                        v-if="image && !deleted_at"
                         :src="getImagePath(image.file_path, 'thumbnail')"
                         :alt="image.alt_text"
                         class="w-full h-full rounded-sm"

@@ -1,6 +1,7 @@
+```vue
 <script setup lang="ts">
-
 import { computed } from 'vue'
+import { X } from '@lucide/vue'
 
 interface Props {
     open?: boolean
@@ -15,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
     dismissable: true,
     showDismiss: true,
     title: 'Show Modal',
-    description: 'This is a sample desc.',
+    description: 'This is a sample description.',
 })
 
 const emit = defineEmits<{
@@ -40,42 +41,44 @@ function handleBackdropClick(event: MouseEvent) {
         close()
     }
 }
-
 </script>
 
 <template>
     <Transition name="modal">
         <div
             v-if="open"
-            class="absolute inset-0 z-50 flex h-full w-full items-center justify-center text-foreground"
+            class="absolute inset-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto p-4 sm:p-6"
             @click="handleBackdropClick"
         >
             <!-- Backdrop -->
             <div
-                class="absolute inset-0 h-full w-full bg-black/70"
+                class="absolute inset-0 bg-background/80 backdrop-blur-sm"
+                aria-hidden="true"
             />
 
             <!-- Modal -->
             <div
-                class="relative z-10 w-full max-w-lg rounded-lg bg-white shadow-xl"
+                class="relative z-10 flex max-h-full w-full max-w-lg flex-col overflow-hidden rounded-xl border border-border bg-background text-foreground shadow-2xl"
+                role="dialog"
+                aria-modal="true"
                 @click.stop
             >
                 <!-- Header -->
                 <div
                     v-if="title || description || showDismiss"
-                    class="flex items-start justify-between gap-2 p-6"
+                    class="flex shrink-0 items-start justify-between gap-4 border-b border-border px-4 py-4 sm:px-6 sm:py-5"
                 >
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
                         <h2
                             v-if="title"
-                            class="text-lg font-semibold"
+                            class="text-base font-semibold leading-6 tracking-tight sm:text-lg"
                         >
                             {{ title }}
                         </h2>
 
                         <p
                             v-if="description"
-                            class="mt-1 text-sm text-gray-700"
+                            class="mt-1 text-sm leading-5 text-muted-foreground"
                         >
                             {{ description }}
                         </p>
@@ -84,15 +87,19 @@ function handleBackdropClick(event: MouseEvent) {
                     <button
                         v-if="showDismiss"
                         type="button"
-                        class="shrink-0 text-gray-500 hover:text-gray-900"
+                        class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none"
+                        aria-label="Close modal"
+                        :disabled="!dismissable"
                         @click="close"
                     >
-                        ✕
+                        <X class="size-4" />
                     </button>
                 </div>
 
                 <!-- Content -->
-                <div class="p-6 py-2">
+                <div
+                    class="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5"
+                >
                     <slot name="content">
                         <slot />
                     </slot>
@@ -101,7 +108,7 @@ function handleBackdropClick(event: MouseEvent) {
                 <!-- Footer -->
                 <div
                     v-if="$slots.footer"
-                    class="flex items-center justify-end gap-2 border-t p-4"
+                    class="flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted/30 px-4 py-4 sm:flex-row sm:items-center sm:justify-end sm:px-6"
                 >
                     <slot name="footer" />
                 </div>
@@ -113,11 +120,19 @@ function handleBackdropClick(event: MouseEvent) {
 <style scoped>
 .modal-enter-active,
 .modal-leave-active {
-    transition: opacity 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
 }
 
 .modal-enter-from,
 .modal-leave-to {
     opacity: 0;
 }
+
+.modal-enter-from .relative,
+.modal-leave-to .relative {
+    transform: translateY(8px) scale(0.98);
+}
 </style>
+```

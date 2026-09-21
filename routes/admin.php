@@ -4,6 +4,10 @@ use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
+use App\Http\Controllers\Admin\Client\ClientManagementController;
+use App\Http\Controllers\Admin\Client\CreateClientController;
+use App\Http\Controllers\Admin\Client\DeleteClientController;
+use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
 use App\Http\Controllers\Admin\Destination\CreateLocationController;
@@ -29,20 +33,16 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
-use App\Http\Controllers\Admin\Tour\CreateTourController;
-use App\Http\Controllers\Admin\Tour\EditTourController;
-use App\Http\Controllers\Admin\Tour\TourManagementController;
-use App\Http\Controllers\Admin\User\AdminAccountDetailController;
-use App\Http\Controllers\Admin\User\AdminManagementController;
-use App\Http\Controllers\Admin\Client\ClientManagementController;
-use App\Http\Controllers\Admin\Client\CreateClientController;
-use App\Http\Controllers\Admin\Client\DeleteClientController;
-use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
 use App\Http\Controllers\Admin\Quotation\DeleteQuotationController;
 use App\Http\Controllers\Admin\Quotation\EditQuotationController;
 use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
+use App\Http\Controllers\Admin\Tour\CreateTourController;
 use App\Http\Controllers\Admin\Tour\DeleteTourController;
+use App\Http\Controllers\Admin\Tour\EditTourController;
+use App\Http\Controllers\Admin\Tour\TourManagementController;
+use App\Http\Controllers\Admin\User\AdminAccountDetailController;
+use App\Http\Controllers\Admin\User\AdminManagementController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
@@ -101,7 +101,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             |--------------------------------------------------------------------------
             */
 
-        Route::prefix('quotations')->group(function (){
+        Route::prefix('quotations')->group(function () {
             Route::controller(QuotationManagementController::class)->group(function () {
                 Route::get('/', 'index')->name('quotations');
             });
@@ -121,7 +121,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 Route::delete('/{quotation}/destroy', 'destroy')->name('quotations.destroy');
             });
         });
-    
 
         /*
             |--------------------------------------------------------------------------
@@ -147,8 +146,9 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
             Route::controller(DeleteTourController::class)->group(function () {
+                Route::put('/{tour}/restore', 'restore')->name('tours.restore')->withTrashed();
                 Route::delete('/{tour}/delete', 'delete')->name('tours.delete');
-                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy');
+                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy')->withTrashed();
             });
         });
 
@@ -165,8 +165,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
         });
-
-
 
         /*
             |--------------------------------------------------------------------------

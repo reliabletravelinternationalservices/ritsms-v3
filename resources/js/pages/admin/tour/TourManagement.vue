@@ -267,7 +267,7 @@ const createTour = () => router.visit(route('admin.tours.create'));
             <!-- TABLE + PAGINATION -->
             <div class="flex flex-col gap-4 p-4">
 
-                <TourTable class="w-full" :tours="props.tours" />
+                <TourTable :tours="props.tours" />
 
                 <PaginationButton :pagination="props.tours" :per-page="filters.per_page" @page-change="handlePageChange"
                     @update:per-page="handlePerPageChange" />
