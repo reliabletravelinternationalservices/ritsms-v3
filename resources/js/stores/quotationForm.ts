@@ -13,6 +13,7 @@ interface Client {
 
 interface Tour {
   tour_id:string;
+  tour_code:string;
   tour_name:string;
   tour_duration: string;
 }
@@ -105,6 +106,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     if(!tour) return
     form.value.tour.tour_duration = tour.duration.toString()
     form.value.tour.tour_id = tour.id.toString()
+    form.value.tour.tour_code = tour.code.toString()
     form.value.tour.tour_name = tour.name
   }
 
@@ -118,6 +120,7 @@ function clearSelectedDepartureDates() {
 function clearTour(){
     form.value.tour.tour_duration = ''
     form.value.tour.tour_id = ''
+    form.value.tour.tour_code = ''
     form.value.tour.tour_name = ''
 }
 
@@ -215,6 +218,7 @@ function fillClient(quote:Quote){
   function fillTour(quote: Quote){
     const tour = {
         tour_id: quote.tour_id?.toString()?? '',
+        tour_code: quote.code.toString(),
         tour_name: quote.tour_name,
         tour_duration: quote.tour_duration.toString()
     } as Tour

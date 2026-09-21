@@ -47,6 +47,7 @@ return new class extends Migration
                 ->nullOnDelete();
 
             // Tour snapshot
+            $table->string('tour_code', 20)->nullable();
             $table->string('tour_name', 200)->nullable();
             $table->unsignedInteger('tour_duration')->nullable();
 

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { getPackageDurationLabel } from '@/lib/utils';
 import { Link } from '@inertiajs/vue3';
 
 interface Props {
-    code?: string,
+    code?: string | null,
     name: string,
+    duration: number,
 }
 
 defineProps<Props>()
@@ -22,13 +24,13 @@ defineProps<Props>()
             >
                 {{ code }}
             </Link>
-            <div v-else class="font-bold text-zinc-400 text-sm">
-                No code
+            <div v-else class="uppercase font-bold text-sm text-yellow-600">
+                {{ code }}
             </div>
             <div
                 class="font-medium text-sm self-center max-w-48 overflow-hidden line-clamp-1"
             >
-                {{ name }}
+                {{ name }} <span class="text-zinc-500 text-xs">| {{ getPackageDurationLabel(duration) }}</span>
             </div>
         </div>
     </div>

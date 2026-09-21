@@ -81,6 +81,10 @@ class QuotationRequest extends FormRequest
                 'integer',
                 'exists:tours,id',
             ],
+            'tour_code' => [
+                'required',
+                'string',
+            ],
             'tour_name' => [
                 'required',
                 'string',
@@ -174,6 +178,8 @@ class QuotationRequest extends FormRequest
 
             'tour_id.required' => 'Please select a tour package.',
             'tour_id.exists' => 'The selected tour package does not exist.',
+
+            'tour_code.required' => 'Please select a tour package.',
 
             'tour_name.required' => 'Tour name is required.',
             'tour_duration.required' => 'Tour duration is required.',

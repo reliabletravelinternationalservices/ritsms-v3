@@ -20,6 +20,7 @@ class Quotation extends Model
 
         // tour
         'tour_id',
+        'tour_code',
         'tour_name',
         'tour_duration',
 

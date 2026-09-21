@@ -30,7 +30,7 @@ export interface Quote {
     primary_client_phone: string;
     tour: Tour;
     tour_id?: number | null;
-    tour_code?: number | null;
+    tour_code?: string | null;
     tour_name: string;
     tour_duration: number;
     departure: Departure;
