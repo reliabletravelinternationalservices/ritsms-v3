@@ -115,6 +115,26 @@ const tourForm = useTourFormStore();
                                 :message="tourForm.errors['schedules.0.return_flight_no']" />
                         </div>
                     </div>
+
+
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-zinc-600">Departure Time <span
+                                    class="text-xs text-muted-foreground italic">(Optional)</span></label>
+                            <Input :disabled="isLoading" v-model="tourForm.form.schedules.def_departure_time" type="time"
+                             placeholder="N/A" class="h-10 w-full" />
+                            <InputError v-if="!tourForm.form.schedules.is_customized"
+                                :message="tourForm.errors['schedules.0.departure_time']" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-zinc-600">Return Pax <span
+                                    class="text-xs text-muted-foreground italic">(Optional)</span></label>
+                            <Input :disabled="isLoading" v-model="tourForm.form.schedules.def_return_time" type="time"
+                                placeholder="N/A" class="h-10 w-full" />
+                            <InputError v-if="!tourForm.form.schedules.is_customized"
+                                :message="tourForm.errors['schedules.0.return_time']" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

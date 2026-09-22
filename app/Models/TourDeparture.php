@@ -21,6 +21,8 @@ class TourDeparture extends Model
         'max_pax',
         'departure_date',
         'return_date',
+        'departure_time',
+        'return_time',
         'departure_flight_no',
         'return_flight_no',
         'airline_name',

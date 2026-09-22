@@ -16,7 +16,7 @@ import { useReferenceDataStore } from '@/stores/referenceData'
 import { useAlertDialog } from '@/composables/useAlertDialog';
 import { isFile } from '@/lib/utils';
 
-const { alertDialog } = useAlertDialog()
+
 
 const props = defineProps<{
     tour: TourWithRelationshipTables;
@@ -32,37 +32,54 @@ const isChangingStatus = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
-const {
-    setCountries
-} = referenceData
+    const {
+        setCountries
+    } = referenceData
 
-const {
-    clearFormChanges,
-    fillFormWithTourData,
-    syncMediaOrder,
-    clearErrors,
-    clearForm,
-    setErrors,
-} = tourForm
+    const {
+        syncMediaOrder,
+        clearErrors,
+        clearForm,
+        setErrors,
 
-setCountries(props.countries)
 
-function fillTourForm(tour: TourWithRelationshipTables) {
-    clearFormChanges()
-    fillFormWithTourData(tour)
-}
+        fillOverview,
+        fillItinerary,
+        fillRoute,
+        fillHotel,
+        fillSchedule,
+        fillAsset,
+        backupOldValues,
+        setInitialFormSnapshot,
+        getOldFormValue,
+        addFormValue,
+    } = tourForm
 
-watch(
-    () => props.tour.id,
-    () => {
-        const tour = props.tour
+    setCountries(props.countries)
 
-        if (!tour) return
+    function fillTourForm(tour: TourWithRelationshipTables) {
+        clearForm()
+        fillOverview(tour)
+        fillItinerary(tour.itineraries)
+        fillRoute(tour.routes)
+        fillHotel(tour.hotels)
+        fillSchedule(tour.departures)
+        fillAsset(tour.media)
+        backupOldValues(tour),
+        setInitialFormSnapshot(JSON.stringify(tourForm.form))
+    }
 
-        fillTourForm(tour)
-    },
-    { immediate: true }
-)
+    watch(
+        () => props.tour.id,
+        () => {
+            const tour = props.tour
+
+            if (!tour) return
+
+            fillTourForm(tour)
+        },
+        { immediate: true }
+    )
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -179,7 +196,16 @@ function saveTourChanges() {
 }
 
 
+
+function restoreOldValue(){
+    clearForm()
+    const oldForm = getOldFormValue()
+    addFormValue(oldForm)
+  }
+
+
 function resetFormChanges() {
+    const { alertDialog } = useAlertDialog()
     alertDialog({
         variant: 'warning',
         title: 'Reset Changes',
@@ -187,8 +213,9 @@ function resetFormChanges() {
         confirmText: 'Reset',
         onConfirm: () => {
             isReseting.value = true
-            resetFormChanges()
+            restoreOldValue()
             isReseting.value = false
+        
         }
     })
 }

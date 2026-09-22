@@ -56,6 +56,9 @@ interface Schedule{
       selected_dates: string[]
       is_customized: boolean,
       def_departure_date: string,
+      def_return_date: string,
+      def_departure_time: string,
+      def_return_time: string,
       def_base_price: string,
       def_discounted_price: string,
       def_airline_name: string,
@@ -68,6 +71,8 @@ interface Schedule{
 interface CustomSchedule {
     departure_date: string,
     return_date: string,
+    departure_time:string,
+    return_time:string,
     base_price: string,
     discounted_price: string,
     airline_name: string,
@@ -85,6 +90,15 @@ interface Asset {
   mediaOrder: { id: number; order_number: number }[]
 }
 
+export interface Form {
+  overviewItems: TourOverview;
+  itineraries:Itinerary[];
+  routes: Route[];
+  hotels: Hotel[];
+  schedules: Schedule;
+  assets: Asset;
+}
+
 type TourSection = typeof SECTION[keyof typeof SECTION]
 
 export const useTourFormStore = defineStore('tour-form', () => {
@@ -93,7 +107,10 @@ export const useTourFormStore = defineStore('tour-form', () => {
   const oldValues = ref<TourWithRelationshipTables>()
   const initialFormSnapshot = ref('')
 
-  const form = ref({
+
+
+
+  const form = ref<Form>({
     overviewItems: {} as TourOverview,
 
     itineraries: [] as Itinerary[],
@@ -411,6 +428,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
       form.value.schedules.customize.push({
         departure_date: value,
         return_date: '',
+        departure_time: '',
+        return_time: '',
         departure_flight_no: '',
         return_flight_no: '',
         base_price: '',
@@ -442,6 +461,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
           departure_date: sched.departure_date,
           return_date:  getReturnDate(sched.departure_date),
+          departure_time: sched.departure_time,
+          return_time: sched.return_time,
           airline_name: sched.airline_name,
           departure_flight_no: sched.departure_flight_no,
           return_flight_no: sched.return_flight_no,
@@ -459,6 +480,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
         departure_date: departureDate,
         return_date:  getReturnDate(departureDate),
+        departure_time: schedules.def_departure_time,
+        return_time: schedules.def_return_time,
         airline_name: schedules.def_airline_name,
         departure_flight_no: schedules.def_departure_flight_no,
         return_flight_no: schedules.def_return_flight_no,
@@ -476,11 +499,14 @@ export const useTourFormStore = defineStore('tour-form', () => {
   }
 
   function fillSchedule(departures: Departure[]) {
-    if (!departures.length) {
+    if (departures.length < 1) {
       return {
         selected_dates: [],
         is_customized: false,
         def_departure_date: '',
+        def_return_date: '',
+        def_departure_time: '',
+        def_return_time: '',
         def_base_price: '',
         def_discounted_price: '',
         def_airline_name: '',
@@ -495,7 +521,7 @@ export const useTourFormStore = defineStore('tour-form', () => {
     const first = departures[0]
 
     const isCustomized = isCustomizeSchedule(departures)
-
+    
     form.value.schedules =  {
       selected_dates: departures.map(
         departure => departure.departure_date
@@ -504,6 +530,9 @@ export const useTourFormStore = defineStore('tour-form', () => {
       is_customized: isCustomized,
 
       def_departure_date: first.departure_date,
+      def_return_date: first.return_date,
+      def_departure_time: first.departure_time,
+      def_return_time: first.return_time,
       def_base_price: String(first.base_price),
       def_discounted_price: first.discounted_price != null
         ? String(first.discounted_price)
@@ -532,6 +561,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
           ? String(departure.max_pax)
           : '',
 
+        departure_time: departure.departure_time,
+        return_time: departure.return_time,
         airline_name: departure.airline_name,
         departure_flight_no: departure.departure_flight_no,
         return_flight_no: departure.return_flight_no,
@@ -549,6 +580,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
       departure.min_pax !== first.min_pax ||
       departure.max_pax !== first.max_pax ||
       departure.airline_name !== first.airline_name ||
+      departure.departure_time !== first.departure_time ||
+      departure.return_time !== first.return_time ||
       departure.departure_flight_no  !== first.departure_flight_no ||
       departure.return_flight_no !== first.return_flight_no
     )
@@ -621,50 +654,26 @@ export const useTourFormStore = defineStore('tour-form', () => {
   // ==============================================================
   // FILL FORM WITH EXISTING TOUR DATA
   // ==============================================================
-  function fillFormWithTourData(tour: TourWithRelationshipTables) {
-    fillOverview(tour)
-    fillItinerary(tour.itineraries)
-    fillRoute(tour.routes)
-    fillHotel(tour.hotels)
-    fillSchedule(tour.departures)
-    fillAsset(tour.media)
-    backupOldValues(tour)
-    initialFormSnapshot.value = JSON.stringify(form.value)
+  // function fillFormWithTourData(tour: TourWithRelationshipTables) {
+  
+  //   setInitialFormSnapshot
+  //   initialFormSnapshot.value = JSON.stringify(form.value)
+  // }
+
+  function setInitialFormSnapshot(snapshot: string)
+  {
+     initialFormSnapshot.value = snapshot
   }
 
   function backupOldValues(tour: TourWithRelationshipTables){
       oldValues.value =  tour;
   }
 
-  function resetFormChanges(){
-    if (!containsOldFormValues()) return
-    clearFormChanges()
-    fillFormWithTourData(oldValues.value!)
-  }
 
   function containsOldFormValues(){
     return !!oldValues.value
   }
   
-
-  function clearFormChanges(){
-    form.value = {
-      overviewItems: {} as TourOverview,
-      itineraries: [] as Itinerary[],
-      routes: [] as Route[],
-      hotels: [] as Hotel[],
-      schedules: {} as Schedule,
-      assets: {
-        images: [],
-        video: undefined,
-        newImages: [],
-        newVideo: undefined,
-        removedMediaIds: [],
-        mediaOrder: []
-      } as Asset
-    }
-    errors.value = {}
-  }
 
   function clearForm(){
     form.value = {
@@ -682,9 +691,17 @@ export const useTourFormStore = defineStore('tour-form', () => {
         mediaOrder: []
       } as Asset
     }
+    errors.value = {}
   }
   
   
+  function getOldFormValue(){
+    return JSON.parse(initialFormSnapshot.value) as Form
+  }
+
+  function addFormValue(value: Form){
+    form.value = value
+  }
 
   // ==============================================================
   // validation functions
@@ -751,7 +768,6 @@ export const useTourFormStore = defineStore('tour-form', () => {
     containsSelectedDates,
     handleCustomizeChange,
     transformSchedules,
-    fillSchedule,
 
     
     addImages,
@@ -762,10 +778,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
     transformAsset,
 
 
-    fillFormWithTourData,
-    resetFormChanges,
+    
     containsOldFormValues,
-    clearFormChanges,
     clearForm,
 
     hasSectionErrors,
@@ -773,6 +787,19 @@ export const useTourFormStore = defineStore('tour-form', () => {
     clearErrors,
     errors,
 
+
+    fillOverview,
+    fillItinerary,
+    fillRoute,
+    fillHotel,
+    fillSchedule,
+    fillAsset,
+
+    
+    backupOldValues,
+    setInitialFormSnapshot,
+    getOldFormValue,
+    addFormValue,
 
     
   }
