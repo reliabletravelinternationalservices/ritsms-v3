@@ -6,6 +6,7 @@ import { QuotationStatus, Quote } from "@/types/quote";
 import { Departure as NewDeparture } from "@/types/tour";
 interface Client {
   client_id: string;
+  primary_client_code: string;
   primary_client_name: string;
   primary_client_email: string;
   primary_client_phone: string;
@@ -22,6 +23,7 @@ interface Departure {
   tour_departure_id:string;
   departure_date:string;
   return_date:string;
+  tour_date_price?: string;
   total_pax:string;
   is_custom_date: boolean;
 }
@@ -42,9 +44,6 @@ interface Pricing {
   discount_total: string;
   tax_total: string;
   grand_total: string;
-
-  discount_percentage: string;
-  tax_percentage: string;
 }
 
 interface Quotation {
@@ -63,12 +62,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
       client: {} as Client,
       tour: {} as Tour,
       departure: { is_custom_date: false } as Departure,
-      pricing: {
-        subtotal: '0',
-        discount_total: '0',
-        tax_total: '0',
-        grand_total: '0'
-      } as Pricing,
+      pricing: {} as Pricing,
       other: {} as Other,
   })
 
@@ -83,6 +77,7 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   function toggleCustomDate (value?: boolean) {
       if(value === form.value.departure.is_custom_date) return
       clearSelectedDepartureDates()
+      form.value.departure.tour_date_price = ''
       form.value.departure.is_custom_date = value!
   }
 
@@ -95,14 +90,14 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
   }
 
   function addDeparture(departure: NewDeparture){
+    const price = departure.discounted_price ?? departure.base_price
     form.value.departure.tour_departure_id = departure.id.toString()
     form.value.departure.departure_date = departure.departure_date
     form.value.departure.return_date = departure.return_date
-    setSubtotalPrice(departure.base_price)
+    form.value.departure.tour_date_price = price.toString()
   } 
 
   function getTourDuration(tour?:TourWithDepartures){
-    clearTour()
     if(!tour) return
     form.value.tour.tour_duration = tour.duration.toString()
     form.value.tour.tour_id = tour.id.toString()
@@ -114,6 +109,7 @@ function clearSelectedDepartureDates() {
     form.value.departure.tour_departure_id = ''
     form.value.departure.departure_date = ''
     form.value.departure.return_date = ''
+    form.value.departure.tour_date_price = ''
 }
 
 
@@ -126,44 +122,52 @@ function clearTour(){
 
 function setSubtotalPrice(price?: number){
   form.value.pricing.subtotal = price?.toString()?? '';
-  calculatePricing()
 }
 
 
-function calculatePricing() {
+
+function calculateSubtotal() {
+    if (!form.value.departure.tour_date_price) return
+    const tourDatePrice = Number(form.value.departure.tour_date_price) || 0
+    const totalPax = Number(form.value.departure.total_pax) || 0
     
-    const subtotal = Number(form.value.pricing.subtotal) || 0
-    if(!subtotal || subtotal < 0 ){
-      clearCalculation()
-    }
-    const discountPercentage = Number(form.value.pricing.discount_percentage) || 0
-    const taxPercentage = Number(form.value.pricing.tax_percentage) || 0
-
-    // Discount
-    const discountTotal = subtotal * (discountPercentage / 100)
-
-    // Amount after discount
-    const taxableAmount = subtotal - discountTotal
-
-    // Tax
-    const taxTotal = taxableAmount * (taxPercentage / 100)
-
-    // Final total
-    const total = taxableAmount + taxTotal
-
-    form.value.pricing.discount_total = discountTotal.toString()
-    form.value.pricing.tax_total = taxTotal.toString()
-    form.value.pricing.grand_total = total.toString()
+    form.value.pricing.subtotal = (tourDatePrice * totalPax).toString()
 }
 
+function calculateGrandTotalPrice() {
+    const discountTotal = Number(form.value.pricing.discount_total) || 0
+    const taxTotal = Number(form.value.pricing.tax_total) || 0
 
-function clearCalculation(){
+    const subtotal = Number(form.value.pricing.subtotal) || 0
+
+
+    // No valid subtotal
+    if (subtotal <= 0) {
+        clearAllCalculation()
+        return
+    }
+
+    // Subtotal minus discount
+    const amountAfterDiscount = Math.max(
+        subtotal - discountTotal,
+        0
+    )
+
+    // Add additional tax
+    const grandTotal = amountAfterDiscount + taxTotal
+
+    form.value.pricing.grand_total = grandTotal.toString()
+}
+
+function clearAllCalculation(){
     form.value.pricing.subtotal= ''
-    form.value.pricing.discount_total = ''
-    form.value.pricing.tax_total =''
     form.value.pricing.grand_total =''
 
 }
+
+
+
+
   // CLIENT
   function getSelectedClient(id?: number, clients?: NewClient[]) {
       if (!clients?.length) {
@@ -180,6 +184,7 @@ function clearCalculation(){
 
       form.value.client = {
         client_id: client?.id?.toString(),
+        primary_client_code: client?.code,
         primary_client_name: client?.name,
         primary_client_email: client?.email,
         primary_client_phone: client?.phone, 
@@ -207,6 +212,7 @@ function clearCalculation(){
 function fillClient(quote:Quote){
       const client = {
         client_id: quote.client_id?.toString()?? '',
+        primary_client_code: quote.primary_client_code,
         primary_client_name: quote.primary_client_name,
         primary_client_email: quote.primary_client_email,
         primary_client_phone: quote.primary_client_phone,
@@ -232,6 +238,7 @@ function fillClient(quote:Quote){
         departure_date: quote.departure_date,
         return_date: quote.return_date,
         total_pax: quote.total_pax.toString(),
+        tour_date_price: quote.tour_date_price?.toString(),
         is_custom_date: !quote.tour_departure_id
     } as Departure
 
@@ -243,24 +250,10 @@ function fillClient(quote:Quote){
       const discountTotal = Number(quote.discount_total) || 0
       const taxTotal = Number(quote.tax_total) || 0
 
-      // Discount percentage
-      const discountPercentage = subtotal > 0
-          ? (discountTotal / subtotal) * 100
-          : 0
-
-      // Tax is calculated after discount
-      const taxableAmount = subtotal - discountTotal
-
-      const taxPercentage = taxableAmount > 0
-          ? (taxTotal / taxableAmount) * 100
-          : 0
-
       const pricing = {
           subtotal: subtotal.toString(),
           discount_total: discountTotal.toString(),
           tax_total: taxTotal.toString(),
-          discount_percentage: discountPercentage.toString(),
-          tax_percentage: taxPercentage.toString(),
           grand_total: quote.grand_total.toString(),
       } as Pricing
 
@@ -329,6 +322,10 @@ function fillClient(quote:Quote){
     getTourDuration,
     addCustomDate,
     setSubtotalPrice,
-    calculatePricing,
+    calculateGrandTotalPrice,
+    calculateSubtotal,
+    clearTour,
+    clearSelectedDepartureDates,
+    clearAllCalculation,
   }
 })

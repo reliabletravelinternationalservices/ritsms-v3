@@ -66,19 +66,6 @@ const columns: ColumnDef<Quote, unknown>[] = [
     },
 
     {
-        accessorKey: 'grand_total',
-        header: 'TOTAL',
-
-        cell: ({ row }) =>
-            h(
-                PriceCell,
-                {
-                    total: row.original.grand_total
-                }
-            ),
-    },
-
-    {
         accessorKey: 'status',
         header: 'STATUS',
 
@@ -91,6 +78,20 @@ const columns: ColumnDef<Quote, unknown>[] = [
             )
         },
     },
+
+    {
+        accessorKey: 'grand_total',
+        header: 'TOTAL',
+
+        cell: ({ row }) =>
+            h(
+                PriceCell,
+                {
+                    total: row.original.grand_total
+                }
+            ),
+    },
+
 
     {
         accessorKey: 'valid_until',
@@ -113,7 +114,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             h(
                 MenuCell,
                 {
-                    onView: ()=>{},
+                    onView: ()=> view(row.original.slug),
                     onEdit: ()=> edit(row.original.slug),
                     onDelete: ()=> deleteQuote(row.original),
                 },
@@ -122,7 +123,16 @@ const columns: ColumnDef<Quote, unknown>[] = [
 ]
 
 
-function edit(slug: string) {
+const view = (slug: string) => {
+    window.open(
+        route('admin.quotations.view', { slug }),
+        '_blank',
+        'noopener,noreferrer'
+    )  
+}
+
+
+const edit = (slug: string) => {
     window.open(
         route('admin.quotations.edit', { slug }),
         '_blank',
@@ -152,7 +162,7 @@ const deleteQuote = (quote: Quote) => {
             });
         },
     });
-};
+}
 
 
 </script>

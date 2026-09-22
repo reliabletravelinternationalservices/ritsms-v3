@@ -87,3 +87,8 @@ export type TourWithRelationshipTables = Tour & {
 export type TourWithDepartures = Tour & {
     departures: Departure[];
 }
+
+
+export type TourWithMedia = Tour & {
+    media: Media[]
+}

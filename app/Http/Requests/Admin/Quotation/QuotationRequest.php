@@ -111,6 +111,13 @@ class QuotationRequest extends FormRequest
                 'date',
                 'after_or_equal:departure_date',
             ],
+
+            'tour_date_price' => [
+                'nullable',
+                'numeric',
+                'min:0',
+            ],
+            
             'total_pax' => [
                 'required',
                 'integer',
@@ -124,12 +131,12 @@ class QuotationRequest extends FormRequest
                 'min:0',
             ],
             'discount_total' => [
-                'required',
+                'nullable',
                 'numeric',
                 'min:0',
             ],
             'tax_total' => [
-                'required',
+                'nullable',
                 'numeric',
                 'min:0',
             ],

@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
 use App\Http\Controllers\Admin\Quotation\DeleteQuotationController;
 use App\Http\Controllers\Admin\Quotation\EditQuotationController;
 use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
+use App\Http\Controllers\Admin\Quotation\ViewQuotationController;
 use App\Http\Controllers\Admin\Tour\CreateTourController;
 use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\Tour\EditTourController;
@@ -111,14 +112,19 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                 Route::post('/store', 'store')->name('quotations.store');
             });
 
+
+            Route::controller(ViewQuotationController::class)->group(function () {
+                Route::get('/view/{slug}', 'view')->name('quotations.view');
+            });
+
             Route::controller(EditQuotationController::class)->group(function () {
-                Route::get('/{slug}/edit', 'edit')->name('quotations.edit');
-                Route::put('/{quotation}/update', 'update')->name('quotations.update');
+                Route::get('/edit/{slug}', 'edit')->name('quotations.edit');
+                Route::put('/update/{quotation}', 'update')->name('quotations.update');
             });
 
             Route::controller(DeleteQuotationController::class)->group(function () {
-                Route::delete('/{quotation}/delete', 'delete')->name('quotations.delete');
-                Route::delete('/{quotation}/destroy', 'destroy')->name('quotations.destroy');
+                Route::delete('/delete/{quotation}', 'delete')->name('quotations.delete');
+                Route::delete('/destroy/{quotation}', 'destroy')->name('quotations.destroy');
             });
         });
 

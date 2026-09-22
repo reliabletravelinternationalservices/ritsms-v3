@@ -25,10 +25,11 @@ export interface Quote {
     id: number;
     client: Client;
     client_id?: number | null;
+    primary_client_code?: string;
     primary_client_name: string;
     primary_client_email: string;
     primary_client_phone: string;
-    tour: Tour;
+    tour?: Tour | null;
     tour_id?: number | null;
     tour_code?: string | null;
     tour_name: string;
@@ -36,6 +37,7 @@ export interface Quote {
     departure: Departure;
     tour_departure_id?: number | null;
     departure_date: string;
+    tour_date_price: number | null;
     return_date: string;
     total_pax: number;
     code: string;

@@ -14,6 +14,7 @@ class Quotation extends Model
     protected $fillable = [
         // client
         'client_id',
+        'primary_client_code',
         'primary_client_name',
         'primary_client_email',
         'primary_client_phone',
@@ -28,6 +29,7 @@ class Quotation extends Model
         'tour_departure_id',
         'departure_date',
         'return_date',
+        'tour_date_price',
         'total_pax',
         
         // quotation

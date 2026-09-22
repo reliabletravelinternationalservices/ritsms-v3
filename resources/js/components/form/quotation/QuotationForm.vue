@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue';
-import { formatCurrency, getDateWithDuration } from '@/lib/utils';
+import { formatCurrency, formatDateRange, getDateWithDuration } from '@/lib/utils';
 import { useQuotationFormStore } from '@/stores/quotationForm'
 import { useReferenceDataStore } from '@/stores/referenceData';
 import { computed } from 'vue';
@@ -17,13 +17,17 @@ const {
     addCustomDate,
     getSelectedClient,
     getTourDuration,
-    calculatePricing,
-    addDeparture
+    clearTour,
+    clearSelectedDepartureDates,
+    calculateGrandTotalPrice,
+    calculateSubtotal,
+    addDeparture,
+    clearAllCalculation,
 } = quotationForm
 
 const {
     getTourByID,
-    getSelectedDeparturePrice,
+    getSelectedDeparture,
 } = refData
 
 
@@ -74,15 +78,21 @@ function changeSelectedClientValue (id?:string) {
 
 function changeSelectedTourDuration(id?:string){
     const tour = getTourByID(Number(id));
+    clearTour()
+    clearSelectedDepartureDates()
+    clearAllCalculation()
     getTourDuration(tour.value)
 }
 
 function changeDepartureDate(id?:string){
     const tourId = Number(quotationForm.form.tour.tour_id);
     const depID = Number(id);
-    const departure = getSelectedDeparturePrice(tourId,depID)
+    const departure = getSelectedDeparture(tourId,depID)
+    clearAllCalculation()
     if (!departure.value) return
     addDeparture(departure.value)
+    calculateSubtotal()
+    calculateGrandTotalPrice()
 }
 
 function changeCustomDateValue(departureDate?:string){
@@ -93,8 +103,13 @@ function changeCustomDateValue(departureDate?:string){
     addCustomDate(departureDate, returnDate)
 }
 
-function calculateChangedValue(){
-    calculatePricing()
+function calculateChangedForGrandTotal(){
+    calculateGrandTotalPrice()
+}
+
+function calculateChangeForSubtotal(){
+    calculateSubtotal()
+    calculateGrandTotalPrice()
 }
 
 
@@ -103,8 +118,9 @@ function calculateChangedValue(){
 <template>
     <div>
     <!-- ------------ -->
-        <!-- CLIENT -->
+
         <div>
+            <!-- CLIENT -->
             <div class="uppercase text-md font-bold border-b-2 border-foreground w-full py-2">
                 <span>Client Information</span>
             </div>
@@ -231,7 +247,8 @@ function calculateChangedValue(){
                             class="block text-sm font-medium leading-6 text-gray-900">Total Pax <span
                                 class="text-red-600">*</span></label>
                         <Input 
-                            v-model="quotationForm.form.departure.total_pax" 
+                            v-model="quotationForm.form.departure.total_pax"
+                            @update:model-value="calculateChangeForSubtotal"
                             type="number" 
                             min="0"
                             name="total_pax"
@@ -257,8 +274,8 @@ function calculateChangedValue(){
                                     class="text-red-600">*</span></label>
                             <Input v-model="quotationForm.form.pricing.subtotal" 
                                 name="subtotal"
-                                placeholder="Enter subtotal" class="font-roboto text-sm" 
-                                @update:model-value="calculateChangedValue" />
+                                placeholder="0.00" class="font-roboto text-sm" 
+                                @update:model-value="calculateChangedForGrandTotal" />
                             <InputError :message="quotationForm.errors['subtotal']" />
                         </div>
 
@@ -275,26 +292,26 @@ function calculateChangedValue(){
                     <div class="flex items-start gap-4 w-full">
                         <div class="space-y-2 w-1/2">
                             <label for="discount_total" 
-                                class="block text-sm font-medium leading-6 text-gray-900">Discount <span class="text-zinc-500 text-xs">(%)</span></label>
-                            <Input v-model="quotationForm.form.pricing.discount_percentage" 
+                                class="block text-sm font-medium leading-6 text-gray-900">Total Discount <span class="text-zinc-500 text-xs">(PHP)</span></label>
+                            <Input v-model="quotationForm.form.pricing.discount_total" 
                                 name="discount_total" 
                                 type="number" min="0"
                                 placeholder="Enter discount" 
                                 class="font-roboto text-sm" 
-                                @update:model-value="calculateChangedValue" />
+                                @update:model-value="calculateChangedForGrandTotal" />
                             <InputError :message="quotationForm.errors['discount_total']" />
                         </div>
 
                         <div class="space-y-2 w-1/2">
                             <label for="tax_total" 
-                                class="block text-sm font-medium leading-6 text-gray-900">Tax <span class="text-zinc-500 text-xs">(%)</span></label>
-                            <Input v-model="quotationForm.form.pricing.tax_percentage" 
+                                class="block text-sm font-medium leading-6 text-gray-900">Total Tax <span class="text-zinc-500 text-xs">(PHP)</span></label>
+                            <Input v-model="quotationForm.form.pricing.tax_total" 
                                 name="tax_total" 
                                 type="number" 
                                 min="0"
                                 placeholder="Enter tax" 
                                 class="font-roboto text-sm" 
-                                @update:model-value="calculateChangedValue" />
+                                @update:model-value="calculateChangedForGrandTotal" />
                             <InputError :message="quotationForm.errors['tax_total']" />
                         </div>
                     </div>
@@ -335,52 +352,133 @@ function calculateChangedValue(){
                     </div>
 
                     <div class="space-y-3">
-                        <!-- Tour -->
+                        <!-- Tour Package -->
                         <div class="flex items-start justify-between gap-6">
                             <div class="min-w-0">
                                 <p class="text-sm text-muted-foreground">
                                     Tour Package
                                 </p>
+
                                 <p class="font-medium">
                                     {{ quotationForm.form.tour.tour_name }}
                                 </p>
                             </div>
+                        </div>
 
-                            <p class="shrink-0 text-right font-medium tabular-nums">
-                                {{ formatCurrency(Number(quotationForm.form.pricing.subtotal), 'PHP', 2) }}
-                            </p>
+                        <!-- Price Per Pax -->
+                        <div
+                            v-if="!quotationForm.form.departure.is_custom_date"
+                            class="flex items-center justify-between"
+                        >
+                            <span class="text-sm text-muted-foreground">
+                                Package Price / Pax
+                            </span>
+
+                            <span class="text-sm font-medium tabular-nums">
+                                {{
+                                    formatCurrency(
+                                        Number(quotationForm.form.departure.tour_date_price),
+                                        'PHP',
+                                        2
+                                    )
+                                }}
+                            </span>
+                        </div>
+
+                        <div
+                            v-else
+                            class="flex items-center justify-between"
+                        >
+                            <span class="text-sm text-muted-foreground">
+                                Selected Date
+                            </span>
+
+                            <span class="text-sm font-medium text-zinc-600">
+                                {{ formatDateRange(
+                                    quotationForm.form.departure.departure_date,
+                                    quotationForm.form.departure.return_date
+                                ) }}
+                            </span>
+                        </div>
+
+
+
+                        <!-- Total Pax -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-muted-foreground">
+                                Total Pax
+                            </span>
+
+                            <span class="text-sm font-medium tabular-nums">
+                                {{ quotationForm.form.departure.total_pax || 0 }}
+                            </span>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="flex items-center justify-between border-t border-border pt-3">
+                            <span class="font-medium">
+                                Subtotal
+                            </span>
+
+                            <span class="font-semibold tabular-nums">
+                                {{
+                                    formatCurrency(
+                                        Number(quotationForm.form.pricing.subtotal) || 0,
+                                        'PHP',
+                                        2
+                                    )
+                                }}
+                            </span>
                         </div>
 
                         <!-- Discount -->
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-muted-foreground">
-                                Discount ({{ quotationForm.form.pricing.discount_percentage }}%)
+                                Discount
                             </span>
 
                             <span class="text-sm font-medium text-destructive tabular-nums">
-                                − {{ formatCurrency(Number(quotationForm.form.pricing.discount_total), 'PHP', 2) }}
+                                − {{
+                                    formatCurrency(
+                                        Number(quotationForm.form.pricing.discount_total) || 0,
+                                        'PHP',
+                                        2
+                                    )
+                                }}
                             </span>
                         </div>
 
                         <!-- Tax -->
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-muted-foreground">
-                                Tax ({{ quotationForm.form.pricing.tax_percentage }}%)
+                                Additional Tax
                             </span>
 
                             <span class="text-sm font-medium tabular-nums">
-                                + {{ formatCurrency(Number(quotationForm.form.pricing.tax_total), 'PHP', 2) }}
+                                + {{
+                                    formatCurrency(
+                                        Number(quotationForm.form.pricing.tax_total) || 0,
+                                        'PHP',
+                                        2
+                                    )
+                                }}
                             </span>
                         </div>
 
-                        <!-- Total -->
+                        <!-- Grand Total -->
                         <div class="mt-4 flex items-center justify-between border-t border-border pt-4">
                             <span class="font-semibold">
-                                Total
+                                Grand Total
                             </span>
 
                             <span class="text-lg font-bold tabular-nums">
-                                {{ formatCurrency(Number(quotationForm.form.pricing.grand_total), 'PHP', 2) }}
+                                {{
+                                    formatCurrency(
+                                        Number(quotationForm.form.pricing.grand_total) || 0,
+                                        'PHP',
+                                        2
+                                    )
+                                }}
                             </span>
                         </div>
                     </div>

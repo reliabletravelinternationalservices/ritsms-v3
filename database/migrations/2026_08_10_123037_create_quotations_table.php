@@ -20,6 +20,7 @@ return new class extends Migration
                 ->constrained('clients')
                 ->nullOnDelete();
 
+            $table->string('primary_client_code', 20);
             $table->string('primary_client_name', 100);
             $table->string('primary_client_email', 150);
             $table->string('primary_client_phone', 30);
@@ -61,6 +62,7 @@ return new class extends Migration
             $table->date('departure_date')->nullable();
             $table->date('return_date')->nullable();
 
+            $table->decimal('tour_date_price', 10,2)->nullable();
             $table->unsignedInteger('total_pax')->default(1);
 
             // Pricing
