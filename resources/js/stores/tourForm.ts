@@ -449,7 +449,28 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function transformSchedules() {
     const schedules = form.value.schedules
 
-    if (!schedules.selected_dates)  return 
+    if (!schedules.selected_dates) {
+      return [
+        {
+        base_price: schedules.def_base_price,
+        discounted_price: isEmpty(schedules.def_discounted_price)
+            ? null :  schedules.def_discounted_price!,
+        min_pax: schedules.def_min_pax,
+        max_pax: isEmpty(schedules.def_max_pax)
+            ? null :  schedules.def_max_pax!,
+
+        departure_date: '',
+        return_date: '',
+        departure_time: schedules.def_departure_time,
+        return_time: schedules.def_return_time,
+        airline_name: schedules.def_airline_name,
+        departure_flight_no: schedules.def_departure_flight_no,
+        return_flight_no: schedules.def_return_flight_no,
+        is_active: true,
+        }
+      ]
+    } 
+
     if (schedules.is_customized) {
       return schedules.customize.map((sched)=>({
          base_price: sched.base_price,

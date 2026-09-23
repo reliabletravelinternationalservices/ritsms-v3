@@ -146,15 +146,15 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
             Route::controller(EditTourController::class)->group(function () {
-                Route::get('/{slug}/edit', 'edit')->name('tours.edit');
-                Route::put('/{tour}/update', 'update')->name('tours.update');
-                Route::patch('/{tour}/status', 'updateStatus')->name('tours.update.status');
+                Route::get('/edit/{slug}', 'edit')->name('tours.edit');
+                Route::put('/update/{tour}', 'update')->name('tours.update');
+                Route::patch('/status/{tour}', 'updateStatus')->name('tours.update.status');
             });
 
             Route::controller(DeleteTourController::class)->group(function () {
-                Route::put('/{tour}/restore', 'restore')->name('tours.restore')->withTrashed();
-                Route::delete('/{tour}/delete', 'delete')->name('tours.delete');
-                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy')->withTrashed();
+                Route::put('/restore/{tour}', 'restore')->name('tours.restore')->withTrashed();
+                Route::delete('/delete/{tour}', 'delete')->name('tours.delete');
+                Route::delete('/destroy/{tour}', 'destroy')->name('tours.destroy')->withTrashed();
             });
         });
 
