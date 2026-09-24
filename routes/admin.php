@@ -115,11 +115,13 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(ViewQuotationController::class)->group(function () {
                 Route::get('/view/{slug}', 'view')->name('quotations.view');
+                Route::get('/view/pdf/{slug}', 'downloadPdf')->name('quotations.pdf');
             });
 
             Route::controller(EditQuotationController::class)->group(function () {
                 Route::get('/edit/{slug}', 'edit')->name('quotations.edit');
                 Route::put('/update/{quotation}', 'update')->name('quotations.update');
+                Route::put('/status/{quotation}', 'status')->name('quotations.update.status');
             });
 
             Route::controller(DeleteQuotationController::class)->group(function () {

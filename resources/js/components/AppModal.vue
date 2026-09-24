@@ -98,6 +98,7 @@ function handleBackdropClick(event: MouseEvent) {
 
                 <!-- Content -->
                 <div
+                    v-if="$slots.content"
                     class="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5"
                 >
                     <slot name="content">

@@ -29,6 +29,11 @@ class Quotation extends Model
         'tour_departure_id',
         'departure_date',
         'return_date',
+        'departure_time',
+        'return_time',
+        'airline_name',
+        'departure_flight_no',
+        'return_flight_no',
         'tour_date_price',
         'total_pax',
         

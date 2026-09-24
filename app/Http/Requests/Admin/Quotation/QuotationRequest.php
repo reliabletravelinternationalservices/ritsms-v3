@@ -29,6 +29,12 @@ class QuotationRequest extends FormRequest
                 'integer',
                 'exists:clients,id',
             ],
+
+            'primary_client_code' => [
+                'required',
+                'string',
+                'max:100',
+            ],
             'primary_client_name' => [
                 'required',
                 'string',
@@ -106,10 +112,36 @@ class QuotationRequest extends FormRequest
                 'required',
                 'date',
             ],
+
             'return_date' => [
                 'required',
                 'date',
                 'after_or_equal:departure_date',
+            ],
+
+            'departure_time' => [
+                'nullable',
+                'date_format:H:i',
+            ],
+
+            'return_time' => [
+                'nullable',
+                'date_format:H:i',
+            ],
+
+            'airline_name' => [
+                'required',
+                'string',
+            ],
+
+            'departure_flight_no' => [
+                'required',
+                'string',
+            ],
+
+            'return_flight_no' => [
+                'required',
+                'string',
             ],
 
             'tour_date_price' => [

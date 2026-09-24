@@ -27,9 +27,12 @@ defineProps<{
 
 const loading = ref(false)
 
-// DELETE PERMA
+// DELETE 
+const showDeletePermannentModal = ref(false)
 const showDeleteModal = ref(false)
 const selectedTour = ref<Tour>()
+
+
 
 
 const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
@@ -139,9 +142,9 @@ const columns: ColumnDef<TourWithRelationshipTables, unknown>[] = [
                         deleted_date: tour.deleted_at,
                         onView: () => { },
                         onEdit: () => edit(tour.slug),
-                        onDelete: () => deleteTour(tour),
+                        onDelete: () => openDeleteModal(tour, false),
                         onRestore: () => restoreDelete(tour),
-                        onForceDelete: () => openDeleteModal(tour)
+                        onForceDelete: () => openDeleteModal(tour, true)
                     }
                 )
         },
@@ -157,9 +160,10 @@ function edit(slug: string) {
 }
 
 
-
-const deleteTour = (tour: Tour) => {
-    router.delete(route('admin.tours.delete', { tour: tour.id }), {
+const deleteTour = () => {
+    showDeleteModal.value=false
+    if (!selectedTour.value) return;
+    router.delete(route('admin.tours.delete', { tour: selectedTour.value.id }), {
         preserveState: true,
         preserveScroll: true,
         onError: () => {
@@ -173,13 +177,17 @@ const deleteTour = (tour: Tour) => {
 
 
 
-function openDeleteModal(tour: Tour) {
+function openDeleteModal(tour: Tour, isPermannent: boolean) {
     selectedTour.value = tour
-    showDeleteModal.value = true
+    if(isPermannent){
+        showDeletePermannentModal.value = true
+    }else{
+        showDeleteModal.value = true
+    }
 }
 
 const deletePermanently = () => {
-    showDeleteModal.value=false
+    showDeletePermannentModal.value=false
     if (!selectedTour.value) return;
     loading.value = true
     router.delete(route('admin.tours.destroy', { tour: selectedTour.value.id }), {
@@ -218,7 +226,7 @@ const restoreDelete = (tour: Tour) => {
 
    
     <AppModal
-        v-model:open="showDeleteModal"
+        v-model:open="showDeletePermannentModal"
         title="Permanently Delete Tour?"
         description="This action cannot be undone."
     >
@@ -298,5 +306,28 @@ const restoreDelete = (tour: Tour) => {
         </template>
     </AppModal>
     
+    <AppModal
+        v-model:open="showDeleteModal"
+        title="Delete Tour"
+        :description="`The following tour ${selectedTour?.code ?? ''} will be deleted.`"
+    >
+        <template #footer>
+            <Button
+                type="button"
+                variant="outline"
+                @click="showDeletePermannentModal = false"
+            >
+                Cancel
+            </Button>
+
+            <Button
+                type="button"
+                variant="destructive"
+                @click="deleteTour"
+            >
+                Delete
+            </Button>
+        </template>
+    </AppModal>
 
 </template>

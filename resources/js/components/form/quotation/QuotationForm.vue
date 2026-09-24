@@ -255,9 +255,60 @@ function calculateChangeForSubtotal(){
                             placeholder="0" 
                             class="font-roboto text-sm"  />
                         <InputError :message="quotationForm.errors['total_pax']" />
-                    </div>
-                                                                                            
+                    </div>                                                           
                 </div>
+
+                <!-- CUSTOM DATE -->
+                <span v-if="quotationForm.form.departure.is_custom_date" class="text-zinc-400">
+                    ------
+                </span>
+                <div v-if="quotationForm.form.departure.is_custom_date" 
+                    class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-zinc-600">Airline Name <span
+                                class="text-red-600">*</span></label>
+                        <Input  v-model="quotationForm.form.departure.airline_name" type="text"
+                            placeholder="e.g. Qatar Airways, Manila International Airport..." class="h-10 w-full" />
+                        <InputError
+                            :message="quotationForm.errors['airline_name']" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-zinc-600">Departure Flight No <span
+                                class="text-red-600">*</span></label>
+                        <Input  v-model="quotationForm.form.departure.departure_flight_no"
+                            type="text" placeholder="e.g. 2A1234" class="h-10 w-full" />
+                        <InputError
+                            :message="quotationForm.errors['departure_flight_no']" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-zinc-600">Return Flight No <span
+                                class="text-red-600">*</span></label>
+                        <Input  v-model="quotationForm.form.departure.return_flight_no"
+                            type="text" placeholder="e.g. 2A1234" class="h-10 w-full" />
+                        <InputError
+                            :message="quotationForm.errors['return_flight_no']" />
+                    </div>
+                </div>
+
+                <div v-if="quotationForm.form.departure.is_custom_date" 
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-zinc-600">Departure Time <span
+                                class="text-xs text-muted-foreground italic">(Optional)</span></label>
+                        <Input v-model="quotationForm.form.departure.departure_time" type="time"
+                            placeholder="N/A" class="h-10 w-full" />
+                        <InputError
+                            :message="quotationForm.errors['departure_time']" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-zinc-600">Return Time <span
+                                class="text-xs text-muted-foreground italic">(Optional)</span></label>
+                        <Input  v-model="quotationForm.form.departure.return_time" type="time"
+                            placeholder="N/A" class="h-10 w-full" />
+                        <InputError
+                            :message="quotationForm.errors['return_time']" />
+                    </div>
+                </div>     
             </div>
 
             <!-- PAYMENT AND SUMMARY -->
@@ -316,18 +367,6 @@ function calculateChangeForSubtotal(){
                         </div>
                     </div>
                     <div class="flex flex-col items-start gap-4 w-full">
-                        <div class="space-y-2 w-1/2">
-                            <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status <span
-                                    class="text-red-600">*</span></label>
-                            <SelectMenu v-model="quotationForm.form.other.status" 
-                                :options="statusOptions" 
-                                name="status"
-                                placeholder="Select status" 
-                                class="font-roboto text-sm" 
-                                />
-                            <InputError :message="quotationForm.errors['status']" />
-                        </div>
-
                         <div class="space-y-2 w-full">
                             <label for="remarks" class="block text-sm font-medium leading-6 text-gray-900">Quotation Remarks <span
                                     class="text-zinc-500 text-xs italic">(optional)</span></label>

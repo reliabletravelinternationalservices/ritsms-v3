@@ -2,7 +2,7 @@
 import Table from '@/components/Table.vue';
 import { Quote } from '@/types/quote'
 import { ColumnDef } from '@tanstack/vue-table'
-import { h } from 'vue'
+import { h, ref } from 'vue'
 import MenuCell from '../reusable/MenuCell.vue';
 import CodeCell from './cells/CodeCell.vue';
 import StatusCell from './cells/StatusCell.vue';
@@ -13,10 +13,20 @@ import ExpirationCell from './cells/ExpirationCell.vue';
 import { router } from '@inertiajs/vue3';
 import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import { toast } from 'vue-sonner';
+import AppModal from '@/components/AppModal.vue';
+import Button from '@/components/ui/button/Button.vue';
 
 defineProps<{
     quotes: Quote[]
 }>()
+
+
+
+// DELETE
+const showDeletePermannentModal = ref(false)
+const showDeleteModal = ref(false)
+const selectedQuote = ref<Quote>()
+
 
 const columns: ColumnDef<Quote, unknown>[] = [
     {
@@ -27,6 +37,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             h(
                 CodeCell,
                 {
+                    deleted_at: row.original.deleted_at,
                     code: row.original.code,
                     link: "#"
                 }
@@ -41,6 +52,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             return h(
                 TourCell,
                 {
+                    deleted_at: row.original.deleted_at,
                     code: row.original.tour_code,
                     name: row.original.tour_name,
                     duration: row.original.tour_duration,
@@ -58,6 +70,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             return h(
                 ClientCell,
                 {
+                    deleted_at: row.original.deleted_at,
                     code: row.original.client.code,
                     name: row.original.client.name,
                 }
@@ -73,6 +86,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             return h(
                 StatusCell,
                 {
+                    deleted_at: row.original.deleted_at,
                     status: row.original.status
                 }
             )
@@ -87,7 +101,8 @@ const columns: ColumnDef<Quote, unknown>[] = [
             h(
                 PriceCell,
                 {
-                    total: row.original.grand_total
+                    deleted_at: row.original.deleted_at,
+                    total: Number(row.original.grand_total)
                 }
             ),
     },
@@ -101,6 +116,7 @@ const columns: ColumnDef<Quote, unknown>[] = [
             h(
                 ExpirationCell,
                 {
+                    deleted_at: row.original.deleted_at,
                     date: row.original.valid_until?? undefined,
                 }
             ),
@@ -114,9 +130,12 @@ const columns: ColumnDef<Quote, unknown>[] = [
             h(
                 MenuCell,
                 {
+                    deleted_date: row.original.deleted_at,
                     onView: ()=> view(row.original.slug),
                     onEdit: ()=> edit(row.original.slug),
-                    onDelete: ()=> deleteQuote(row.original),
+                    onDelete: ()=> openDeleteModal(row.original, false),
+                    onRestore: ()=> restoreDelete(row.original),
+                    onForceDelete: () => openDeleteModal(row.original, true),
                 },
             ),
     },
@@ -140,35 +159,109 @@ const edit = (slug: string) => {
     )
 }
 
-const deleteQuote = (quote: Quote) => {
-    const alert = useAlertDialog();
-    alert.alertDialog({
-        variant: 'danger',
-        title: 'Delete Quote',
-        description: `Are you sure you want to delete this quote "${quote.code}"? This action cannot be undone.`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
 
-        onConfirm: () => {
-            router.delete(route('admin.quotations.delete', { quotation: quote.id }), {
-                preserveState: true,
-                preserveScroll: true,
-                onError: () => {
-                    toast.error('Failed to delete quote. Somethings went wrong.')
-                },
-                onSuccess: () => {
-                    toast.success('Quote deleted successfully.')
-                },
-            });
+
+const openDeleteModal = (quote: Quote, isPermannent: boolean) => {
+    selectedQuote.value = quote
+    if(isPermannent){
+        showDeletePermannentModal.value = true
+    }else{
+        showDeleteModal.value = true
+    }
+}
+
+
+const deleteQuote = () => {
+    router.delete(route('admin.quotations.delete', { quotation: selectedQuote.value?.id }), {
+        preserveState: true,
+        preserveScroll: true,
+        onError: () => {
+            toast.error('Failed to delete quote. Somethings went wrong.')
+        },
+        onSuccess: () => {
+            toast.success('Quote deleted successfully.')
+        },
+    });
+}
+
+const deletePermanentQuote = () => {
+    router.delete(route('admin.quotations.destroy', { quotation: selectedQuote.value?.id }), {
+        preserveState: true,
+        preserveScroll: true,
+        onError: () => {
+            toast.error('Failed to delete quote. Somethings went wrong.')
+        },
+        onSuccess: () => {
+            toast.success('Quote deleted successfully.')
         },
     });
 }
 
 
+const restoreDelete = (quote: Quote) => {
+    router.put(
+        route('admin.quotations.restore', { quotation: quote.id }),
+        {},
+        {
+            preserveState: true,
+            preserveScroll: true,
+        }
+    )
+}
+
 </script>
 
 <template>
     <div>
-        <Table :columns="columns" :data="quotes" class="w-full text-foreground" />
+        <Table :columns="columns" :data="quotes" class="text-foreground"/>
     </div>
+
+
+    <AppModal
+        v-model:open="showDeleteModal"
+        title="Delete Tour"
+        :description="`The following Quotation ${selectedQuote?.code ?? ''} will be deleted.`"
+    >
+        <template #footer>
+            <Button
+                type="button"
+                variant="outline"
+                @click="showDeleteModal = false"
+            >
+                Cancel
+            </Button>
+
+            <Button
+                type="button"
+                variant="destructive"
+                @click="deleteQuote"
+            >
+                Delete
+            </Button>
+        </template>
+    </AppModal>
+
+    <AppModal
+        v-model:open="showDeletePermannentModal"
+        title="Delete Permanently Tour"
+        :description="`The following Quotation ${selectedQuote?.code ?? ''} will be deleted Permanently.`"
+    >
+        <template #footer>
+            <Button
+                type="button"
+                variant="outline"
+                @click="showDeletePermannentModal = false"
+            >
+                Cancel
+            </Button>
+
+            <Button
+                type="button"
+                variant="destructive"
+                @click="deletePermanentQuote"
+            >
+                Delete
+            </Button>
+        </template>
+    </AppModal>
 </template>

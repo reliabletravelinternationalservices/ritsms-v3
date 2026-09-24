@@ -403,3 +403,10 @@ export const formatDateRange = (
     // Different years: Dec 20, 2026 - Jan 05, 2027
     return `${start.toLocaleDateString('en-US', rangeFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
 }
+
+
+export const formatTime = (time: string | null | undefined): string => {
+    if (!time) return '';
+
+    return time.slice(0, 5);
+}

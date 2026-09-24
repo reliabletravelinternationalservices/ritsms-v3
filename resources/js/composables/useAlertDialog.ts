@@ -18,7 +18,14 @@ export interface AlertDialogOptions {
 }
 
 const isOpen = ref(false)
-const options = ref<AlertDialogOptions>({})
+
+const options = ref<AlertDialogOptions>({
+  variant: 'info',
+  title: 'Are you sure?',
+  description: 'This action cannot be undone.',
+  confirmText: 'Continue',
+  cancelText: 'Cancel',
+})
 
 export function useAlertDialog() {
   const alertDialog = (newOptions: AlertDialogOptions) => {
@@ -38,14 +45,17 @@ export function useAlertDialog() {
     isOpen.value = false
   }
 
-  const confirm = async () => {
-    await options.value.onConfirm?.()
-    close()
-  }
-
   const cancel = () => {
     options.value.onCancel?.()
-    close()
+    isOpen.value = false
+  }
+
+  const confirm = async () => {
+    try {
+      await options.value.onConfirm?.()
+    } finally {
+      isOpen.value = false
+    }
   }
 
   return {

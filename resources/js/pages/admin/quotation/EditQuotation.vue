@@ -29,7 +29,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: props.quotation.code,
-        href: '',
+        href: route('admin.quotations.view', {slug: props.quotation.slug}),
     },
     {
         title: 'Edit',

@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class DeleteQuotationController extends Controller
 {
+
     public function delete(Request $request, Quotation $quotation)
     {
-
         $quotation->delete();
+
+        $redirectUrl = $request->input('redirect_url');
+
+        if ($redirectUrl) {
+            return redirect($redirectUrl);
+        }
+
         return redirect()->back();
     }
 

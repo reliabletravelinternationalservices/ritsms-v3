@@ -274,7 +274,7 @@ const tourForm = useTourFormStore();
                                             :message="tourForm.errors['schedules.'+ index +'.departure_time']" />
                                     </div>
                                     <div class="space-y-2">
-                                        <label class="text-sm font-semibold text-zinc-600">Return Pax <span
+                                        <label class="text-sm font-semibold text-zinc-600">Return Time <span
                                                 class="text-xs text-muted-foreground italic">(Optional)</span></label>
                                         <Input :disabled="isLoading" v-model="tourForm.form.schedules.customize[index].return_time" type="time"
                                             placeholder="N/A" class="h-10 w-full" />

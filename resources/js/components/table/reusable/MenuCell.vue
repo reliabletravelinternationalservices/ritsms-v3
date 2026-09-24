@@ -26,6 +26,7 @@ const emit = defineEmits<{
 
 
 const isDeleted = computed(()=> !!props.deleted_date);
+
 </script>
 
 <template>

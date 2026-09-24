@@ -37,6 +37,11 @@ export interface Quote {
     departure: Departure;
     tour_departure_id?: number | null;
     departure_date: string;
+    departure_time?: string | null;
+    return_time? : string | null;
+    airline_name : string;
+    departure_flight_no: string;
+    return_flight_no: string;
     tour_date_price: number | null;
     return_date: string;
     total_pax: number;

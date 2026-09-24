@@ -41,7 +41,7 @@ return new class extends Migration
 
             $table->date('valid_until')->nullable();
 
-            // Tour
+            // TOUR
             $table->foreignId('tour_id')
                 ->nullable()
                 ->constrained('tours')
@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string('tour_name', 200)->nullable();
             $table->unsignedInteger('tour_duration')->nullable();
 
-            // Existing departure, if selected
+            // DEPARTURES
             $table->foreignId('tour_departure_id')
                 ->nullable()
                 ->constrained('tour_departures')
@@ -62,10 +62,17 @@ return new class extends Migration
             $table->date('departure_date')->nullable();
             $table->date('return_date')->nullable();
 
+            $table->time('departure_time')->nullable();
+            $table->time('return_time')->nullable();
+
+            $table->string('airline_name')->nullable();
+            $table->string('departure_flight_no')->nullable();
+            $table->string('return_flight_no')->nullable();
+
             $table->decimal('tour_date_price', 10,2)->nullable();
             $table->unsignedInteger('total_pax')->default(1);
 
-            // Pricing
+            // PRICING
             $table->decimal('subtotal', 12, 2)->default(0);
             $table->decimal('discount_total', 12, 2)->default(0);
             $table->decimal('tax_total', 12, 2)->default(0);

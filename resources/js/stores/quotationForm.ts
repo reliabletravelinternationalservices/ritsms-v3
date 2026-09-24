@@ -4,6 +4,7 @@ import { Client as NewClient } from "@/types/client";
 import { TourWithDepartures } from "@/types/tour";
 import { QuotationStatus, Quote } from "@/types/quote";
 import { Departure as NewDeparture } from "@/types/tour";
+import { formatTime } from "@/lib/utils";
 interface Client {
   client_id: string;
   primary_client_code: string;
@@ -23,6 +24,11 @@ interface Departure {
   tour_departure_id:string;
   departure_date:string;
   return_date:string;
+  departure_time?:string;
+  return_time?:string;
+  departure_flight_no:string;
+  return_flight_no:string;
+  airline_name:string;
   tour_date_price?: string;
   total_pax:string;
   is_custom_date: boolean;
@@ -94,7 +100,13 @@ export const useQuotationFormStore = defineStore('quotation-form', () => {
     form.value.departure.tour_departure_id = departure.id.toString()
     form.value.departure.departure_date = departure.departure_date
     form.value.departure.return_date = departure.return_date
+    form.value.departure.airline_name = departure.airline_name
+    form.value.departure.departure_flight_no = departure.departure_flight_no
+    form.value.departure.return_flight_no = departure.return_flight_no
+    form.value.departure.departure_time = formatTime(departure.departure_time)
+    form.value.departure.return_time = formatTime(departure.return_time)
     form.value.departure.tour_date_price = price.toString()
+    console.log(form.value.departure)
   } 
 
   function getTourDuration(tour?:TourWithDepartures){
@@ -110,6 +122,11 @@ function clearSelectedDepartureDates() {
     form.value.departure.departure_date = ''
     form.value.departure.return_date = ''
     form.value.departure.tour_date_price = ''
+    form.value.departure.airline_name = ''
+    form.value.departure.departure_flight_no = ''
+    form.value.departure.return_flight_no = ''
+    form.value.departure.departure_time = ''
+    form.value.departure.return_time = ''
 }
 
 
@@ -237,6 +254,11 @@ function fillClient(quote:Quote){
         tour_departure_id: quote.tour_departure_id?.toString()??'',
         departure_date: quote.departure_date,
         return_date: quote.return_date,
+        departure_flight_no: quote.departure_flight_no,
+        return_flight_no: quote.return_flight_no,
+        airline_name: quote.airline_name,
+        departure_time: quote.departure_time,
+        return_time: quote.return_time,
         total_pax: quote.total_pax.toString(),
         tour_date_price: quote.tour_date_price?.toString(),
         is_custom_date: !quote.tour_departure_id

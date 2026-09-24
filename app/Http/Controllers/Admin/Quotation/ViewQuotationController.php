@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Quotation;
 use App\Http\Controllers\Controller;
 use App\Models\Quotation;
 use App\Services\Quotation\QuotationService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Inertia\Inertia;
 
 class ViewQuotationController extends Controller
@@ -21,6 +22,23 @@ class ViewQuotationController extends Controller
         return Inertia::render(
             'admin/quotation/ViewQuotation',
             compact('quotation')
+        );
+    }
+
+
+
+    public function downloadPdf(string $slug)
+    {
+        $quotation = Quotation::where('slug', $slug)->firstOrFail();
+
+        $pdf = Pdf::loadView('pdf.quotations.show', [
+            'quotation' => $quotation,
+        ]);
+
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download(
+            "{$quotation->code}.pdf"
         );
     }
 }

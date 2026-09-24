@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 interface Props {
+    deleted_at?: string | null
     status: string
 }
 
@@ -46,6 +47,14 @@ const statusConfig = {
 } as const
 
 const config = computed(() => {
+    if (props.deleted_at) {
+        return {
+            label: props.status,
+            color: 'bg-zinc-400 ',
+            text: 'text-zinc-400 dark:text-zinc-400',
+        }
+    }
+
     return (
         statusConfig[
             props.status.toLowerCase() as keyof typeof statusConfig
