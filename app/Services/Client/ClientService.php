@@ -44,7 +44,7 @@ class ClientService
         array $filters = []
     ) {
         $perPage = $filters['per_page'] ?? 10;
-
+        $page = $filters['page'] ?? 1;
         return Client::with($relationships)
             ->when(
                 isset($filters['status']) && $filters['status'] !== 'all',
@@ -79,7 +79,7 @@ class ClientService
                 isset($filters['source']) && $filters['source'] !== 'all',
                 fn ($query) => $query->where('source', $filters['source'])
             )
-            ->paginate($perPage)
+            ->paginate(perPage: $perPage, page: $page)
             ->withQueryString();
     }
 

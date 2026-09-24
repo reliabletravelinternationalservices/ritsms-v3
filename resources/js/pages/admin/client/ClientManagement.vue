@@ -161,7 +161,7 @@ const sourceOptions: SelectOption[] = [
     },
 ]
 
-const loadTours = (page = 1) => {
+const loadTours = (page = Number(filters.page) || 1) => {
     const params: Record<string, string | number> = {}
 
     if (page !== 1) {
@@ -246,17 +246,29 @@ const createClient = () => router.visit(route('admin.clients.create'));
 
                     <div class="col-span-3 grid grid-cols-6 h-full rounded-xl text-foreground w-full gap-2">
 
-                        <SearchInput v-model="filters.search" placeholder="Search name | email | code..."
-                            class="w-full border border-muted-foreground col-span-2" @keyup.enter="applyFilters" />
+                        <SearchInput v-model="filters.search" 
+                            placeholder="Search name | email | code..."
+                            class="w-full border border-muted-foreground col-span-2" 
+                            @keyup.enter="applyFilters" 
+                             />
 
-                        <SelectMenu v-model="filters.type" :options="typeOptions" placeholder="Type"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.type" 
+                            :options="typeOptions" placeholder="Type"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters" 
+                            :enable-clear="false" />
 
-                        <SelectMenu v-model="filters.status" :options="statusOptions" placeholder="Status"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.status" 
+                            :options="statusOptions" placeholder="Status"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters" 
+                            :enable-clear="false"/>
 
-                        <SelectMenu v-model="filters.source" :options="sourceOptions" placeholder="Source"
-                            class="w-full border border-muted-foreground" @update:model-value="applyFilters" />
+                        <SelectMenu v-model="filters.source" 
+                            :options="sourceOptions" placeholder="Source"
+                            class="w-full border border-muted-foreground" 
+                            @update:model-value="applyFilters" 
+                            :enable-clear="false" />
 
                     </div>
 

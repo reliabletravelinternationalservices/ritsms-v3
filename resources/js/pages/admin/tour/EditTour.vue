@@ -16,7 +16,7 @@ import { useReferenceDataStore } from '@/stores/referenceData'
 import { useAlertDialog } from '@/composables/useAlertDialog';
 import { isFile } from '@/lib/utils';
 
-const { alertDialog } = useAlertDialog()
+
 
 const props = defineProps<{
     tour: TourWithRelationshipTables;
@@ -32,24 +32,55 @@ const isChangingStatus = ref(false)
 const tourForm = useTourFormStore()
 const referenceData = useReferenceDataStore()
 
-function fillTourForm(tour: TourWithRelationshipTables) {
-    tourForm.clearFormChanges()
-    tourForm.fillFormWithTourData(tour)
-}
+    const {
+        setCountries
+    } = referenceData
 
-watch(
-    () => props.tour.id,
-    () => {
-        const tour = props.tour
+    const {
+        syncMediaOrder,
+        clearErrors,
+        clearForm,
+        setErrors,
 
-        if (!tour) return
 
-        fillTourForm(tour)
-    },
-    { immediate: true }
-)
+        fillOverview,
+        fillItinerary,
+        fillRoute,
+        fillHotel,
+        fillSchedule,
+        fillAsset,
+        backupOldValues,
+        setInitialFormSnapshot,
+        getOldFormValue,
+        addFormValue,
+    } = tourForm
 
-referenceData.setCountries(props.countries)
+    setCountries(props.countries)
+
+    function fillTourForm(tour: TourWithRelationshipTables) {
+        clearForm()
+        fillOverview(tour)
+        fillItinerary(tour.itineraries)
+        fillRoute(tour.routes)
+        fillHotel(tour.hotels)
+        fillSchedule(tour.departures)
+        fillAsset(tour.media)
+        backupOldValues(tour),
+        setInitialFormSnapshot(JSON.stringify(tourForm.form))
+    }
+
+    watch(
+        () => props.tour.id,
+        () => {
+            const tour = props.tour
+
+            if (!tour) return
+
+            fillTourForm(tour)
+        },
+        { immediate: true }
+    )
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -70,7 +101,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 function saveTourChanges() {
     isSaving.value = true
-    tourForm.syncMediaOrder()
+    syncMediaOrder()
 
     const formData = new FormData()
 
@@ -142,7 +173,7 @@ function saveTourChanges() {
             },
 
             onError: (errors) => {
-                tourForm.setErrors(errors)
+                setErrors(errors)
 
                 toast.error(
                     'Failed to save the tour. Please check the form.'
@@ -150,8 +181,8 @@ function saveTourChanges() {
             },
 
             onSuccess: () => {
-                tourForm.clearErrors()
-
+                clearErrors()
+                clearForm()
                 toast.success(
                     'Tour saved successfully.'
                 )
@@ -165,7 +196,16 @@ function saveTourChanges() {
 }
 
 
+
+function restoreOldValue(){
+    clearForm()
+    const oldForm = getOldFormValue()
+    addFormValue(oldForm)
+  }
+
+
 function resetFormChanges() {
+    const { alertDialog } = useAlertDialog()
     alertDialog({
         variant: 'warning',
         title: 'Reset Changes',
@@ -173,8 +213,9 @@ function resetFormChanges() {
         confirmText: 'Reset',
         onConfirm: () => {
             isReseting.value = true
-            tourForm.resetFormChanges()
+            restoreOldValue()
             isReseting.value = false
+        
         }
     })
 }
@@ -205,8 +246,7 @@ function updateStatus(status: PublishStatus) {
             },
 
             onSuccess: () => {
-                tourForm.clearErrors()
-                tourForm.resetFormChanges()
+                clearErrors()
 
                 toast.success(
                     'Tour status changed.'
@@ -276,7 +316,7 @@ function updateStatus(status: PublishStatus) {
                 </div>
             </div>
             <div class="p-6">
-                <TourForm :is-create-new="false" :is-loading="isSaving || isReseting" />
+                <TourForm :newEntry="false" :loading="isSaving || isReseting" />
             </div>
             <ScrollToTopButton />
         </div>

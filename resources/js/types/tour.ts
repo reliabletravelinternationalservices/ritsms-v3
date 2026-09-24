@@ -69,6 +69,8 @@ export interface Departure {
     max_pax?: number | null;
     departure_date: string
     return_date: string;
+    departure_time?: string
+    return_time?: string;
     airline_name: string;
     departure_flight_no: string;
     return_flight_no: string;
@@ -86,4 +88,9 @@ export type TourWithRelationshipTables = Tour & {
 
 export type TourWithDepartures = Tour & {
     departures: Departure[];
+}
+
+
+export type TourWithMedia = Tour & {
+    media: Media[]
 }

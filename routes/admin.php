@@ -4,6 +4,10 @@ use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
+use App\Http\Controllers\Admin\Client\ClientManagementController;
+use App\Http\Controllers\Admin\Client\CreateClientController;
+use App\Http\Controllers\Admin\Client\DeleteClientController;
+use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
 use App\Http\Controllers\Admin\Destination\CreateLocationController;
@@ -29,18 +33,17 @@ use App\Http\Controllers\Admin\Package\PackageGroupPinController;
 use App\Http\Controllers\Admin\Package\PackageImageController;
 use App\Http\Controllers\Admin\Package\ServicePackageController;
 use App\Http\Controllers\Admin\Package\UpdateTravelBatchController;
+use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
+use App\Http\Controllers\Admin\Quotation\DeleteQuotationController;
+use App\Http\Controllers\Admin\Quotation\EditQuotationController;
+use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
+use App\Http\Controllers\Admin\Quotation\ViewQuotationController;
 use App\Http\Controllers\Admin\Tour\CreateTourController;
+use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\Tour\EditTourController;
 use App\Http\Controllers\Admin\Tour\TourManagementController;
 use App\Http\Controllers\Admin\User\AdminAccountDetailController;
 use App\Http\Controllers\Admin\User\AdminManagementController;
-use App\Http\Controllers\Admin\Client\ClientManagementController;
-use App\Http\Controllers\Admin\Client\CreateClientController;
-use App\Http\Controllers\Admin\Client\DeleteClientController;
-use App\Http\Controllers\Admin\Client\EditClientController;
-use App\Http\Controllers\Admin\Quotation\CreateQuotationController;
-use App\Http\Controllers\Admin\Quotation\QuotationManagementController;
-use App\Http\Controllers\Admin\Tour\DeleteTourController;
 use App\Http\Controllers\Admin\User\CreateAdminAccountController;
 use App\Http\Controllers\Admin\User\DeleteAdminAccountController;
 use App\Http\Controllers\Admin\User\EditAdminAccountController;
@@ -99,16 +102,33 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             |--------------------------------------------------------------------------
             */
 
-        Route::prefix('quotations')->group(function (){
+        Route::prefix('quotations')->group(function () {
             Route::controller(QuotationManagementController::class)->group(function () {
                 Route::get('/', 'index')->name('quotations');
             });
 
             Route::controller(CreateQuotationController::class)->group(function () {
                 Route::get('/create', 'create')->name('quotations.create');
+                Route::post('/store', 'store')->name('quotations.store');
+            });
+
+
+            Route::controller(ViewQuotationController::class)->group(function () {
+                Route::get('/view/{slug}', 'view')->name('quotations.view');
+                Route::get('/view/pdf/{slug}', 'downloadPdf')->name('quotations.pdf');
+            });
+
+            Route::controller(EditQuotationController::class)->group(function () {
+                Route::get('/edit/{slug}', 'edit')->name('quotations.edit');
+                Route::put('/update/{quotation}', 'update')->name('quotations.update');
+                Route::put('/status/{quotation}', 'status')->name('quotations.update.status');
+            });
+
+            Route::controller(DeleteQuotationController::class)->group(function () {
+                Route::delete('/delete/{quotation}', 'delete')->name('quotations.delete');
+                Route::delete('/destroy/{quotation}', 'destroy')->name('quotations.destroy');
             });
         });
-    
 
         /*
             |--------------------------------------------------------------------------
@@ -128,14 +148,15 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
             Route::controller(EditTourController::class)->group(function () {
-                Route::get('/{slug}/edit', 'edit')->name('tours.edit');
-                Route::put('/{tour}/update', 'update')->name('tours.update');
-                Route::patch('/{tour}/status', 'updateStatus')->name('tours.update.status');
+                Route::get('/edit/{slug}', 'edit')->name('tours.edit');
+                Route::put('/update/{tour}', 'update')->name('tours.update');
+                Route::patch('/status/{tour}', 'updateStatus')->name('tours.update.status');
             });
 
             Route::controller(DeleteTourController::class)->group(function () {
-                Route::delete('/{tour}/delete', 'delete')->name('tours.delete');
-                Route::delete('/{tour}/destroy', 'destroy')->name('tours.destroy');
+                Route::put('/restore/{tour}', 'restore')->name('tours.restore')->withTrashed();
+                Route::delete('/delete/{tour}', 'delete')->name('tours.delete');
+                Route::delete('/destroy/{tour}', 'destroy')->name('tours.destroy')->withTrashed();
             });
         });
 
@@ -152,8 +173,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
         });
-
-
 
         /*
             |--------------------------------------------------------------------------

@@ -13,30 +13,80 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
-            
+
+            // Client
+            $table->foreignId('client_id')
+                ->nullable()
+                ->constrained('clients')
+                ->nullOnDelete();
+
+            $table->string('primary_client_code', 20);
+            $table->string('primary_client_name', 100);
+            $table->string('primary_client_email', 150);
+            $table->string('primary_client_phone', 30);
+
+            // Quotation
             $table->string('code', 20)->unique();
             $table->string('slug', 100)->unique();
-            $table->enum('status',  [
-                'draft', 
-                'sent', 
-                'viewed', 
-                'accepted', 
-                'rejected', 
-                'expired', 
-                'cancelled'
+
+            $table->enum('status', [
+                'draft',
+                'sent',
+                'viewed',
+                'accepted',
+                'rejected',
+                'expired',
+                'cancelled',
             ])->default('draft');
+
             $table->date('valid_until')->nullable();
 
-            $table->decimal('subtotal', 10,2)->default(0);
-            $table->decimal('discount_total', 10,2)->default(0);
-            $table->decimal('tax_total', 10,2)->default(0);
-            $table->decimal('grand_total', 10,2)->default(0);
-            
-            $table->datetime('sent_at')->nullable();
+            // TOUR
+            $table->foreignId('tour_id')
+                ->nullable()
+                ->constrained('tours')
+                ->nullOnDelete();
+
+            // Tour snapshot
+            $table->string('tour_code', 20)->nullable();
+            $table->string('tour_name', 200)->nullable();
+            $table->unsignedInteger('tour_duration')->nullable();
+
+            // DEPARTURES
+            $table->foreignId('tour_departure_id')
+                ->nullable()
+                ->constrained('tour_departures')
+                ->nullOnDelete();
+
+            // Quoted travel dates
+            $table->date('departure_date')->nullable();
+            $table->date('return_date')->nullable();
+
+            $table->time('departure_time')->nullable();
+            $table->time('return_time')->nullable();
+
+            $table->string('airline_name')->nullable();
+            $table->string('departure_flight_no')->nullable();
+            $table->string('return_flight_no')->nullable();
+
+            $table->decimal('tour_date_price', 10,2)->nullable();
+            $table->unsignedInteger('total_pax')->default(1);
+
+            // PRICING
+            $table->decimal('subtotal', 12, 2)->default(0);
+            $table->decimal('discount_total', 12, 2)->default(0);
+            $table->decimal('tax_total', 12, 2)->default(0);
+            $table->decimal('grand_total', 12, 2)->default(0);
+
+            // Quotation tracking
+            $table->dateTime('sent_at')->nullable();
             $table->dateTime('viewed_at')->nullable();
             $table->dateTime('accepted_at')->nullable();
-            $table->text('notes')->nullable();
+
+            // Notes
+            $table->text('remarks')->nullable(); // Client-visible
+            $table->text('notes')->nullable();   // Internal only
+
             $table->softDeletes();
             $table->timestamps();
         });
