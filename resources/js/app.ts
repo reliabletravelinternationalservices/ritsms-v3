@@ -13,6 +13,11 @@ import { imageViewer } from "@/lib/imageViewer"
 import { appModal } from "@/lib/app-modal"
 import ShareModal from './components/ShareModal.vue';
 import VueApexCharts from 'vue3-apexcharts';
+import { configureEcho } from '@laravel/echo-vue';
+
+configureEcho({
+    broadcaster: 'reverb',
+});
 import { createPinia } from 'pinia'
 
 const pinia = createPinia()

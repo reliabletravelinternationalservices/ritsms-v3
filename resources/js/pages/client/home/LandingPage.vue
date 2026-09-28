@@ -20,6 +20,7 @@ import ClientFeedback from './section/ClientFeedback.vue';
 import {
     LANDING_DELAYS,
 } from './constants';
+import ChatWidget from '@/components/chat/ChatWidget.vue';
 
 
 </script>
@@ -60,5 +61,6 @@ import {
         <MotionWrapper :delay="LANDING_DELAYS.feedbackSection">
             <ClientFeedback />
         </MotionWrapper>
+        <ChatWidget />
     </AppLayout>
 </template>

@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\Destination\DeleteLocationController;
 use App\Http\Controllers\Admin\Destination\EditDestinationController;
 use App\Http\Controllers\Admin\Destination\EditLocationController;
 use App\Http\Controllers\Admin\Destination\ServiceCountryController;
-use App\Http\Controllers\Admin\InboxController;
+use App\Http\Controllers\Admin\Inbox\InboxController;
 use App\Http\Controllers\Admin\Inquiry\ClientsInquiryController;
 use App\Http\Controllers\Admin\Inquiry\InquiryDetailController;
 use App\Http\Controllers\Admin\Log\ActivityLogController;
