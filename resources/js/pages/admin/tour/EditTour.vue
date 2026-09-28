@@ -49,7 +49,6 @@ const referenceData = useReferenceDataStore()
         fillHotel,
         fillSchedule,
         fillAsset,
-        backupOldValues,
         setInitialFormSnapshot,
         getOldFormValue,
         addFormValue,
@@ -65,7 +64,6 @@ const referenceData = useReferenceDataStore()
         fillHotel(tour.hotels)
         fillSchedule(tour.departures)
         fillAsset(tour.media)
-        backupOldValues(tour),
         setInitialFormSnapshot(JSON.stringify(tourForm.form))
     }
 

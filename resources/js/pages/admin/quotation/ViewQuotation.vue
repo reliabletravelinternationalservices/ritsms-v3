@@ -2,14 +2,14 @@
 import ScrollToTopButton from '@/components/ScrollToTopButton.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { BreadcrumbItem } from '@/types'
-import { Head, Link, router } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { Quote } from '@/types/quote'
 import SelectMenu, { SelectOption } from '@/components/SelectMenu.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Icon } from '@iconify/vue'
-import { formatCurrency, formatDateRange, formatDateString, formatTime, getMediaUrl, getPackageDurationLabel } from '@/lib/utils'
-import { ref } from 'vue'
+import { formatCurrency, formatDateRange, formatDateString, formatTime, getPackageDurationLabel } from '@/lib/utils'
 import { useAlertDialog } from '@/composables/useAlertDialog'
+import { ref } from 'vue'
 
 
 interface Props {
@@ -98,6 +98,11 @@ const updateStatus = (status: string) => {
         }
     )
 }
+
+
+const status = ref(props.quotation.status);
+
+
 </script>
 
 <template>
@@ -225,7 +230,7 @@ const updateStatus = (status: string) => {
 
                         <!-- Status -->
                         <SelectMenu
-                            v-model="quotation.status"
+                            v-model="status"
                             :options="options"
                             :enable-clear="false"
                             class="w-auto min-w-32"

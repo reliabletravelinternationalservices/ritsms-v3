@@ -12,7 +12,6 @@ import MenuCell from '../reusable/MenuCell.vue';
 import { router } from '@inertiajs/vue3';
 import DurationCell from './cells/DurationCell.vue';
 import { Pagination } from '@/types/pagination.js';
-import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import { toast } from 'vue-sonner';
 import AppModal from '@/components/AppModal.vue';
 import Button from '@/components/ui/button/Button.vue';

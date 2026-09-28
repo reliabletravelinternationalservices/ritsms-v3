@@ -11,7 +11,6 @@ import TourCell from './cells/TourCell.vue';
 import ClientCell from './cells/ClientCell.vue';
 import ExpirationCell from './cells/ExpirationCell.vue';
 import { router } from '@inertiajs/vue3';
-import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import { toast } from 'vue-sonner';
 import AppModal from '@/components/AppModal.vue';
 import Button from '@/components/ui/button/Button.vue';

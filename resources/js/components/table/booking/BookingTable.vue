@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import Table from '@/components/Table.vue'
-import { Tour, TourWithRelationshipTables } from '@/types/tour'
+import { Tour } from '@/types/tour'
 import { ColumnDef } from '@tanstack/vue-table'
 import { h, ref } from 'vue'
-import { getFirstImage } from '@/lib/utils.js';
 
 import MenuCell from '../reusable/MenuCell.vue';
 import { router } from '@inertiajs/vue3';
 import { Pagination } from '@/types/pagination.js';
-import { useAlertDialog } from '@/composables/useAlertDialog.js';
 import { toast } from 'vue-sonner';
 import AppModal from '@/components/AppModal.vue';
 import Button from '@/components/ui/button/Button.vue';
@@ -173,14 +171,14 @@ const deleteTour = () => {
 
 
 
-function openDeleteModal(tour: Tour, isPermannent: boolean) {
-    selectedTour.value = tour
-    if(isPermannent){
-        showDeletePermannentModal.value = true
-    }else{
-        showDeleteModal.value = true
-    }
-}
+// function openDeleteModal(tour: Tour, isPermannent: boolean) {
+//     selectedTour.value = tour
+//     if(isPermannent){
+//         showDeletePermannentModal.value = true
+//     }else{
+//         showDeleteModal.value = true
+//     }
+// }
 
 const deletePermanently = () => {
     showDeletePermannentModal.value=false
@@ -202,16 +200,16 @@ const deletePermanently = () => {
 }
 
 
-const restoreDelete = (tour: Tour) => {
-    router.put(
-        route('admin.tours.restore', { tour: tour.id }),
-        {},
-        {
-            preserveState: true,
-            preserveScroll: true,
-        }
-    )
-}
+// const restoreDelete = (tour: Tour) => {
+//     router.put(
+//         route('admin.tours.restore', { tour: tour.id }),
+//         {},
+//         {
+//             preserveState: true,
+//             preserveScroll: true,
+//         }
+//     )
+// }
 
 </script>
 

@@ -39,36 +39,36 @@ const getDepartureOptions = computed<SelectOption[]>(
 
 
 
-const statusOptions: SelectOption[] = [
-    {
-        label: 'Draft',
-        value: 'draft',
-    },
-    {
-        label: 'Sent',
-        value: 'sent',
-    },
-    {
-        label: 'Viewed',
-        value: 'viewed',
-    },
-    {
-        label: 'Accepted',
-        value: 'accepted',
-    },
-    {
-        label: 'Rejected',
-        value: 'rejected',
-    },
-    {
-        label: 'Expired',
-        value: 'expired',
-    },
-    {
-        label: 'Cancelled',
-        value: 'cancelled',
-    },
-];
+// const statusOptions: SelectOption[] = [
+//     {
+//         label: 'Draft',
+//         value: 'draft',
+//     },
+//     {
+//         label: 'Sent',
+//         value: 'sent',
+//     },
+//     {
+//         label: 'Viewed',
+//         value: 'viewed',
+//     },
+//     {
+//         label: 'Accepted',
+//         value: 'accepted',
+//     },
+//     {
+//         label: 'Rejected',
+//         value: 'rejected',
+//     },
+//     {
+//         label: 'Expired',
+//         value: 'expired',
+//     },
+//     {
+//         label: 'Cancelled',
+//         value: 'cancelled',
+//     },
+// ];
 
 
 

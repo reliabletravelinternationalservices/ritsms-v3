@@ -552,8 +552,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
 
       def_departure_date: first.departure_date,
       def_return_date: first.return_date,
-      def_departure_time: first.departure_time,
-      def_return_time: first.return_time,
+      def_departure_time: first.departure_time?? '',
+      def_return_time: first.return_time?? '',
       def_base_price: String(first.base_price),
       def_discounted_price: first.discounted_price != null
         ? String(first.discounted_price)
@@ -582,8 +582,8 @@ export const useTourFormStore = defineStore('tour-form', () => {
           ? String(departure.max_pax)
           : '',
 
-        departure_time: departure.departure_time,
-        return_time: departure.return_time,
+        departure_time: departure.departure_time?? '',
+        return_time: departure.return_time?? '',
         airline_name: departure.airline_name,
         departure_flight_no: departure.departure_flight_no,
         return_flight_no: departure.return_flight_no,
@@ -684,10 +684,6 @@ export const useTourFormStore = defineStore('tour-form', () => {
   function setInitialFormSnapshot(snapshot: string)
   {
      initialFormSnapshot.value = snapshot
-  }
-
-  function backupOldValues(tour: TourWithRelationshipTables){
-      oldValues.value =  tour;
   }
 
 
@@ -817,7 +813,6 @@ export const useTourFormStore = defineStore('tour-form', () => {
     fillAsset,
 
     
-    backupOldValues,
     setInitialFormSnapshot,
     getOldFormValue,
     addFormValue,
