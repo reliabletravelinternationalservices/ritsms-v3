@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
 
@@ -20,6 +21,8 @@ class TourDeparture extends Model
         'max_pax',
         'departure_date',
         'return_date',
+        'departure_time',
+        'return_time',
         'departure_flight_no',
         'return_flight_no',
         'airline_name',
@@ -41,5 +44,10 @@ class TourDeparture extends Model
     {
         return $this->hasMany(DepartureFlight::class)
             ->orderBy('sequence');
+    }
+
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
     }
 }

@@ -1,4 +1,5 @@
 import { Client } from "./client";
+import { Departure, Tour } from "./tour";
 
 
 export type QuotationStatus =
@@ -23,6 +24,27 @@ export type QuotationItemType =
 export interface Quote {
     id: number;
     client: Client;
+    client_id?: number | null;
+    primary_client_code?: string;
+    primary_client_name: string;
+    primary_client_email: string;
+    primary_client_phone: string;
+    tour?: Tour | null;
+    tour_id?: number | null;
+    tour_code?: string | null;
+    tour_name: string;
+    tour_duration: number;
+    departure: Departure;
+    tour_departure_id?: number | null;
+    departure_date: string;
+    departure_time?: string | null;
+    return_time? : string | null;
+    airline_name : string;
+    departure_flight_no: string;
+    return_flight_no: string;
+    tour_date_price: number | null;
+    return_date: string;
+    total_pax: number;
     code: string;
     slug: string;
     status: QuotationStatus;
@@ -31,6 +53,7 @@ export interface Quote {
     discount_total: number;
     tax_total:number;
     grand_total:number;
+    remarks?: string | null;
     notes?: string | null;
     sent_at?: string | null;
     viewed_at?: string | null;

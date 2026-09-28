@@ -294,6 +294,22 @@ export function parseStringDateWithDuration(value: string, duration?: string): s
     })
 }
 
+export function getDateWithDuration(value: string, duration?: string) {
+    const [year, month, day] = value.split('-').map(Number)
+
+    const date = new Date(
+        year,
+        month - 1,
+        day + (duration ? parseInt(duration, 10) : 0)
+    )
+
+    if (Number.isNaN(date.getTime())) {
+        return undefined
+    }
+
+    return date.toISOString().split('T')[0]
+}
+
 
 export const createObjectURL = (file: File) => {
     return URL.createObjectURL(file)
@@ -386,4 +402,11 @@ export const formatDateRange = (
 
     // Different years: Dec 20, 2026 - Jan 05, 2027
     return `${start.toLocaleDateString('en-US', rangeFormat)} - ${end.toLocaleDateString('en-US', rangeFormat)}`
+}
+
+
+export const formatTime = (time: string | null | undefined): string => {
+    if (!time) return '';
+
+    return time.slice(0, 5);
 }

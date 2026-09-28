@@ -10,8 +10,6 @@ use App\Services\MediaService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-use function PHPSTORM_META\map;
-
 class TourService
 {
     public function __construct(protected MediaService $mediaService) {}
@@ -44,14 +42,33 @@ class TourService
         ]);
     }
 
-
-    
     /*
     |------------------------------------------------------------------------------------------
-    | DELETE TOUR
+    | DELETE & RESTORE TOUR
     |------------------------------------------------------------------------------------------
     */
     public function delete(Tour $tour)
+    {
+        $tour->update([
+            'state' => State::ARCHIVED->value,
+            'visibility' => Visibility::PRIVATE->value,
+        ]);
+
+        $tour->delete();
+
+    }
+
+    public function restore(Tour $tour)
+    {
+        $tour->restore();
+
+        $tour->update([
+            'state' => State::PUBLISHED,
+            'visibility' => Visibility::PRIVATE->value,
+        ]);
+    }
+
+    public function forceDelete(Tour $tour)
     {
         $tour->load('media');
 
@@ -62,12 +79,11 @@ class TourService
             'visibility' => Visibility::PRIVATE->value,
         ]);
 
-        $tour->delete();
+        $tour->forceDelete();
 
         $this->deleteMediaById($tour, $mediaIDs);
     }
 
-    
     /*
     |--------------------------------------------------------------------------------------
     | UPDATE ITINERARIES
@@ -261,15 +277,46 @@ class TourService
     |------------------------------------------------------------------------------------------
     */
 
-   public function getTours(
+    public function getTours(
         array $relationships = [],
         array $filters = []
     ) {
         $perPage = $filters['per_page'] ?? 10;
 
-    if (isset($filters['state']) && $filters['state'] === 'deleted') {
+        if (isset($filters['state']) && $filters['state'] === 'deleted') {
+            return Tour::with($relationships)
+                ->whereNotNull('deleted_at')
+                ->when(
+                    isset($filters['search']) && $filters['search'] !== '',
+                    function ($query) use ($filters) {
+                        $search = $filters['search'];
+
+                        $query->where(function ($query) use ($search) {
+                            $query
+                                ->where('name', 'like', "%{$search}%")
+                                ->orWhere('code', 'like', "%{$search}%");
+                        });
+                    }
+                )
+                ->when(
+                    isset($filters['category']) && $filters['category'] !== 'all',
+                    fn ($query) => $query->where('category', $filters['category'])
+                )
+                ->when(
+                    isset($filters['destination']) && $filters['destination'] !== '0',
+                    fn ($query) => $query->whereHas('routes', function ($query) use ($filters) {
+                        $query->where(
+                            'destination_country_id',
+                            (int) $filters['destination']
+                        );
+                    })
+                )
+                ->withTrashed()
+                ->paginate($perPage)
+                ->withQueryString();
+        }
+
         return Tour::with($relationships)
-            ->whereNotNull('deleted_at')
             ->when(
                 isset($filters['search']) && $filters['search'] !== '',
                 function ($query) use ($filters) {
@@ -283,69 +330,29 @@ class TourService
                 }
             )
             ->when(
+                isset($filters['state']) && $filters['state'] !== 'all',
+                fn ($query) => $query->where('state', $filters['state'])
+            )
+            ->when(
                 isset($filters['category']) && $filters['category'] !== 'all',
-                fn ($query) =>
-                    $query->where('category', $filters['category'])
+                fn ($query) => $query->where('category', $filters['category'])
+            )
+            ->when(
+                isset($filters['visibility']) && $filters['visibility'] !== 'all',
+                fn ($query) => $query->where('visibility', $filters['visibility'])
             )
             ->when(
                 isset($filters['destination']) && $filters['destination'] !== '0',
-                fn ($query) =>
-                    $query->whereHas('routes', function ($query) use ($filters) {
-                        $query->where(
-                            'destination_country_id',
-                            (int) $filters['destination']
-                        );
-                    })
-            )
-            ->withTrashed()
-            ->paginate($perPage)
-            ->withQueryString();
-    }
-
-
-    return Tour::with($relationships)
-        ->when(
-            isset($filters['search']) && $filters['search'] !== '',
-            function ($query) use ($filters) {
-                $search = $filters['search'];
-
-                $query->where(function ($query) use ($search) {
-                    $query
-                        ->where('name', 'like', "%{$search}%")
-                        ->orWhere('code', 'like', "%{$search}%");
-                });
-            }
-        )
-        ->when(
-            isset($filters['state']) && $filters['state'] !== 'all',
-            fn ($query) =>
-                $query->where('state', $filters['state'])
-        )
-        ->when(
-            isset($filters['category']) && $filters['category'] !== 'all',
-            fn ($query) =>
-                $query->where('category', $filters['category'])
-        )
-        ->when(
-            isset($filters['visibility']) && $filters['visibility'] !== 'all',
-            fn ($query) =>
-                $query->where('visibility', $filters['visibility'])
-        )
-        ->when(
-            isset($filters['destination']) && $filters['destination'] !== '0',
-            fn ($query) =>
-                $query->whereHas('routes', function ($query) use ($filters) {
+                fn ($query) => $query->whereHas('routes', function ($query) use ($filters) {
                     $query->where(
                         'destination_country_id',
                         (int) $filters['destination']
                     );
                 })
-        )
-        ->paginate($perPage)
-        ->withQueryString();
+            )
+            ->paginate($perPage)
+            ->withQueryString();
     }
-
-
 
     public function getTourBySlug(string $slug, array $relationships)
     {
@@ -354,8 +361,6 @@ class TourService
             ->whereNull('deleted_at')
             ->firstOrFail();
     }
-
-
 
     /*
     |------------------------------------------------------------------------------------------
@@ -373,6 +378,4 @@ class TourService
 
         return Tour::count();
     }
-
-
 }

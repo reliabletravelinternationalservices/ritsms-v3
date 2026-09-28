@@ -83,14 +83,14 @@ const statusLabel = computed(() => {
         state.value === 'published' &&
         visibility.value === 'private'
     ) {
-        return 'Published'
+        return 'Private'
     }
 
     if (
         state.value === 'published' &&
         visibility.value === 'public'
     ) {
-        return 'Live'
+        return 'Public'
     }
 
     if (state.value === 'archived') {

@@ -364,6 +364,16 @@ trait TourValidationRules
                 'after_or_equal:schedules.*.departure_date',
             ],
 
+            'schedules.*.departure_time' => [
+                'nullable',
+                'date_format:H:i',
+            ],
+
+            'schedules.*.return_time' => [
+                'nullable',
+                'date_format:H:i',
+            ],
+            
             'schedules.*.airline_name' => [
                 'required',
                 'string',

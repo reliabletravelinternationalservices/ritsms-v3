@@ -121,7 +121,10 @@ class Tour extends Model
             ->orderByPivot('sort_order');
     }
 
-
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
 
 
     // other

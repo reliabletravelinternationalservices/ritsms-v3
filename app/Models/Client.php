@@ -7,6 +7,7 @@ use App\Enums\Client\Source;
 use App\Enums\Client\Status;
 use App\Enums\Client\Type;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -51,9 +52,9 @@ class Client extends Model
     ];
 
 
-    public function quotation(): HasOne
+    public function quotation(): HasMany
     {
-        return $this->hasOne(Quotation::class);
+        return $this->hasMany(Quotation::class);
     }
 
 

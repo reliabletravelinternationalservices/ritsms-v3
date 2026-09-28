@@ -11,6 +11,13 @@ import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 
 const clientForm = useClientFormStore()
+
+const {
+    clearForm,
+    clearErrors,
+    setErrors,
+} = clientForm
+
 const isSaving = ref(false)
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -36,15 +43,18 @@ function saveClientInformnation() {
            ...clientForm.form.profile,
         },
         {
+            preserveScroll: true,
+            preserveState: true,
             onFinish: () => {
                 isSaving.value = false
             },
             onError: (e) => {
-                clientForm.setErrors(e)
+                setErrors(e)
                 toast.error('Failed to save the client. Please check for required forms.')
             },
             onSuccess: () => {
-                clientForm.clearErrors()
+                clearErrors()
+                clearForm()
                 toast.success('Client recorded successfully.')
             },
         },
@@ -89,7 +99,7 @@ function saveClientInformnation() {
             </div>
 
             <div class="p-6">
-                <ClientForm :is-loading="isSaving" />
+                <ClientForm :loading="isSaving" />
             </div>
             <ScrollToTopButton />
 

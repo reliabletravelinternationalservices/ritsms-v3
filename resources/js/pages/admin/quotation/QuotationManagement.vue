@@ -8,7 +8,7 @@ import { BreadcrumbItem } from '@/types';
 import { Pagination } from '@/types/pagination';
 import { Quote } from '@/types/quote';
 import { Head, router } from '@inertiajs/vue3';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import PaginationButton from '@/components/table/pagination/Pagination.vue';
 
 
@@ -16,13 +16,12 @@ interface Props {
     quotations: Pagination<Quote>;
     filters: {
         search?: string,
+        status?: string,
     }
 }
 
 
 const props = defineProps<Props>();
-
-const selectedStatus = ref('all');
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -32,7 +31,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const options: SelectOption[] = [
-    { label: 'All', value: 'all' },
+    { label: 'All Status', value: 'all' },
     { label: 'Draft', value: 'draft' },
     { label: 'Sent', value: 'sent' },
     { label: 'Viewed', value: 'viewed' },
@@ -40,6 +39,7 @@ const options: SelectOption[] = [
     { label: 'Rejected', value: 'rejected' },
     { label: 'Expired', value: 'expired' },
     { label: 'Cancelled', value: 'cancelled' },
+    { label: 'Deleted', value: 'deleted' },
 ]
 
 
@@ -47,10 +47,7 @@ const options: SelectOption[] = [
 const filters = reactive({
     page: props.quotations.current_page.toString() || '1',
     per_page: props.quotations.per_page.toString() || '10',
-
-    // type: props.filters.type ??  'all',
-    // status: props.filters.status ??  'all',
-    // source: props.filters.source ??  'all',
+    status: props.filters.status ??  'all',
     search: props.filters.search ??  '',
 });
 
@@ -67,17 +64,9 @@ const loadTours = (page = 1) => {
         params.per_page = filters.per_page
     }
 
-    // if (filters.type !== 'all') {
-    //     params.type = filters.type
-    // }
-
-    // if (filters.status !== 'all') {
-    //     params.status = filters.status
-    // }
-
-    // if (filters.source !== 'all') {
-    //     params.source = filters.source
-    // }
+    if (filters.status !== 'all') {
+        params.status = filters.status
+    }
 
 
     if (filters.search.trim() !== '') {
@@ -91,11 +80,11 @@ const loadTours = (page = 1) => {
 }
 
 
-// const applyFilters = () => {
-//     filters.page = '1';
+const applyFilters = () => {
+    filters.page = '1';
 
-//     loadTours();
-// };
+    loadTours();
+};
 
 
 const handlePageChange = (page: string) => {
@@ -118,6 +107,7 @@ function createQuotation () { router.visit(route('admin.quotations.create')) }
 
 
 
+
 </script>
 
 
@@ -129,8 +119,8 @@ function createQuotation () { router.visit(route('admin.quotations.create')) }
         <div class="flex flex-col gap-4">
             <div class="relative grid grid-cols-2 gap-2 w-full items-center p-4">
                 <div class="col-span-1 flex h-full rounded-xl text-foreground w-full gap-2">
-                    <SearchInput placeholder="Search code..." class="w-full" />
-                    <SelectMenu v-model="selectedStatus" :options="options" placeholder="Status" class="w-1/3" />
+                    <SearchInput v-model="filters.search" placeholder="Search code..." class="w-full" @keyup.enter="applyFilters" />
+                    <SelectMenu v-model="filters.status" :options="options" placeholder="Status" class="w-1/3" :enable-clear="false" @update:model-value="applyFilters"/>
                 </div>
                 <div class="col-span-1 flex justify-end items-center">
                     <ButtonIcon @click="createQuotation"  icon="lucide:plus" label="Create Quote"

@@ -117,7 +117,7 @@ const displayValue = computed(() => {
     <Popover>
         <PopoverTrigger as-child>
             <Button :disabled="disabled" type="button" variant="outline" :class="cn(
-                'h-9 w-full flex items-center justify-between gap-2',
+                'h-10 w-full flex items-center justify-between gap-2',
                 props.class
             )">
                 <span class="truncate" :class="{

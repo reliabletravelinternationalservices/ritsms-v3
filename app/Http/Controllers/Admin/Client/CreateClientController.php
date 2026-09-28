@@ -26,6 +26,6 @@ class CreateClientController extends Controller
         $validatedData = $request->validated();
 
         $this->service->create($validatedData);
-        return to_route('admin.clients');
+        return redirect()->back();
     }
 }
