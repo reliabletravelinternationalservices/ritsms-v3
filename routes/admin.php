@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\AccountForgotPassword;
-use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
 use App\Http\Controllers\Admin\Client\ClientManagementController;
 use App\Http\Controllers\Admin\Client\CreateClientController;
@@ -168,7 +167,7 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
         Route::prefix('bookings')->group(function () {
 
-            Route::controller(BookingController::class)->group(function () {
+            Route::controller(BookingManagementController::class)->group(function () {
                 Route::get('/', 'index')->name('bookings');
             });
 
