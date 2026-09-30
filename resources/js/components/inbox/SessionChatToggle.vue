@@ -1,63 +1,53 @@
 <script setup lang="ts">
+import { useInboxStore } from '@/stores/inbox';
 import { Icon } from '@iconify/vue'
 
-interface Props {
-    modelValue: 'chat' | 'session'
-    sessionUnread?: number
-}
 
-const props = withDefaults(defineProps<Props>(), {
-    sessionUnread: 0,
-})
+const inbox = useInboxStore()
 
-const emit = defineEmits<{
-    'update:modelValue': [value: 'chat' | 'session']
-}>()
 
-function setMode(mode: 'chat' | 'session') {
-    emit('update:modelValue', mode)
-}
+
 </script>
 
 <template>
-    <div class="flex w-[58px] shrink-0 flex-col items-center border-l border-border py-4">
+    <div class="flex items-center rounded-lg border bg-muted/30 p-1">
 
-        <!-- Normal chats -->
         <button
             type="button"
-            title="Chats"
-            class="flex size-10 items-center justify-center rounded-lg transition"
-            :class="props.modelValue === 'chat'
-                ? 'bg-[rgb(var(--color-primary)/0.15)] text-[rgb(var(--color-primary))]'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground'"
-            @click="setMode('chat')"
+            class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
+            :class="inbox.mode === 'chat'
+                ? 'bg-yellow-600 text-white shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'"
+            @click="inbox.changeMode('chat')"
+        >
+            <Icon
+                icon="lucide:message-circle"
+                class="size-3.5"
+            />
+
+            Chat
+        </button>
+
+        <button
+            type="button"
+            class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
+            :class="inbox.mode === 'session'
+                ? 'bg-yellow-600 text-white shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'"
+            @click="inbox.changeMode('session')"
         >
             <Icon
                 icon="lucide:messages-square"
-                class="text-xl"
+                class="size-3.5"
             />
-        </button>
 
-        <!-- Session chats -->
-        <button
-            type="button"
-            title="Session Chats"
-            class="relative mt-2 flex size-10 items-center justify-center rounded-lg transition"
-            :class="props.modelValue === 'session'
-                ? 'bg-[rgb(var(--color-primary)/0.15)] text-[rgb(var(--color-primary))]'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground'"
-            @click="setMode('session')"
-        >
-            <Icon
-                icon="lucide:message-circle-more"
-                class="text-xl"
-            />
+            Session
 
             <span
-                v-if="sessionUnread"
-                class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[rgb(var(--color-primary))] text-[9px] font-bold text-white"
+                v-if="inbox.sessionUnread > 0"
+                class="flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-semibold text-destructive-foreground"
             >
-                {{ sessionUnread > 9 ? '9+' : sessionUnread }}
+                {{ inbox.sessionUnread > 99 ? '99+' : inbox.sessionUnread }}
             </span>
         </button>
 

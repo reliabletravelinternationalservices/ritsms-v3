@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ChatSessionAuth;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'adminAuth' => \App\Http\Middleware\Admin\AuthAdmin::class,
             'guestUser' => \App\Http\Middleware\Admin\GuestUser::class,
             'accountAccess' => \App\Http\Middleware\Admin\AccountAccess::class,
+            'chat.session' => ChatSessionAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

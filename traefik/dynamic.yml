@@ -12,8 +12,27 @@ http:
         - web
       service: laravel
 
+    reverb-public:
+      rule: 'Host(`reliabletravelph.test`) && PathPrefix(`/app`)'
+      entryPoints:
+        - web
+      service: reverb
+      priority: 100
+
+    reverb-admin:
+      rule: 'Host(`admin.reliabletravelph.test`) && PathPrefix(`/app`)'
+      entryPoints:
+        - web
+      service: reverb
+      priority: 100
+
   services:
     laravel:
       loadBalancer:
         servers:
           - url: 'http://host.docker.internal:8000'
+
+    reverb:
+      loadBalancer:
+        servers:
+          - url: 'http://host.docker.internal:8080'

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountAccessController;
 use App\Http\Controllers\Admin\AccountForgotPassword;
 use App\Http\Controllers\Admin\Booking\BookingManagementController;
+use App\Http\Controllers\Admin\ChatSession\ChatSessionController;
 use App\Http\Controllers\Admin\Client\ClientManagementController;
 use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\DeleteClientController;
@@ -91,9 +92,30 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             |--------------------------------------------------------------------------
             */
 
-        Route::prefix('inbox')->controller(InboxController::class)->group(function () {
-            Route::get('/', 'index')->name('inbox');
+        Route::prefix('inbox')->group(function () {
+
+            Route::controller(InboxController::class)->group(function () {
+                Route::get('/', 'index')->name('inbox');
+            });
+
+            Route::controller(ChatSessionController::class)->group(function () {
+                Route::get('/sessions', 'index')
+                    ->name('inbox.sessions');
+
+                Route::get('/sessions/{uuid}', 'show')
+                    ->name('inbox.sessions.show');
+
+                Route::post('/sessions/{uuid}/messages', 'store')
+                    ->name('inbox.sessions.messages.store');
+            });
         });
+
+        
+
+
+
+
+        
 
         /*
             |--------------------------------------------------------------------------

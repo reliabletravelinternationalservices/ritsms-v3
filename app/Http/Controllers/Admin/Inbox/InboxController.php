@@ -9,8 +9,13 @@ use Inertia\Response;
 
 class InboxController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return Inertia::render('admin/inbox/Inbox');
+            $filters = $request->only([
+                'type',
+            ]);
+
+
+        return Inertia::render('admin/inbox/Inbox', compact('filters'));
     }
 }

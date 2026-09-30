@@ -36,12 +36,12 @@ const emit = defineEmits<{
     delete: []
 }>()
 
-// Typing state of the OTHER person
 const isThemTyping = ref(false)
 </script>
 
 <template>
-    <div class="flex min-w-0 flex-1 flex-col text-foreground">
+    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden text-foreground">
+        <!-- Header -->
         <ChatHeader
             :name="name"
             :initials="initials"
@@ -52,7 +52,7 @@ const isThemTyping = ref(false)
         />
 
         <!-- Messages -->
-        <div class="flex-1 overflow-y-auto bg-muted/20 p-5">
+        <div class="min-h-0 h-[500px] flex-1 overflow-y-auto bg-muted/20 p-5">
             <div class="flex justify-center">
                 <span
                     class="rounded-full bg-muted px-3 py-1 text-[11px] text-muted-foreground"
@@ -78,11 +78,9 @@ const isThemTyping = ref(false)
                     <span
                         class="size-1.5 animate-bounce rounded-full bg-muted-foreground"
                     />
-
                     <span
                         class="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:100ms]"
                     />
-
                     <span
                         class="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:200ms]"
                     />
@@ -92,10 +90,12 @@ const isThemTyping = ref(false)
             </div>
         </div>
 
-        <!-- My composer -->
-        <MessageComposer
-            @send="emit('send', $event)"
-            @typing="emit('typing', $event)"
-        />
+        <!-- Composer always at bottom -->
+        <div class="shrink-0 bg-background self-end w-full">
+            <MessageComposer
+                @send="emit('send', $event)"
+                @typing="emit('typing', $event)"
+            />
+        </div>
     </div>
 </template>

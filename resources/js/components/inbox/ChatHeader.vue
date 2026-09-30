@@ -14,13 +14,24 @@ withDefaults(defineProps<Props>(), {
     status: 'offline',
 })
 
-const emit = defineEmits<{
-    mute: []
-    archive: []
-    delete: []
-}>()
 
-const showMenu = ref(false)
+const handleConversationAction = (
+    action: 'mute' | 'archive' | 'delete'
+) => {
+    switch (action) {
+        case 'mute':
+            // handleMute()
+            break
+
+        case 'archive':
+            // handleArchive()
+            break
+
+        case 'delete':
+            // handleDelete()
+            break
+    }
+}
 </script>
 
 <template>
@@ -47,25 +58,7 @@ const showMenu = ref(false)
         </div>
 
         <div class="relative">
-
-            <button
-                type="button"
-                class="rounded-lg p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
-                @click="showMenu = !showMenu"
-            >
-                <Icon
-                    icon="lucide:more-vertical"
-                    class="text-xl"
-                />
-            </button>
-
-            <ConversationMenu
-                v-if="showMenu"
-                @mute="emit('mute'); showMenu = false"
-                @archive="emit('archive'); showMenu = false"
-                @delete="emit('delete'); showMenu = false"
-            />
-
+            <ConversationMenu @action="handleConversationAction" />
         </div>
     </div>
 </template>

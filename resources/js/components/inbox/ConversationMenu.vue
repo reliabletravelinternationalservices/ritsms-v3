@@ -1,44 +1,66 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+type ConversationAction = 'mute' | 'archive' | 'delete'
+
 const emit = defineEmits<{
-    mute: []
-    archive: []
-    delete: []
+    action: [value: ConversationAction]
 }>()
 </script>
 
 <template>
-    <div
-        class="absolute right-0 top-11 z-50 w-48 overflow-hidden rounded-lg border border-border bg-background p-1 shadow-lg"
-    >
-        <button
-            type="button"
-            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted"
-            @click="emit('mute')"
-        >
-            <Icon icon="lucide:bell-off" />
-            Mute notifications
-        </button>
+    <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+            <slot name="trigger">
+                <button
+                    type="button"
+                    class="flex size-8 items-center justify-center rounded-md hover:bg-muted"
+                >
+                    <Icon
+                        icon="lucide:more-vertical"
+                        class="size-4"
+                    />
+                </button>
+            </slot>
+        </DropdownMenuTrigger>
 
-        <button
-            type="button"
-            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted"
-            @click="emit('archive')"
+        <DropdownMenuContent
+            align="end"
+            class="w-52"
         >
-            <Icon icon="lucide:archive" />
-            Archive conversation
-        </button>
+            <DropdownMenuItem
+                class="gap-2"
+                @click="emit('action', 'mute')"
+            >
+                <Icon icon="lucide:bell-off" class="size-4" />
+                <span>Mute notifications</span>
+            </DropdownMenuItem>
 
-        <div class="my-1 border-t border-border" />
+            <DropdownMenuItem
+                class="gap-2"
+                @click="emit('action', 'archive')"
+            >
+                <Icon icon="lucide:archive" class="size-4" />
+                <span>Archive conversation</span>
+            </DropdownMenuItem>
 
-        <button
-            type="button"
-            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
-            @click="emit('delete')"
-        >
-            <Icon icon="lucide:trash-2" />
-            Delete conversation
-        </button>
-    </div>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+                class="gap-2 text-destructive focus:bg-destructive/10 focus:text-destructive"
+                @click="emit('action', 'delete')"
+            >
+                <Icon icon="lucide:trash-2" class="size-4" />
+                <span>Delete conversation</span>
+            </DropdownMenuItem>
+        </DropdownMenuContent>
+    </DropdownMenu>
 </template>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Client\About\AboutUsController;
+use App\Http\Controllers\Client\ChatSession\ChatMessageController;
+use App\Http\Controllers\Client\ChatSession\ChatSessionController;
 use App\Http\Controllers\Client\Contact\ContactPageController;
 use App\Http\Controllers\Client\Destination\DestinationPageController;
 use App\Http\Controllers\Client\InboundPageController;
@@ -61,6 +63,34 @@ Route::prefix('inquiry')->group(function () {
 Route::get('/contacts', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
 
+
+
+
+// CHAT SESSIONS
+Route::post('/chat/session', [
+    ChatSessionController::class,
+    'store',
+])->name('chat.session.store');
+
+
+Route::middleware('chat.session')->group(function () {
+
+    Route::get(
+        '/chat/session/{chatSession:uuid}',
+        [ChatSessionController::class, 'show']
+    )->name('chat.session.show');
+
+    Route::get(
+        '/chat/session/{chatSession:uuid}/messages',
+        [ChatMessageController::class, 'index']
+    );
+
+    Route::post(
+        '/chat/session/{chatSession:uuid}/messages',
+        [ChatMessageController::class, 'store']
+    );
+
+});
 
 Route::fallback(function () {
     return Inertia::render('error/RouteFallbackError', [
