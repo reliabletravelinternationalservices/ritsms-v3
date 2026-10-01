@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-type Status = 'online' | 'away' | 'offline'
+type Status = 'open' | 'closed'
 
 interface Props {
     status?: Status
@@ -9,23 +9,23 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    status: 'offline',
+    status: 'closed',
     label: true,
 })
 
 const statusConfig = computed(() => {
     switch (props.status) {
-        case 'online':
+        case 'open':
             return {
                 text: 'Online',
                 dot: 'bg-green-500',
                 pulse: true,
             }
 
-        case 'away':
+        case 'closed':
             return {
-                text: 'Away',
-                dot: 'bg-yellow-500',
+                text: 'Closed',
+                dot: 'bg-muted-foreground',
                 pulse: false,
             }
 

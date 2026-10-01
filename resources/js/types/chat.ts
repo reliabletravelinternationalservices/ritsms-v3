@@ -64,4 +64,5 @@ export interface Message {
 
 export type ChatSessionWithLatestMessage = ChatSession & {
     latest_message: Message | null
+    new_messages_count: number
 }

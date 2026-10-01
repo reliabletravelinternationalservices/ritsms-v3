@@ -3,7 +3,7 @@
 
 import { Loader2, X } from '@lucide/vue'
 
-import { isSenderType } from '@/lib/utils'
+import { formatMessageTime, isSenderType } from '@/lib/utils'
 import { Message } from '@/types/chat'
 
 interface Props {
@@ -21,12 +21,7 @@ function getMessageParts(message: string) {
     }))
 }
 
-function formatMessageTime(date: string) {
-    return new Date(date).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-    })
-}
+
 
 </script>
 

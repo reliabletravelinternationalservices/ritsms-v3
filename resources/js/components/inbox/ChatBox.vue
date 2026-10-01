@@ -11,12 +11,12 @@ import { Message } from '@/types/chat'
 interface Props {
     name: string
     initials: string
-    status?: 'online' | 'away' | 'offline'
+    status?: 'open' | 'closed'
     messages: Message[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    status: 'offline',
+    status: 'closed',
 })
 
 const emit = defineEmits<{
@@ -36,7 +36,7 @@ const isThemTyping = ref(false)
 </script>
 
 <template>
-    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden text-foreground">
+    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden text-foreground max-h-[calc(100vh-150px)]">
         <!-- Header -->
         <ChatHeader
             :name="name"

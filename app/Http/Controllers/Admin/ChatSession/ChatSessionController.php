@@ -13,7 +13,7 @@ class ChatSessionController extends Controller
     public function index(): JsonResponse
     {
         $sessions = ChatSession::query()
-            ->with('latestMessage')
+            ->with(['latestMessage',  'newMessagesCount'])
             ->get();
 
         return response()->json($sessions);
@@ -26,35 +26,17 @@ class ChatSessionController extends Controller
 
         $messages = $session->messages()
             ->orderBy('created_at')
-            ->get([
-                'id',
-                'message',
-                'sender_type',
-                'created_at',
-            ])
-            ->map(fn ($message) => [
-                'id' => $message->id,
-                'sender' => $message->sender_type === 'admin'
-                    ? 'me'
-                    : 'them',
-                'content' => $message->message,
-                'time' => $message->created_at->format('g:i A'),
-            ]);
+            ->get();
 
         return response()->json([
-            'session' => [
-                'uuid' => $session->uuid,
-                'name' => $session->guest_name ?? 'Website Visitor',
-                'initials' => $this->getInitials(
-                    $session->guest_name ?? 'Website Visitor'
-                ),
-                'status' => $session->status === 'open'
-                    ? 'online'
-                    : 'offline',
-            ],
             'messages' => $messages,
         ]);
+
     }
+
+
+
+    
 
     public function store(
         Request $request,

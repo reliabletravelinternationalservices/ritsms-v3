@@ -34,7 +34,7 @@ const filteredChats = computed(() => {
 </script>
 
 <template>
-    <aside class="flex h-full min-h-0 flex-col border-r">
+    <aside class="flex h-full min-h-0 flex-col border-r text-foreground">
 
         <!-- LIST HEADER -->
         <div class="flex shrink-0 items-center justify-between px-4 py-3">

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ChatSession } from '@/types/chat';
+import { formatDateLabel, formatMessageTime } from '@/lib/utils';
+import { ChatSession, ChatSessionWithLatestMessage } from '@/types/chat';
 import { Icon } from '@iconify/vue'
 
 
 
 interface Props {
-    chat: ChatSession
+    chat: ChatSessionWithLatestMessage
     active?: boolean
 }
 
@@ -25,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
         <!-- AVATAR -->
         <div class="relative shrink-0">
             <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                {{ chat.initials }}
+                WV
             </div>
 
             <span
@@ -44,36 +45,36 @@ const props = withDefaults(defineProps<Props>(), {
             <div class="flex items-center justify-between gap-2">
                 <p
                     class="truncate text-sm"
-                    :class="chat.unread
+                    :class="chat.latest_message?.state === 'unread'
                         ? 'font-semibold'
                         : 'font-medium'"
                 >
-                    {{ chat.name }}
+                    {{ chat.code }}
                 </p>
 
                 <span
-                    v-if="chat.time"
+                    v-if="chat.latest_message?.created_at"
                     class="shrink-0 text-[10px] text-muted-foreground"
                 >
-                    {{ chat.time }}
+                    {{ formatMessageTime(chat.latest_message?.created_at) }}
                 </span>
             </div>
 
             <div class="mt-1 flex items-center gap-2">
                 <p
                     class="min-w-0 flex-1 truncate text-xs"
-                    :class="chat.unread
+                    :class="chat.latest_message?.state === 'unread'
                         ? 'font-medium text-foreground'
                         : 'text-muted-foreground'"
                 >
-                    {{ chat.message || 'No messages yet' }}
+                    {{ chat.latest_message?.message || 'No messages yet' }}
                 </p>
 
                 <span
-                    v-if="chat.unread && chat.unread > 0"
+                    v-if="chat.latest_message?.state === 'unread' && chat.new_messages_count > 0"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
                 >
-                    {{ chat.unread > 99 ? '99+' : chat.unread }}
+                    {{ chat.new_messages_count }}
                 </span>
             </div>
         </div>

@@ -7,11 +7,11 @@ import ConversationMenu from './ConversationMenu.vue'
 interface Props {
     name: string
     initials: string
-    status?: 'online' | 'away' | 'offline'
+    status?: 'open' | 'closed'
 }
 
 withDefaults(defineProps<Props>(), {
-    status: 'offline',
+    status: 'closed',
 })
 
 

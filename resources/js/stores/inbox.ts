@@ -24,17 +24,9 @@ export const useInboxStore = defineStore('inbox', () => {
     const activeId = ref<number | string | null>(null)
 
 
-    const loadingSessionChats = ref(false)
-    const loadingSessionMessages = ref(false)
+    const loadingChats = ref(false)
+    const loadingMessages = ref(false)
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | UI State
-    |--------------------------------------------------------------------------
-    */
-
-    // const showNewConversation = ref(false)
 
 
 
@@ -65,10 +57,19 @@ export const useInboxStore = defineStore('inbox', () => {
     })
 
 
-
-    const isSessionChatLoading = computed(() => {
-        return loadingSessionChats.value
+    const getMessages = computed(() => {
+        return messages.value
     })
+
+    const isChatsLoading = computed(() => {
+        return loadingChats.value
+    })
+
+    const isMessagesLoading = computed(() => {
+        return loadingMessages.value
+    })
+
+
 
 
     /*
@@ -116,10 +117,10 @@ export const useInboxStore = defineStore('inbox', () => {
     */
 
     async function selectChat(chat: ChatSessionWithLatestMessage) {
-        activeId.value = chat.uuid
+        activeId.value = chat.id
 
         messages.value = []
-
+        
         if (mode.value === 'session') {
             await loadMessages(String(chat.uuid))
         }else {
@@ -134,7 +135,7 @@ export const useInboxStore = defineStore('inbox', () => {
     */
 
     async function loadChats() {
-        loadingSessionChats.value = true
+        loadingChats.value = true
 
         try {
             const response = await axios.get(
@@ -145,6 +146,8 @@ export const useInboxStore = defineStore('inbox', () => {
                 (session: ChatSessionWithLatestMessage) => ({ ...session }),
             )
 
+            loadMessages(String(chats.value[0]?.uuid))
+
         } catch (error) {
             console.error(
                 'Failed to load session chats:',
@@ -154,12 +157,12 @@ export const useInboxStore = defineStore('inbox', () => {
             messages.value = []
 
         } finally {
-            loadingSessionChats.value = false
+            loadingChats.value = false
         }
     }
 
     async function loadMessages(uuid: string) {
-        loadingSessionMessages.value = true
+        loadingMessages.value = true
 
         try {
             const response = await axios.get(
@@ -178,7 +181,7 @@ export const useInboxStore = defineStore('inbox', () => {
             messages.value = []
             
         } finally {
-            loadingSessionMessages.value = false
+            loadingMessages.value = false
         }
     }
 
@@ -187,6 +190,10 @@ export const useInboxStore = defineStore('inbox', () => {
     | Send Message
     |--------------------------------------------------------------------------
     */
+
+     function sendMessage(){
+
+     }
 
     // async function sendMessage(payload: {
     //     content: string
@@ -364,9 +371,11 @@ export const useInboxStore = defineStore('inbox', () => {
         mode,
         chats,
         activeId,
+        getMessages,
 
         // // Loading
-        isSessionChatLoading,
+        isMessagesLoading,
+        isChatsLoading,
         // loadingMessages,
         // sendingMessage,
 
@@ -376,6 +385,7 @@ export const useInboxStore = defineStore('inbox', () => {
         // // Computed
         // activeChats,
         activeChats,
+        selectedActiveChat,
         sessionUnreadChats,
 
         // Mode
@@ -389,7 +399,7 @@ export const useInboxStore = defineStore('inbox', () => {
         // loadSessionMessages,
 
         // // Messages
-        // sendMessage,
+        sendMessage,
         // updateLastMessage,
 
         // // New conversation

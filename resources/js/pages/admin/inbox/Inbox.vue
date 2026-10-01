@@ -10,7 +10,6 @@ import NewConversationModal from '@/components/inbox/NewConversationModal.vue'
 
 import type { BreadcrumbItem } from '@/types'
 import { useInboxStore } from '@/stores/inbox'
-import NoConvoSelected from '@/components/inbox/NoConvoSelected.vue'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -62,7 +61,7 @@ onMounted(() => {
                                 ? 'Conversations'
                                 : 'Sessions'
                         "
-                        :loading="inbox.isSessionChatLoading"
+                        :loading="inbox.isChatsLoading"
                         @select="inbox.selectChat"
                         
                     />
@@ -70,16 +69,15 @@ onMounted(() => {
 
                 <!-- CENTER -->
                 <main class="min-w-0 flex-1">
-                    <!-- <ChatBox
-                        v-if="inbox.activeChat"
-                        :name="inbox.activeChat.name"
-                        :initials="inbox.activeChat.initials"
-                        :status="inbox.activeChat.status"
-                        :messages="inbox.messages"
-                        :loading="inbox.loadingMessages"
-                        :sending="inbox.sendingMessage"
+                    <ChatBox
+                        v-if="inbox.selectedActiveChat"
+                        :name="inbox.selectedActiveChat.code"
+                        initials="WV"
+                        :status="inbox.selectedActiveChat.status"
+                        :messages="inbox.getMessages"
+                        :loading="inbox.isMessagesLoading"
                         @send="inbox.sendMessage"
-                    /> -->
+                    />
 
                     <!-- <NoConvoSelected v-else /> -->
                 </main>

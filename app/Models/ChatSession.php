@@ -48,6 +48,14 @@ class ChatSession extends Model
             ->latestOfMany();
     }
 
+    public function newMessagesCount(): HasOne
+    {
+        return $this->hasOne(ChatMessage::class)
+            ->selectRaw('chat_session_id, COUNT(*) as count')
+            ->where('state', 'unread')
+            ->groupBy('chat_session_id');
+    }
+
     public function messages(): HasMany
     {
         return $this->hasMany(ChatMessage::class);

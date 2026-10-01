@@ -414,3 +414,49 @@ export const formatTime = (time: string | null | undefined): string => {
 export const isSenderType = (sender_type: 'session' | 'admin' | 'user', type: string): boolean => {
     return sender_type === type;
 }
+
+
+
+export function isSameDay(firstDate: string, secondDate: string) {
+    const first = new Date(firstDate)
+    const second = new Date(secondDate)
+
+    return (
+        first.getFullYear() === second.getFullYear() &&
+        first.getMonth() === second.getMonth() &&
+        first.getDate() === second.getDate()
+    )
+}
+
+export function formatDateLabel(date: string) {
+    const value = new Date(date)
+    const today = new Date()
+
+    if (isSameDay(date, today.toISOString())) {
+        return 'TODAY'
+    }
+
+    const yesterday = new Date()
+    yesterday.setDate(today.getDate() - 1)
+
+    if (isSameDay(date, yesterday.toISOString())) {
+        return 'YESTERDAY'
+    }
+
+    return value
+        .toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+        })
+        .toUpperCase()
+}
+
+
+
+export function formatMessageTime(date: string) {
+    return new Date(date).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+    })
+}
