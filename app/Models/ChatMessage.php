@@ -11,6 +11,7 @@ class ChatMessage extends Model
         'chat_session_id',
         'sender_type',
         'message',
+        'state',
     ];
 
     public function chatSession(): BelongsTo

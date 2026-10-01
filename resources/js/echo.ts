@@ -1,4 +1,5 @@
 import Echo from 'laravel-echo'
+import { Message } from './types/chat'
 
 const echo = new Echo({
     broadcaster: 'reverb',
@@ -18,3 +19,17 @@ const echo = new Echo({
 })
 
 export default echo
+
+
+
+
+export const subscribeToChatSession =(
+        sessionUuid: string,
+        onMessage: (message: Message) => void,
+    ) => {
+    return echo
+        .channel(`chat.session.${sessionUuid}`)
+        .listen('.message.sent', (event: Message) => {
+            onMessage(event)
+        })
+    }

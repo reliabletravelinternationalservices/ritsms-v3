@@ -58,4 +58,5 @@ export interface Message {
     created_at: string
     sender_type: 'session' | 'admin'
     status?: 'sending' | 'sent' | 'failed'
+    state?: 'unread' | 'read'
 }

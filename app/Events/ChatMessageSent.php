@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\ChatMessage;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,14 +13,15 @@ class ChatMessageSent implements ShouldBroadcast
     use Dispatchable, SerializesModels;
 
     public function __construct(
+        public readonly string $uuid,
         public ChatMessage $chatMessage
     ) {}
 
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel(
-                'chat.session.' . $this->chatMessage->chat_session_id
+            new Channel(
+                'chat.session.' . $this->uuid
             ),
         ];
     }

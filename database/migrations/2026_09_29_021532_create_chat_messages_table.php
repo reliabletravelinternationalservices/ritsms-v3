@@ -18,9 +18,12 @@ return new class extends Migration
                 ->constrained('chat_sessions')
                 ->cascadeOnDelete();
 
-            $table->enum('sender_type', ['session', 'admin', 'user']);
+            $table->enum('sender_type', ['session', 'admin']);
+
+            $table->enum('state', ['unread', 'read'])->default('unread');
 
             $table->text('message');
+            
 
             $table->timestamps();
         });

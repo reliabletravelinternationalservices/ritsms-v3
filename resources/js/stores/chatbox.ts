@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import { computed, nextTick, ref } from "vue"
 import axios from 'axios'
 import { ChatSession, ChatSessionWithToken, Message } from "@/types/chat";
-import echo from "@/guest_echo";
+import echo from "@/echo";
 
 
 
@@ -22,7 +22,6 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
 
     const messages = ref<Message[]>([])
 
-    const messagesContainer = ref<HTMLElement | null>(null)
 
 
 
@@ -49,11 +48,6 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     //===========================================
     const chatboxToggle = (isOpen: boolean) => {
         openChatbox.value = isOpen 
-        if (isOpen) {
-            startPolling()
-        } else {
-            stopPolling()
-        }
     }
 
     const initializeChatSession = async () => {
@@ -84,6 +78,8 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
                 ...response.data,
                 token: chatSession.token,
             }
+
+            subscribeToChatSession(chatSession.uuid)
 
         } catch (error) {
             console.error(
@@ -139,6 +135,8 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
                     token: response.data.token,
                 }),
             )
+
+            subscribeToChatSession(response.data.uuid)
         } catch (error) {
             console.error('Failed to start chat session:', error)
         } finally {
@@ -158,7 +156,6 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
 
         if (!message || !session.value) return
         
-        scrollToBottom()
         const tempId = `temp-${Date.now()}`
 
         const tempMessage: Message = {
@@ -217,56 +214,29 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     }
 
 
-    const loadMessages = async () => {
-        if (!session.value?.uuid || !session.value?.token) return
 
-        try {
-            const response = await axios.get(
-                route('chat.session.messages.index', {
-                    chatSession: session.value.uuid,
-                }),
-                {
-                    headers: {
-                        'X-Chat-Token': session.value.token,
-                    },
-                },
-            )
+    const subscribeToChatSession = (sessionUuid: string) => {
+        const channelName = `chat.session.${sessionUuid}`
 
-            messages.value = response.data
+        console.log('Subscribing to:', channelName)
 
-        } catch (error) {
-            console.error('Failed to load session messages:', error)
-        }
-    }
+        echo
+            .channel(channelName)
+            .listen('.message.sent', (event: Message) => {
+                console.log('Message received:', event)
 
-    const scrollToBottom =() => {
-        nextTick(() => {
-            if (!messagesContainer.value) return
+                // Prevent duplicate messages
+                const exists = messages.value.some(
+                    message => message.id === event.id
+                )
 
-            messagesContainer.value.scrollTop =
-                messagesContainer.value.scrollHeight
-        })
-    }
+                if (exists) return
 
-
-    // ==================================================================
-    // Polling for new messages
-    // ==================================================================
-    let polling: ReturnType<typeof setInterval> | null = null
-
-    const startPolling = () => {
-        stopPolling()
-
-        polling = setInterval(() => {
-            loadMessages()
-        }, 3000)
-    }
-
-    const stopPolling = () => {
-        if (polling) {
-            clearInterval(polling)
-            polling = null
-        }
+                messages.value.push({
+                    ...event,
+                    status: 'sent',
+                })
+            })
     }
 
     return {
@@ -286,10 +256,5 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
         composedMessage,
         getChatSessionDetails,
         getMessages,
-
-        scrollToBottom,
-        messagesContainer,
-        startPolling,
-        stopPolling,
     }
 })

@@ -65,7 +65,7 @@ class ChatMessageController extends Controller
             'last_message_at' => now(),
         ]);
 
-        broadcast(new ChatMessageSent($chatMessage));
+        broadcast(new ChatMessageSent($chatSession->uuid, $chatMessage));
 
         return response()->json([
             'id' => $chatMessage->id,
