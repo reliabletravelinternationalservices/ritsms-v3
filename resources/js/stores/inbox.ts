@@ -2,8 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-import type { ChatCardData } from '@/components/inbox/ChatCard.vue'
-import type { ChatMessage, ChatSession, Message, SessionChat } from '@/types/chat'
+import type { ChatSessionWithLatestMessage, Message } from '@/types/chat'
 import echo from '@/echo'
 
 export type InboxMode = 'chat' | 'session'
@@ -17,51 +16,17 @@ export const useInboxStore = defineStore('inbox', () => {
 
     const mode = ref<InboxMode>('chat')
 
-    const chats = ref<ChatCardData[]>([
-        {
-            id: 1,
-            name: 'Juan Dela Cruz',
-            initials: 'JD',
-            message: 'Hi, I would like to ask about my booking.',
-            time: '10:42 AM',
-            unread: 2,
-            status: 'online',
-            type: 'chat',
-        },
-        {
-            id: 2,
-            name: 'Maria Santos',
-            initials: 'MS',
-            message: 'Thank you for the quotation.',
-            time: '9:18 AM',
-            status: 'away',
-            type: 'chat',
-        },
-        {
-            id: 3,
-            name: 'Pedro Garcia',
-            initials: 'PG',
-            message: 'Can I change my travel date?',
-            time: 'Yesterday',
-            unread: 1,
-            status: 'offline',
-            type: 'chat',
-        },
-    ])
-
-    const sessionChats = ref<ChatSession[]>([])
-
+    const chats = ref<ChatSessionWithLatestMessage[]>([])
     const messages = ref<Message[]>([])
+    
+    
+    // first chat id
+    const activeId = ref<number | string | null>(null)
 
-    const activeId = ref<number | string | null>(
-        chats.value[0]?.id ?? null,
-    )
 
-    const loadingChats = ref(false)
+    const loadingSessionChats = ref(false)
+    const loadingSessionMessages = ref(false)
 
-    const loadingMessages = ref(false)
-
-    const sendingMessage = ref(false)
 
     /*
     |--------------------------------------------------------------------------
@@ -69,7 +34,10 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    const showNewConversation = ref(false)
+    // const showNewConversation = ref(false)
+
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -78,23 +46,30 @@ export const useInboxStore = defineStore('inbox', () => {
     */
 
     const activeChats = computed(() => {
-        return mode.value === 'chat'
-            ? chats.value
-            : sessionChats.value
+        return chats.value.filter(
+            chat => chat.status === 'open',
+        )
     })
 
-    const activeChat = computed(() => {
+    const selectedActiveChat = computed(() => {
         return activeChats.value.find(
             chat => String(chat.id) === String(activeId.value),
         ) ?? null
     })
 
-    const sessionUnread = computed(() => {
-        return sessionChats.value.reduce(
-            (total, chat) => total + (5),
+    const sessionUnreadChats = computed(() => {
+        return messages.value.reduce(
+            (total, chat) => total + (chat.state === 'unread' ? 1 : 0),
             0,
         )
     })
+
+
+
+    const isSessionChatLoading = computed(() => {
+        return loadingSessionChats.value
+    })
+
 
     /*
     |--------------------------------------------------------------------------
@@ -116,16 +91,14 @@ export const useInboxStore = defineStore('inbox', () => {
         activeId.value = firstChat?.id ?? null
 
         if (value === 'session') {
-            await loadSessionChats()
+            await loadChats()
 
-            const firstSession = sessionChats.value[0]
+            const firstSession = chats.value[0]
 
             activeId.value = firstSession?.id ?? null
 
             if (firstSession) {
-                await loadSessionMessages(
-                    String(firstSession.id),
-                )
+                await loadMessages(String(firstSession.uuid))
             }
 
             return
@@ -142,17 +115,15 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    async function selectChat(chat: ChatCardData) {
-        activeId.value = chat.id
-
-        chat.unread = 0
+    async function selectChat(chat: ChatSessionWithLatestMessage) {
+        activeId.value = chat.uuid
 
         messages.value = []
 
         if (mode.value === 'session') {
-            await loadSessionMessages(
-                String(chat.id),
-            )
+            await loadMessages(String(chat.uuid))
+        }else {
+            messages.value = []
         }
     }
 
@@ -162,34 +133,33 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    async function loadSessionChats() {
-        loadingChats.value = true
+    async function loadChats() {
+        loadingSessionChats.value = true
 
         try {
             const response = await axios.get(
                 route('admin.inbox.sessions'),
             )
 
-            sessionChats.value = response.data.map(
-                (session: SessionChat) => ({
-                    ...session,
-                    id: session.uuid,
-                }),
+            chats.value = response.data.map(
+                (session: ChatSessionWithLatestMessage) => ({ ...session }),
             )
+
         } catch (error) {
             console.error(
                 'Failed to load session chats:',
                 error,
             )
 
-            sessionChats.value = []
+            messages.value = []
+
         } finally {
-            loadingChats.value = false
+            loadingSessionChats.value = false
         }
     }
 
-    async function loadSessionMessages(uuid: string) {
-        loadingMessages.value = true
+    async function loadMessages(uuid: string) {
+        loadingSessionMessages.value = true
 
         try {
             const response = await axios.get(
@@ -206,8 +176,9 @@ export const useInboxStore = defineStore('inbox', () => {
             )
 
             messages.value = []
+            
         } finally {
-            loadingMessages.value = false
+            loadingSessionMessages.value = false
         }
     }
 
@@ -217,47 +188,47 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    async function sendMessage(payload: {
-        content: string
-        attachments: unknown[]
-    }) {
-        if (
-            mode.value !== 'session'
-            || activeId.value === null
-            || !payload.content.trim()
-        ) {
-            return
-        }
+    // async function sendMessage(payload: {
+    //     content: string
+    //     attachments: unknown[]
+    // }) {
+    //     if (
+    //         mode.value !== 'session'
+    //         || activeId.value === null
+    //         || !payload.content.trim()
+    //     ) {
+    //         return
+    //     }
 
-        sendingMessage.value = true
+    //     sendingMessage.value = true
 
-        try {
-            const response = await axios.post(
-                route(
-                    'admin.inbox.sessions.messages.store',
-                    {
-                        uuid: activeId.value,
-                    },
-                ),
-                {
-                    message: payload.content,
-                },
-            )
+    //     try {
+    //         const response = await axios.post(
+    //             route(
+    //                 'admin.inbox.sessions.messages.store',
+    //                 {
+    //                     uuid: activeId.value,
+    //                 },
+    //             ),
+    //             {
+    //                 message: payload.content,
+    //             },
+    //         )
 
-            messages.value.push(response.data)
+    //         messages.value.push(response.data)
 
-            updateLastMessage(
-                payload.content,
-            )
-        } catch (error) {
-            console.error(
-                'Failed to send message:',
-                error,
-            )
-        } finally {
-            sendingMessage.value = false
-        }
-    }
+    //         updateLastMessage(
+    //             payload.content,
+    //         )
+    //     } catch (error) {
+    //         console.error(
+    //             'Failed to send message:',
+    //             error,
+    //         )
+    //     } finally {
+    //         sendingMessage.value = false
+    //     }
+    // }
 
     /*
     |--------------------------------------------------------------------------
@@ -265,22 +236,22 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    function updateLastMessage(content: string) {
-        const chat = activeChats.value.find(
-            item =>
-                String(item.id)
-                === String(activeId.value),
-        )
+    // function updateLastMessage(content: string) {
+    //     const chat = activeChats.value.find(
+    //         item =>
+    //             String(item.id)
+    //             === String(activeId.value),
+    //     )
 
-        if (!chat) {
-            return
-        }
+    //     if (!chat) {
+    //         return
+    //     }
 
-        const temp = document.createElement('div')
+    //     const temp = document.createElement('div')
 
-        temp.innerHTML = content
+    //     temp.innerHTML = content
 
-    }
+    // }
 
     /*
     |--------------------------------------------------------------------------
@@ -288,117 +259,124 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    function openNewConversation() {
-        showNewConversation.value = true
-    }
+    // function openNewConversation() {
+    //     showNewConversation.value = true
+    // }
 
-    function closeNewConversation() {
-        showNewConversation.value = false
-    }
+    // function closeNewConversation() {
+    //     showNewConversation.value = false
+    // }
 
-    function createConversation(payload: {
-        type: 'chat' | 'group'
-        contacts: {
-            id: number
-            name: string
-            email: string
-            initials: string
-        }[]
-        name?: string
-    }) {
-        const name =
-            payload.type === 'group'
-                ? payload.name ?? 'New Group'
-                : payload.contacts[0]?.name
-                    ?? 'New Conversation'
+    // function createConversation(payload: {
+    //     type: 'chat' | 'group'
+    //     contacts: {
+    //         id: number
+    //         name: string
+    //         email: string
+    //         initials: string
+    //     }[]
+    //     name?: string
+    // }) {
+    //     const name =
+    //         payload.type === 'group'
+    //             ? payload.name ?? 'New Group'
+    //             : payload.contacts[0]?.name
+    //                 ?? 'New Conversation'
 
-        const newChat: ChatCardData = {
-            id: `new-${Date.now()}`,
-            name,
-            initials: name
-                .split(' ')
-                .map(word => word[0])
-                .join('')
-                .slice(0, 2)
-                .toUpperCase(),
-            message: 'New conversation',
-            time: 'Just now',
-            status: 'online',
-            type: 'chat',
-        }
+    //     const newChat: ChatCardData = {
+    //         id: `new-${Date.now()}`,
+    //         name,
+    //         initials: name
+    //             .split(' ')
+    //             .map(word => word[0])
+    //             .join('')
+    //             .slice(0, 2)
+    //             .toUpperCase(),
+    //         message: 'New conversation',
+    //         time: 'Just now',
+    //         status: 'online',
+    //         type: 'chat',
+    //     }
 
-        chats.value.unshift(newChat)
+    //     chats.value.unshift(newChat)
 
-        mode.value = 'chat'
+    //     mode.value = 'chat'
 
-        activeId.value = newChat.id
+    //     activeId.value = newChat.id
 
-        messages.value = []
+    //     messages.value = []
 
-        closeNewConversation()
-    }
+    //     closeNewConversation()
+    // }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Reset
-    |--------------------------------------------------------------------------
-    */
+    // /*
+    // |--------------------------------------------------------------------------
+    // | Reset
+    // |--------------------------------------------------------------------------
+    // */
 
-    function clearMessages() {
-        messages.value = []
-    }
+    // function clearMessages() {
+    //     messages.value = []
+    // }
 
-    function clearActiveChat() {
-        activeId.value = null
+    // function clearActiveChat() {
+    //     activeId.value = null
 
-        messages.value = []
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Store
-    |--------------------------------------------------------------------------
-    */
+    //     messages.value = []
+    // }
 
 
 
 
+    // const subscribeToChatSession = (sessionUuid: string) => {
+    //     const channelName = `chat.session.${sessionUuid}`
 
-    const subscribeToSession = (sessionId: number) => {
-        echo
-            .private(`chat.session.${sessionId}`)
-            .listen('.message.sent', (data: Message) => {
+    //     console.log('Subscribing to:', channelName)
 
-                messages.value.push({
-                    id: Number(data.id),
-                    message: data.message,
-                    sender_type: data.sender_type,
-                    created_at: data.created_at,
-                    status: 'sent',
-                })
-            })
-    }
+    //     echo
+    //         .channel(channelName)
+    //         .listen('.message.sent', (event: Message) => {
+    //             console.log('Message received:', event)
+
+    //             // Prevent duplicate messages
+    //             const exists = messages.value.some(
+    //                 message => message.id === event.id
+    //             )
+
+    //             if (exists) return
+
+    //             messages.value.push({
+    //                 ...event,
+    //                 status: 'sent',
+    //                 state: event.state ?? (
+    //                     event.sender_type === 'admin' ? 'unread' : 'read'
+    //                 ),
+    //             })
+    //         })
+    // }
+
+
+
+
 
     return {
         // State
         mode,
         chats,
-        sessionChats,
-        messages,
         activeId,
 
-        // Loading
-        loadingChats,
-        loadingMessages,
-        sendingMessage,
+        // // Loading
+        isSessionChatLoading,
+        // loadingMessages,
+        // sendingMessage,
 
-        // UI
-        showNewConversation,
+        // // UI
+        // showNewConversation,
 
-        // Computed
+        // // Computed
+        // activeChats,
         activeChats,
-        activeChat,
-        sessionUnread,
+        sessionUnreadChats,
 
         // Mode
         changeMode,
@@ -407,21 +385,21 @@ export const useInboxStore = defineStore('inbox', () => {
         selectChat,
 
         // Sessions
-        loadSessionChats,
-        loadSessionMessages,
+        loadChats,
+        // loadSessionMessages,
 
-        // Messages
-        sendMessage,
-        updateLastMessage,
+        // // Messages
+        // sendMessage,
+        // updateLastMessage,
 
-        // New conversation
-        openNewConversation,
-        closeNewConversation,
-        createConversation,
+        // // New conversation
+        // openNewConversation,
+        // closeNewConversation,
+        // createConversation,
 
-        // Utility
-        clearMessages,
-        clearActiveChat,
-        subscribeToSession,
+        // // Utility
+        // clearMessages,
+        // clearActiveChat,
+        // subscribeToSession,
     }
 })

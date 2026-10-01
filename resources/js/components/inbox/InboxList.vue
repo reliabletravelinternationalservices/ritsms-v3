@@ -3,11 +3,10 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
-import type { ChatCardData } from './ChatCard.vue'
-import { ChatSession } from '@/types/chat'
+import { ChatSessionWithLatestMessage } from '@/types/chat'
 
 interface Props {
-    chats: ChatSession[]
+    chats: ChatSessionWithLatestMessage[]
     activeId: number | string | null
     title: string
 }
@@ -15,7 +14,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    select: [chat: ChatSession]
+    select: [chat: ChatSessionWithLatestMessage]
     create: []
 }>()
 

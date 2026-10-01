@@ -14,26 +14,7 @@ class ChatSessionController extends Controller
     {
         $sessions = ChatSession::query()
             ->with('latestMessage')
-            ->latest('last_message_at')
-            ->get()
-            ->map(function (ChatSession $session) {
-                $lastMessage = $session->latestMessage;
-
-                return [
-                    'uuid' => $session->uuid,
-                    'name' => $session->guest_name ?? 'Website Visitor',
-                    'initials' => $this->getInitials(
-                        $session->guest_name ?? 'Website Visitor'
-                    ),
-                    'message' => $lastMessage?->message ?? 'No messages yet',
-                    'time' => $lastMessage?->created_at?->format('g:i A'),
-                    'unread' => 0,
-                    'status' => $session->status === 'open'
-                        ? 'online'
-                        : 'offline',
-                    'type' => 'session',
-                ];
-            });
+            ->get();
 
         return response()->json($sessions);
     }

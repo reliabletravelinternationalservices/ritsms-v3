@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { computed, nextTick, ref } from "vue"
+import { computed, ref } from "vue"
 import axios from 'axios'
 import { ChatSession, ChatSessionWithToken, Message } from "@/types/chat";
 import echo from "@/echo";
@@ -36,6 +36,9 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     const isInitializing = computed(()=> initializingLoad.value)
     const isLoadingMessages = computed(()=> loadingMessages.value)
     const isSendingMessage = computed(()=> messageSendLoad.value)
+    const unreadMessageCount = computed(() => messages.value.filter(
+        message => message.sender_type === 'admin' && message.state === 'unread'
+    ).length)
 
     const getChatSessionDetails = computed<ChatSession | null>(()=> session.value)
     const getMessages = computed<Message[]>(()=> messages.value)
@@ -235,8 +238,47 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
                 messages.value.push({
                     ...event,
                     status: 'sent',
+                    state: event.state ?? (
+                        event.sender_type === 'admin' ? 'unread' : 'read'
+                    ),
                 })
             })
+    }
+
+    const markIncomingMessagesAsRead = async () => {
+        if (
+            !session.value?.uuid ||
+            !session.value?.token ||
+            unreadMessageCount.value === 0
+        ) return
+
+        try {
+            const response = await axios.post(
+                route('chat.session.messages.read', {
+                    chatSession: session.value.uuid,
+                }),
+                {},
+                {
+                    headers: {
+                        'X-Chat-Token': session.value.token,
+                    },
+                },
+            )
+
+            const readMessageIds = new Set<string>(
+                response.data.read_message_ids.map(
+                    (id: number | string) => String(id)
+                )
+            )
+
+            messages.value = messages.value.map(message =>
+                readMessageIds.has(String(message.id))
+                    ? { ...message, state: 'read' }
+                    : message
+            )
+        } catch (error) {
+            console.error('Failed to mark chat messages as read:', error)
+        }
     }
 
     return {
@@ -249,10 +291,12 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
         isInitializing,
         isSendingMessage,
         isLoadingMessages,
+        unreadMessageCount,
         canSendMessage,
         chatboxToggle,
         startChat,
         sendComposedMessage,
+        markIncomingMessagesAsRead,
         composedMessage,
         getChatSessionDetails,
         getMessages,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatWindow from './ChatWindow.vue'
@@ -24,7 +24,10 @@ onMounted(()=>{
         <button
             v-else
             type="button"
-            class="flex size-14 items-center justify-center rounded-full bg-yellow-600 text-foreground shadow-xl transition-colors hover:bg-yellow-400"
+            class="relative flex size-14 items-center justify-center rounded-full bg-yellow-600 text-foreground shadow-xl transition-colors hover:bg-yellow-400"
+            :aria-label="chatbox.unreadMessageCount > 0
+                ? `Open chat, ${chatbox.unreadMessageCount} unread messages`
+                : 'Open chat'"
             @click="chatbox.chatboxToggle(true)"
         >
             <Icon
@@ -32,6 +35,14 @@ onMounted(()=>{
                 width="28"
                 height="28"
             />
+
+            <span
+                v-if="chatbox.unreadMessageCount > 0"
+                class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-none text-white ring-2 ring-background"
+                aria-hidden="true"
+            >
+                {{ chatbox.unreadMessageCount > 99 ? '99+' : chatbox.unreadMessageCount }}
+            </span>
         </button>
     </div>
 </template>

@@ -5,8 +5,6 @@ import { Icon } from '@iconify/vue'
 
 const inbox = useInboxStore()
 
-
-
 </script>
 
 <template>
@@ -26,6 +24,13 @@ const inbox = useInboxStore()
             />
 
             Chat
+
+            <!-- <span
+                v-if="inbox.sessionUnreadChats > 0"
+                class="flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-semibold text-destructive-foreground"
+            >
+                {{ inbox.sessionUnreadChats > 99 ? '99+' : inbox.sessionUnreadChats }}
+            </span> -->
         </button>
 
         <button
@@ -44,10 +49,10 @@ const inbox = useInboxStore()
             Session
 
             <span
-                v-if="inbox.sessionUnread > 0"
+                v-if="inbox.sessionUnreadChats > 0"
                 class="flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-semibold text-destructive-foreground"
             >
-                {{ inbox.sessionUnread > 99 ? '99+' : inbox.sessionUnread }}
+                {{ inbox.sessionUnreadChats > 99 ? '99+' : inbox.sessionUnreadChats }}
             </span>
         </button>
 

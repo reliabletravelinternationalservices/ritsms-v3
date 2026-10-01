@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Client\ChatSession;
 
+use App\Events\ChatMessageSent;
 use App\Http\Controllers\Controller;
-use App\Models\ChatMessage;
 use App\Models\ChatSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Events\ChatMessageSent;
 
 class ChatMessageController extends Controller
 {
-    
     public function index(Request $request): JsonResponse
     {
         /** @var ChatSession $chatSession */
@@ -23,6 +21,7 @@ class ChatMessageController extends Controller
                 'id',
                 'message',
                 'sender_type',
+                'state',
                 'created_at',
             ])
             ->map(function ($message) {
@@ -31,14 +30,14 @@ class ChatMessageController extends Controller
                     'message' => $message->message,
                     'created_at' => $message->created_at,
                     'sender_type' => $message->sender_type,
+                    'state' => $message->state,
                 ];
             });
 
         return response()->json($messages);
     }
 
-
-   public function store(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'sender_type' => [
@@ -59,6 +58,7 @@ class ChatMessageController extends Controller
         $chatMessage = $chatSession->messages()->create([
             'sender_type' => $validated['sender_type'],
             'message' => $validated['message'],
+            'state' => 'read',
         ]);
 
         $chatSession->update([
@@ -73,7 +73,28 @@ class ChatMessageController extends Controller
             'message' => $chatMessage->message,
             'created_at' => $chatMessage->created_at,
             'sender_type' => $chatMessage->sender_type,
+            'state' => $chatMessage->state,
         ], 201);
     }
-    
+
+    public function markAsRead(Request $request): JsonResponse
+    {
+        /** @var ChatSession $chatSession */
+        $chatSession = $request->attributes->get('chat_session');
+
+        $unreadMessageIds = $chatSession->messages()
+            ->where('sender_type', 'admin')
+            ->where('state', 'unread')
+            ->pluck('id');
+
+        if ($unreadMessageIds->isNotEmpty()) {
+            $chatSession->messages()
+                ->whereIn('id', $unreadMessageIds)
+                ->update(['state' => 'read']);
+        }
+
+        return response()->json([
+            'read_message_ids' => $unreadMessageIds,
+        ]);
+    }
 }

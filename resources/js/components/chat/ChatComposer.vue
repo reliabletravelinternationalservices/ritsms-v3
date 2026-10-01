@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import { Send } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useSessionChatbox } from '@/stores/chatbox'
 import { Textarea } from '../ui/textarea'
 
@@ -21,6 +19,7 @@ const chatbox = useSessionChatbox();
                 class="flex-1 max-h-40 overflow-y-auto scrollbar-none"
                 :min-height="20"
                 :max-height="40"
+                @focus="chatbox.markIncomingMessagesAsRead"
                 @keydown.enter.exact.prevent="chatbox.sendComposedMessage"
             />
 

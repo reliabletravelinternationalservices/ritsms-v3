@@ -60,3 +60,8 @@ export interface Message {
     status?: 'sending' | 'sent' | 'failed'
     state?: 'unread' | 'read'
 }
+
+
+export type ChatSessionWithLatestMessage = ChatSession & {
+    latest_message: Message | null
+}

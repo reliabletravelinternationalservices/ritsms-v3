@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const inbox = useInboxStore()
 
 onMounted(() => {
-    inbox.loadSessionChats()
+    inbox.loadChats()
 })
 </script>
 
@@ -47,11 +47,7 @@ onMounted(() => {
                     </p>
                 </div>
 
-                <SessionChatToggle
-                    :model-value="inbox.mode"
-                    :session-unread="inbox.sessionUnread"
-                    @update:model-value="inbox.changeMode"
-                />
+                <SessionChatToggle />
             </header>
 
             <!-- CONTENT -->
@@ -66,15 +62,15 @@ onMounted(() => {
                                 ? 'Conversations'
                                 : 'Sessions'
                         "
-                        :loading="inbox.loadingChats"
+                        :loading="inbox.isSessionChatLoading"
                         @select="inbox.selectChat"
-                        @create="inbox.openNewConversation"
+                        
                     />
                 </div>
 
                 <!-- CENTER -->
                 <main class="min-w-0 flex-1">
-                    <ChatBox
+                    <!-- <ChatBox
                         v-if="inbox.activeChat"
                         :name="inbox.activeChat.name"
                         :initials="inbox.activeChat.initials"
@@ -83,14 +79,14 @@ onMounted(() => {
                         :loading="inbox.loadingMessages"
                         :sending="inbox.sendingMessage"
                         @send="inbox.sendMessage"
-                    />
+                    /> -->
 
-                    <NoConvoSelected v-else />
+                    <!-- <NoConvoSelected v-else /> -->
                 </main>
             </div>
         </div>
 
-        <NewConversationModal
+        <!-- <NewConversationModal
             v-model:open="inbox.showNewConversation"
             :contacts="[
                 {
@@ -113,6 +109,6 @@ onMounted(() => {
                 },
             ]"
             @create="inbox.createConversation"
-        />
+        /> -->
     </AppLayout>
 </template>

@@ -5,8 +5,8 @@ use App\Http\Controllers\Client\ChatSession\ChatMessageController;
 use App\Http\Controllers\Client\ChatSession\ChatSessionController;
 use App\Http\Controllers\Client\Contact\ContactPageController;
 use App\Http\Controllers\Client\Destination\DestinationPageController;
-use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
+use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\Outbound\OutboundPageController;
 use App\Http\Controllers\Client\Policy\InquiryPolicyController;
@@ -57,21 +57,14 @@ Route::prefix('inquiry')->group(function () {
     Route::get('/policy', [InquiryPolicyController::class, 'index'])->name('client.inquiry.policy');
 });
 
-
-
-
 Route::get('/contacts', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
-
-
-
 
 // CHAT SESSIONS
 Route::post('/chat/session', [
     ChatSessionController::class,
     'store',
 ])->name('chat.session.store');
-
 
 Route::middleware('chat.session')->group(function () {
 
@@ -86,10 +79,15 @@ Route::middleware('chat.session')->group(function () {
     )->name('chat.session.messages.index');
 
     Route::post(
+        '/chat/session/{chatSession:uuid}/messages/read',
+        [ChatMessageController::class, 'markAsRead']
+    )->name('chat.session.messages.read');
+
+    Route::post(
         '/chat/session/{chatSession:uuid}/messages',
         [ChatMessageController::class, 'store']
     )->name('chat.session.message.store');
-    
+
 });
 
 Route::fallback(function () {
