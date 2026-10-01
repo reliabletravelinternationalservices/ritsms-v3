@@ -8,8 +8,6 @@ import { useSessionChatbox } from '@/stores/chatbox.js'
 const chatbox = useSessionChatbox()
 
 
-
-
 onMounted(()=>{
     chatbox.initializeChatSession()
 })

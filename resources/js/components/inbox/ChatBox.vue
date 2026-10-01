@@ -4,13 +4,9 @@ import { ref } from 'vue'
 import ChatHeader from './ChatHeader.vue'
 import ChatMessage from './ChatMessage.vue'
 import MessageComposer from './MessageComposer.vue'
+import { Message } from '@/types/chat'
 
-interface Message {
-    id: number
-    sender: 'me' | 'them'
-    content: string
-    time: string
-}
+
 
 interface Props {
     name: string

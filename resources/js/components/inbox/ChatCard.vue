@@ -1,19 +1,11 @@
 <script setup lang="ts">
+import { ChatSession } from '@/types/chat';
 import { Icon } from '@iconify/vue'
 
-export interface ChatCardData {
-    id: number | string
-    name: string
-    initials: string
-    message?: string
-    time?: string
-    unread?: number
-    status?: 'online' | 'away' | 'offline'
-    type?: 'chat' | 'session'
-}
+
 
 interface Props {
-    chat: ChatCardData
+    chat: ChatSession
     active?: boolean
 }
 
@@ -37,13 +29,13 @@ const props = withDefaults(defineProps<Props>(), {
             </div>
 
             <span
-                v-if="chat.status === 'online'"
+                v-if="chat.status === 'open'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-green-500"
             />
 
             <span
-                v-else-if="chat.status === 'away'"
-                class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-yellow-500"
+                v-else-if="chat.status === 'closed'"
+                class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-gray-500"
             />
         </div>
 

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
-import { MessageCircle } from '@lucide/vue'
 
 import Message from './Message.vue'
 import EmptyMessage from './EmptyMessage.vue'
+import MessageSkeleton from './MessageSkeleton.vue'
+
 import { useSessionChatbox } from '@/stores/chatbox.js'
 
 const chatbox = useSessionChatbox()
 
 const messagesContainer = ref<HTMLElement | null>(null)
+
+let lastScrolledSessionId: string | null = null
 
 function scrollToBottom() {
     nextTick(() => {
@@ -20,11 +23,25 @@ function scrollToBottom() {
 }
 
 watch(
-    () => chatbox.getMessages,
-    () => {
+    [
+        () => chatbox.getChatSessionDetails?.uuid,
+        () => chatbox.getMessages.length,
+        () => chatbox.isLoadingMessages,
+    ],
+    ([sessionId, length, isLoading]) => {
+        if (
+            !sessionId ||
+            length === 0 ||
+            isLoading ||
+            lastScrolledSessionId === sessionId
+        ) return
+
         scrollToBottom()
+        lastScrolledSessionId = sessionId
     },
-    { deep: true, immediate: true },
+    {
+        immediate: true,
+    },
 )
 
 function isSameDay(firstDate: string, secondDate: string) {
@@ -70,8 +87,15 @@ function formatDateLabel(date: string) {
             [scrollbar-width:thin]
             [scrollbar-color:hsl(var(--muted-foreground)/0.45)_transparent]"
     >
+        <!-- Loading -->
+        <MessageSkeleton
+            v-if="chatbox.isLoadingMessages"
+        />
+
         <!-- Empty -->
-        <EmptyMessage v-if="chatbox.isEmptyMessage" />
+        <EmptyMessage
+            v-else-if="chatbox.isEmptyMessage"
+        />
 
         <!-- Messages -->
         <div
@@ -105,8 +129,6 @@ function formatDateLabel(date: string) {
                 </div>
 
                 <Message
-                    v-if="chatbox.getChatSessionDetails"
-                    :chat="chatbox.getChatSessionDetails"
                     :message="message"
                 />
             </template>

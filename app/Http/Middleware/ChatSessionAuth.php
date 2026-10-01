@@ -21,10 +21,24 @@ class ChatSessionAuth
             ], 401);
         }
 
-        /** @var ChatSession|null $chatSession */
         $chatSession = $request->route('chatSession');
 
-        if (!$chatSession || $chatSession->token !== $token) {
+        // Route binding may give us the model,
+        // otherwise resolve it from the UUID.
+        if (!$chatSession instanceof ChatSession) {
+            $chatSession = ChatSession::where(
+                'uuid',
+                $chatSession
+            )->first();
+        }
+
+        if (!$chatSession) {
+            return response()->json([
+                'message' => 'Chat session not found.',
+            ], 404);
+        }
+
+        if (!hash_equals($chatSession->token, $token)) {
             return response()->json([
                 'message' => 'Invalid chat session.',
             ], 401);

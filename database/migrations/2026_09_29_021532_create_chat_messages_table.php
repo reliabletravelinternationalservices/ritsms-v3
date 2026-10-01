@@ -18,7 +18,7 @@ return new class extends Migration
                 ->constrained('chat_sessions')
                 ->cascadeOnDelete();
 
-            $table->string('sender_type'); // user | admin
+            $table->enum('sender_type', ['session', 'admin', 'user']);
 
             $table->text('message');
 

@@ -5,6 +5,7 @@ import { Send } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSessionChatbox } from '@/stores/chatbox'
+import { Textarea } from '../ui/textarea'
 
 const chatbox = useSessionChatbox();
 
@@ -14,11 +15,13 @@ const chatbox = useSessionChatbox();
 <template>
     <div class="border-t p-3">
         <div class="flex items-center gap-2">
-            <Input
+            <Textarea
                 v-model="chatbox.composedMessage"
                 placeholder="Write a message..."
-                class="flex-1"
-                @keyup.enter="chatbox.sendComposedMessage"
+                class="flex-1 max-h-40 overflow-y-auto scrollbar-none"
+                :min-height="20"
+                :max-height="40"
+                @keydown.enter.exact.prevent="chatbox.sendComposedMessage"
             />
 
             <Button
@@ -32,3 +35,14 @@ const chatbox = useSessionChatbox();
         </div>
     </div>
 </template>
+
+<style scoped>
+    .scrollbar-none {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+</style>

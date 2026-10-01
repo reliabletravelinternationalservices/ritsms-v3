@@ -15,6 +15,7 @@ class ChatSessionController extends Controller
         $session = ChatSession::create();
 
         return response()->json([
+            'id' => $session->id,
             'uuid' => $session->uuid,
             'code' => $session->code,
             'token' => $session->token,
@@ -25,6 +26,7 @@ class ChatSessionController extends Controller
     public function show(ChatSession $chatSession): JsonResponse
     {
         return response()->json([
+            'id' => $chatSession->id,
             'uuid' => $chatSession->uuid,
             'status' => $chatSession->status,
             'code' => $chatSession->code,

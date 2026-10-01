@@ -30,7 +30,7 @@ class ChatMessageController extends Controller
                     'id' => $message->id,
                     'message' => $message->message,
                     'created_at' => $message->created_at,
-                    'sender' => $message->sender_type,
+                    'sender_type' => $message->sender_type,
                 ];
             });
 
@@ -38,12 +38,14 @@ class ChatMessageController extends Controller
     }
 
 
-    public function store(Request $request): JsonResponse
+   public function store(Request $request): JsonResponse
     {
-        /** @var ChatSession $chatSession */
-        $chatSession = $request->attributes->get('chat_session');
-
         $validated = $request->validate([
+            'sender_type' => [
+                'required',
+                'string',
+                'in:session,admin,user',
+            ],
             'message' => [
                 'required',
                 'string',
@@ -51,8 +53,11 @@ class ChatMessageController extends Controller
             ],
         ]);
 
+        /** @var ChatSession $chatSession */
+        $chatSession = $request->attributes->get('chat_session');
+
         $chatMessage = $chatSession->messages()->create([
-            'sender_type' => 'user',
+            'sender_type' => $validated['sender_type'],
             'message' => $validated['message'],
         ]);
 
@@ -64,9 +69,10 @@ class ChatMessageController extends Controller
 
         return response()->json([
             'id' => $chatMessage->id,
+            'type' => $chatMessage->type,
             'message' => $chatMessage->message,
             'created_at' => $chatMessage->created_at,
-            'sender' => 'user',
+            'sender_type' => $chatMessage->sender_type,
         ], 201);
     }
     

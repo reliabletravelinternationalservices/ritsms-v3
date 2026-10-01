@@ -83,13 +83,13 @@ Route::middleware('chat.session')->group(function () {
     Route::get(
         '/chat/session/{chatSession:uuid}/messages',
         [ChatMessageController::class, 'index']
-    );
+    )->name('chat.session.messages.index');
 
     Route::post(
         '/chat/session/{chatSession:uuid}/messages',
         [ChatMessageController::class, 'store']
-    );
-
+    )->name('chat.session.message.store');
+    
 });
 
 Route::fallback(function () {

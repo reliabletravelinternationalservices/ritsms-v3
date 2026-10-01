@@ -41,6 +41,7 @@ export interface ChatCardData {
 
 
 export interface ChatSession {
+    id: number;
     uuid: string;
     code: string;
     status: 'open' | 'closed';
@@ -52,8 +53,9 @@ export type ChatSessionWithToken = ChatSession & {
 
 
 export interface Message {
-    id: number
+    id: number | string
     message: string
     created_at: string
-    sender: 'session' | 'admin'
+    sender_type: 'session' | 'admin'
+    status?: 'sending' | 'sent' | 'failed'
 }

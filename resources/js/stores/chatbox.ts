@@ -1,7 +1,8 @@
 import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import { computed, nextTick, ref } from "vue"
 import axios from 'axios'
 import { ChatSession, ChatSessionWithToken, Message } from "@/types/chat";
+import echo from "@/guest_echo";
 
 
 
@@ -10,41 +11,18 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     const SESSION_KEY = 'reliable_chat_session';
 
     const openChatbox = ref(false)
-    const session = ref<ChatSession | null>(null)
+    const session = ref<ChatSessionWithToken | null>(null)
     const composedMessage = ref('')
 
     // LOADING
     const initializingLoad = ref(false)
+    const loadingMessages = ref(false)
     const chatStartLoad = ref(false)
+    const messageSendLoad = ref(false)
 
-    const messages = ref<Message[]>([
-        {
-            id: 1,
-            message: 'Hello! I would like to ask about your Japan tour packages.',
-            created_at: '2026-09-30T09:30:00',
-            sender: 'session',
-        },
-        {
-            id: 2,
-            message:
-                'Hi! Sure, we would be happy to help. May I know your preferred travel date?',
-            created_at: '2026-09-30T09:32:00',
-            sender: 'admin',
-        },
-        {
-            id: 3,
-            message: 'Around December. Do you have Tokyo packages available?',
-            created_at: '2026-09-30T09:35:00',
-            sender: 'session',
-        },
-        {
-            id: 4,
-            message:
-                'Yes! We currently have several Tokyo packages available. You can check the details here: https://reliabletravelph.com/tours',
-            created_at: '2026-09-30T09:37:00',
-            sender: 'session',
-        },
-    ])
+    const messages = ref<Message[]>([])
+
+    const messagesContainer = ref<HTMLElement | null>(null)
 
 
 
@@ -57,27 +35,43 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     const isEmptyMessage  = computed(()=> messages.value.length <= 0)
     const isChatStarting = computed(()=> chatStartLoad.value)
     const isInitializing = computed(()=> initializingLoad.value)
+    const isLoadingMessages = computed(()=> loadingMessages.value)
+    const isSendingMessage = computed(()=> messageSendLoad.value)
 
     const getChatSessionDetails = computed<ChatSession | null>(()=> session.value)
     const getMessages = computed<Message[]>(()=> messages.value)
 
+
+
+
     //===========================================
     // FUNCTIONS
     //===========================================
-    const chatboxToggle = (isOpen: boolean) => openChatbox.value = isOpen 
+    const chatboxToggle = (isOpen: boolean) => {
+        openChatbox.value = isOpen 
+        if (isOpen) {
+            startPolling()
+        } else {
+            stopPolling()
+        }
+    }
 
     const initializeChatSession = async () => {
-
         initializingLoad.value = true
+
         const stored = localStorage.getItem(SESSION_KEY)
 
-        if (!stored) return;
+        if (!stored) {
+            initializingLoad.value = false
+            return
+        }
 
         try {
             const chatSession = JSON.parse(stored)
+
             const response = await axios.get(
                 route('chat.session.show', {
-                    uuid: chatSession.uuid,
+                    chatSession: chatSession.uuid,
                 }),
                 {
                     headers: {
@@ -86,12 +80,45 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
                 },
             )
 
-            session.value = response.data as ChatSession
+            session.value = {
+                ...response.data,
+                token: chatSession.token,
+            }
 
         } catch (error) {
-            console.error('Failed to initialize chat session:', error)
-        }finally{
+            console.error(
+                'Failed to initialize chat session:',
+                error
+            )
+        } finally {
+            await loadSessionMessages()
             initializingLoad.value = false
+        }
+    }
+
+
+    const loadSessionMessages = async () => {
+        if (!session.value?.uuid || !session.value?.token) return
+
+        loadingMessages.value = true
+        try {
+            const response = await axios.get(
+                route('chat.session.messages.index', {
+                    chatSession: session.value.uuid,
+                }),
+                {
+                    headers: {
+                        'X-Chat-Token': session.value.token,
+                    },
+                },
+            )
+
+            messages.value = response.data
+
+        } catch (error) {
+            console.error('Failed to load session messages:', error)
+        }finally {
+            loadingMessages.value = false
         }
     }
 
@@ -102,16 +129,14 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
             chatStartLoad.value = true
 
             const response = await axios.post(route('chat.session.store'))
-            
-            const data = response.data as ChatSessionWithToken
-            
-            session.value = data
+        
+            session.value = response.data
 
             localStorage.setItem(
                 SESSION_KEY,
                 JSON.stringify({
-                    uuid: data.uuid,
-                    token: data.token,
+                    uuid: response.data.uuid,
+                    token: response.data.token,
                 }),
             )
         } catch (error) {
@@ -125,22 +150,124 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
 
 
     // TODO: THIS IS WHERE I SEND A MESSAGE 
-    const sendComposedMessage = () => {
-        if (!canSendMessage.value) return;
 
-        if (!composedMessage.value.trim()) return
+    const sendComposedMessage = async () => {
+        if (!canSendMessage.value) return
 
-        messages.value.push({
-            id: Date.now(),
-            message: composedMessage.value.trim(),
+        const message = composedMessage.value.trim()
+
+        if (!message || !session.value) return
+        
+        scrollToBottom()
+        const tempId = `temp-${Date.now()}`
+
+        const tempMessage: Message = {
+            id: tempId,
+            message,
             created_at: new Date().toISOString(),
-            sender: 'session',
-        })
+            sender_type: 'session',
+            status: 'sending',
+        }
 
+        // Immediately show the message
+        messages.value.push(tempMessage)
+
+        // Clear composer immediately
         composedMessage.value = ''
+
+        try {
+            const response = await axios.post(
+                route('chat.session.message.store', {
+                    uuid: session.value.uuid,
+                }),
+                {
+                    sender_type: 'session',
+                    message,
+                },
+                {
+                    headers: {
+                        'X-Chat-Token': session.value.token,
+                    },
+                }
+            )
+
+            const index = messages.value.findIndex(
+                item => item.id === tempId
+            )
+
+            if (index !== -1) {
+                messages.value[index] = {
+                    ...response.data,
+                    status: 'sent',
+                }
+            }
+
+        } catch (error) {
+
+            const index = messages.value.findIndex(
+                item => item.id === tempId
+            )
+
+            if (index !== -1) {
+                messages.value[index].status = 'failed'
+            }
+
+            console.error('Failed to send message:', error)
+        }
     }
 
 
+    const loadMessages = async () => {
+        if (!session.value?.uuid || !session.value?.token) return
+
+        try {
+            const response = await axios.get(
+                route('chat.session.messages.index', {
+                    chatSession: session.value.uuid,
+                }),
+                {
+                    headers: {
+                        'X-Chat-Token': session.value.token,
+                    },
+                },
+            )
+
+            messages.value = response.data
+
+        } catch (error) {
+            console.error('Failed to load session messages:', error)
+        }
+    }
+
+    const scrollToBottom =() => {
+        nextTick(() => {
+            if (!messagesContainer.value) return
+
+            messagesContainer.value.scrollTop =
+                messagesContainer.value.scrollHeight
+        })
+    }
+
+
+    // ==================================================================
+    // Polling for new messages
+    // ==================================================================
+    let polling: ReturnType<typeof setInterval> | null = null
+
+    const startPolling = () => {
+        stopPolling()
+
+        polling = setInterval(() => {
+            loadMessages()
+        }, 3000)
+    }
+
+    const stopPolling = () => {
+        if (polling) {
+            clearInterval(polling)
+            polling = null
+        }
+    }
 
     return {
 
@@ -150,13 +277,19 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
         isEmptyMessage,
         isChatStarting,
         isInitializing,
-
+        isSendingMessage,
+        isLoadingMessages,
         canSendMessage,
         chatboxToggle,
         startChat,
         sendComposedMessage,
         composedMessage,
         getChatSessionDetails,
-        getMessages
+        getMessages,
+
+        scrollToBottom,
+        messagesContainer,
+        startPolling,
+        stopPolling,
     }
 })

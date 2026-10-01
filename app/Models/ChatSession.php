@@ -25,6 +25,8 @@ class ChatSession extends Model
             $session->token ??= Str::random(64);
 
             $session->code ??= self::generateCode();
+
+            $session->status ??= 'open';
         });
     }
 

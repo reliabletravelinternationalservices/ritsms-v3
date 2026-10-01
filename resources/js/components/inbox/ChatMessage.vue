@@ -1,18 +1,13 @@
 <script setup lang="ts">
+import { Message } from '@/types/chat';
 import { computed } from 'vue'
 
-interface Message {
-    id: number | string
-    sender: 'me' | 'them'
-    content: string
-    time: string
-}
 
 const props = defineProps<{
     message: Message
 }>()
 
-const isMine = computed(() => props.message.sender === 'me')
+const isMine = computed(() => props.message.sender_type === 'admin')
 </script>
 
 <template>
@@ -30,14 +25,14 @@ const isMine = computed(() => props.message.sender === 'me')
                 :class="isMine
                     ? 'rounded-tr-md bg-[rgb(var(--color-primary))] text-white'
                     : 'rounded-tl-md bg-background'"
-                v-html="message.content"
+                v-html="message.message"
             />
 
             <p
                 class="mt-1 px-1 text-[10px] text-muted-foreground"
                 :class="isMine ? 'text-right' : ''"
             >
-                {{ message.time }}
+                {{ new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
             </p>
 
         </div>

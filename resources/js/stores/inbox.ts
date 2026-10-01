@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import type { ChatCardData } from '@/components/inbox/ChatCard.vue'
-import type { ChatMessage, SessionChat } from '@/types/chat'
+import type { ChatMessage, ChatSession, Message, SessionChat } from '@/types/chat'
+import echo from '@/echo'
 
 export type InboxMode = 'chat' | 'session'
 
@@ -48,9 +49,9 @@ export const useInboxStore = defineStore('inbox', () => {
         },
     ])
 
-    const sessionChats = ref<ChatCardData[]>([])
+    const sessionChats = ref<ChatSession[]>([])
 
-    const messages = ref<ChatMessage[]>([])
+    const messages = ref<Message[]>([])
 
     const activeId = ref<number | string | null>(
         chats.value[0]?.id ?? null,
@@ -90,7 +91,7 @@ export const useInboxStore = defineStore('inbox', () => {
 
     const sessionUnread = computed(() => {
         return sessionChats.value.reduce(
-            (total, chat) => total + (chat.unread ?? 0),
+            (total, chat) => total + (5),
             0,
         )
     })
@@ -279,10 +280,6 @@ export const useInboxStore = defineStore('inbox', () => {
 
         temp.innerHTML = content
 
-        chat.message =
-            temp.innerText || 'Attachment'
-
-        chat.time = 'Just now'
     }
 
     /*
@@ -363,6 +360,25 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
+
+
+
+
+    const subscribeToSession = (sessionId: number) => {
+        echo
+            .private(`chat.session.${sessionId}`)
+            .listen('.message.sent', (data: Message) => {
+
+                messages.value.push({
+                    id: Number(data.id),
+                    message: data.message,
+                    sender_type: data.sender_type,
+                    created_at: data.created_at,
+                    status: 'sent',
+                })
+            })
+    }
+
     return {
         // State
         mode,
@@ -406,5 +422,6 @@ export const useInboxStore = defineStore('inbox', () => {
         // Utility
         clearMessages,
         clearActiveChat,
+        subscribeToSession,
     }
 })

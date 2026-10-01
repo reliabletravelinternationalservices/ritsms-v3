@@ -4,9 +4,10 @@ import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
 import type { ChatCardData } from './ChatCard.vue'
+import { ChatSession } from '@/types/chat'
 
 interface Props {
-    chats: ChatCardData[]
+    chats: ChatSession[]
     activeId: number | string | null
     title: string
 }
@@ -14,7 +15,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    select: [chat: ChatCardData]
+    select: [chat: ChatSession]
     create: []
 }>()
 
@@ -28,8 +29,7 @@ const filteredChats = computed(() => {
     }
 
     return props.chats.filter(chat =>
-        chat.name.toLowerCase().includes(query)
-        || chat.message?.toLowerCase().includes(query),
+        chat.code.toLowerCase().includes(query)
     )
 })
 </script>

@@ -410,3 +410,7 @@ export const formatTime = (time: string | null | undefined): string => {
 
     return time.slice(0, 5);
 }
+
+export const isSenderType = (sender_type: 'session' | 'admin' | 'user', type: string): boolean => {
+    return sender_type === type;
+}
