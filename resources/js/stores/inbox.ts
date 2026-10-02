@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import type { ChatSessionWithLatestMessage, Message } from '@/types/chat'
 import echo from '@/echo'
+import { CursorPaginated } from '@/types/cursor_paginate'
 
 export type InboxMode = 'chat' | 'session'
 
@@ -138,15 +139,17 @@ export const useInboxStore = defineStore('inbox', () => {
         loadingChats.value = true
 
         try {
-            const response = await axios.get(
+            const response = await axios.get<CursorPaginated<ChatSessionWithLatestMessage>>(
                 route('admin.inbox.sessions'),
             )
 
-            chats.value = response.data.map(
+            const value = response.data
+
+            chats.value = value.data.map(
                 (session: ChatSessionWithLatestMessage) => ({ ...session }),
             )
 
-            loadMessages(String(chats.value[0]?.uuid))
+            subscribeToAdminInbox()
 
         } catch (error) {
             console.error(
@@ -182,6 +185,17 @@ export const useInboxStore = defineStore('inbox', () => {
             
         } finally {
             loadingMessages.value = false
+        }
+    }
+
+
+    function addMessageToSession(sessionUuid: string, message: Message) {
+        const session = chats.value.find(
+            chat => chat.uuid === sessionUuid,
+        )
+
+        if (session) {
+            session.latest_message = message
         }
     }
 
@@ -334,34 +348,13 @@ export const useInboxStore = defineStore('inbox', () => {
 
 
 
-
-    // const subscribeToChatSession = (sessionUuid: string) => {
-    //     const channelName = `chat.session.${sessionUuid}`
-
-    //     console.log('Subscribing to:', channelName)
-
-    //     echo
-    //         .channel(channelName)
-    //         .listen('.message.sent', (event: Message) => {
-    //             console.log('Message received:', event)
-
-    //             // Prevent duplicate messages
-    //             const exists = messages.value.some(
-    //                 message => message.id === event.id
-    //             )
-
-    //             if (exists) return
-
-    //             messages.value.push({
-    //                 ...event,
-    //                 status: 'sent',
-    //                 state: event.state ?? (
-    //                     event.sender_type === 'admin' ? 'unread' : 'read'
-    //                 ),
-    //             })
-    //         })
-    // }
-
+    const subscribeToAdminInbox = () => {
+        echo
+            .channel('chat.admin')
+            .listen('.message.sent', (event: Message) => {
+                console.log('Admin received:', event)
+            })
+    }
 
 
 

@@ -14,7 +14,7 @@
                 💬
             </div>
 
-            <p class="font-medium">
+            <p class="font-medium text-foreground">
                 No conversation selected
             </p>
 

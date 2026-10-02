@@ -13,11 +13,21 @@ class ChatSessionController extends Controller
     public function index(): JsonResponse
     {
         $sessions = ChatSession::query()
-            ->with(['latestMessage',  'newMessagesCount'])
-            ->get();
+            ->with(['latestMessage', 'newMessagesCount'])
+            ->latest('updated_at')
+            ->cursorPaginate(10);
+
+        $sessions->getCollection()->each(function ($session) {
+            $session->new_messages_count = $session->newMessagesCount?->count ?? 0;
+
+            unset($session->newMessagesCount);
+        });
 
         return response()->json($sessions);
     }
+
+
+
 
     public function show(string $uuid): JsonResponse
     {

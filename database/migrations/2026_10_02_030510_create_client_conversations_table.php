@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chat_sessions', function (Blueprint $table) {
+        Schema::create('client_conversations', function (Blueprint $table) {
             $table->id();
 
-            $table->uuid('uuid')->unique();
-            $table->string('code')->unique();
-            
-            $table->enum('status', ['closed', 'open'])->default('open');
+            $table->foreignId('client_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->enum('status', ['open', 'closed'])->default('open');
 
             $table->timestamp('last_message_at')->nullable();
             $table->timestamp('closed_at')->nullable();
-            
+
             $table->index('last_message_at');
+
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chat_sessions');
+        Schema::dropIfExists('client_conversations');
     }
 };

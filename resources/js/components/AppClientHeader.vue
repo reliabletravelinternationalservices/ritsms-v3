@@ -62,10 +62,11 @@ const isMobilePackagesOpen = ref(false);
             </nav>
 
             <div class="hidden md:flex items-center">
-                <a href="#" aria-label="Open account portal">
+                <a :href="route('client.login')" aria-label="Open account portal">
                     <button
+
                         class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
-                        <span class="font-roboto text-xs md:text-sm">Account</span>
+                        <span class="font-roboto text-xs md:text-sm">Login</span>
                         <Icon icon="lucide:key-round" width="20" height="20" />
                     </button>
                 </a>
@@ -119,7 +120,7 @@ const isMobilePackagesOpen = ref(false);
                     About us
                 </a>
                 <hr class="border-[var(--shadow-custom)]" />
-                <a href="#">
+                <a :href="route('client.login')">
                     <Button class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]">
                         <span>Login</span>
                         <Icon icon="material-symbols:login" width="20" height="20" />

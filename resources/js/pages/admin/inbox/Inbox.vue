@@ -10,6 +10,7 @@ import NewConversationModal from '@/components/inbox/NewConversationModal.vue'
 
 import type { BreadcrumbItem } from '@/types'
 import { useInboxStore } from '@/stores/inbox'
+import NoConvoSelected from '@/components/inbox/NoConvoSelected.vue'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -68,7 +69,7 @@ onMounted(() => {
                 </div>
 
                 <!-- CENTER -->
-                <main class="min-w-0 flex-1">
+                <main class="min-w-0 flex-1 max-h-[calc(100vh-150px)]">
                     <ChatBox
                         v-if="inbox.selectedActiveChat"
                         :name="inbox.selectedActiveChat.code"
@@ -79,7 +80,7 @@ onMounted(() => {
                         @send="inbox.sendMessage"
                     />
 
-                    <!-- <NoConvoSelected v-else /> -->
+                    <NoConvoSelected v-else />
                 </main>
             </div>
         </div>

@@ -13,6 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     active: false,
 })
+
 </script>
 
 <template>
@@ -26,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
         <!-- AVATAR -->
         <div class="relative shrink-0">
             <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                WV
+                SC
             </div>
 
             <span
@@ -71,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
                 </p>
 
                 <span
-                    v-if="chat.latest_message?.state === 'unread' && chat.new_messages_count > 0"
+                    v-if="chat.new_messages_count > 0"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
                 >
                     {{ chat.new_messages_count }}

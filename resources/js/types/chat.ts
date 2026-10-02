@@ -62,6 +62,11 @@ export interface Message {
 }
 
 
+export type MessageWithSessionUIID = Message & {
+    uuid: string
+}
+
+
 export type ChatSessionWithLatestMessage = ChatSession & {
     latest_message: Message | null
     new_messages_count: number

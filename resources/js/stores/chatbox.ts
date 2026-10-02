@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { computed, ref } from "vue"
 import axios from 'axios'
-import { ChatSession, ChatSessionWithToken, Message } from "@/types/chat";
+import { ChatSession, ChatSessionWithToken, Message, MessageWithSessionUIID } from "@/types/chat";
 import echo from "@/echo";
 
 
@@ -221,12 +221,9 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
     const subscribeToChatSession = (sessionUuid: string) => {
         const channelName = `chat.session.${sessionUuid}`
 
-        console.log('Subscribing to:', channelName)
-
         echo
             .channel(channelName)
-            .listen('.message.sent', (event: Message) => {
-                console.log('Message received:', event)
+            .listen('.message.sent', (event: MessageWithSessionUIID) => {
 
                 // Prevent duplicate messages
                 const exists = messages.value.some(

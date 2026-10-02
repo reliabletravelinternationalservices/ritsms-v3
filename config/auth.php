@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
 
-        'traveler' => [
+        'client' => [
             'driver' => 'session',
-            'provider' => 'travelers',
+            'provider' => 'clients',
         ],
     ],
 
@@ -70,9 +70,9 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        'travelers' => [
+        'clients' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_TRAVELER_MODEL', App\Models\Traveler::class),
+            'model' => env('AUTH_CLIENT_MODEL', App\Models\Client::class),
         ],
     ],
 
@@ -103,8 +103,8 @@ return [
             'throttle' => 60,
         ],
         
-        'travelers' => [
-            'provider' => 'travelers',
+        'clients' => [
+            'provider' => 'clients',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

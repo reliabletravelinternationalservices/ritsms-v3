@@ -23,6 +23,8 @@ class ChatMessageSent implements ShouldBroadcast
             new Channel(
                 'chat.session.'.$this->uuid
             ),
+
+            new Channel('chat.admin')
         ];
     }
 
@@ -34,6 +36,7 @@ class ChatMessageSent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
+            'uuid' => $this->uuid,
             'id' => $this->chatMessage->id,
             'message' => $this->chatMessage->message,
             'sender_type' => $this->chatMessage->sender_type,

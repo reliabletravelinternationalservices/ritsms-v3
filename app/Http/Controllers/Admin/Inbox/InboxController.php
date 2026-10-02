@@ -15,7 +15,7 @@ class InboxController extends Controller
                 'type',
             ]);
 
-
+        
         return Inertia::render('admin/inbox/Inbox', compact('filters'));
     }
 }

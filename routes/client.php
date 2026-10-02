@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\About\AboutUsController;
+use App\Http\Controllers\Client\Auth\LoginController;
 use App\Http\Controllers\Client\ChatSession\ChatMessageController;
 use App\Http\Controllers\Client\ChatSession\ChatSessionController;
 use App\Http\Controllers\Client\Contact\ContactPageController;
@@ -17,6 +18,18 @@ Route::get('/', [LandingPageController::class, 'index'])->name('client.landing')
 // Route::get('/updateTable', [LandingPageController::class, 'updateTableData'])->name('client.update');
 
 // DESTINATIONS
+
+Route::name('client.')->group(function () {
+
+    Route::prefix('auth')->group(function () {
+        Route::get('/login', [LoginController::class, 'login'])->name('login');
+        Route::post('/store', [LoginController::class, 'store'])->name('login.store');
+    });
+
+});
+
+
+
 Route::prefix('destinations')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
     Route::prefix('countries')->group(function () {

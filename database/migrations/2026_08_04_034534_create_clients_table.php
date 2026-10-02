@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug', 100)->unique();
             $table->string('name', 100);
             $table->string('email', 100)->unique();
+            $table->string('password')->nullable();
             $table->string('phone', 20)->nullable();
             $table->text('address')->nullable();
             $table->enum(
@@ -32,7 +33,7 @@ return new class extends Migration
                     'cancelled',
                     'disqualified'
                 ]
-            );
+            )->default('new');
 
             $table->enum(
                 'source',
@@ -48,17 +49,19 @@ return new class extends Migration
                     'youtube',
                     'other'
                 ]
-            );
+            )->default('website');
 
-            $table->enum('type', ['personal', 'business', 'partner', 'other'])->default('other');
-            $table->enum('gender', ['male', 'female', 'transgender', 'lesbian', 'other'])->default('other');
+            $table->enum('type', ['personal', 'business', 'partner', 'other'])->default('other')->default('personal');
+            $table->enum('gender', ['male', 'female', 'transgender', 'lesbian', 'other'])->default('other')->nullable();
             $table->boolean('accept_marketing')->default(false);
             $table->string('website_link', 255)->nullable();
             $table->string('facebook_link', 255)->nullable();
             $table->dateTime('last_contacted_at')->nullable();
-
+            
             $table->text('notes')->nullable();
-
+            
+            $table->boolean('is_registered')->default(false);
+            $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
         });

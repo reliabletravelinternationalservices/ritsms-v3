@@ -36,7 +36,7 @@ const isThemTyping = ref(false)
 </script>
 
 <template>
-    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden text-foreground max-h-[calc(100vh-150px)]">
+    <div class="flex min-w-0 flex-1 flex-col overflow-hidden text-foreground min-h-[calc(100vh-150px)] max-h-[calc(100vh-150px)]">
         <!-- Header -->
         <ChatHeader
             :name="name"

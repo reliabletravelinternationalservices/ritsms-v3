@@ -6,6 +6,8 @@ use App\Enums\Client\Gender;
 use App\Enums\Client\Source;
 use App\Enums\Client\Status;
 use App\Enums\Client\Type;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,8 +20,9 @@ use Illuminate\Support\Str;
  * @property Type|null $type
  * @property Gender|null $gender
  */
-class Client extends Model
+class Client extends Model implements AuthenticatableContract
 {
+    use Authenticatable;
     use SoftDeletes;
 
     protected $table = 'clients';
@@ -29,6 +32,7 @@ class Client extends Model
         'slug',
         'name',
         'email',
+        'password',
         'phone',
         'address',
         'type',
@@ -39,6 +43,7 @@ class Client extends Model
         'website_link',
         'facebook_link',
         'last_contacted_at',
+        'is_registered',
         'notes',
     ];
 
@@ -48,6 +53,7 @@ class Client extends Model
         'type' => Type::class,
         'gender' => Gender::class,
         'accept_marketing' => 'boolean',
+        'is_registered' => 'boolean',
         'last_contacted_at' => 'datetime',
     ];
 
