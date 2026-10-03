@@ -6,10 +6,19 @@ import Button from './ui/button/Button.vue';
 import { cn } from '@/lib/utils';
 import { route } from 'ziggy-js'
 import AppLogoIcon from './AppLogoIcon.vue';
+import { Client } from '@/types/client';
+import ClientProfileMenu from './ClientProfileMenu.vue';
 
 
 const isMobileMenuOpen = ref(false);
 const isMobilePackagesOpen = ref(false);
+
+interface AuthUser {
+    client?: Client | null;
+}
+
+const props = defineProps<AuthUser>();
+
 </script>
 
 <template>
@@ -62,12 +71,28 @@ const isMobilePackagesOpen = ref(false);
             </nav>
 
             <div class="hidden md:flex items-center">
-                <a :href="route('client.login')" aria-label="Open account portal">
-                    <button
+                <ClientProfileMenu
+                    v-if="props.client"
+                    :client="props.client"
+                />
 
-                        class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75">
-                        <span class="font-roboto text-xs md:text-sm">Login</span>
-                        <Icon icon="lucide:key-round" width="20" height="20" />
+                <a
+                    v-else
+                    :href="route('client.login')"
+                    aria-label="Open account portal"
+                >
+                    <button
+                        class="flex items-center gap-2 px-4 py-4 text-[var(--muted-custom)] h-8 border-2 border-[var(--muted-custom)] hover:text-[var(--tertiary-custom)] hover:border-[var(--tertiary-custom)] ease-in duration-75"
+                    >
+                        <span class="font-roboto text-xs md:text-sm">
+                            Login
+                        </span>
+
+                        <Icon
+                            icon="lucide:key-round"
+                            width="20"
+                            height="20"
+                        />
                     </button>
                 </a>
             </div>
@@ -120,12 +145,62 @@ const isMobilePackagesOpen = ref(false);
                     About us
                 </a>
                 <hr class="border-[var(--shadow-custom)]" />
-                <a :href="route('client.login')">
-                    <Button class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]">
+
+                <!-- Guest -->
+                <a
+                    v-if="!props.client"
+                    :href="route('client.login')"
+                >
+                    <Button
+                        class="w-full text-[var(--muted-custom)] border-2 border-[var(--muted-custom)]"
+                    >
                         <span>Login</span>
-                        <Icon icon="material-symbols:login" width="20" height="20" />
+
+                        <Icon
+                            icon="material-symbols:login"
+                            width="20"
+                            height="20"
+                        />
                     </Button>
                 </a>
+
+                <!-- Authenticated Client -->
+                <div
+                    v-else
+                    class="flex flex-col gap-3"
+                >
+                    <a
+                        :href="route('client.profile')"
+                        :class="cn(
+                            'flex items-center gap-3 font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75',
+                            {
+                                'text-[var(--tertiary-custom)]':
+                                    route().current('client.profile'),
+                            }
+                        )"
+                    >
+                        <Icon
+                            icon="lucide:user-round"
+                            width="20"
+                            height="20"
+                        />
+
+                        <span>Profile</span>
+                    </a>
+
+                    <a
+                        :href="route('client.logout')"
+                        class="flex items-center gap-3 font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75"
+                    >
+                        <Icon
+                            icon="lucide:log-out"
+                            width="20"
+                            height="20"
+                        />
+
+                        <span>Logout</span>
+                    </a>
+                </div>
             </div>
         </Transition>
     </header>

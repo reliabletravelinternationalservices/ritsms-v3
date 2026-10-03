@@ -55,6 +55,7 @@ export interface Client {
     facebook_link: string | null;
 
     last_contacted_at: string | null;
+    email_verified_at: boolean | null;
 
     note: string | null;
 

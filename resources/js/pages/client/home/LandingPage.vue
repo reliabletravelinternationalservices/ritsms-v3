@@ -20,8 +20,12 @@ import ClientFeedback from './section/ClientFeedback.vue';
 import {
     LANDING_DELAYS,
 } from './constants';
-import ChatWidget from '@/components/chat/ChatWidget.vue';
 
+import { SharedData } from '@/types/index.js';
+import { usePage } from '@inertiajs/vue3';
+import { Client } from '@/types/client';
+import { computed, ref } from 'vue';
+import AuthSuccessModal from '@/components/AuthSuccessModal.vue';
 
 </script>
 
@@ -61,6 +65,9 @@ import ChatWidget from '@/components/chat/ChatWidget.vue';
         <MotionWrapper :delay="LANDING_DELAYS.feedbackSection">
             <ClientFeedback />
         </MotionWrapper>
-        <ChatWidget />
+
+
+        <!-- for only new registered -->
+
     </AppLayout>
 </template>

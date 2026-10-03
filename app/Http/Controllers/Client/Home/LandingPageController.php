@@ -7,6 +7,7 @@ use App\Models\Destination;
 use App\Models\Package;
 use App\Models\PackageGroup;
 use App\Services\Client\LandingService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 class LandingPageController extends Controller
@@ -14,10 +15,12 @@ class LandingPageController extends Controller
     public function __construct(protected LandingService $service) {}
 
 
-    public function index()
+    public function index(Request $request)
     {
         $this->service->initializeSEO();
-        return Inertia::render('client/home/LandingPage');
+
+        $isNewRegister = $request->session()->get('is_new_register', false);
+        return Inertia::render('client/home/LandingPage', compact('isNewRegister'));
     }
 
 

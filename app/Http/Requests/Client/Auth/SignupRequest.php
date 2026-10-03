@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class SignupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,23 +24,32 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => [
+                'required',
+                'string',
+                'min:2',
+                'max:255',
+            ],
+
             'email' => [
                 'required',
+                'string',
                 'email',
                 'max:255',
-                Rule::exists('clients', 'email')
-                    ->where('is_registered', true),
+                Rule::unique('clients', 'email'),
             ],
 
             'password' => [
                 'required',
                 'string',
                 'min:8',
+                'same:password_confirm',
             ],
 
-            'remember' => [
-                'sometimes',
-                'boolean',
+            'password_confirm' => [
+                'required',
+                'string',
+                'min:8',
             ],
         ];
     }
@@ -53,15 +62,23 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'name.required' => 'Please enter your name.',
+            'name.string' => 'The name must be a valid text.',
+            'name.min' => 'The name must be at least 2 characters.',
+            'name.max' => 'The name must not exceed 255 characters.',
+
             'email.required' => 'Please enter your email address.',
+            'email.string' => 'The email must be a valid text.',
             'email.email' => 'Please enter a valid email address.',
             'email.max' => 'The email address must not exceed 255 characters.',
-            'email.exists' => 'The email address is not registered.',
+            'email.unique' => 'This email address is already registered.',
 
-            'password.required' => 'Please enter your password.',
+            'password.required' => 'Please enter a password.',
             'password.min' => 'The password must be at least 8 characters.',
+            'password.same' => 'The password confirmation does not match.',
 
-            'remember.boolean' => 'The remember me option must be valid.',
+            'password_confirm.required' => 'Please confirm your password.',
+            'password_confirm.min' => 'The password confirmation must be at least 8 characters.',
         ];
     }
 }

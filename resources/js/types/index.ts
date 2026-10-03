@@ -1,8 +1,9 @@
+import { Client } from "./client";
 
 
 export interface Auth {
     user: User;
-    traveler: Traveler;
+    client: Client;
 }
 
 export interface BreadcrumbItem {
@@ -41,8 +42,9 @@ export interface SharedData {
     };
     flash: {
         message: string;
-        type: 'success' | 'error' | 'warning' | 'info';
+        type: 'success' | 'error' | 'warning' | 'info' | 'login' | 'logout' | 'register';
     };
+    
     settings: {
         usd_to_php_rate: number;
     };

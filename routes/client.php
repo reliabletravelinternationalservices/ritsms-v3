@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Client\About\AboutUsController;
 use App\Http\Controllers\Client\Auth\LoginController;
+use App\Http\Controllers\Client\Auth\LogoutController;
+use App\Http\Controllers\Client\Auth\SignupController;
 use App\Http\Controllers\Client\ChatSession\ChatMessageController;
 use App\Http\Controllers\Client\ChatSession\ChatSessionController;
 use App\Http\Controllers\Client\Contact\ContactPageController;
@@ -14,16 +16,30 @@ use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
+
 // Route::get('/updateTable', [LandingPageController::class, 'updateTableData'])->name('client.update');
 
 // DESTINATIONS
 
 Route::name('client.')->group(function () {
 
+    Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+
     Route::prefix('auth')->group(function () {
-        Route::get('/login', [LoginController::class, 'login'])->name('login');
-        Route::post('/store', [LoginController::class, 'store'])->name('login.store');
+        Route::controller(LoginController::class)->group(function(){
+            Route::get('/login', 'login')->name('login');
+            Route::post('login/store', 'store')->name('login.store');
+        });
+
+        Route::controller(SignupController::class)->group(function(){
+            Route::get('/signup', 'signup')->name('signup');
+            Route::post('signup/store', 'store')->name('signup.store');
+        });
+
+        Route::controller(LogoutController::class)->group(function(){
+            Route::get('/logout', 'logout')->name('logout');
+        });
+
     });
 
 });

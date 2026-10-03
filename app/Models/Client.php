@@ -55,6 +55,13 @@ class Client extends Model implements AuthenticatableContract
         'accept_marketing' => 'boolean',
         'is_registered' => 'boolean',
         'last_contacted_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+    ];
+
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
 
