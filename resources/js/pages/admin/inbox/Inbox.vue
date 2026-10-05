@@ -11,6 +11,16 @@ import NewConversationModal from '@/components/inbox/NewConversationModal.vue'
 import type { BreadcrumbItem } from '@/types'
 import { useInboxStore } from '@/stores/inbox'
 import NoConvoSelected from '@/components/inbox/NoConvoSelected.vue'
+import { Mode } from '@/types/chat'
+
+interface Props {
+    filters: {
+        type:  Mode
+    }
+}
+
+
+const props = defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,8 +31,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const inbox = useInboxStore()
 
+inbox.setCurrentMode(props.filters.type);
+
+
 onMounted(() => {
-    inbox.loadChats()
+    inbox.loadSessionChats()
 })
 </script>
 
@@ -58,7 +71,7 @@ onMounted(() => {
                         :chats="inbox.activeChats"
                         :active-id="inbox.activeId"
                         :title="
-                            inbox.mode === 'chat'
+                            inbox.mode === 'chats'
                                 ? 'Conversations'
                                 : 'Sessions'
                         "

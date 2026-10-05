@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\Admin\AccountAccess;
+use App\Http\Middleware\Admin\AuthAdmin;
+use App\Http\Middleware\Admin\GuestUser;
+use App\Http\Middleware\AuthClient;
 use App\Http\Middleware\ChatSessionAuth;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -27,9 +31,10 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'adminAuth' => \App\Http\Middleware\Admin\AuthAdmin::class,
-            'guestUser' => \App\Http\Middleware\Admin\GuestUser::class,
-            'accountAccess' => \App\Http\Middleware\Admin\AccountAccess::class,
+            'clientAuth' => AuthClient::class,
+            'adminAuth' => AuthAdmin::class,
+            'guestUser' => GuestUser::class,
+            'accountAccess' => AccountAccess::class,
             'chat.session' => ChatSessionAuth::class,
         ]);
     })

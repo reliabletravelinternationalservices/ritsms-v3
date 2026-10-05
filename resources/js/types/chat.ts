@@ -1,40 +1,8 @@
-export interface SessionChat {
-    uuid: string
-    id: string
-    name: string
-    initials: string
-    message: string
-    time: string
-    unread?: number
-    status: 'online' | 'away' | 'offline'
-    type: 'session'
-}
 
-export interface ChatMessage {
-    id: number
-    sender: 'me' | 'them'
-    content: string
-    time: string
-}
 
-export type Mode = 'chat' | 'session'
+export type Mode = 'chats' | 'sessions'
 export type Sender = 'me' | 'them'
 export type Status = 'online' | 'away' | 'offline'
-
-
-export interface ChatCardData {
-    id: number | string
-    name: string
-    initials: string
-    message: string
-    time: string
-    unread?: number
-    status?: Status
-    type?: Mode
-    lastSender?: Sender
-}
-
-
 
 
 // ===========================================
@@ -71,3 +39,19 @@ export type ChatSessionWithLatestMessage = ChatSession & {
     latest_message: Message | null
     new_messages_count: number
 }
+
+
+
+
+
+// CONVERSATION
+export interface ChatConversation {
+    id: number;
+    name?: string | null;
+    avatar?: string | null;
+    last_message_at?: string | null;
+    is_turned_over: boolean;
+    turned_over_at?: string | null;
+}
+
+

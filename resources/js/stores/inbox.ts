@@ -2,11 +2,11 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-import type { ChatSessionWithLatestMessage, Message } from '@/types/chat'
+import type { ChatConversation, ChatSessionWithLatestMessage, Message, Mode } from '@/types/chat'
 import echo from '@/echo'
 import { CursorPaginated } from '@/types/cursor_paginate'
-
-export type InboxMode = 'chat' | 'session'
+import { Conversation, Message as ConvoMessage } from '@/types/conversation'
+import { router } from '@inertiajs/vue3'
 
 export const useInboxStore = defineStore('inbox', () => {
     /*
@@ -15,11 +15,13 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    const mode = ref<InboxMode>('chat')
-
-    const chats = ref<ChatSessionWithLatestMessage[]>([])
+    const mode = ref<Mode>('chats')
+    
+    const chats = ref<ChatSessionWithLatestMessage[] >([])
     const messages = ref<Message[]>([])
     
+    const conversation =  ref<Conversation[]>([])
+    const convo_messages = ref<ConvoMessage[]>([])
     
     // first chat id
     const activeId = ref<number | string | null>(null)
@@ -38,10 +40,14 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
+    const setCurrentMode =(type: Mode) => {
+        mode.value = type;
+    }
+
     const activeChats = computed(() => {
         return chats.value.filter(
             chat => chat.status === 'open',
-        )
+        )   
     })
 
     const selectedActiveChat = computed(() => {
@@ -79,36 +85,13 @@ export const useInboxStore = defineStore('inbox', () => {
     |--------------------------------------------------------------------------
     */
 
-    async function changeMode(value: InboxMode) {
+    async function changeMode(value: Mode) {
         if (mode.value === value) {
             return
         }
+        
+        router.get(route('admin.inbox', { type: value }))
 
-        mode.value = value
-
-        messages.value = []
-
-        const firstChat = activeChats.value[0]
-
-        activeId.value = firstChat?.id ?? null
-
-        if (value === 'session') {
-            await loadChats()
-
-            const firstSession = chats.value[0]
-
-            activeId.value = firstSession?.id ?? null
-
-            if (firstSession) {
-                await loadMessages(String(firstSession.uuid))
-            }
-
-            return
-        }
-
-        if (firstChat) {
-            messages.value = []
-        }
     }
 
     /*
@@ -122,8 +105,8 @@ export const useInboxStore = defineStore('inbox', () => {
 
         messages.value = []
         
-        if (mode.value === 'session') {
-            await loadMessages(String(chat.uuid))
+        if (mode.value === 'sessions') {
+            await loadSessionMessages(String(chat.uuid))
         }else {
             messages.value = []
         }
@@ -131,11 +114,52 @@ export const useInboxStore = defineStore('inbox', () => {
 
     /*
     |--------------------------------------------------------------------------
-    | Session Chats
+    | Chats
     |--------------------------------------------------------------------------
     */
 
-    async function loadChats() {
+
+    function loadChats(){
+        if(mode.value === 'chats'){
+            loadConversationChats()
+        }else{
+            loadSessionChats()
+        }
+    }
+
+
+    async function loadConversationChats(){
+        loadingChats.value = true
+        try {
+            const response = await axios.get<CursorPaginated<ChatSessionWithLatestMessage>>(
+                route('admin.inbox.sessions'),
+            )
+
+            const value = response.data
+
+            chats.value = value.data.map(
+                (session: ChatSessionWithLatestMessage) => ({ ...session }),
+            )
+
+            subscribeToAdminInbox()
+
+        } catch (error) {
+            console.error(
+                'Failed to load session chats:',
+                error,
+            )
+
+            messages.value = []
+
+        } finally {
+            loadingChats.value = false
+        }
+
+    }
+
+
+    // SESSIONS
+    async function loadSessionChats() {
         loadingChats.value = true
 
         try {
@@ -164,7 +188,7 @@ export const useInboxStore = defineStore('inbox', () => {
         }
     }
 
-    async function loadMessages(uuid: string) {
+    async function loadSessionMessages(uuid: string) {
         loadingMessages.value = true
 
         try {
@@ -383,12 +407,13 @@ export const useInboxStore = defineStore('inbox', () => {
 
         // Mode
         changeMode,
+        setCurrentMode,
 
         // Conversations
         selectChat,
 
         // Sessions
-        loadChats,
+        loadSessionChats,
         // loadSessionMessages,
 
         // // Messages

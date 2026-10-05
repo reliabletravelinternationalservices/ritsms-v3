@@ -11,20 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client_conversations', function (Blueprint $table) {
+        Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('client_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
-            $table->enum('status', ['open', 'closed'])->default('open');
-
+            $table->string('name')->nullable();
+            $table->string('avatar')->nullable();
             $table->timestamp('last_message_at')->nullable();
-            $table->timestamp('closed_at')->nullable();
+            $table->boolean('is_turned_over')->default(false);
+            $table->timestamp('turned_over_at')->nullable();
 
             $table->index('last_message_at');
-
             $table->timestamps();
         });
     }
@@ -34,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('client_conversations');
+        Schema::dropIfExists('conversations');
     }
 };

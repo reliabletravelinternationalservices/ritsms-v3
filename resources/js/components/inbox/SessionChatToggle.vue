@@ -13,10 +13,10 @@ const inbox = useInboxStore()
         <button
             type="button"
             class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
-            :class="inbox.mode === 'chat'
+            :class="inbox.mode === 'chats'
                 ? 'bg-yellow-600 text-white shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'"
-            @click="inbox.changeMode('chat')"
+            @click="inbox.changeMode('chats')"
         >
             <Icon
                 icon="lucide:message-circle"
@@ -36,10 +36,10 @@ const inbox = useInboxStore()
         <button
             type="button"
             class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
-            :class="inbox.mode === 'session'
+            :class="inbox.mode === 'sessions'
                 ? 'bg-yellow-600 text-white shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'"
-            @click="inbox.changeMode('session')"
+            @click="inbox.changeMode('sessions')"
         >
             <Icon
                 icon="lucide:messages-square"

@@ -22,7 +22,7 @@ import {
 } from './constants';
 
 import { SharedData } from '@/types/index.js';
-import { usePage } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { Client } from '@/types/client';
 import { computed, ref } from 'vue';
 import AuthSuccessModal from '@/components/AuthSuccessModal.vue';
@@ -30,8 +30,11 @@ import AuthSuccessModal from '@/components/AuthSuccessModal.vue';
 </script>
 
 <template>
-
+    
     <AppLayout>
+
+        <Head title="Discover the world with us" />
+
         <CarouselSection />
 
         <MotionWrapper :delay="LANDING_DELAYS.destinationSection">

@@ -14,14 +14,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, InteractsWithChatify;
+    use HasFactory, InteractsWithChatify, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,7 +62,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-
     public function sendEmailVerificationNotification()
     {
         $verificationUrl = URL::temporarySignedRoute(
@@ -74,7 +73,6 @@ class User extends Authenticatable implements MustVerifyEmail
             ]
         );
 
-
         try {
             Mail::to($this->email)->send(
                 new VerifyEmployeeEmail($this->name, $verificationUrl)
@@ -83,7 +81,6 @@ class User extends Authenticatable implements MustVerifyEmail
             Log::error($e->getMessage());
         }
     }
-
 
     public function adminVerificationCooldownKey(): string
     {
@@ -103,7 +100,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return max((int) now()->diffInSeconds($expiresAt, false), 0);
     }
 
-
     public function sendAccountPasswordResetNotification()
     {
         $token = app('auth.password.broker')->createToken($this);
@@ -112,5 +108,10 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this->email)->send(
             new ResetPasswordMail($this, $resetUrl)
         );
+    }
+
+    public function conversations()
+    {
+        return $this->hasMany(ClientConversation::class);
     }
 }
