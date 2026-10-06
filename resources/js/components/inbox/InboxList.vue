@@ -3,12 +3,12 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
-import { ChatSessionWithLatestMessage } from '@/types/chat'
+import { ChatSessionWithLatestMessage, Mode } from '@/types/chat'
 
 interface Props {
+    mode: Mode
     chats: ChatSessionWithLatestMessage[]
     activeId: number | string | null
-    title: string
 }
 
 const props = defineProps<Props>()
@@ -34,37 +34,11 @@ const filteredChats = computed(() => {
 </script>
 
 <template>
-    <aside class="flex h-full min-h-0 flex-col border-r text-foreground">
-
-        <!-- LIST HEADER -->
-        <div class="flex shrink-0 items-center justify-between px-4 py-3">
-            <div>
-                <h2 class="text-sm font-semibold">
-                    {{ title }}
-                </h2>
-
-                <p class="text-xs text-muted-foreground">
-                    {{ props.chats.length }}
-                    conversations
-                </p>
-            </div>
-
-            <button
-                type="button"
-                class="flex size-8 items-center justify-center rounded-md hover:bg-muted"
-                title="New conversation"
-                @click="emit('create')"
-            >
-                <Icon
-                    icon="lucide:plus"
-                    class="size-4"
-                />
-            </button>
-        </div>
+    <aside class="flex h-full min-h-0 flex-col border-r text-foreground py-6">
 
         <!-- SEARCH -->
-        <div class="shrink-0 px-3 pb-3">
-            <div class="relative">
+        <div class="shrink-0 px-3 pb-3 flex items-center gap-2">
+            <div class="relative w-full">
                 <Icon
                     icon="lucide:search"
                     class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -77,6 +51,19 @@ const filteredChats = computed(() => {
                     class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
                 />
             </div>
+
+            <button
+                v-if="mode === 'chats'"
+                type="button"
+                class="flex size-8 items-center justify-center rounded-md hover:bg-muted"
+                title="New conversation"
+                @click="emit('create')"
+            >
+                <Icon
+                    icon="lucide:plus"
+                    class="size-4"
+                />
+            </button>
         </div>
 
         <!-- CHAT LIST -->

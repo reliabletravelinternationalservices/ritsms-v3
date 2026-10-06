@@ -112,6 +112,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function conversations()
     {
-        return $this->hasMany(ClientConversation::class);
+        return $this->morphTo('participant');
     }
 }

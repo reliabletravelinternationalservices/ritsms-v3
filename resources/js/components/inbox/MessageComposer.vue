@@ -18,6 +18,7 @@ interface MessagePayload {
 const emit = defineEmits<{
     send: [payload: MessagePayload]
     typing: [value: boolean]
+    read: []
 }>()
 
 const editor = ref<HTMLElement | null>(null)

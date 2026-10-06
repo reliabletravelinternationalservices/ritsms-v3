@@ -43,7 +43,7 @@ class ChatMessageController extends Controller
             'sender_type' => [
                 'required',
                 'string',
-                'in:session,admin,user',
+                'in:session,admin',
             ],
             'message' => [
                 'required',
@@ -58,7 +58,7 @@ class ChatMessageController extends Controller
         $chatMessage = $chatSession->messages()->create([
             'sender_type' => $validated['sender_type'],
             'message' => $validated['message'],
-            'state' => 'read',
+            'state' => 'unread',
         ]);
 
         $chatSession->update([

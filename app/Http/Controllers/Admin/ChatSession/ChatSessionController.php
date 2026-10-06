@@ -22,7 +22,7 @@ class ChatSessionController extends Controller
 
             unset($session->newMessagesCount);
         });
-
+        
         return response()->json($sessions);
     }
 
@@ -83,12 +83,25 @@ class ChatSessionController extends Controller
         ], 201);
     }
 
-    private function getInitials(string $name): string
+    public function markAsRead(string $uuid): JsonResponse
     {
-        return collect(explode(' ', $name))
-            ->filter()
-            ->map(fn ($word) => strtoupper($word[0]))
-            ->take(2)
-            ->implode('');
+        $chatSession = ChatSession::where('uuid', $uuid)->firstOrFail();
+
+        $unreadMessageIds = $chatSession->messages()
+            ->where('sender_type', 'session')
+            ->where('state', 'unread')
+            ->pluck('id');
+
+        if ($unreadMessageIds->isNotEmpty()) {
+            $chatSession->messages()
+                ->whereIn('id', $unreadMessageIds)
+                ->update([
+                    'state' => 'read',
+                ]);
+        }
+
+        return response()->json([
+            'read_message_ids' => $unreadMessageIds,
+        ]);
     }
 }

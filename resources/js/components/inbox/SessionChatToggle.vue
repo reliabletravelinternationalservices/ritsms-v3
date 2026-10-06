@@ -1,9 +1,24 @@
 <script setup lang="ts">
-import { useInboxStore } from '@/stores/inbox';
+import { Mode } from '@/types/chat';
 import { Icon } from '@iconify/vue'
 
+interface Props {
+    mode: Mode
+    totalNewSessionChat: number;
+    totalNewConvoChat: number;
+}
 
-const inbox = useInboxStore()
+withDefaults(defineProps<Props>(),{
+    mode: 'chats',
+    totalNewConvoChat: 0,
+    totalNewSessionChat: 0
+})
+
+const emit = defineEmits<{
+    changeMode: [mode: Mode]
+}>()
+
+
 
 </script>
 
@@ -13,10 +28,10 @@ const inbox = useInboxStore()
         <button
             type="button"
             class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
-            :class="inbox.mode === 'chats'
+            :class="mode === 'chats'
                 ? 'bg-yellow-600 text-white shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'"
-            @click="inbox.changeMode('chats')"
+            @click="emit('changeMode', 'chats')"
         >
             <Icon
                 icon="lucide:message-circle"
@@ -25,21 +40,21 @@ const inbox = useInboxStore()
 
             Chat
 
-            <!-- <span
-                v-if="inbox.sessionUnreadChats > 0"
+            <span
+                v-if="totalNewConvoChat > 0"
                 class="flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-semibold text-destructive-foreground"
             >
-                {{ inbox.sessionUnreadChats > 99 ? '99+' : inbox.sessionUnreadChats }}
-            </span> -->
+                {{ totalNewConvoChat > 99 ? '99+' : totalNewConvoChat }}
+            </span>
         </button>
 
         <button
             type="button"
             class="relative flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition"
-            :class="inbox.mode === 'sessions'
+            :class="mode === 'sessions'
                 ? 'bg-yellow-600 text-white shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'"
-            @click="inbox.changeMode('sessions')"
+            @click="emit('changeMode', 'sessions')"
         >
             <Icon
                 icon="lucide:messages-square"
@@ -49,10 +64,10 @@ const inbox = useInboxStore()
             Session
 
             <span
-                v-if="inbox.sessionUnreadChats > 0"
+                v-if="totalNewSessionChat > 0"
                 class="flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-semibold text-destructive-foreground"
             >
-                {{ inbox.sessionUnreadChats > 99 ? '99+' : inbox.sessionUnreadChats }}
+                {{ totalNewSessionChat > 99 ? '99+' : totalNewSessionChat }}
             </span>
         </button>
 

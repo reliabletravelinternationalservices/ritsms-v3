@@ -63,7 +63,23 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
             return
         }
 
+        await loadChatSessions()
+        await loadSessionMessages()
+        if(session.value){
+            subscribeToChatSession(session.value?.uuid)
+        }
+        
+        initializingLoad.value = false
+    }
+
+    const loadChatSessions = async () => {
         try {
+            const stored = localStorage.getItem(SESSION_KEY)
+
+            if (!stored) {
+                return
+            }
+
             const chatSession = JSON.parse(stored)
 
             const response = await axios.get(
@@ -82,16 +98,11 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
                 token: chatSession.token,
             }
 
-            subscribeToChatSession(chatSession.uuid)
-
         } catch (error) {
             console.error(
                 'Failed to initialize chat session:',
                 error
             )
-        } finally {
-            await loadSessionMessages()
-            initializingLoad.value = false
         }
     }
 
@@ -167,6 +178,7 @@ export const useSessionChatbox = defineStore('session-chatbox', () => {
             created_at: new Date().toISOString(),
             sender_type: 'session',
             status: 'sending',
+            state: 'unread'
         }
 
         // Immediately show the message

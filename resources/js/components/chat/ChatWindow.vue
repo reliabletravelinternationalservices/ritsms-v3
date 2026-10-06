@@ -8,12 +8,20 @@ import ChatStart from './ChatStart.vue'
 import { useSessionChatbox } from '@/stores/chatbox.js'
 import InitializingChat from './InitializingChat.vue'
 
+const chatMessagesRef = ref<InstanceType<typeof ChatMessages> | null>(null)
+
+
 const chatbox = useSessionChatbox()
 
 const emit = defineEmits<{
     close: []
 }>()
 
+
+const sendMessage = () => {
+    chatbox.sendComposedMessage()
+    chatMessagesRef.value?.scrollToBottom()
+}
 
 </script>
 
@@ -38,9 +46,11 @@ const emit = defineEmits<{
         />
 
         <template v-else>
-            <ChatMessages />
+            <ChatMessages ref="chatMessagesRef" />
 
-            <ChatComposer />
+            <ChatComposer
+                @send="sendMessage"
+            />
         </template>
     </div>
 </template>

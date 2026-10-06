@@ -21,6 +21,7 @@ function scrollToBottom() {
         messagesContainer.value.scrollTop =
             messagesContainer.value.scrollHeight
     })
+
 }
 
 watch(
@@ -44,6 +45,10 @@ watch(
         immediate: true,
     },
 )
+
+defineExpose({
+    scrollToBottom,
+})
 
 </script>
 

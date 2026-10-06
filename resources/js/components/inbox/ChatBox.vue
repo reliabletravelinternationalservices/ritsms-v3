@@ -4,11 +4,12 @@ import { ref } from 'vue'
 import ChatHeader from './ChatHeader.vue'
 import ChatMessage from './ChatMessage.vue'
 import MessageComposer from './MessageComposer.vue'
-import { Message } from '@/types/chat'
-
+import { Message, Mode } from '@/types/chat'
+import ChatComposer from './ChatComposer.vue'
 
 
 interface Props {
+    mode: Mode
     name: string
     initials: string
     status?: 'open' | 'closed'
@@ -88,7 +89,11 @@ const isThemTyping = ref(false)
 
         <!-- Composer always at bottom -->
         <div class="shrink-0 bg-background self-end w-full">
+            <ChatComposer 
+                v-if="mode === 'sessions'"
+            />
             <MessageComposer
+                v-if="mode === 'chats'"
                 @send="emit('send', $event)"
                 @typing="emit('typing', $event)"
             />

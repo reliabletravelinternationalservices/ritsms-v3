@@ -107,6 +107,10 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
                 Route::post('/sessions/{uuid}/messages', 'store')
                     ->name('inbox.sessions.messages.store');
+
+                Route::post(
+                    '/session/{uuid}/messages/read', 'markAsRead')
+                    ->name('inbox.session.messages.read');
             });
         });
 
