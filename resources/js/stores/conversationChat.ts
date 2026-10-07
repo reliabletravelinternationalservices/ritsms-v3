@@ -54,7 +54,7 @@ export const useConvoChatbox = defineStore('convo-chatbox', () => {
         // SELECTING CHAT
     }
 
-    const sendMessage = (message: string, attachment?: File[] | null) =>{
+    const sendMessage = (message: string, attachment?: unknown[] | null) =>{
 
     }
 

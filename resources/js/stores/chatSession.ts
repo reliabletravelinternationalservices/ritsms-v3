@@ -70,6 +70,9 @@ export const useChatSessionStore = defineStore('chat-session', () => {
     */
 
     async function selectChat(uuid: string) {
+        if (activeUUID.value === uuid) {
+            return
+        }
         activeUUID.value =uuid
         messages.value = []
         await loadSessionMessages(String(uuid))
@@ -147,25 +150,14 @@ export const useChatSessionStore = defineStore('chat-session', () => {
     }
 
 
-    function addMessageToSession(sessionUuid: string, message: Message) {
-        const session = chats.value.find(
-            chat => chat.uuid === sessionUuid,
-        )
-
-        if (session) {
-            session.latest_message = message
-        }
-    }
-
-
     const markIncomingMessagesAsRead = async () => {
-        if (!activeUUID) return
-        console.log(activeUUID.value)
+        if (!activeUUID.value) return
+
         try {
             const response = await axios.post(
                 route(
                     'admin.inbox.session.messages.read',
-                    {uuid: activeUUID},
+                    {uuid: activeUUID.value},
                 ),
             )
 
@@ -180,6 +172,40 @@ export const useChatSessionStore = defineStore('chat-session', () => {
                     ? { ...message, state: 'read' }
                     : message,
             )
+
+            const selectedChatIndex = chats.value.findIndex(
+                (chat) => String(chat.uuid) === String(activeUUID.value),
+            )
+
+            if (selectedChatIndex === -1) {
+                return
+            }
+
+            const selectedChat = chats.value[selectedChatIndex]
+            const unreadCountToClear = Math.min(
+                selectedChat.new_messages_count,
+                readMessageIds.size,
+            )
+
+            selectedChat.new_messages_count = Math.max(
+                0,
+                selectedChat.new_messages_count - unreadCountToClear,
+            )
+
+            if (selectedChat.latest_message) {
+                selectedChat.latest_message = readMessageIds.has(
+                    String(selectedChat.latest_message.id),
+                )
+                    ? { ...selectedChat.latest_message, state: 'read' }
+                    : selectedChat.latest_message
+            }
+
+            chats.value = [
+                selectedChat,
+                ...chats.value.filter(
+                    (chat) => String(chat.uuid) !== String(activeUUID.value),
+                ),
+            ]
         } catch (error) {
             console.error(
                 'Failed to mark chat messages as read:',

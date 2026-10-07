@@ -22,7 +22,7 @@ class ChatSessionController extends Controller
 
             unset($session->newMessagesCount);
         });
-        
+
         return response()->json($sessions);
     }
 
@@ -41,12 +41,11 @@ class ChatSessionController extends Controller
         return response()->json([
             'messages' => $messages,
         ]);
-
     }
 
 
 
-    
+
 
     public function store(
         Request $request,
@@ -83,7 +82,8 @@ class ChatSessionController extends Controller
         ], 201);
     }
 
-    public function markAsRead(string $uuid): JsonResponse
+
+    public function markAsRead(Request $request, string $uuid): JsonResponse
     {
         $chatSession = ChatSession::where('uuid', $uuid)->firstOrFail();
 

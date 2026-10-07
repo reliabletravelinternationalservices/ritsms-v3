@@ -16,7 +16,7 @@ import { useConvoChatbox } from '@/stores/conversationChat'
 import { useReferenceDataStore } from '@/stores/referenceData'
 
 import { Client } from '@/types/client'
-import { Conversation } from '@/types/conversation'
+import { ConversationWithLatestMessage } from '@/types/conversation'
 
 interface Props {
     clients: Client[]
@@ -162,12 +162,28 @@ function selectChat(id: string) {
 /**
  * Send message through the active inbox
  */
-function sendMessage(message: string) {
+function sendMessage(message: string, attachments?: unknown[] | null) {
     if (mode.value === 'sessions') {
         sessionInbox.sendMessage(message)
     } else {
-        convoInbox.sendMessage(message)
+        convoInbox.sendMessage(message, attachments)
     }
+}
+
+
+const getName = (chat: ChatSessionWithLatestMessage | ConversationWithLatestMessage) => {
+    if (mode.value === 'sessions') {
+        return (chat as ChatSessionWithLatestMessage).code ?? 'Unnamed session'
+    }
+
+    return (chat as ConversationWithLatestMessage).name ?? 'Unnamed conversation'
+}
+
+const getInitials = () => {
+    if (mode.value === 'sessions') {
+        return 'SC'
+    }
+    return 'CV'
 }
 
 /**
@@ -183,16 +199,13 @@ function sendMessage(message: string) {
 </script>
 
 <template>
+
     <Head title="Inbox" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div
-            class="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-border bg-background"
-        >
+        <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-border bg-background">
             <!-- HEADER -->
-            <header
-                class="flex shrink-0 items-center justify-between border-b px-5 py-2 text-foreground"
-            >
+            <header class="flex shrink-0 items-center justify-between border-b px-5 py-2 text-foreground">
                 <div>
                     <h2 class="text-sm font-semibold">
                         {{ mode === 'chats' ? 'Conversations' : 'Sessions' }}
@@ -203,56 +216,29 @@ function sendMessage(message: string) {
                     </p>
                 </div>
 
-                <SessionChatToggle
-                    :mode="mode"
-                    :total-new-convo-chat="convoInbox.totalUnreadChatConvo"
-                    :total-new-session-chat="sessionInbox.totalUnreadChatSessions"
-                    @change-mode="changeMode"
-                />
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="convoInbox.totalUnreadChatConvo"
+                    :total-new-session-chat="sessionInbox.totalUnreadChatSessions" @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
             <div class="flex min-h-0 flex-1">
                 <!-- LEFT -->
                 <div class="w-[320px] shrink-0">
-                    <InboxList
-                        :mode="mode"
-                        :chats="activeChats"
-                        :active-id="activeId"
-                        :loading="isChatsLoading"
-                        @select="selectChat"
-                        @create="createNewModal = true"
-                    />
+                    <InboxList :mode="mode" :chats="activeChats" :active-id="activeId" :loading="isChatsLoading"
+                        @select="selectChat" @create="createNewModal = true" />
                 </div>
 
                 <!-- CENTER -->
-                <main
-                    class="min-w-0 max-h-[calc(100vh-150px)] flex-1"
-                >
-                    <ChatBox
-                        v-if="activeChat"
-                        :mode="mode"
-                        :name="
-                            mode === 'sessions'
-                                ? activeChat.code
-                                : activeChat.name
-                        "
-                        initials="WV"
-                        :status="activeChat.status"
-                        :messages="activeMessages"
-                        :has-new-messages="hasNewMessages"
-                        :loading="isMessagesLoading"
-                        @send="sendMessage"
-                    />
+                <main class="min-w-0 max-h-[calc(100vh-150px)] flex-1">
+                    <ChatBox v-if="activeChat" :mode="mode" :name="getName(activeChat)" :initials="getInitials()"
+                        :status="(activeChat as ChatSessionWithLatestMessage).status" :messages="activeMessages"
+                        :loading="isMessagesLoading" @send="sendMessage" />
 
                     <NoConvoSelected v-else />
                 </main>
             </div>
         </div>
 
-        <NewConversationModal
-            v-model:open="createNewModal"
-            :contacts="refData.contacts"
-        />
+        <NewConversationModal v-model:open="createNewModal" :contacts="refData.contacts" />
     </AppLayout>
 </template>

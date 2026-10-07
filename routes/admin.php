@@ -110,22 +110,24 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
                     ->name('inbox.sessions.messages.store');
 
                 Route::post(
-                    '/session/{uuid}/messages/read', 'markAsRead')
+                    '/session/messages/{uuid}/read',
+                    'markAsRead'
+                )
                     ->name('inbox.session.messages.read');
             });
 
 
-            Route::controller(CreateConversationController::class)->group(function(){
+            Route::controller(CreateConversationController::class)->group(function () {
                 Route::post('/convo/store', 'store')->name('inbox.convo.store');
             });
         });
 
-        
 
 
 
 
-        
+
+
 
         /*
             |--------------------------------------------------------------------------
@@ -202,7 +204,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(BookingManagementController::class)->group(function () {
                 Route::get('/', 'index')->name('bookings');
             });
-
         });
 
         /*
@@ -231,7 +232,6 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             Route::controller(ClientManagementController::class)->group(function () {
                 Route::get('/', 'index')->name('clients');
             });
-
         });
     });
 

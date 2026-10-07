@@ -4,7 +4,7 @@ import { Send } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '../ui/textarea'
 import { useChatSessionStore } from '@/stores/chatSession'
-import {ref, computed} from 'vue'
+import { ref, computed } from 'vue'
 
 const chatSession = useChatSessionStore()
 
@@ -14,11 +14,11 @@ const emit = defineEmits<{
 
 const composedMessage = ref('')
 
-const canSend = computed(()=>  composedMessage.value.trim() === '');
+const canSend = computed(() => composedMessage.value.trim() !== '');
 
 
 function sendMessage() {
-    if (!canSend) return
+    if (!canSend.value) return
     emit('send')
 }
 </script>
@@ -26,22 +26,11 @@ function sendMessage() {
 <template>
     <div class="border-t p-3">
         <div class="flex items-center gap-2">
-            <Textarea
-                v-model="composedMessage"
-                placeholder="Write a message..."
-                class="flex-1 max-h-40 overflow-y-auto scrollbar-none"
-                :min-height="20"
-                :max-height="40"
-                @focus="chatSession.markIncomingMessagesAsRead"
-                @keydown.enter.exact.prevent="sendMessage"
-            />
+            <Textarea v-model="composedMessage" placeholder="Write a message..."
+                class="flex-1 max-h-40 overflow-y-auto scrollbar-none" :min-height="20" :max-height="40"
+                @focus="chatSession.markIncomingMessagesAsRead" @keydown.enter.exact.prevent="sendMessage" />
 
-            <Button
-                type="button"
-                size="icon"
-                :disabled="!canSend"
-                @click="sendMessage"
-            >
+            <Button type="button" size="icon" :disabled="!canSend" @click="sendMessage">
                 <Send class="size-4" />
             </Button>
         </div>
