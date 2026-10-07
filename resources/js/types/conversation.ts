@@ -46,3 +46,9 @@ export interface Conversation {
     is_group?: boolean;
 }
 
+
+
+export type ConversationWithLatestMessage = Conversation & {
+    latest_message: Message | null
+    new_messages_count: number
+}

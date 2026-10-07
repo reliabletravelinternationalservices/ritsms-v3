@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { formatDateLabel, formatMessageTime } from '@/lib/utils';
-import { ChatSession, ChatSessionWithLatestMessage } from '@/types/chat';
+import { formatMessageTime } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
 
+import {
+    ChatSessionWithLatestMessage,
+    Mode,
+} from '@/types/chat'
 
+import {
+    ConversationWithLatestMessage,
+} from '@/types/conversation'
 
 interface Props {
-    chat: ChatSessionWithLatestMessage
+    chat: ChatSessionWithLatestMessage | ConversationWithLatestMessage
+    mode: Mode
     active?: boolean
 }
 
@@ -14,29 +21,47 @@ const props = withDefaults(defineProps<Props>(), {
     active: false,
 })
 
+const isSession = (
+    chat: ChatSessionWithLatestMessage | ConversationWithLatestMessage,
+): chat is ChatSessionWithLatestMessage => {
+    return props.mode === 'sessions'
+}
+
+const chatName = () => {
+    if (isSession(props.chat)) {
+        return props.chat.code
+    }
+
+    return props.chat.name ?? 'Unnamed conversation'
+}
 </script>
 
 <template>
     <button
         type="button"
         class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition"
-        :class="props.active
-            ? 'bg-muted'
-            : 'hover:bg-muted/60'"
+        :class="
+            props.active
+                ? 'bg-muted'
+                : 'hover:bg-muted/60'
+        "
     >
         <!-- AVATAR -->
         <div class="relative shrink-0">
-            <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                SC
+            <div
+                class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+            >
+                {{ mode === 'sessions' ? 'SC' : 'CV' }}
             </div>
 
+            <!-- STATUS -->
             <span
-                v-if="chat.status === 'open'"
+                v-if="(chat as ChatSessionWithLatestMessage).status === 'open'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-green-500"
             />
 
             <span
-                v-else-if="chat.status === 'closed'"
+                v-else-if="(chat as ChatSessionWithLatestMessage).status === 'closed'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-gray-500"
             />
         </div>
@@ -44,33 +69,41 @@ const props = withDefaults(defineProps<Props>(), {
         <!-- INFO -->
         <div class="min-w-0 flex-1">
             <div class="flex items-center justify-between gap-2">
+                <!-- NAME -->
                 <p
                     class="truncate text-sm"
-                    :class="chat.latest_message?.state === 'unread'
-                        ? 'font-semibold'
-                        : 'font-medium'"
+                    :class="
+                        chat.latest_message?.state === 'unread'
+                            ? 'font-semibold'
+                            : 'font-medium'
+                    "
                 >
-                    {{ chat.code }}
+                    {{ chatName() }}
                 </p>
 
+                <!-- TIME -->
                 <span
                     v-if="chat.latest_message?.created_at"
                     class="shrink-0 text-[10px] text-muted-foreground"
                 >
-                    {{ formatMessageTime(chat.latest_message?.created_at) }}
+                    {{ formatMessageTime(chat.latest_message.created_at) }}
                 </span>
             </div>
 
+            <!-- LAST MESSAGE -->
             <div class="mt-1 flex items-center gap-2">
                 <p
                     class="min-w-0 flex-1 truncate text-xs"
-                    :class="chat.latest_message?.state === 'unread'
-                        ? 'font-medium text-foreground'
-                        : 'text-muted-foreground'"
+                    :class="
+                        chat.latest_message?.state === 'unread'
+                            ? 'font-medium text-foreground'
+                            : 'text-muted-foreground'
+                    "
                 >
                     {{ chat.latest_message?.message || 'No messages yet' }}
                 </p>
 
+                <!-- UNREAD COUNT -->
                 <span
                     v-if="chat.new_messages_count > 0"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"

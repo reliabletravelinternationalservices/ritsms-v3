@@ -21,14 +21,14 @@ const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
 
 <template>
     <Avatar class="h-8 w-8 overflow-hidden rounded-lg bg-sidebar border border-sidebar-border">
-        <AvatarImage v-if="showAvatar && user.avatar" :src="user.avatar" :alt="user.display_name" />
+        <AvatarImage v-if="showAvatar && user.avatar" :src="user.avatar" :alt="user.name" />
         <AvatarFallback class="rounded-lg text-white">
-            {{ getInitials(user.display_name) }}
+            {{ getInitials(user.name) }}
         </AvatarFallback>
     </Avatar>
 
     <div class="grid flex-1 text-left text-sm leading-tight">
-        <span class="truncate font-medium text-sidebar-foreground">{{ user.display_name }}</span>
+        <span class="truncate font-medium text-sidebar-foreground">{{ user.name }}</span>
         <span v-if="showEmail" class="truncate text-sidebar-foreground">{{ user.email }}</span>
     </div>
 </template>

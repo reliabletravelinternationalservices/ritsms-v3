@@ -69,10 +69,10 @@ export const useChatSessionStore = defineStore('chat-session', () => {
     |--------------------------------------------------------------------------
     */
 
-    async function selectChat(chat: ChatSessionWithLatestMessage) {
-        activeUUID.value = chat.uuid
+    async function selectChat(uuid: string) {
+        activeUUID.value =uuid
         messages.value = []
-        await loadSessionMessages(String(chat.uuid))
+        await loadSessionMessages(String(uuid))
     }
 
     /*
@@ -196,12 +196,9 @@ export const useChatSessionStore = defineStore('chat-session', () => {
 
 
 
-    async function sendMessage(payload: {
-        content: string
-        attachments: unknown[]
-    }) {
+    async function sendMessage(message: string) {
         if (activeUUID.value === null
-            || !payload.content.trim()
+            || !message.trim()
         ) {
             return
         }
@@ -217,7 +214,7 @@ export const useChatSessionStore = defineStore('chat-session', () => {
                     },
                 ),
                 {
-                    message: payload.content,
+                    message: message,
                 },
             )
 

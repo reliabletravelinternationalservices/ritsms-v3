@@ -4,6 +4,8 @@ import type { SelectOption } from '@/components/SelectMenu.vue'
 import { Client } from '@/types/client'
 import { Departure, TourWithDepartures } from '@/types/tour'
 import { formatDateString } from '@/lib/utils'
+import { User } from '@/types'
+import { Contact } from '@/types/contact'
 
 export interface Country {
     id: number
@@ -14,6 +16,7 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
     const countries = ref<Country[]>([])
     const clients = ref<Client[]>([])
     const tours = ref<TourWithDepartures[]>([])
+    const admins = ref<User[]>([])
 
     // COUNTRIES
     function setCountries(data: Country[]) {
@@ -40,6 +43,36 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
             label: `(${client.code}) ${client.name}`,
             value: String(client.id),
         }))
+    })
+
+
+
+    //FOR ADMINS
+    function setAdmins(data: User[]) {
+        admins.value = data
+    }
+
+
+
+    //FOR CONTACTS
+    const contacts = computed<Contact[]>(() => {
+        const clientsData = clients.value.map((client, index) => ({
+            index,
+            id: client.id,
+            name: client.name,
+            type: 'client' as const,
+            email: client.email,
+        }))
+
+        const adminsData = admins.value.map((admin, index) => ({
+            index: clientsData.length + index,
+            id: admin.id,
+            name: admin.name,
+            type: admin.role,
+            email: admin.email,
+        }))
+
+        return [...clientsData, ...adminsData]
     })
 
 
@@ -91,6 +124,11 @@ export const useReferenceDataStore = defineStore('reference-data', () => {
         clients,
         clientOptions,
         setClients,
+
+        admins,
+        setAdmins,
+
+        contacts,
 
         tours,
         tourOptions,

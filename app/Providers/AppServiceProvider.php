@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Client;
 use App\Models\Destination;
 use App\Models\Package;
+use App\Models\User;
 use App\Observers\DestinationObserver;
 use App\Observers\PackageObserver;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
         $this->getLimit('packages');
         $this->getLimit('countries', 120);
         $this->getObserver();
+        Relation::enforceMorphMap([
+            'user' => User::class,
+            'client' => Client::class,
+        ]);
     }
 
 

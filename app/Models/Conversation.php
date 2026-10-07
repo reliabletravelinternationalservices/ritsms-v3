@@ -12,14 +12,10 @@ class Conversation extends Model
         'name',
         'avatar',
         'last_message_at',
-        'is_turned_over',
-        'turned_over_at',
     ];
 
     protected $casts = [
         'last_message_at' => 'datetime',
-        'is_turned_over' => 'boolean',
-        'turned_over_at' => 'datetime',
     ];
 
     /*
@@ -30,9 +26,7 @@ class Conversation extends Model
 
     public function participants(): HasMany
     {
-        return $this->hasMany(
-            ConversationParticipant::class
-        );
+        return $this->hasMany(ConversationParticipant::class);
     }
 
     public function messages(): HasMany

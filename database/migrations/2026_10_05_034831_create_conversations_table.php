@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('avatar')->nullable();
             $table->timestamp('last_message_at')->nullable();
-            $table->boolean('is_turned_over')->default(false);
-            $table->timestamp('turned_over_at')->nullable();
 
             $table->index('last_message_at');
             $table->timestamps();

@@ -13,12 +13,35 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'code' => 'ADM-20260421-02445',
-            'display_name' => 'Reliable Info',
-            'is_active' => true,
-            'email' => 'reliabletravelinfo@gmail.com',
-            'password' => bcrypt('password'),
-        ]);
+        $users = [
+            [
+                'code' => 'AD-20260421-02445',
+                'name' => 'Reliable Info',
+                'is_active' => true,
+                'role' => 'admin',
+                'email' => 'reliabletravelinfo@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'code' => 'AD-20260421-02456',
+                'name' => 'Reliable Dhel',
+                'is_active' => true,
+                'role' => 'agent',
+                'email' => 'reliabledhel@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'code' => 'AD-20260421-12344',
+                'name' => 'Reliable Shy',
+                'is_active' => true,
+                'role' => 'agent',
+                'email' => 'reliableshy@gmail.com',
+                'password' => bcrypt('password'),
+            ]
+        ];
+
+        foreach ($users as $user) {
+            User::create($user);
+        }
     }
 }

@@ -3,18 +3,24 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
-import { ChatSessionWithLatestMessage, Mode } from '@/types/chat'
+import {
+    ChatSessionWithLatestMessage,
+    Mode,
+} from '@/types/chat'
+import {
+    ConversationWithLatestMessage,
+} from '@/types/conversation'
 
 interface Props {
     mode: Mode
-    chats: ChatSessionWithLatestMessage[]
+    chats: ChatSessionWithLatestMessage[] | ConversationWithLatestMessage[]
     activeId: number | string | null
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    select: [chat: ChatSessionWithLatestMessage]
+    select: [id: string | number]
     create: []
 }>()
 
@@ -27,17 +33,32 @@ const filteredChats = computed(() => {
         return props.chats
     }
 
-    return props.chats.filter(chat =>
-        chat.code.toLowerCase().includes(query)
-    )
+    return props.chats.filter((chat) => {
+        if (props.mode === 'sessions') {
+            const session = chat as ChatSessionWithLatestMessage
+
+            return session.code
+                ?.toLowerCase()
+                .includes(query)
+        }
+
+        const conversation = chat as ConversationWithLatestMessage
+
+        return (
+            conversation.name
+                ?.toLowerCase()
+                .includes(query)
+        )
+    })
 })
 </script>
 
 <template>
-    <aside class="flex h-full min-h-0 flex-col border-r text-foreground py-6">
-
+    <aside
+        class="flex h-full min-h-0 flex-col border-r py-6 text-foreground"
+    >
         <!-- SEARCH -->
-        <div class="shrink-0 px-3 pb-3 flex items-center gap-2">
+        <div class="flex shrink-0 items-center gap-2 px-3 pb-3">
             <div class="relative w-full">
                 <Icon
                     icon="lucide:search"
@@ -47,11 +68,16 @@ const filteredChats = computed(() => {
                 <input
                     v-model="search"
                     type="text"
-                    placeholder="Search conversations..."
+                    :placeholder="
+                        mode === 'chats'
+                            ? 'Search conversations...'
+                            : 'Search sessions...'
+                    "
                     class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
                 />
             </div>
 
+            <!-- NEW CONVERSATION -->
             <button
                 v-if="mode === 'chats'"
                 type="button"
@@ -73,9 +99,10 @@ const filteredChats = computed(() => {
                 :key="chat.id"
                 :chat="chat"
                 :active="chat.id === activeId"
-                @click="emit('select', chat)"
+                @click="emit('select', chat.id)"
             />
 
+            <!-- EMPTY -->
             <div
                 v-if="filteredChats.length === 0"
                 class="flex flex-col items-center justify-center px-4 py-12 text-center"

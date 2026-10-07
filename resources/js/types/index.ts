@@ -53,31 +53,20 @@ export interface SharedData {
 
 export interface User {
     id: number;
-    name: string;
+    code: string;
     email: string;
     avatar?: string;
-    display_name: string;
+    name: string;
     phone: string | null;
     role: 'admin' | 'agent';
     email_verified_at: string | null;
-    status: 'active' | 'inactive';
+    is_active: boolean;
     created_at: string;
     updated_at: string;
 }
 
 
 
-export interface Traveler {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    phone: string | null;
-    email_verified_at: string | null;
-    status: 'active' | 'inactive';
-    created_at: string;
-    updated_at: string;
-}
 
 export type BreadcrumbItemType = BreadcrumbItem;
 
