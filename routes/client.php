@@ -113,10 +113,15 @@ Route::middleware('chat.session')->group(function () {
         [ChatSessionController::class, 'show']
     )->name('chat.session.show');
 
+    Route::post(
+        '/chat/session/{chatSession:uuid}/validate',
+        [ChatSessionController::class, 'validateSession']
+    )->name('chat.session.validate');
+
     Route::get(
         '/chat/session/{chatSession:uuid}/messages',
-        [ChatMessageController::class, 'index']
-    )->name('chat.session.messages.index');
+        [ChatMessageController::class, 'getMessages']
+    )->name('chat.session.messages');
 
     Route::post(
         '/chat/session/{chatSession:uuid}/messages/read',

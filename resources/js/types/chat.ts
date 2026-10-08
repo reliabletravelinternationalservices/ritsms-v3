@@ -8,6 +8,18 @@ export type Status = 'online' | 'away' | 'offline'
 // ===========================================
 
 
+
+export interface StoredSession {
+    uuid: string;
+    token: string;
+    valid: boolean;
+}
+
+export interface ValidationResponse {
+    is_valid: boolean;
+    message: string;
+}
+
 export interface ChatSession {
     id: number;
     uuid: string;
@@ -35,7 +47,7 @@ export type MessageWithSessionUIID = Message & {
 }
 
 
-export type ChatSessionWithLatestMessage = ChatSession & {
+export type ChatSessionWithLatestMessage = ChatSessionWithToken & {
     latest_message: Message | null
     new_messages_count: number
 }

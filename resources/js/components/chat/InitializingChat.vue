@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { MessageCircle, LoaderCircle } from '@lucide/vue'
 
-interface Props {
-    initializing: boolean
-}
-
-defineProps<Props>()
 </script>
 
 <template>

@@ -53,6 +53,7 @@ class ChatSession extends Model
         return $this->hasOne(ChatMessage::class)
             ->selectRaw('chat_session_id, COUNT(*) as count')
             ->where('state', 'unread')
+            ->where('sender_type', 'session')
             ->groupBy('chat_session_id');
     }
 

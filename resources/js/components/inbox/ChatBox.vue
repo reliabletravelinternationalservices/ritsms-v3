@@ -66,8 +66,8 @@ const emit = defineEmits<{
 
         <!-- Composer always at bottom -->
         <div class="shrink-0 bg-background self-end w-full">
-            <ChatComposer v-if="mode === 'sessions'" />
-            <MessageComposer v-if="mode === 'chats'" @send="emit('send', $event)" @typing="emit('typing', $event)" />
+            <ChatComposer @send="emit('send', $event)" />
+            <!-- <MessageComposer v-if="mode === 'chats'" @send="emit('send', $event)" /> -->
         </div>
     </div>
 </template>

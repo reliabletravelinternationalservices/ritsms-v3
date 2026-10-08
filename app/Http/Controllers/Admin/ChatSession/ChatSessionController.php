@@ -76,9 +76,11 @@ class ChatSessionController extends Controller
 
         return response()->json([
             'id' => $chatMessage->id,
-            'sender' => 'me',
-            'content' => $chatMessage->message,
-            'time' => $chatMessage->created_at->format('g:i A'),
+            'type' => $chatMessage->type,
+            'message' => $chatMessage->message,
+            'created_at' => $chatMessage->created_at,
+            'sender_type' => $chatMessage->sender_type,
+            'state' => $chatMessage->state,
         ], 201);
     }
 

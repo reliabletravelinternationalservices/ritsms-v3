@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const isMine = computed(() => props.message.sender_type === 'admin')
 
+
 </script>
 
 <template>

@@ -32,4 +32,12 @@ class ChatSessionController extends Controller
             'code' => $chatSession->code,
         ]);
     }
+
+    public function validateSession(ChatSession $chatSession): JsonResponse
+    {
+        return response()->json([
+            'is_valid' => true,
+            'message' => 'Chat Credentia is valid..'
+        ], 200);
+    }
 }

@@ -9,17 +9,20 @@ import { ref, computed } from 'vue'
 const chatSession = useChatSessionStore()
 
 const emit = defineEmits<{
-    send: []
+    send: [message: string, attachment?: unknown[] | null]
 }>()
 
 const composedMessage = ref('')
+const attachment = ref<unknown[] | null>(null)
 
 const canSend = computed(() => composedMessage.value.trim() !== '');
 
 
 function sendMessage() {
     if (!canSend.value) return
-    emit('send')
+    emit('send',  composedMessage.value, attachment.value)
+    composedMessage.value=''
+    attachment.value=null
 }
 </script>
 

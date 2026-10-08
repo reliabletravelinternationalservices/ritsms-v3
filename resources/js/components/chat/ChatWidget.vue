@@ -4,12 +4,13 @@ import { Icon } from '@iconify/vue'
 
 import ChatWindow from './ChatWindow.vue'
 import { useSessionChatbox } from '@/stores/chatbox.js'
+import { useSessionChat } from '@/stores/sessionChat'
 
 const chatbox = useSessionChatbox()
-
+const sessionChat = useSessionChat()
 
 onMounted(() => {
-    chatbox.initializeChatSession()
+    sessionChat.initializeStoredChat()
 })
 
 </script>

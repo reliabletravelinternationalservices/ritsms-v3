@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ChatMessageController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function getMessages(Request $request): JsonResponse
     {
         /** @var ChatSession $chatSession */
         $chatSession = $request->attributes->get('chat_session');

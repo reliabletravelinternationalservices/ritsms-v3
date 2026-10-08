@@ -5,8 +5,14 @@ import ChatHeader from './ChatHeader.vue'
 import ChatMessages from './ChatMessages.vue'
 import ChatComposer from './ChatComposer.vue'
 import ChatStart from './ChatStart.vue'
-import { useSessionChatbox } from '@/stores/chatbox.js'
+import { useSessionChatbox } from '@/stores/chatbox'
 import InitializingChat from './InitializingChat.vue'
+import { useSessionChat } from '@/stores/sessionChat'
+
+const sessionChat = useSessionChat()
+
+
+
 
 const chatMessagesRef = ref<InstanceType<typeof ChatMessages> | null>(null)
 
@@ -30,19 +36,19 @@ const sendMessage = () => {
         class="mb-3 flex h-[500px] w-[360px] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl"
     >
         <ChatHeader
-            :online="chatbox.isHasSession"
+            :online="sessionChat.isValidSession"
             @close="emit('close')"
         />
         
         <InitializingChat
-            v-if="!chatbox.isHasSession && chatbox.isInitializing"
-            :initializing="chatbox.isInitializing"
+            v-if="sessionChat.isInitializing"
         />
 
         <ChatStart
-            v-else-if="!chatbox.isHasSession"
-            :starting="chatbox.isChatStarting"
-            @start="chatbox.startChat"
+            v-else-if="!sessionChat.isValidSession && 
+            !sessionChat.isInitializing "
+            :starting="sessionChat.isCreatingSession"
+            @start="sessionChat.createChatSession()"
         />
 
         <template v-else>
