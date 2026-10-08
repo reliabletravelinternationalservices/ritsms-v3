@@ -4,11 +4,10 @@ import { nextTick, ref, watch } from 'vue'
 import Message from './Message.vue'
 import EmptyMessage from './EmptyMessage.vue'
 import MessageSkeleton from './MessageSkeleton.vue'
-
-import { useSessionChatbox } from '@/stores/chatbox.js'
 import { formatDateLabel, isSameDay } from '@/lib/utils.js'
+import { useSessionChat } from '@/stores/sessionChat'
 
-const chatbox = useSessionChatbox()
+const sessionChat = useSessionChat()
 
 const messagesContainer = ref<HTMLElement | null>(null)
 
@@ -26,9 +25,9 @@ function scrollToBottom() {
 
 watch(
     [
-        () => chatbox.getChatSessionDetails?.uuid,
-        () => chatbox.getMessages.length,
-        () => chatbox.isLoadingMessages,
+        () => sessionChat.storedSession?.uuid,
+        () => sessionChat.getMessages.length,
+        () => sessionChat.isInitializing,
     ],
     ([sessionId, length, isLoading]) => {
         if (
@@ -53,56 +52,36 @@ defineExpose({
 </script>
 
 <template>
-    <div
-        ref="messagesContainer"
-        class="flex-1 overflow-y-auto scroll-smooth p-4
+    <div ref="messagesContainer" class="flex-1 overflow-y-auto scroll-smooth p-4
             [scrollbar-width:thin]
-            [scrollbar-color:hsl(var(--muted-foreground)/0.45)_transparent]"
-    >
+            [scrollbar-color:hsl(var(--muted-foreground)/0.45)_transparent]">
         <!-- Loading -->
-        <MessageSkeleton
-            v-if="chatbox.isLoadingMessages"
-        />
+        <MessageSkeleton v-if="sessionChat.isInitializing" />
 
         <!-- Empty -->
-        <EmptyMessage
-            v-else-if="chatbox.isEmptyMessage"
-        />
+        <EmptyMessage v-else-if="sessionChat.isEmptyNewMessages" />
 
         <!-- Messages -->
-        <div
-            v-else
-            class="space-y-5"
-        >
-            <template
-                v-for="(message, index) in chatbox.getMessages"
-                :key="message.id"
-            >
+        <div v-else class="space-y-5">
+            <template v-for="(message, index) in sessionChat.getMessages" :key="message.id">
                 <!-- Date separator -->
-                <div
-                    v-if="
-                        index === 0 ||
-                        !isSameDay(
-                            message.created_at,
-                            chatbox.getMessages[index - 1].created_at,
-                        )
-                    "
-                    class="flex items-center gap-3"
-                >
+                <div v-if="
+                    index === 0 ||
+                    !isSameDay(
+                        message.created_at,
+                        sessionChat.getMessages[index - 1].created_at,
+                    )
+                " class="flex items-center gap-3">
                     <div class="h-px flex-1 bg-border" />
 
-                    <span
-                        class="text-[10px] font-medium uppercase tracking-wider text-muted-foreground"
-                    >
+                    <span class="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                         {{ formatDateLabel(message.created_at) }}
                     </span>
 
                     <div class="h-px flex-1 bg-border" />
                 </div>
 
-                <Message
-                    :message="message"
-                />
+                <Message :message="message" />
             </template>
         </div>
     </div>

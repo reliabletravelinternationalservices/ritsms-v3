@@ -12,7 +12,6 @@ export type Status = 'online' | 'away' | 'offline'
 export interface StoredSession {
     uuid: string;
     token: string;
-    valid: boolean;
 }
 
 export interface ValidationResponse {
@@ -37,12 +36,12 @@ export interface Message {
     message: string
     created_at: string
     sender_type: 'session' | 'admin'
-    status?: 'sending' | 'sent' | 'failed'
-    state?: 'unread' | 'read'
+    status: 'sending' | 'sent' | 'delivered' | 'failed'
+    state: 'unread' | 'read'
 }
 
 
-export type MessageWithSessionUIID = Message & {
+export type MessageWithSessionUUID = Message & {
     uuid: string
 }
 

@@ -1,5 +1,4 @@
 import { ChatSession, ChatSessionWithToken, Message, ValidationResponse } from '@/types/chat'
-import type { CountryFilter, CountryWithLocations } from '@/types/country'
 import axios from 'axios'
 
 const api = axios.create({
@@ -47,6 +46,25 @@ export const sessionChatService = {
     ): Promise<ValidationResponse> {
         const { data } = await api.post<ValidationResponse>(
             route('chat.session.validate', {
+                chatSession: uuid,
+            }),
+            {},
+            {
+                headers: {
+                    'X-Chat-Token': token,
+                },
+            }
+        )
+
+        return data
+    },
+
+    async markChatMessagesAsRead(
+        uuid: string,
+        token: string
+    ): Promise<number[]> {
+        const { data } = await api.post<number[]>(
+            route('chat.session.messages.read', {
                 chatSession: uuid,
             }),
             {},

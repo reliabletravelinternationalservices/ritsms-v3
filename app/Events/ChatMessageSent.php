@@ -21,7 +21,7 @@ class ChatMessageSent implements ShouldBroadcast
     {
         return [
             new Channel(
-                'chat.session.'.$this->uuid
+                'chat.session.' . $this->uuid
             ),
 
             new Channel('chat.admin')

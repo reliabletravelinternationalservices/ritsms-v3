@@ -2,7 +2,7 @@
 
 import ChatHeader from './ChatHeader.vue'
 import ChatMessage from './ChatMessage.vue'
-import MessageComposer from './MessageComposer.vue'
+// import MessageComposer from './MessageComposer.vue'
 import { Message as SessionMessage, Mode } from '@/types/chat'
 import { Message as ConversationMessage } from '@/types/conversation'
 import ChatComposer from './ChatComposer.vue'
