@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client\ChatSession;
 
+use App\Events\ChatMessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\ChatSession;
 use Illuminate\Http\Request;
@@ -13,6 +14,18 @@ class ChatSessionController extends Controller
     public function store(Request $request): JsonResponse
     {
         $session = ChatSession::create();
+
+        $message = $session->messages()->create([
+            'sender_type' => 'admin',
+            'message' => 'Thank you for massaging us. How can we help you?',
+            'state' => 'unread',
+        ]);
+
+        $session->update([
+            'last_message_at' => now(),
+        ]);
+
+        broadcast(new ChatMessageSent($session->uuid, $message));
 
         return response()->json([
             'id' => $session->id,

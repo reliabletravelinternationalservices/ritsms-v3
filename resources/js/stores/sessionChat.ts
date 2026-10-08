@@ -13,7 +13,6 @@ export const useSessionChat = defineStore('session-chat', () => {
     const chats = ref<ChatSessionWithLatestMessage[]>([]);
     const messages = ref<Message[]>([]);
 
-
     const initializing = ref(false);
     const creatingSession = ref(false);
 
@@ -27,7 +26,7 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     const isEmptySession = computed(()=> storedSession.value === null);
 
-    const isValidSession = computed(() => storedSession.value?.valid?? false)
+    const isValidSession = computed(() => !isEmptySession.value && storedSession.value!.valid)
 
     const isCreatingSession = computed(()=> creatingSession.value);
 
@@ -67,12 +66,12 @@ export const useSessionChat = defineStore('session-chat', () => {
             return;
         };
         
-        const sessionData = JSON.stringify({
+        const sessionData = {
             uuid: session.uuid,
             token: session.token,
             valid: true,
-        });
-
+        };
+        
         localStorage.setStorageDataByKey(StorageKey.CHAT_SESSION, sessionData);
         creatingSession.value = false;
     }

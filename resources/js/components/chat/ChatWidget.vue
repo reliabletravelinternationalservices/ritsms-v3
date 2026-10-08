@@ -9,8 +9,8 @@ import { useSessionChat } from '@/stores/sessionChat'
 const chatbox = useSessionChatbox()
 const sessionChat = useSessionChat()
 
-onMounted(() => {
-    sessionChat.initializeStoredChat()
+onMounted(async () => {
+    await sessionChat.initializeStoredChat()
 })
 
 </script>

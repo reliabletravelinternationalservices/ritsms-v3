@@ -24,9 +24,14 @@ const emit = defineEmits<{
 }>()
 
 
-const sendMessage = () => {
-    chatbox.sendComposedMessage()
+const sendMessage = async () => {
+    await chatbox.sendComposedMessage()
     chatMessagesRef.value?.scrollToBottom()
+}
+
+const startSession = async () => {
+    await sessionChat.createChatSession()
+    await sessionChat.initializeStoredChat()
 }
 
 </script>
@@ -45,10 +50,9 @@ const sendMessage = () => {
         />
 
         <ChatStart
-            v-else-if="!sessionChat.isValidSession && 
-            !sessionChat.isInitializing "
+            v-else-if="!sessionChat.isValidSession && !sessionChat.isInitializing"
             :starting="sessionChat.isCreatingSession"
-            @start="sessionChat.createChatSession()"
+            @start="startSession"
         />
 
         <template v-else>
