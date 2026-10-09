@@ -10,10 +10,10 @@ const sessionChat = useSessionChat();
 
 
 const composedMessage = ref('');
-
+const attachment = ref<unknown[]|null>(null);
 
 const emit = defineEmits<{
-    send: []
+    send: [message:string, attachment:unknown[]|null]
 }>()
 
 
@@ -23,7 +23,8 @@ const canSendMessage = computed(() => {
 
 function sendMessage() {
     if (!canSendMessage.value) return
-    emit('send')
+    emit('send', composedMessage.value, attachment.value)
+    composedMessage.value = '';
 }
 </script>
 

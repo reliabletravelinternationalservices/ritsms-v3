@@ -40,11 +40,6 @@ class ChatMessageController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'sender_type' => [
-                'required',
-                'string',
-                'in:session,admin',
-            ],
             'message' => [
                 'required',
                 'string',
@@ -56,7 +51,7 @@ class ChatMessageController extends Controller
         $chatSession = $request->attributes->get('chat_session');
 
         $chatMessage = $chatSession->messages()->create([
-            'sender_type' => $validated['sender_type'],
+            'sender_type' => 'session',
             'message' => $validated['message'],
             'state' => 'unread',
         ]);

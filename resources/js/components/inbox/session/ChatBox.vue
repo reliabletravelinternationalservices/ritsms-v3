@@ -1,11 +1,9 @@
 <script setup lang="ts">
-
-import ChatHeader from './ChatHeader.vue'
 import ChatMessage from './ChatMessage.vue'
-// import MessageComposer from './MessageComposer.vue'
 import { Message as SessionMessage, Mode } from '@/types/chat'
-import { Message as ConversationMessage } from '@/types/conversation'
+import ChatHeader from './ChatHeader.vue'
 import ChatComposer from './ChatComposer.vue'
+import { nextTick, ref, watch } from 'vue'
 
 
 interface Props {
@@ -13,10 +11,10 @@ interface Props {
     name: string
     initials: string
     status?: 'open' | 'closed' | undefined
-    messages: SessionMessage[] | ConversationMessage[]
+    messages: SessionMessage[]
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     send: [
@@ -30,7 +28,33 @@ const emit = defineEmits<{
     delete: []
 }>()
 
-// const isThemTyping = ref(false)
+
+const messagesContainer = ref<HTMLElement | null>(null)
+
+function scrollToBottom() {
+    nextTick(() => {
+        const container = messagesContainer.value
+
+        if (!container) return
+
+        container.scrollTop = container.scrollHeight
+    })
+}
+
+watch(
+    () => props.messages.length,
+    (newLength, oldLength) => {
+        if (newLength > oldLength) {
+            scrollToBottom()
+        }
+    },
+)
+
+defineExpose({
+    scrollToBottom,
+})
+
+
 </script>
 
 <template>
@@ -49,7 +73,7 @@ const emit = defineEmits<{
             </div>
 
             <div class="mt-6 space-y-4">
-                <ChatMessage v-for="message in messages" :key="message.id" :message="message" />
+                <ChatMessage ref="messagesContainer" v-for="message in messages" :key="message.id" :message="message" />
             </div>
 
             <!-- Other user is typing -->

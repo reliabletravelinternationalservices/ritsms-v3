@@ -11,8 +11,6 @@ import { useSessionChat } from '@/stores/sessionChat'
 const sessionChat = useSessionChat()
 
 
-
-
 const chatMessagesRef = ref<InstanceType<typeof ChatMessages> | null>(null)
 
 
@@ -21,12 +19,13 @@ const emit = defineEmits<{
 }>()
 
 
-const sendMessage = async () => {
-
+const sendMessage = async (message:string, attachment: unknown[]|null) => {
+    await sessionChat.sendComposedMessage(message, attachment);
     chatMessagesRef.value?.scrollToBottom()
 }
 
 const startSession = async () => {
+
     await sessionChat.createChatSession()
 }
 

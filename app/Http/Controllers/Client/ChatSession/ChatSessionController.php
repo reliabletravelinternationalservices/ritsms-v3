@@ -17,7 +17,7 @@ class ChatSessionController extends Controller
 
         $message = $session->messages()->create([
             'sender_type' => 'admin',
-            'message' => 'Thank you for massaging us. How can we help you?',
+            'message' => 'Hello, this is Reliable International Travel Services. How can we help you?',
             'state' => 'unread',
         ]);
 

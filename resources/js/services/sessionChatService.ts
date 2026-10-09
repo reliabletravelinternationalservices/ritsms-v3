@@ -1,4 +1,5 @@
-import { ChatSession, ChatSessionWithToken, Message, ValidationResponse } from '@/types/chat'
+import { ChatSessionWithLatestMessage, ChatSessionWithToken, Message, ValidationResponse } from '@/types/chat'
+import { CursorPaginated } from '@/types/cursor_paginate'
 import axios from 'axios'
 
 const api = axios.create({
@@ -14,10 +15,6 @@ const api = axios.create({
 
 
 export const sessionChatService = {
-    async fetchChatByUUID(uuid:string): Promise<ChatSession> {
-        const { data } = await api.get<ChatSession>(route(''))
-        return data
-    },
     
     async createChat(): Promise<ChatSessionWithToken> {
         const { data } = await api.post<ChatSessionWithToken>(route('chat.session.store'))
@@ -39,11 +36,26 @@ export const sessionChatService = {
     },
 
 
+    async storeChatMessage(uuid:string, token: string, payload: {
+        message: string;
+    }): Promise<Message[]> {
+        const { data } = await api.post<Message[]>(route('chat.session.message.store', {
+            chatSession: uuid,
+        }), 
+        {
+            ...payload
+        },
+        {
+            headers: {
+                'X-Chat-Token': token,
+            },
+        })
+        return data
+    },
 
-    async validateSessionChat(
-        uuid: string,
-        token: string
-    ): Promise<ValidationResponse> {
+
+
+    async validateSession(uuid: string, token: string): Promise<ValidationResponse> {
         const { data } = await api.post<ValidationResponse>(
             route('chat.session.validate', {
                 chatSession: uuid,
@@ -59,10 +71,7 @@ export const sessionChatService = {
         return data
     },
 
-    async markChatMessagesAsRead(
-        uuid: string,
-        token: string
-    ): Promise<number[]> {
+    async markChatMessagesAsRead(uuid: string, token: string): Promise<number[]> {
         const { data } = await api.post<number[]>(
             route('chat.session.messages.read', {
                 chatSession: uuid,
@@ -76,8 +85,34 @@ export const sessionChatService = {
         )
 
         return data
-    }
+    },
 
+
+    //-----------------------------
+    async fetchChats(): Promise<CursorPaginated<ChatSessionWithLatestMessage>> {
+        const { data } = await api.get<CursorPaginated<ChatSessionWithLatestMessage>>(route('admin.inbox.sessions'))
+        return data
+    },
+
+    async fetchChatMessagesToAdminByUUID(uuid:string): Promise<Message[]> {
+        const { data } = await api.get<Message[]>(route('admin.inbox.sessions.show', {
+            uuid: uuid
+        }))
+        return data
+    },
+
+
+    async markSessionChatMessagesAsRead(uuid: string): Promise<number[]> {
+        const { data } = await api.post<number[]>(
+            route('admin.inbox.session.messages.read', {
+                uuid: uuid,
+            }),
+        )
+
+        return data
+    },
+
+    
 
 }
 

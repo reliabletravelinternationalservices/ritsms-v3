@@ -59,7 +59,7 @@ defineExpose({
         <MessageSkeleton v-if="sessionChat.isInitializing" />
 
         <!-- Empty -->
-        <EmptyMessage v-else-if="sessionChat.isEmptyNewMessages" />
+        <EmptyMessage v-else-if="sessionChat.isEmptyMessage" />
 
         <!-- Messages -->
         <div v-else class="space-y-5">

@@ -1,18 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { formatMessageTime } from '@/lib/utils'
 
 import {
     ChatSessionWithLatestMessage,
-    Mode,
 } from '@/types/chat'
 
-import {
-    ConversationWithLatestMessage,
-} from '@/types/conversation'
-
 interface Props {
-    chat: ChatSessionWithLatestMessage | ConversationWithLatestMessage
-    mode: Mode
+    chat: ChatSessionWithLatestMessage
     active?: boolean
 }
 
@@ -20,13 +15,10 @@ const props = withDefaults(defineProps<Props>(), {
     active: false,
 })
 
-const chatName = () => {
-    if (props.mode === 'sessions') {
-        return (props.chat as ChatSessionWithLatestMessage).code ?? 'Unnamed session'
-    }
 
-    return (props.chat as ConversationWithLatestMessage).name ?? 'Unnamed conversation'
-}
+const isSendMessae = computed(()=> props.chat.latest_message?.sender_type === 'admin')
+
+
 </script>
 
 <template>
@@ -38,11 +30,11 @@ const chatName = () => {
         <div class="relative shrink-0">
             <div
                 class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                {{ mode === 'sessions' ? 'SC' : 'CV' }}
+                SC
             </div>
 
             <!-- STATUS -->
-            <span v-if="(chat as ChatSessionWithLatestMessage).status === 'open'"
+            <span v-if="chat.status === 'open'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-green-500" />
 
             <span v-else-if="(chat as ChatSessionWithLatestMessage).status === 'closed'"
@@ -57,7 +49,7 @@ const chatName = () => {
                     ? 'font-semibold'
                     : 'font-medium'
                     ">
-                    {{ chatName() }}
+                    {{ chat.code }}
                 </p>
 
                 <!-- TIME -->
@@ -72,6 +64,7 @@ const chatName = () => {
                     ? 'font-medium text-foreground'
                     : 'text-muted-foreground'
                     ">
+                    <span v-if="isSendMessae">You:</span>
                     {{ chat.latest_message?.message || 'No messages yet' }}
                 </p>
 

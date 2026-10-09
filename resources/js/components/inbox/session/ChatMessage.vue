@@ -2,7 +2,7 @@
 import { formatMessageTime } from '@/lib/utils';
 import { Message as SessionMessage } from '@/types/chat';
 import { Message as ConversationMessage } from '@/types/conversation';
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
 
 const props = defineProps<{
@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const isMine = computed(() => props.message.sender_type === 'admin')
+
 
 
 </script>

@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 
 import AppLayout from '@/layouts/AppLayout.vue'
-import InboxList from '@/components/inbox/InboxList.vue'
-import ChatBox from '@/components/inbox/ChatBox.vue'
+import SessionInboxList from '@/components/inbox/session/InboxList.vue'
+import ChatBox from '@/components/inbox/session/ChatBox.vue'
 import SessionChatToggle from '@/components/inbox/SessionChatToggle.vue'
 import NewConversationModal from '@/components/inbox/NewConversationModal.vue'
 import NoConvoSelected from '@/components/inbox/NoConvoSelected.vue'
 
 import type { BreadcrumbItem, User } from '@/types'
-import { Mode, ChatSessionWithLatestMessage } from '@/types/chat'
-import { useChatSessionStore } from '@/stores/chatSession'
-import { useConvoChatbox } from '@/stores/conversationChat'
+import { Mode } from '@/types/chat'
 import { useReferenceDataStore } from '@/stores/referenceData'
 
 import { Client } from '@/types/client'
-import { ConversationWithLatestMessage } from '@/types/conversation'
+import { useAdminChat } from '@/stores/adminChat'
 
 interface Props {
     clients: Client[]
@@ -37,8 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const mode = ref<Mode>(props.filters.type)
 
-const sessionInbox = useChatSessionStore()
-const convoInbox = useConvoChatbox()
+const adminChat = useAdminChat()
 const refData = useReferenceDataStore()
 
 const createNewModal = ref(false)
@@ -73,129 +70,31 @@ watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
-
-        if (value === 'sessions') {
-            await sessionInbox.initializeSessionChats()
-        } else if (value === 'chats') {
-            await convoInbox.initializeConvoChats()
-        }
+        await adminChat.initializeChats(mode.value)
     },
     {
         immediate: true,
     },
 )
 
-/**
- * Active inbox list
- */
-const activeChats = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.chats
-    }
 
-    return convoInbox.chats
-})
-
-/**
- * Active selected chat
- */
-const activeChat = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.selectedActiveChat
-    }
-
-    return convoInbox.selectedActiveChat
-})
-
-/**
- * Active chat messages
- */
-const activeMessages = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.getMessages
-    }
-
-    return convoInbox.getMessages
-})
-
-/**
- * Active loading state
- */
-const isChatsLoading = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.isChatsLoading
-    }
-
-    return convoInbox.isChatsLoading
-})
-
-const isMessagesLoading = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.isMessagesLoading
-    }
-
-    return convoInbox.isMessagesLoading
-})
-
-/**
- * Active selected ID
- */
-const activeId = computed(() => {
-    if (mode.value === 'sessions') {
-        return sessionInbox.activeUUID
-    }
-
-    return convoInbox.activeID
-})
-
-/**
- * Select chat from the active inbox
- */
-function selectChat(id: string) {
-    if (mode.value === 'sessions') {
-        sessionInbox.selectChat(id)
-    } else {
-        convoInbox.selectChat(Number(id))
-    }
+const selectChat = (id:string) => {
+    adminChat.selectChat(mode.value, id)
 }
+
 
 /**
  * Send message through the active inbox
  */
 function sendMessage(message: string, attachments?: unknown[] | null) {
     if (mode.value === 'sessions') {
-        sessionInbox.sendMessage(message)
+        // sessionInbox.sendMessage(message)
     } else {
-        convoInbox.sendMessage(message, attachments)
+        // convoInbox.sendMessage(message, attachments)
     }
 }
 
 
-const getName = (chat: ChatSessionWithLatestMessage | ConversationWithLatestMessage) => {
-    if (mode.value === 'sessions') {
-        return (chat as ChatSessionWithLatestMessage).code ?? 'Unnamed session'
-    }
-
-    return (chat as ConversationWithLatestMessage).name ?? 'Unnamed conversation'
-}
-
-const getInitials = () => {
-    if (mode.value === 'sessions') {
-        return 'SC'
-    }
-    return 'CV'
-}
-
-/**
- * New message indicator
- */
-// const hasNewMessages = computed(() => {
-//     if (!activeChat.value) {
-//         return false
-//     }
-
-//     return activeChat.value.new_messages_count > 0
-// })
 </script>
 
 <template>
@@ -212,27 +111,34 @@ const getInitials = () => {
                     </h2>
 
                     <p class="text-xs text-muted-foreground">
-                        {{ activeChats.length }} conversations
+                        {{ adminChat.totalSessionChat }} conversations
                     </p>
                 </div>
 
-                <SessionChatToggle :mode="mode" :total-new-convo-chat="convoInbox.totalUnreadChatConvo"
-                    :total-new-session-chat="sessionInbox.totalUnreadChatSessions" @change-mode="changeMode" />
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="0"
+                    :total-new-session-chat="adminChat.totalNewUnreadChats" @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
             <div class="flex min-h-0 flex-1">
                 <!-- LEFT -->
                 <div class="w-[320px] shrink-0">
-                    <InboxList :mode="mode" :chats="activeChats" :active-id="activeId" :loading="isChatsLoading"
-                        @select="selectChat" @create="createNewModal = true" />
+                    <SessionInboxList 
+                        :mode="mode" 
+                        :chats="adminChat.getSessionChats" 
+                        :loading="adminChat.isLoadingChats"
+                        @select="selectChat" />
                 </div>
 
                 <!-- CENTER -->
                 <main class="min-w-0 max-h-[calc(100vh-150px)] flex-1">
-                    <ChatBox v-if="activeChat" :mode="mode" :name="getName(activeChat)" :initials="getInitials()"
-                        :status="(activeChat as ChatSessionWithLatestMessage).status" :messages="activeMessages"
-                        :loading="isMessagesLoading" @send="sendMessage" />
+                    <ChatBox v-if="!adminChat.isNoSelectedChat" 
+                        :mode="mode" 
+                        :name="adminChat.getSelectedSessionChat!.code" 
+                        initials="SC"
+                        :status="adminChat.getSelectedSessionChat!.status" 
+                        :messages="adminChat.getSessionMessages"
+                        :loading="adminChat.isLoadingChats" @send="sendMessage" />
 
                     <NoConvoSelected v-else />
                 </main>

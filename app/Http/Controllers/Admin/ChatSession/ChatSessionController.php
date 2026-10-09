@@ -39,7 +39,7 @@ class ChatSessionController extends Controller
             ->get();
 
         return response()->json([
-            'messages' => $messages,
+            ...$messages
         ]);
     }
 

@@ -31,7 +31,7 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     const isInitializing = computed(()=> initializing.value);
 
-    const getMessages = computed<Message[]>(()=> messages.value)
+    const getMessages = computed(()=> messages.value)
 
     const totalNewMessages = computed(() => getMessages.value.filter(
         message => message.sender_type === 'admin' && message.state === 'unread'
@@ -39,7 +39,7 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     const isEmptyNewMessages = computed(() => totalNewMessages.value <= 0)
 
-
+    const isEmptyMessage = computed(()=> !messages.value)
 
     // =========================================
     // FUNCTIONS
@@ -61,8 +61,9 @@ export const useSessionChat = defineStore('session-chat', () => {
         subscribeToChatSession(uuid);
 
         const data = await fetchMessage(uuid, token);
+
         messages.value = data;
-        
+
         localStorage.setStorageDataByKey(StorageKey.CHAT_SESSION, {
             uuid: uuid,
             token: token,
@@ -87,7 +88,6 @@ export const useSessionChat = defineStore('session-chat', () => {
         localStorage.setStorageDataByKey(StorageKey.CHAT_SESSION, {
             uuid: session.uuid,
             token: session.token,
-            valid: true,
         });
         flagValid.value = true;
         creatingSession.value = false;
@@ -96,31 +96,64 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     
     const markMessagesAsRead = async () => {
-        if(isEmptySession.value) return;
+
         if(!flagValid.value) return;
-        if(!isEmptyNewMessages.value) return;
+        if(isEmptySession.value) return;
+        if(isEmptyNewMessages.value) return;
         const { uuid, token } = storedSession.value!;
-
-
         messages.value = messages.value.map(message =>
                 messages.value.some(m => m.id === message.id && m.state === 'unread' && m.sender_type === 'admin')
                     ? { ...message, state: 'read' }
                     : message
             );
 
-        try {
-            await chatService.markChatMessagesAsRead(uuid, token);
-        } catch (error) {
-            console.error('Failed to mark chat messages as read:', error)
-        }
+        await markMessagesRead(uuid, token)
     }
+
+
+    const sendComposedMessage = async (message:string, attachment: unknown[]|null) =>{
+        if(isEmptySession.value) return;
+        const { uuid,  token } = storedSession.value!;
+
+        const tempId = `temp-${Date.now()}`
+
+        const tempMessage: Message = {
+            id: tempId,
+            message,
+            created_at: new Date().toISOString(),
+            sender_type: 'session',
+            status: 'sending',
+            state: 'unread'
+        }
+
+        messages.value.push(tempMessage)
+
+
+        const data = await sendMessage( uuid, token, {
+            message: message,
+            attachment: attachment
+        })
+
+
+        const index = messages.value.findIndex(item => item.id === tempId)
+
+            
+        if(!data || index === -1){
+            messages.value[index].status = 'failed';
+            return;
+        }
+        
+        messages.value[index].status = 'sent';
+    }
+
+
 
     //=======================================
     // API SERVICE FUNCTIONS
     //=======================================
     async function validateSession(uuid: string, token:string){
         try {
-            const data = await chatService.validateSessionChat(uuid, token)
+            const data = await chatService.validateSession(uuid, token)
             return data.is_valid;
         }catch(e){
             console.error('Invalid chat session credentials: ', e);
@@ -148,7 +181,30 @@ export const useSessionChat = defineStore('session-chat', () => {
             return null;
         }
     }
+
+
+    async function sendMessage(uuid:string, token:string, payload:{
+        message: string
+        attachment: unknown[] | null
+    }) {
+        try{
+            const data = chatService.storeChatMessage(uuid, token, {
+                message:payload.message
+            });
+            return data;
+        }catch(e){
+            console.log('Error to send message: ', e);
+            return null;
+        }
+    }
     
+    async function markMessagesRead(uuid:string, token:string) {
+        try {
+            await chatService.markChatMessagesAsRead(uuid, token);
+        } catch (error) {
+            console.error('Failed to mark chat messages as read:', error)
+        }
+    }
 
     
     function subscribeToChatSession(uuid: string) {
@@ -176,7 +232,7 @@ export const useSessionChat = defineStore('session-chat', () => {
         console.log('Subscribed to chat session channel');
     }
 
-
+    
 
 
     return {
@@ -189,13 +245,15 @@ export const useSessionChat = defineStore('session-chat', () => {
         isValidSession,
         isCreatingSession,
         isInitializing,
+        isEmptyMessage,
 
         totalNewMessages,
         isEmptyNewMessages,
 
         storedSession,
         getMessages,
-
+        
         markMessagesAsRead,
+        sendComposedMessage,
     }
 })
