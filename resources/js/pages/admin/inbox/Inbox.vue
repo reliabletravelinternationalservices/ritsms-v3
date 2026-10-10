@@ -33,6 +33,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
+
+const chatboxRef = ref<InstanceType<typeof ChatBox> | null>(null)
+
 const mode = ref<Mode>(props.filters.type)
 
 const adminChat = useAdminChat()
@@ -78,8 +81,20 @@ watch(
 )
 
 
-const selectChat = (id:string) => {
-    adminChat.selectChat(mode.value, id)
+watch(
+    () => adminChat.getSessionMessages,
+    async (messages) => {
+        
+    },
+    { deep: true, immediate: true },
+)
+
+
+
+
+const selectChat = async (id: string) => {
+    await adminChat.selectChat(mode.value, id)
+    await chatboxRef.value?.scrollToBottom()
 }
 
 
@@ -132,7 +147,7 @@ function sendMessage(message: string, attachments?: unknown[] | null) {
 
                 <!-- CENTER -->
                 <main class="min-w-0 max-h-[calc(100vh-150px)] flex-1">
-                    <ChatBox v-if="!adminChat.isNoSelectedChat" 
+                    <ChatBox ref="chatboxRef" v-if="!adminChat.isNoSelectedChat" 
                         :mode="mode" 
                         :name="adminChat.getSelectedSessionChat!.code" 
                         initials="SC"

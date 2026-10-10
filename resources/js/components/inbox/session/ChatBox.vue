@@ -31,24 +31,21 @@ const emit = defineEmits<{
 
 const messagesContainer = ref<HTMLElement | null>(null)
 
-function scrollToBottom() {
-    nextTick(() => {
-        const container = messagesContainer.value
+async function scrollToBottom() {
+    await nextTick()
 
-        if (!container) return
+    const container = messagesContainer.value
 
-        container.scrollTop = container.scrollHeight
-    })
+    if (!container) return
+
+    container.scrollTop = container.scrollHeight
 }
 
-watch(
-    () => props.messages.length,
-    (newLength, oldLength) => {
-        if (newLength > oldLength) {
-            scrollToBottom()
-        }
-    },
-)
+function sendMessage(content: string, attachments?: unknown[] | null) {
+    emit('send', content, attachments)
+    void scrollToBottom()
+}
+
 
 defineExpose({
     scrollToBottom,
@@ -65,7 +62,7 @@ defineExpose({
             @delete="emit('delete')" />
 
         <!-- Messages -->
-        <div class="min-h-0 h-[500px] flex-1 overflow-y-auto bg-muted/20 p-5">
+        <div ref="messagesContainer" class="min-h-0 h-[500px] flex-1 overflow-y-auto bg-muted/20 p-5 scroll-smooth">
             <div class="flex justify-center">
                 <span class="rounded-full bg-muted px-3 py-1 text-[11px] text-muted-foreground">
                     Today
@@ -73,7 +70,7 @@ defineExpose({
             </div>
 
             <div class="mt-6 space-y-4">
-                <ChatMessage ref="messagesContainer" v-for="message in messages" :key="message.id" :message="message" />
+                <ChatMessage v-for="message in messages" :key="message.id" :message="message" />
             </div>
 
             <!-- Other user is typing -->
@@ -90,7 +87,7 @@ defineExpose({
 
         <!-- Composer always at bottom -->
         <div class="shrink-0 bg-background self-end w-full">
-            <ChatComposer @send="emit('send', $event)" />
+            <ChatComposer @send="sendMessage" />
             <!-- <MessageComposer v-if="mode === 'chats'" @send="emit('send', $event)" /> -->
         </div>
     </div>

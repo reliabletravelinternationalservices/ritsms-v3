@@ -88,16 +88,19 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
 
 
-    const selectChat = (mode: Mode, id:string) =>{
+    const selectChat = async (mode: Mode, id:string) =>{
+        if(id === selectedChatID.value){
+            return;
+        }
         if(mode === 'sessions'){
             selectedChatID.value=id;
-            fetchSessionChatMessages(id);
+            await fetchSessionChatMessages(id);
             return;
         }
 
         if(mode === 'chats'){
             selectedChatID.value=id;
-            fetchConvoChatMessages(id)
+            await fetchConvoChatMessages(id)
             return;
         }
     }
@@ -112,6 +115,36 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
     const fetchConvoChatMessages = (id:string) => {
         //TODO: FETCH CONVO MESSAGE BY ID
+    }
+
+    const sendSessionMessage = async (message: string) => {
+        const chatId = selectedChatID.value
+
+        if (!chatId || !message.trim()) {
+            return
+        }
+
+        try {
+            const sentMessage = await SCS.sendAdminSessionMessage(chatId, message.trim())
+            const messageWithStatus: SessionMessage = {
+                ...sentMessage,
+                status: 'sent',
+            }
+
+            sessionMessages.value = [...sessionMessages.value, messageWithStatus]
+
+            const chat = sessionChats.value.find((item) => item.uuid === chatId)
+
+            if (chat) {
+                chat.latest_message = messageWithStatus
+                sessionChats.value = [
+                    chat,
+                    ...sessionChats.value.filter((item) => item.uuid !== chatId),
+                ]
+            }
+        } catch (error) {
+            console.error('Failed to send chat message:', error)
+        }
     }
 
 
@@ -166,38 +199,61 @@ export const useAdminChat = defineStore('admin-chat', () => {
         //TODO: FOR CONVO WEBSOCKET CONNCTION
     }
     
-    function subscribeToSessionChat(){
+    function subscribeToSessionChat() {
         echo
             .channel('chat.admin')
             .listen('.message.sent', (event: MessageWithSessionUUID) => {
-
                 const message: SessionMessage = {
                     ...event,
                     status: 'sent',
                 }
 
-                const chat = sessionChats.value.find((item) => item.uuid === event.uuid)
-                
-                if (!chat) return;
+                const chat = sessionChats.value.find(
+                    (item) => item.uuid === event.uuid,
+                )
+
+                if (!chat) return
 
                 chat.latest_message = message
-                chat.new_messages_count =  chat.new_messages_count + 1
+
+                if (
+                    event.sender_type === 'session' &&
+                    message.state === 'unread'
+                ) {
+                    chat.new_messages_count += 1
+                }
+
                 sessionChats.value = [
                     chat,
-                    ...sessionChats.value.filter((item) => item.uuid !== event.uuid),
+                    ...sessionChats.value.filter(
+                        (item) => item.uuid !== event.uuid,
+                    ),
                 ]
-              
+
+                const isActiveSession = selectedChatID.value === event.uuid
+                const messageExists = sessionMessages.value.some(
+                    (item) => item.id === message.id,
+                )
+
+                if (isActiveSession && !messageExists) {
+                    sessionMessages.value = [
+                        ...sessionMessages.value,
+                        message,
+                    ]
+                }
             })
     }
 
     return {
         initializeChats,
         selectChat,
+        sessionMessages,
         getSessionMessages,
         getSessionChats,
         getSelectedChatID,
         getSelectedSessionChat,
         markMessagesAsRead,
+        sendSessionMessage,
 
         totalNewUnreadChats,
         totalSessionChat,

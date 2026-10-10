@@ -101,6 +101,15 @@ export const sessionChatService = {
         return data
     },
 
+    async sendAdminSessionMessage(uuid: string, message: string): Promise<Omit<Message, 'status'>> {
+        const { data } = await api.post<Omit<Message, 'status'>>(
+            route('admin.inbox.sessions.messages.store', { uuid }),
+            { message },
+        )
+
+        return data
+    },
+
 
     async markSessionChatMessagesAsRead(uuid: string): Promise<number[]> {
         const { data } = await api.post<number[]>(
@@ -115,7 +124,6 @@ export const sessionChatService = {
     
 
 }
-
 
 
 
