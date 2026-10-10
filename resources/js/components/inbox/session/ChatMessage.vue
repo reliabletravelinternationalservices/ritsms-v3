@@ -2,7 +2,7 @@
 import { formatMessageTime } from '@/lib/utils';
 import { Message as SessionMessage } from '@/types/chat';
 import { Message as ConversationMessage } from '@/types/conversation';
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed } from 'vue'
 
 
 const props = defineProps<{

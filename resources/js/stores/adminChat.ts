@@ -1,20 +1,18 @@
 import { defineStore } from "pinia"
 import { computed, ref, watch } from "vue"
 import { ChatSessionWithLatestMessage, Message as SessionMessage, MessageWithSessionUUID, Mode } from "@/types/chat";
-import { ConversationWithLatestMessage, Message as ConvoMessage } from "@/types/conversation";
+// import { ConversationWithLatestMessage, Message as ConvoMessage } from "@/types/conversation";
 import echo from "@/echo";
 import { sessionChatService as SCS } from "@/services/sessionChatService";
-import { CursorPaginated } from "@/types/cursor_paginate";
 
 
 export const useAdminChat = defineStore('admin-chat', () => {
 
-    const convoChats = ref<ConversationWithLatestMessage[]>([]);
-    const convoMessages = ref< ConvoMessage[]>([]);
+    // const convoChats = ref<ConversationWithLatestMessage[]>([]);
+    // const convoMessages = ref< ConvoMessage[]>([]);
 
     const sessionChats = ref<ChatSessionWithLatestMessage[]>([]);
     const sessionMessages = ref<SessionMessage[]>([]);
-    const totalUnreadSessionChat = ref(0);
     
     const selectedChatID = ref<string| null>();
     const loadingChats = ref(false);
@@ -36,6 +34,11 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
     const isNoSelectedChat = computed(()=> !getSelectedChatID.value)
 
+    const totalUnreadSessionChat = computed(()=> {
+        return sessionChats.value.reduce((total, chat) => {
+            return total + chat.new_messages_count;
+        }, 0);
+    });
     
     const getSelectedSessionChat = computed(() => {
         if (isEmptySessionChat.value) return null;
@@ -94,13 +97,6 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
         sessionChats.value = pagedData.data;
         loadingChats.value = false;
-        refreshTotalUnreadSesionChat();
-    }
-
-
-    const refreshTotalUnreadSesionChat=()=>{
-        totalUnreadSessionChat.value = sessionChats.value.
-            filter(chat => chat.new_messages_count > 0).length;
     }
     
 
@@ -124,7 +120,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
         if(mode === 'chats'){
             selectedChatID.value=id;
-            await fetchConvoChatMessages(id)
+            await fetchConvoChatMessages()
             return;
         }
     }
@@ -137,7 +133,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
         loadingMessages.value=false;
     }
 
-    const fetchConvoChatMessages = (id:string) => {
+    const fetchConvoChatMessages = () => {
         //TODO: FETCH CONVO MESSAGE BY ID
     }
 
@@ -175,7 +171,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
         ]
     }
 
-    const storeLocalSessionMessage=(message:string,)=>{
+    const storeLocalSessionMessage=(message:string)=>{
         const tempId = `temp-${Date.now()}`
 
         const tempMessage: SessionMessage = {
@@ -188,7 +184,6 @@ export const useAdminChat = defineStore('admin-chat', () => {
         }
 
         sessionMessages.value.push(tempMessage)
-        sessionMessages.value
         return tempId;
     }
 
@@ -285,18 +280,12 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
                 chat.latest_message = message
 
-                if (isSessionMessage && message.state === 'unread') {
-                    chat.new_messages_count += 1
-                }
-
                 sessionChats.value = [
                     chat,
                     ...sessionChats.value.filter(
                         (item) => item.uuid !== event.uuid,
                     ),
                 ]
-
-                refreshTotalUnreadSesionChat();
 
                 const isActiveSession = selectedChatID.value === event.uuid
 
@@ -324,8 +313,8 @@ export const useAdminChat = defineStore('admin-chat', () => {
         markMessagesAsRead,
         sendSessionMessage,
 
-        totalUnreadSessionChat,
         totalSessionChat,
+        totalUnreadSessionChat,
         isLoadingChats,
         isNoSelectedChat,
     }

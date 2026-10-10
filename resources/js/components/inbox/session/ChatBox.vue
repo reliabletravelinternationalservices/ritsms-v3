@@ -3,7 +3,7 @@ import ChatMessage from './ChatMessage.vue'
 import { Message } from '@/types/chat'
 import ChatHeader from './ChatHeader.vue'
 import ChatComposer from './ChatComposer.vue'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
     messages: Message[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const emit = defineEmits<{
     send: [
@@ -28,13 +28,13 @@ const emit = defineEmits<{
 const messagesContainer = ref<HTMLElement | null>(null)
 
 const scrollToBottom = () => {
-    nextTick(()=>{
+    nextTick(() => {
         const container = messagesContainer.value
 
         if (!container) return
 
         container.scrollTop = container.scrollHeight
-    })   
+    })
 }
 
 async function sendMessage(content: string) {
@@ -47,7 +47,7 @@ defineExpose({
     scrollToBottom,
 })
 
-onMounted(async()=>{
+onMounted(async () => {
     scrollToBottom()
 })
 

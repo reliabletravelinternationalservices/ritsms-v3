@@ -6,7 +6,7 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import SessionChatToggle from '@/components/inbox/SessionChatToggle.vue'
 
 import type { BreadcrumbItem, User } from '@/types'
-import {Mode } from '@/types/chat'
+import { Mode } from '@/types/chat'
 
 import { Client } from '@/types/client'
 import { useAdminChat } from '@/stores/adminChat'
@@ -32,24 +32,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 const UAC = useAdminChat();
 const mode = ref<Mode>(props.filters.type);
 
-const totalUnreadSessionChat = ref(0);
 
 watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
         await UAC.initializeChats()
-        totalUnreadSessionChat.value = UAC.totalUnreadSessionChat;
-    },
-    {
-        immediate: true,
-    },
-)
-
-watch(
-    () => UAC.totalUnreadSessionChat,
-    (value) => {
-        totalUnreadSessionChat.value = value
     },
     {
         immediate: true,
@@ -58,7 +46,8 @@ watch(
 
 
 
-const changeMode =(value: Mode)=> {
+
+const changeMode = (value: Mode) => {
     if (mode.value === value) {
         return
     }
@@ -77,7 +66,7 @@ const changeMode =(value: Mode)=> {
 
 
 
-onMounted(async()=>{
+onMounted(async () => {
     await UAC.initializeChats()
 })
 
@@ -102,19 +91,13 @@ onMounted(async()=>{
                     </p>
                 </div>
 
-                <SessionChatToggle 
-                    :mode="mode" 
-                    :total-new-convo-chat="0"
-                    :total-new-session-chat="totalUnreadSessionChat" 
-                    @change-mode="changeMode" />
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="0"
+                    :total-new-session-chat="UAC.totalUnreadSessionChat" @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
             <div class="flex min-h-0 flex-1">
-                <SessionInbox 
-                    v-if="mode==='sessions'"
-                    :mode="mode"
-                />
+                <SessionInbox v-if="mode === 'sessions'" :mode="mode" />
             </div>
         </div>
 
