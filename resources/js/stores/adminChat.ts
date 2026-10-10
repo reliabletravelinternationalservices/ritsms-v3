@@ -34,12 +34,10 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
     const isNoSelectedChat = computed(()=> !getSelectedChatID.value)
 
-    const totalUnreadSessionChat = computed(()=> {
-        return sessionChats.value.reduce((total, chat) => {
-            return total + chat.new_messages_count;
-        }, 0);
+    const totalUnreadSessionChat = computed(() => {
+        return sessionChats.value.filter(chat => chat.new_messages_count > 0).length
     });
-    
+        
     const getSelectedSessionChat = computed(() => {
         if (isEmptySessionChat.value) return null;
 
@@ -53,23 +51,27 @@ export const useAdminChat = defineStore('admin-chat', () => {
     
     const totalSessionChat = computed(()=> sessionChats.value.length)
 
+    
 
 
 
     //==============================
     // WATCHERS
     //============================
-    // watch(
-    //     [
-    //         () => sessionChats.value,
-    //     ]
-    //     (value) => {
-    //         mas
-    //     },
-    //     {
-    //         immediate: true,
-    //     },
-    // )
+    watch(
+        () => sessionChats.value.find((chat) => chat.uuid === selectedChatID.value)?.latest_message,
+        (message) => {
+            if (
+                !message ||
+                message.sender_type !== 'session' ||
+                sessionMessages.value.some((item) => item.id === message.id)
+            ) {
+                return
+            }
+
+            sessionMessages.value = [...sessionMessages.value, message]
+        },
+    )
 
 
     //=====================================
@@ -180,7 +182,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
             created_at: new Date().toISOString(),
             sender_type: 'admin',
             status: 'sending',
-            state: 'unread'
+            state: 'read'
         }
 
         sessionMessages.value.push(tempMessage)
@@ -204,7 +206,14 @@ export const useAdminChat = defineStore('admin-chat', () => {
                 ? { ...message, state: 'read' }
                 : message
         );
-        console.log(sessionMessages.value)
+
+        const selectedChat = sessionChats.value.find(
+            (chat) => chat.uuid === selectedChatID.value,
+        )
+
+        if (selectedChat) {
+            selectedChat.new_messages_count = 0
+        }
     }
 
 
@@ -245,6 +254,8 @@ export const useAdminChat = defineStore('admin-chat', () => {
         //TODO: FOR CONVO WEBSOCKET CONNCTION
     }
 
+    let isSubscribedToSessionChat = false
+
 
     async function storeSessionMessage(uuid:string, payload:{
         message: string
@@ -259,26 +270,46 @@ export const useAdminChat = defineStore('admin-chat', () => {
     }
     
     function subscribeToSessionChat() {
+        if (isSubscribedToSessionChat) {
+            return
+        }
+
+        isSubscribedToSessionChat = true
+
         echo
             .channel('chat.admin')
-            .listen('.message.sent', (event: MessageWithSessionUUID) => {
+            .listen('.message.sent', async (event: MessageWithSessionUUID) => {
                 
                 const isSessionMessage = event.sender_type === 'session'; 
                 if(!isSessionMessage){
                     return;
                 }
 
-                const chat = sessionChats.value.find(
+                let chat = sessionChats.value.find(
                     (item) => item.uuid === event.uuid,
                 )
 
-                if (!chat) return
+                if (!chat) {
+                    await fetchAllSessionChats()
+                    chat = sessionChats.value.find(
+                        (item) => item.uuid === event.uuid,
+                    )
+                }
+
+                if (!chat) {
+                    return
+                }
 
                 const message: SessionMessage = {
                     ...event,
                 }
 
+                const isNewMessage = chat.latest_message?.id !== message.id
                 chat.latest_message = message
+
+                if (isNewMessage && message.state === 'unread') {
+                    chat.new_messages_count += 1
+                }
 
                 sessionChats.value = [
                     chat,

@@ -16,7 +16,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 
-const isSendMessage = computed(()=> props.chat.latest_message?.sender_type === 'admin')
+const isSendMessage = computed(() => props.chat.latest_message?.sender_type === 'admin')
+const hasUnreadMessages = computed(() => props.chat.new_messages_count > 0)
 
 
 </script>
@@ -37,7 +38,7 @@ const isSendMessage = computed(()=> props.chat.latest_message?.sender_type === '
             <span v-if="chat.status === 'open'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-green-500" />
 
-            <span v-else-if="(chat as ChatSessionWithLatestMessage).status === 'closed'"
+            <span v-else-if="chat.status === 'closed'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-gray-500" />
         </div>
 
@@ -45,7 +46,7 @@ const isSendMessage = computed(()=> props.chat.latest_message?.sender_type === '
         <div class="min-w-0 flex-1">
             <div class="flex items-center justify-between gap-2">
                 <!-- NAME -->
-                <p class="truncate text-sm" :class="chat.latest_message?.state === 'unread'
+                <p class="truncate text-sm" :class="hasUnreadMessages
                     ? 'font-semibold'
                     : 'font-medium'
                     ">
@@ -60,8 +61,8 @@ const isSendMessage = computed(()=> props.chat.latest_message?.sender_type === '
 
             <!-- LAST MESSAGE -->
             <div class="mt-1 flex items-center gap-2">
-                <p class="min-w-0 flex-1 truncate text-xs" :class="chat.latest_message?.state === 'unread'
-                    ? 'font-medium text-foreground'
+                <p class="min-w-0 flex-1 truncate text-xs" :class="hasUnreadMessages
+                    ? 'font-semibold text-foreground'
                     : 'text-muted-foreground'
                     ">
                     <span v-if="isSendMessage">You:</span>

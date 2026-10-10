@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import ChatHeader from './ChatHeader.vue'
 import ChatMessages from './ChatMessages.vue'
@@ -19,7 +19,7 @@ const emit = defineEmits<{
 }>()
 
 
-const sendMessage = async (message:string, attachment: unknown[]|null) => {
+const sendMessage = async (message: string, attachment: unknown[] | null) => {
     await sessionChat.sendComposedMessage(message, attachment);
     chatMessagesRef.value?.scrollToBottom()
 }
