@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 
-const isSendMessae = computed(()=> props.chat.latest_message?.sender_type === 'admin')
+const isSendMessage = computed(()=> props.chat.latest_message?.sender_type === 'admin')
 
 
 </script>
@@ -64,7 +64,7 @@ const isSendMessae = computed(()=> props.chat.latest_message?.sender_type === 'a
                     ? 'font-medium text-foreground'
                     : 'text-muted-foreground'
                     ">
-                    <span v-if="isSendMessae">You:</span>
+                    <span v-if="isSendMessage">You:</span>
                     {{ chat.latest_message?.message || 'No messages yet' }}
                 </p>
 

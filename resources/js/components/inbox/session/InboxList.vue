@@ -5,7 +5,6 @@ import { Icon } from '@iconify/vue'
 import ChatCard from './ChatCard.vue'
 import {
     ChatSessionWithLatestMessage as ChatSession,
-    Mode,
 } from '@/types/chat'
 
 

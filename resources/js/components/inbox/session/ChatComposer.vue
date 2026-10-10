@@ -6,7 +6,7 @@ import { Textarea } from '../../ui/textarea'
 import { useAdminChat } from '@/stores/adminChat'
 import { ref, computed } from 'vue'
 
-const adminChat = useAdminChat()
+const UAC = useAdminChat()
 
 const emit = defineEmits<{
     send: [message: string, attachment?: unknown[] | null]
@@ -31,7 +31,7 @@ function sendMessage() {
         <div class="flex items-center gap-2">
             <Textarea v-model="composedMessage" placeholder="Write a message..."
                 class="flex-1 max-h-40 overflow-y-auto scrollbar-none" :min-height="20" :max-height="40"
-                @focus="adminChat.markMessagesAsRead" @keydown.enter.exact.prevent="sendMessage" />
+                @focus="UAC.markMessagesAsRead" @keydown.enter.exact.prevent="sendMessage" />
 
             <Button type="button" size="icon" :disabled="!canSend" @click="sendMessage">
                 <Send class="size-4" />

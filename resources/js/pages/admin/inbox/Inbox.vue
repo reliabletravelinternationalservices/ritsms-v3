@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 
 import AppLayout from '@/layouts/AppLayout.vue'
-import SessionInboxList from '@/components/inbox/session/InboxList.vue'
-import ChatBox from '@/components/inbox/session/ChatBox.vue'
 import SessionChatToggle from '@/components/inbox/SessionChatToggle.vue'
-import NewConversationModal from '@/components/inbox/NewConversationModal.vue'
-import NoConvoSelected from '@/components/inbox/NoConvoSelected.vue'
 
 import type { BreadcrumbItem, User } from '@/types'
-import { Mode } from '@/types/chat'
-import { useReferenceDataStore } from '@/stores/referenceData'
+import {Mode } from '@/types/chat'
 
 import { Client } from '@/types/client'
 import { useAdminChat } from '@/stores/adminChat'
+import SessionInbox from '@/components/inbox/session/SessionInbox.vue'
 
 interface Props {
     clients: Client[]
@@ -33,23 +29,36 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
+const UAC = useAdminChat();
+const mode = ref<Mode>(props.filters.type);
 
-const chatboxRef = ref<InstanceType<typeof ChatBox> | null>(null)
+const totalUnreadSessionChat = ref(0);
 
-const mode = ref<Mode>(props.filters.type)
+watch(
+    () => props.filters.type,
+    async (value) => {
+        mode.value = value
+        await UAC.initializeChats()
+        totalUnreadSessionChat.value = UAC.totalUnreadSessionChat;
+    },
+    {
+        immediate: true,
+    },
+)
 
-const adminChat = useAdminChat()
-const refData = useReferenceDataStore()
+watch(
+    () => UAC.totalUnreadSessionChat,
+    (value) => {
+        totalUnreadSessionChat.value = value
+    },
+    {
+        immediate: true,
+    },
+)
 
-const createNewModal = ref(false)
 
-refData.setClients(props.clients)
-refData.setAdmins(props.admins)
 
-/**
- * Change inbox mode
- */
-function changeMode(value: Mode) {
+const changeMode =(value: Mode)=> {
     if (mode.value === value) {
         return
     }
@@ -66,48 +75,11 @@ function changeMode(value: Mode) {
     )
 }
 
-/**
- * Initialize only the store belonging to the current mode.
- */
-watch(
-    () => props.filters.type,
-    async (value) => {
-        mode.value = value
-        await adminChat.initializeChats(mode.value)
-    },
-    {
-        immediate: true,
-    },
-)
 
 
-watch(
-    () => adminChat.getSessionMessages,
-    async (messages) => {
-        
-    },
-    { deep: true, immediate: true },
-)
-
-
-
-
-const selectChat = async (id: string) => {
-    await adminChat.selectChat(mode.value, id)
-    await chatboxRef.value?.scrollToBottom()
-}
-
-
-/**
- * Send message through the active inbox
- */
-function sendMessage(message: string, attachments?: unknown[] | null) {
-    if (mode.value === 'sessions') {
-        // sessionInbox.sendMessage(message)
-    } else {
-        // convoInbox.sendMessage(message, attachments)
-    }
-}
+onMounted(async()=>{
+    await UAC.initializeChats()
+})
 
 
 </script>
@@ -126,40 +98,26 @@ function sendMessage(message: string, attachments?: unknown[] | null) {
                     </h2>
 
                     <p class="text-xs text-muted-foreground">
-                        {{ adminChat.totalSessionChat }} conversations
+                        {{ UAC.totalSessionChat }} conversations
                     </p>
                 </div>
 
-                <SessionChatToggle :mode="mode" :total-new-convo-chat="0"
-                    :total-new-session-chat="adminChat.totalNewUnreadChats" @change-mode="changeMode" />
+                <SessionChatToggle 
+                    :mode="mode" 
+                    :total-new-convo-chat="0"
+                    :total-new-session-chat="totalUnreadSessionChat" 
+                    @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
             <div class="flex min-h-0 flex-1">
-                <!-- LEFT -->
-                <div class="w-[320px] shrink-0">
-                    <SessionInboxList 
-                        :mode="mode" 
-                        :chats="adminChat.getSessionChats" 
-                        :loading="adminChat.isLoadingChats"
-                        @select="selectChat" />
-                </div>
-
-                <!-- CENTER -->
-                <main class="min-w-0 max-h-[calc(100vh-150px)] flex-1">
-                    <ChatBox ref="chatboxRef" v-if="!adminChat.isNoSelectedChat" 
-                        :mode="mode" 
-                        :name="adminChat.getSelectedSessionChat!.code" 
-                        initials="SC"
-                        :status="adminChat.getSelectedSessionChat!.status" 
-                        :messages="adminChat.getSessionMessages"
-                        :loading="adminChat.isLoadingChats" @send="sendMessage" />
-
-                    <NoConvoSelected v-else />
-                </main>
+                <SessionInbox 
+                    v-if="mode==='sessions'"
+                    :mode="mode"
+                />
             </div>
         </div>
 
-        <NewConversationModal v-model:open="createNewModal" :contacts="refData.contacts" />
+        <!-- <NewConversationModal v-model:open="createNewModal" :contacts="refData.contacts" /> -->
     </AppLayout>
 </template>

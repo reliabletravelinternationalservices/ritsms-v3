@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { ChatSessionWithLatestMessage, Message as SessionMessage, MessageWithSessionUUID, Mode } from "@/types/chat";
 import { ConversationWithLatestMessage, Message as ConvoMessage } from "@/types/conversation";
 import echo from "@/echo";
@@ -10,10 +10,12 @@ import { CursorPaginated } from "@/types/cursor_paginate";
 export const useAdminChat = defineStore('admin-chat', () => {
 
     const convoChats = ref<ConversationWithLatestMessage[]>([]);
-    const sessionChats = ref<ChatSessionWithLatestMessage[]>([]);
-
     const convoMessages = ref< ConvoMessage[]>([]);
+
+    const sessionChats = ref<ChatSessionWithLatestMessage[]>([]);
     const sessionMessages = ref<SessionMessage[]>([]);
+    const totalUnreadSessionChat = ref(0);
+    
     const selectedChatID = ref<string| null>();
     const loadingChats = ref(false);
     const loadingMessages = ref(false);
@@ -45,13 +47,26 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
     const isLoadingChats = computed(()=> loadingChats.value);
 
-    const totalNewUnreadChats = computed<number>(() => {
-        return sessionChats.value.filter(
-            chat => chat.new_messages_count > 0
-        ).length;
-    });
     
     const totalSessionChat = computed(()=> sessionChats.value.length)
+
+
+
+
+    //==============================
+    // WATCHERS
+    //============================
+    // watch(
+    //     [
+    //         () => sessionChats.value,
+    //     ]
+    //     (value) => {
+    //         mas
+    //     },
+    //     {
+    //         immediate: true,
+    //     },
+    // )
 
 
     //=====================================
@@ -59,7 +74,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
     //=====================================
 
 
-    const initializeChats = async (mode: Mode) => {
+    const initializeChats = async () => {
         
         await fetchAllSessionChats();
         await fetchAllConversationChats();
@@ -79,6 +94,13 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
         sessionChats.value = pagedData.data;
         loadingChats.value = false;
+        refreshTotalUnreadSesionChat();
+    }
+
+
+    const refreshTotalUnreadSesionChat=()=>{
+        totalUnreadSessionChat.value = sessionChats.value.
+            filter(chat => chat.new_messages_count > 0).length;
     }
     
 
@@ -93,8 +115,10 @@ export const useAdminChat = defineStore('admin-chat', () => {
             return;
         }
         if(mode === 'sessions'){
+            loadingChats.value=true;
             selectedChatID.value=id;
             await fetchSessionChatMessages(id);
+            loadingChats.value=false;
             return;
         }
 
@@ -124,41 +148,68 @@ export const useAdminChat = defineStore('admin-chat', () => {
             return
         }
 
-        try {
-            const sentMessage = await SCS.sendAdminSessionMessage(chatId, message.trim())
-            const messageWithStatus: SessionMessage = {
-                ...sentMessage,
-                status: 'sent',
-            }
+        const tempID = storeLocalSessionMessage(message);
 
-            sessionMessages.value = [...sessionMessages.value, messageWithStatus]
+        const data = await storeSessionMessage(chatId, {
+            message
+        });
 
-            const chat = sessionChats.value.find((item) => item.uuid === chatId)
+        
+        const index = sessionMessages.value.findIndex(item => item.id === tempID)
 
-            if (chat) {
-                chat.latest_message = messageWithStatus
-                sessionChats.value = [
-                    chat,
-                    ...sessionChats.value.filter((item) => item.uuid !== chatId),
-                ]
-            }
-        } catch (error) {
-            console.error('Failed to send chat message:', error)
+        if(!data || index === -1){
+            sessionMessages.value[index].status = 'failed';
+            return;
         }
+        
+        sessionMessages.value[index].status = 'sent';
+
+        const chat = sessionChats.value.find((item) => item.uuid === chatId)
+
+        if (!chat) return;
+        
+        chat.latest_message = data
+        sessionChats.value = [
+            chat,
+            ...sessionChats.value.filter((item) => item.uuid !== chatId),
+        ]
     }
+
+    const storeLocalSessionMessage=(message:string,)=>{
+        const tempId = `temp-${Date.now()}`
+
+        const tempMessage: SessionMessage = {
+            id: tempId,
+            message,
+            created_at: new Date().toISOString(),
+            sender_type: 'admin',
+            status: 'sending',
+            state: 'unread'
+        }
+
+        sessionMessages.value.push(tempMessage)
+        sessionMessages.value
+        return tempId;
+    }
+
 
 
     const markMessagesAsRead = async () => {
 
         if(isNoSelectedChat.value) return;
         if(isEmptySessionMessages.value) return;
-        sessionMessages.value = sessionMessages.value.map(message =>
-                sessionMessages.value.some(m => m.id === message.id && m.state === 'unread' && m.sender_type === 'session')
-                    ? { ...message, state: 'read' }
-                    : message
-            );
-
+        readLocalMessages();
         await markMessagesRead(selectedChatID.value!)
+    }
+
+
+    const readLocalMessages=()=>{
+        sessionMessages.value = sessionMessages.value.map(message =>
+            sessionMessages.value.some(m => m.id === message.id && m.state === 'unread')
+                ? { ...message, state: 'read' }
+                : message
+        );
+        console.log(sessionMessages.value)
     }
 
 
@@ -198,14 +249,28 @@ export const useAdminChat = defineStore('admin-chat', () => {
     function subscribeToConversationChat(){
         //TODO: FOR CONVO WEBSOCKET CONNCTION
     }
+
+
+    async function storeSessionMessage(uuid:string, payload:{
+        message: string
+    }) {
+        try{
+            const data = await SCS.sendAdminSessionMessage(uuid, payload.message)
+            return data;
+        }catch(e){
+            console.log('Error to send message: ', e);
+            return null;
+        }
+    }
     
     function subscribeToSessionChat() {
         echo
             .channel('chat.admin')
             .listen('.message.sent', (event: MessageWithSessionUUID) => {
-                const message: SessionMessage = {
-                    ...event,
-                    status: 'sent',
+                
+                const isSessionMessage = event.sender_type === 'session'; 
+                if(!isSessionMessage){
+                    return;
                 }
 
                 const chat = sessionChats.value.find(
@@ -214,12 +279,13 @@ export const useAdminChat = defineStore('admin-chat', () => {
 
                 if (!chat) return
 
+                const message: SessionMessage = {
+                    ...event,
+                }
+
                 chat.latest_message = message
 
-                if (
-                    event.sender_type === 'session' &&
-                    message.state === 'unread'
-                ) {
+                if (isSessionMessage && message.state === 'unread') {
                     chat.new_messages_count += 1
                 }
 
@@ -230,7 +296,10 @@ export const useAdminChat = defineStore('admin-chat', () => {
                     ),
                 ]
 
+                refreshTotalUnreadSesionChat();
+
                 const isActiveSession = selectedChatID.value === event.uuid
+
                 const messageExists = sessionMessages.value.some(
                     (item) => item.id === message.id,
                 )
@@ -255,7 +324,7 @@ export const useAdminChat = defineStore('admin-chat', () => {
         markMessagesAsRead,
         sendSessionMessage,
 
-        totalNewUnreadChats,
+        totalUnreadSessionChat,
         totalSessionChat,
         isLoadingChats,
         isNoSelectedChat,

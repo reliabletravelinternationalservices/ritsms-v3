@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import ChatMessage from './ChatMessage.vue'
-import { Message as SessionMessage, Mode } from '@/types/chat'
+import { Message } from '@/types/chat'
 import ChatHeader from './ChatHeader.vue'
 import ChatComposer from './ChatComposer.vue'
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 
 interface Props {
-    mode: Mode
     name: string
     initials: string
     status?: 'open' | 'closed' | undefined
-    messages: SessionMessage[]
+    messages: Message[]
 }
 
 const props = defineProps<Props>()
@@ -19,10 +18,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
     send: [
         content: string,
-        attachments?: unknown[] | null
     ]
-
-    typing: [value: boolean]
     mute: []
     archive: []
     delete: []
@@ -31,19 +27,19 @@ const emit = defineEmits<{
 
 const messagesContainer = ref<HTMLElement | null>(null)
 
-async function scrollToBottom() {
-    await nextTick()
+const scrollToBottom = () => {
+    nextTick(()=>{
+        const container = messagesContainer.value
 
-    const container = messagesContainer.value
+        if (!container) return
 
-    if (!container) return
-
-    container.scrollTop = container.scrollHeight
+        container.scrollTop = container.scrollHeight
+    })   
 }
 
-function sendMessage(content: string, attachments?: unknown[] | null) {
-    emit('send', content, attachments)
-    void scrollToBottom()
+async function sendMessage(content: string) {
+    emit('send', content)
+    scrollToBottom()
 }
 
 
@@ -51,6 +47,9 @@ defineExpose({
     scrollToBottom,
 })
 
+onMounted(async()=>{
+    scrollToBottom()
+})
 
 </script>
 
