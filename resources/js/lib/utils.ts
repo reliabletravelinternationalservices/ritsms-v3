@@ -460,3 +460,9 @@ export function formatMessageTime(date: string) {
         minute: '2-digit',
     })
 }
+
+
+
+export function generateUUID(): string {
+    return crypto.randomUUID()
+}

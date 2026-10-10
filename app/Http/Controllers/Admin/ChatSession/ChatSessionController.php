@@ -66,6 +66,7 @@ class ChatSessionController extends Controller
         $chatMessage = $session->messages()->create([
             'sender_type' => 'admin',
             'message' => $validated['message'],
+            'state' => 'unread',
         ]);
 
         $session->update([

@@ -101,29 +101,27 @@ export const sessionChatService = {
         return data
     },
 
-    async sendAdminSessionMessage(uuid: string, message: string): Promise<Omit<Message, 'status'>> {
-        const { data } = await api.post<Omit<Message, 'status'>>(
+    async sendAdminSessionMessage(uuid: string, message: string): Promise<Message> {
+        const { data } = await api.post<Message>(
             route('admin.inbox.sessions.messages.store', { uuid }),
             { message },
-        )
-
+        );
         return data
     },
 
 
-    async markSessionChatMessagesAsRead(uuid: string): Promise<number[]> {
-        const { data } = await api.post<number[]>(
+    async markSessionChatMessagesAsRead(uuid: string): Promise<Array<number | string>> {
+        const { data } = await api.post<{ read_message_ids: Array<number | string> }>(
             route('admin.inbox.session.messages.read', {
                 uuid: uuid,
             }),
         )
 
-        return data
+        return data.read_message_ids
     },
 
     
 
 }
-
 
 

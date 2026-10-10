@@ -10,8 +10,9 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     // const chats = ref<ChatSessionWithLatestMessage[]>([]);
     const messages = ref<Message[]>([]);
-    const flagValid = ref(false);
+    const session = ref<StoredSession| null>(null);
 
+    const flagValid = ref(false);
     const initializing = ref(false);
     const creatingSession = ref(false);
 
@@ -20,16 +21,16 @@ export const useSessionChat = defineStore('session-chat', () => {
     // COMPUTED
     // =========================================
 
-    const storedSession = computed(()=>
-        localStorage.getStorageDataByKey<StoredSession>(StorageKey.CHAT_SESSION))
 
-    const isEmptySession = computed(()=> storedSession.value === null);
+    const isEmptySession = computed(()=> session.value === null);
 
     const isValidSession = computed(() => flagValid.value)
 
     const isCreatingSession = computed(()=> creatingSession.value);
 
     const isInitializing = computed(()=> initializing.value);
+
+    const getCurrentSession = computed(()=> session.value)
 
     const getMessages = computed(()=> messages.value)
 
@@ -46,11 +47,15 @@ export const useSessionChat = defineStore('session-chat', () => {
     // =========================================
 
     const initializeStoredChat = async () => {
-        flagValid.value = false;
-        if(isEmptySession.value) return;
-        const { uuid, token } = storedSession.value!;
 
+        const stored = localStorage.getStorageDataByKey<StoredSession>(StorageKey.CHAT_SESSION);
+        flagValid.value = false;
+
+        if(!stored) return;
+        
+        session.value = stored
         initializing.value = true;
+        const {uuid, token} = session.value!;
         const validated = await validateSession(uuid, token);
         if(!validated){
             initializing.value = false;
@@ -64,11 +69,6 @@ export const useSessionChat = defineStore('session-chat', () => {
 
         messages.value = data;
 
-        localStorage.setStorageDataByKey(StorageKey.CHAT_SESSION, {
-            uuid: uuid,
-            token: token,
-        });
-
         flagValid.value = true;
         initializing.value = false;
     }
@@ -76,18 +76,24 @@ export const useSessionChat = defineStore('session-chat', () => {
     const createChatSession = async () => {
         flagValid.value = false;
         creatingSession.value = true;
-        const session = await createNewSession()
-        if(!session) {
+        const newSession = await createNewSession()
+        
+        if(!newSession) {
             flagValid.value = false;
             creatingSession.value = false;
             return;
         };
+
+        subscribeToChatSession(newSession.uuid);
         
-        subscribeToChatSession(session.uuid);
-        
+        session.value = {
+            uuid: newSession.uuid,
+            token: newSession.token,
+        }
+
         localStorage.setStorageDataByKey(StorageKey.CHAT_SESSION, {
-            uuid: session.uuid,
-            token: session.token,
+            uuid: newSession.uuid,
+            token: newSession.token,
         });
         flagValid.value = true;
         creatingSession.value = false;
@@ -100,7 +106,7 @@ export const useSessionChat = defineStore('session-chat', () => {
         if(!flagValid.value) return;
         if(isEmptySession.value) return;
         if(isEmptyNewMessages.value) return;
-        const { uuid, token } = storedSession.value!;
+        const { uuid, token } = session.value!;
         messages.value = messages.value.map(message =>
                 messages.value.some(m => m.id === message.id && m.state === 'unread' && m.sender_type === 'admin')
                     ? { ...message, state: 'read' }
@@ -113,7 +119,7 @@ export const useSessionChat = defineStore('session-chat', () => {
 
     const sendComposedMessage = async (message:string, attachment: unknown[]|null) =>{
         if(isEmptySession.value) return;
-        const { uuid,  token } = storedSession.value!;
+        const { uuid,  token } = session.value!;
 
         const tempId = `temp-${Date.now()}`
 
@@ -221,9 +227,11 @@ export const useSessionChat = defineStore('session-chat', () => {
                     message => message.id === event.id
                 )
 
-                if (exists) return
+                if (exists) return;
                 
-                console.log('Received new message event:', event);
+                const isAdminMessage = event.sender_type ==='admin';
+                if(!isAdminMessage) return;
+                
                 messages.value.push({
                     ...event,
                 })
@@ -250,8 +258,8 @@ export const useSessionChat = defineStore('session-chat', () => {
         totalNewMessages,
         isEmptyNewMessages,
 
-        storedSession,
         getMessages,
+        getCurrentSession,
         
         markMessagesAsRead,
         sendComposedMessage,

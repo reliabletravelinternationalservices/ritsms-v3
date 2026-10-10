@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 import Message from './Message.vue'
 import EmptyMessage from './EmptyMessage.vue'
@@ -25,7 +25,7 @@ function scrollToBottom() {
 
 watch(
     [
-        () => sessionChat.storedSession?.uuid,
+        () => sessionChat.getCurrentSession?.uuid,
         () => sessionChat.getMessages.length,
         () => sessionChat.isInitializing,
     ],
@@ -47,6 +47,11 @@ watch(
 
 defineExpose({
     scrollToBottom,
+})
+
+
+onMounted(()=>{
+    scrollToBottom();
 })
 
 </script>

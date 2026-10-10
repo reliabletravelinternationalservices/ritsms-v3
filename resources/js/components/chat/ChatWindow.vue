@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import ChatHeader from './ChatHeader.vue'
 import ChatMessages from './ChatMessages.vue'
@@ -28,6 +28,8 @@ const startSession = async () => {
 
     await sessionChat.createChatSession()
 }
+
+
 
 </script>
 
