@@ -12,8 +12,8 @@ interface Props {
     chats: ChatSession[]
 }
 
-const props = withDefaults(defineProps<Props>(),{
-    chats: ()=> []
+const props = withDefaults(defineProps<Props>(), {
+    chats: () => []
 })
 
 const emit = defineEmits<{
@@ -41,7 +41,7 @@ const filteredChats = computed(() => {
 
 
 
-const selectChat= (id:string) =>{
+const selectChat = (id: string) => {
     selectedID.value = id;
     emit('select', id)
 }
@@ -59,22 +59,15 @@ const selectChat= (id:string) =>{
                 <Icon icon="lucide:search"
                     class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-                <input v-model="search" type="text" placeholder="Search sessions..."
+                <input v-model="search" type="text" placeholder="Search name..."
                     class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring" />
             </div>
-
-            <!-- NEW CONVERSATION -->
-            <!-- <button v-if="mode === 'chats'" type="button"
-                class="flex size-8 items-center justify-center rounded-md hover:bg-muted" title="New conversation"
-                @click="emit('create')">
-                <Icon icon="lucide:plus" class="size-4" />
-            </button> -->
         </div>
 
         <!-- CHAT LIST -->
         <div class="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
-            <ChatCard v-for="chat in filteredChats" :key="chat.id" :chat="chat"
-                :active="chat.uuid === selectedID" @click="selectChat(chat.uuid)"/>
+            <ChatCard v-for="chat in filteredChats" :key="chat.id" :chat="chat" :active="chat.uuid === selectedID"
+                @click="selectChat(chat.uuid)" />
 
             <!-- EMPTY -->
             <div v-if="filteredChats.length === 0"

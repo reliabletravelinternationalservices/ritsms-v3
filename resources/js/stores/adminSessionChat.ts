@@ -1,15 +1,11 @@
 import { defineStore } from "pinia"
 import { computed, ref, watch } from "vue"
 import { ChatSessionWithLatestMessage, Message as SessionMessage, MessageWithSessionUUID, Mode } from "@/types/chat";
-// import { ConversationWithLatestMessage, Message as ConvoMessage } from "@/types/conversation";
 import echo from "@/echo";
 import { sessionChatService as SCS } from "@/services/sessionChatService";
 
 
 export const useAdminSessionChat = defineStore('admin-session-chat', () => {
-
-    // const convoChats = ref<ConversationWithLatestMessage[]>([]);
-    // const convoMessages = ref< ConvoMessage[]>([]);
 
     const sessionChats = ref<ChatSessionWithLatestMessage[]>([]);
     const sessionMessages = ref<SessionMessage[]>([]);
@@ -82,9 +78,6 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
     const initializeChats = async () => {
         
         await fetchAllSessionChats();
-        await fetchAllConversationChats();
-
-        subscribeToConversationChat();
         subscribeToSessionChat();
     }
 
@@ -100,12 +93,6 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
         sessionChats.value = pagedData.data;
         loadingChats.value = false;
     }
-    
-
-    const fetchAllConversationChats = async () => {
-        //TODO: GET ALL CHATS CONVO
-    }
-
 
 
     const selectChat = async (mode: Mode, id:string) =>{
@@ -120,11 +107,6 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
             return;
         }
 
-        if(mode === 'chats'){
-            selectedChatID.value=id;
-            await fetchConvoChatMessages()
-            return;
-        }
     }
 
 
@@ -133,10 +115,6 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
         const data = await fetchSessionMessages(uuid) 
         sessionMessages.value = data;
         loadingMessages.value=false;
-    }
-
-    const fetchConvoChatMessages = () => {
-        //TODO: FETCH CONVO MESSAGE BY ID
     }
 
     const sendSessionMessage = async (message: string) => {
@@ -250,11 +228,6 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
         }
     }
 
-    function subscribeToConversationChat(){
-        //TODO: FOR CONVO WEBSOCKET CONNCTION
-    }
-
-    let isSubscribedToSessionChat = false
 
 
     async function storeSessionMessage(uuid:string, payload:{
@@ -269,6 +242,9 @@ export const useAdminSessionChat = defineStore('admin-session-chat', () => {
         }
     }
     
+
+    let isSubscribedToSessionChat = false
+
     function subscribeToSessionChat() {
         if (isSubscribedToSessionChat) {
             return
