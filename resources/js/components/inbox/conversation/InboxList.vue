@@ -7,7 +7,6 @@ import {
     ChatSessionWithLatestMessage as ChatSession,
 } from '@/types/chat'
 
-
 interface Props {
     chats: ChatSession[]
 }
@@ -16,8 +15,11 @@ const props = withDefaults(defineProps<Props>(), {
     chats: () => []
 })
 
+const showNewConversationDialog = ref(false)
+
 const emit = defineEmits<{
     select: [id: string]
+    create: [value: boolean]
 }>()
 
 const search = ref('')
@@ -46,9 +48,6 @@ const selectChat = (id: string) => {
     emit('select', id)
 }
 
-
-
-
 </script>
 
 <template>
@@ -64,11 +63,11 @@ const selectChat = (id: string) => {
             </div>
 
             <!-- NEW CONVERSATION -->
-            <!-- <button v-if="mode === 'chats'" type="button"
-                class="flex size-8 items-center justify-center rounded-md hover:bg-muted" title="New conversation"
-                @click="emit('create')">
+            <button type="button"
+                class="flex size-8 items-center justify-center rounded-md hover:bg-muted border border-foreground-muted text-muted-foreground transition-colors"
+                title="New conversation" @click="showNewConversationDialog = true">
                 <Icon icon="lucide:plus" class="size-4" />
-            </button> -->
+            </button>
         </div>
 
         <!-- CHAT LIST -->
@@ -90,5 +89,6 @@ const selectChat = (id: string) => {
                 </p>
             </div>
         </div>
+        <NewConversationDialog v-if="showNewConversationDialog" @close="showNewConversationDialog = false" />
     </aside>
 </template>

@@ -10,8 +10,10 @@ import { Mode } from '@/types/chat'
 
 import { Client } from '@/types/client'
 import { useAdminSessionChat } from '@/stores/adminSessionChat'
+import { useAdminConvoChat } from '@/stores/adminConvoChat'
 import SessionInbox from '@/components/inbox/session/SessionInbox.vue'
 import ConvoInbox from '@/components/inbox/conversation/ConvoInbox.vue'
+
 
 interface Props {
     clients: Client[]
@@ -30,6 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
+const UACC = useAdminConvoChat();
 const UASC = useAdminSessionChat();
 const mode = ref<Mode>(props.filters.type);
 
@@ -39,6 +42,7 @@ watch(
     async (value) => {
         mode.value = value
         await UASC.initializeChats()
+        await UACC.initializeChats()
     },
     {
         immediate: true,
@@ -69,6 +73,7 @@ const changeMode = (value: Mode) => {
 
 onMounted(async () => {
     await UASC.initializeChats()
+    await UACC.initializeChats()
 })
 
 
