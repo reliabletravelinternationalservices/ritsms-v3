@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
 import PresenceStatus from './PresenceStatus.vue'
 import ConversationMenu from './ConversationMenu.vue'
 
@@ -39,9 +37,7 @@ const handleConversationAction = (
 
         <div class="flex items-center gap-3">
 
-            <div
-                class="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-semibold"
-            >
+            <div class="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-semibold">
                 {{ initials }}
             </div>
 
@@ -50,9 +46,7 @@ const handleConversationAction = (
                     {{ name }}
                 </h3>
 
-                <PresenceStatus
-                    :status="status"
-                />
+                <PresenceStatus :status="status" />
             </div>
 
         </div>

@@ -6,7 +6,7 @@ import echo from "@/echo";
 import { sessionChatService as SCS } from "@/services/sessionChatService";
 
 
-export const useAdminChat = defineStore('admin-chat', () => {
+export const useAdminSessionChat = defineStore('admin-session-chat', () => {
 
     // const convoChats = ref<ConversationWithLatestMessage[]>([]);
     // const convoMessages = ref< ConvoMessage[]>([]);

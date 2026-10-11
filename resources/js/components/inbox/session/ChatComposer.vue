@@ -3,10 +3,10 @@ import { Send } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '../../ui/textarea'
-import { useAdminChat } from '@/stores/adminChat'
+import { useAdminSessionChat } from '@/stores/adminSessionChat'
 import { ref, computed } from 'vue'
 
-const UAC = useAdminChat()
+const UAC = useAdminSessionChat()
 
 const emit = defineEmits<{
     send: [message: string, attachment?: unknown[] | null]
@@ -20,9 +20,9 @@ const canSend = computed(() => composedMessage.value.trim() !== '');
 
 function sendMessage() {
     if (!canSend.value) return
-    emit('send',  composedMessage.value, attachment.value)
-    composedMessage.value=''
-    attachment.value=null
+    emit('send', composedMessage.value, attachment.value)
+    composedMessage.value = ''
+    attachment.value = null
 }
 </script>
 

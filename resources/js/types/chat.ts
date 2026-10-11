@@ -54,15 +54,3 @@ export type ChatSessionWithLatestMessage = ChatSessionWithToken & {
 
 
 
-
-// CONVERSATION
-export interface ChatConversation {
-    id: number;
-    name?: string | null;
-    avatar?: string | null;
-    last_message_at?: string | null;
-    is_turned_over: boolean;
-    turned_over_at?: string | null;
-}
-
-

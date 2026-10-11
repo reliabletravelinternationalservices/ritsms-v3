@@ -9,8 +9,9 @@ import type { BreadcrumbItem, User } from '@/types'
 import { Mode } from '@/types/chat'
 
 import { Client } from '@/types/client'
-import { useAdminChat } from '@/stores/adminChat'
+import { useAdminSessionChat } from '@/stores/adminSessionChat'
 import SessionInbox from '@/components/inbox/session/SessionInbox.vue'
+import ConvoInbox from '@/components/inbox/conversation/ConvoInbox.vue'
 
 interface Props {
     clients: Client[]
@@ -29,7 +30,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
-const UAC = useAdminChat();
+const UASC = useAdminSessionChat();
 const mode = ref<Mode>(props.filters.type);
 
 
@@ -37,7 +38,7 @@ watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
-        await UAC.initializeChats()
+        await UASC.initializeChats()
     },
     {
         immediate: true,
@@ -67,7 +68,7 @@ const changeMode = (value: Mode) => {
 
 
 onMounted(async () => {
-    await UAC.initializeChats()
+    await UASC.initializeChats()
 })
 
 
@@ -87,17 +88,18 @@ onMounted(async () => {
                     </h2>
 
                     <p class="text-xs text-muted-foreground">
-                        {{ UAC.totalSessionChat }} conversations
+                        {{ UASC.totalSessionChat }} conversations
                     </p>
                 </div>
 
                 <SessionChatToggle :mode="mode" :total-new-convo-chat="0"
-                    :total-new-session-chat="UAC.totalUnreadSessionChat" @change-mode="changeMode" />
+                    :total-new-session-chat="UASC.totalUnreadSessionChat" @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
             <div class="flex min-h-0 flex-1">
                 <SessionInbox v-if="mode === 'sessions'" :mode="mode" />
+                <ConvoInbox v-else :mode="mode" />
             </div>
         </div>
 
