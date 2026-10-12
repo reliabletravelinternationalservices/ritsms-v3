@@ -1,8 +1,7 @@
 export interface Contact{
-        index: number;
-        id: number;
+        code: string;
         name: string;
         email: string;
-        type: 'admin' | 'client' | 'agent';
+        contact_type: 'client' | 'agent';
         initials?: string | null;
     }

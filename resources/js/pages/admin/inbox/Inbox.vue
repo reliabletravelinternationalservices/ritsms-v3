@@ -32,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
-const UACC = useAdminConvoChat();
+// const UACC = useAdminConvoChat();
 const UASC = useAdminSessionChat();
 const mode = ref<Mode>(props.filters.type);
 
@@ -42,7 +42,6 @@ watch(
     async (value) => {
         mode.value = value
         await UASC.initializeChats()
-        await UACC.initializeChats()
     },
     {
         immediate: true,
@@ -73,7 +72,6 @@ const changeMode = (value: Mode) => {
 
 onMounted(async () => {
     await UASC.initializeChats()
-    await UACC.initializeChats()
 })
 
 
@@ -107,7 +105,5 @@ onMounted(async () => {
                 <ConvoInbox v-else :mode="mode" />
             </div>
         </div>
-
-        <!-- <NewConversationModal v-model:open="createNewModal" :contacts="refData.contacts" /> -->
     </AppLayout>
 </template>

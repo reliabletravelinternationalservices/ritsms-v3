@@ -3,12 +3,11 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
-import {
-    ChatSessionWithLatestMessage as ChatSession,
-} from '@/types/chat'
+import { ChatConversation } from '@/types/conversation'
+import CreateConvoModal from './CreateConvoModal.vue'
 
 interface Props {
-    chats: ChatSession[]
+    chats: ChatConversation[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,7 +18,6 @@ const showNewConversationDialog = ref(false)
 
 const emit = defineEmits<{
     select: [id: string]
-    create: [value: boolean]
 }>()
 
 const search = ref('')
@@ -34,11 +32,11 @@ const filteredChats = computed(() => {
         return props.chats
     }
 
-    return props.chats.filter((chat) => {
-        return chat.code
-            ?.toLowerCase()
-            .includes(query)
-    })
+    // return props.chats.filter((chat) => {
+    //     return chat.code
+    //         ?.toLowerCase()
+    //         .includes(query)
+    // })
 })
 
 
@@ -47,6 +45,8 @@ const selectChat = (id: string) => {
     selectedID.value = id;
     emit('select', id)
 }
+
+
 
 </script>
 
@@ -58,7 +58,7 @@ const selectChat = (id: string) => {
                 <Icon icon="lucide:search"
                     class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-                <input v-model="search" type="text" placeholder="Search sessions..."
+                <input v-model="search" type="text" placeholder="Search convo name..."
                     class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring" />
             </div>
 
@@ -72,11 +72,11 @@ const selectChat = (id: string) => {
 
         <!-- CHAT LIST -->
         <div class="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
-            <ChatCard v-for="chat in filteredChats" :key="chat.id" :chat="chat" :active="chat.uuid === selectedID"
-                @click="selectChat(chat.uuid)" />
+            <!-- <ChatCard v-for="chat in filteredChats" :key="chat.id" :chat="chat" :active="chat.uuid === selectedID"
+                @click="" /> -->
 
             <!-- EMPTY -->
-            <div v-if="filteredChats.length === 0"
+            <!-- <div v-if="filteredChats.length === 0"
                 class="flex flex-col items-center justify-center px-4 py-12 text-center">
                 <Icon icon="lucide:search-x" class="mb-2 size-7 text-muted-foreground" />
 
@@ -87,8 +87,11 @@ const selectChat = (id: string) => {
                 <p class="mt-1 text-xs text-muted-foreground">
                     Try searching for another conversation.
                 </p>
-            </div>
+            </div> -->
         </div>
-        <NewConversationDialog v-if="showNewConversationDialog" @close="showNewConversationDialog = false" />
+
+        <CreateConvoModal
+            v-model:open="showNewConversationDialog"
+        />
     </aside>
 </template>

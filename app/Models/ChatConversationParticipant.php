@@ -10,6 +10,8 @@ class ChatConversationParticipant extends Model
 {
     protected $fillable = [
         'chat_conversation_id',
+        'participant_type',
+        'participant_id',
         'joined_at',
         'removed_at',
     ];

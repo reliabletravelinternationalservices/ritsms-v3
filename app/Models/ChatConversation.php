@@ -13,6 +13,8 @@ class ChatConversation extends Model
 
     protected $fillable = [
         'name',
+        'created_by_type',
+        'created_by_id',
     ];
 
     /**

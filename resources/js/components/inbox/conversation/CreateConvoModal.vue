@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { Input } from '@/components/ui/input'
 import { Contact } from '@/types/contact'
 import { router } from '@inertiajs/vue3'
 import { Loader2 } from '@lucide/vue'
+import { useAdminConvoChat } from '@/stores/adminConvoChat'
+import { CursorPaginated } from '@/types/cursor_paginate'
+import { ContactFilters } from '@/services/convoChatService'
+import { useDebounceFn } from '@vueuse/core'
+
 const props = withDefaults(
     defineProps<{
         open: boolean
-        contacts: Contact[]
     }>(),
     {
         open: false,
@@ -20,69 +24,41 @@ const emit = defineEmits<{
     'update:open': [value: boolean]
 }>()
 
-const search = ref('')
+const UCC = useAdminConvoChat(); 
+const paginatedContact = ref<CursorPaginated<Contact>>()
+const createLoading = ref(false)
+const searchLoading = ref(false)
+
 const selected = ref<Contact[]>([])
-const loading = ref(false)
+
 
 function close() {
+    selected.value = []
     emit('update:open', false)
 }
 
 function toggleContact(contact: Contact) {
     const exists = selected.value.some(
-        item => item.index === contact.index,
+        item => item.code === contact.code,
     )
 
     if (exists) {
         selected.value = selected.value.filter(
-            item => item.index !== contact.index,
+            item => item.code !== contact.code,
         )
     } else {
         selected.value.push(contact)
     }
 }
 
-const create = () => {
-    router.post(route('admin.inbox.convo.store'), {
-        contacts: selected.value.map(contact => ({
-            id: contact.id,
-            name: contact.name,
-            type: contact.type,
-        })),
-    }, {
-        onStart: () => {
-            loading.value = true
-        },
-        onSuccess: () => {
-            selected.value = []
-            search.value = ''
-            close()
-        },
-        onFinish: () => {
-            loading.value = false
-        },
-    })
+const create = async() => {
+    createLoading.value = true;
+    const codes = selected.value.map((value)=> value.code);
+    await UCC.createNewConvo(codes)
+    createLoading.value = false;
+    close();
 }
 
-const filteredContacts = computed(() => {
-    const query = search.value.trim().toLowerCase()
-
-    if (!query) {
-        return props.contacts
-    }
-
-    return props.contacts.filter(contact => {
-        const name = contact.name?.toLowerCase() ?? ''
-        const email = contact.email?.toLowerCase() ?? ''
-        const type = contact.type?.toLowerCase() ?? ''
-
-        return (
-            name.includes(query) ||
-            email.includes(query) ||
-            type.includes(query)
-        )
-    })
-})
 
 const hasSelectedContact = computed(() =>
     selected.value.length > 0
@@ -90,9 +66,27 @@ const hasSelectedContact = computed(() =>
 
 const isSelected = (contact: Contact) =>
     selected.value.some(
-        item => item.index === contact.index,
+        item => item.code === contact.code,
     )
 
+const loadContacts = async (filters?: ContactFilters) => {
+    searchLoading.value = true;
+    paginatedContact.value =  await UCC.getContactList(filters?? {});
+    searchLoading.value = false;
+} 
+
+
+
+const searchContact = useDebounceFn(async (value: string | number) => {
+    await loadContacts({
+        search: value.toString(),
+    })
+}, 300)
+
+
+onMounted(async()=>{
+    await loadContacts()
+})
 
 </script>
 
@@ -148,7 +142,7 @@ const isSelected = (contact: Contact) =>
                         </p>
 
                         <p class="mt-1">
-                            You can add agents or admins to the same
+                            You can add agents and client to the same
                             conversation.
                         </p>
                     </div>
@@ -162,8 +156,8 @@ const isSelected = (contact: Contact) =>
                     />
 
                     <Input
-                        v-model="search"
-                        placeholder="Search contacts..."
+                        @update:model-value="searchContact"
+                        placeholder="Search code | name | email..."
                         class="pl-9"
                     />
                 </div>
@@ -175,7 +169,7 @@ const isSelected = (contact: Contact) =>
                 >
                     <div
                         v-for="contact in selected"
-                        :key="`${contact.type}-${contact.id}`"
+                        :key="`${contact.contact_type}-${contact.code}`"
                         class="flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-xs"
                     >
                         <span class="max-w-32 truncate">
@@ -199,9 +193,15 @@ const isSelected = (contact: Contact) =>
                 <div
                     class="mt-3 min-h-64 max-h-[300px] overflow-y-auto rounded-lg border border-border"
                 >
+
+                    <div v-if="searchLoading" class="flex items-center justify-center min-h-64">
+                        <Loader2 class="animate-spin" />
+                    </div>
+
                     <button
-                        v-for="contact in filteredContacts"
-                        :key="`${contact.type}-${contact.id}`"
+                        v-else
+                        v-for="contact in paginatedContact?.data"
+                        :key="`${contact.contact_type}-${contact.code}`"
                         type="button"
                         class="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted"
                         @click="toggleContact(contact)"
@@ -224,7 +224,7 @@ const isSelected = (contact: Contact) =>
                                 <span
                                     class="text-xs font-normal capitalize text-zinc-400"
                                 >
-                                    ({{ contact.type }})
+                                    ({{ contact.contact_type }})
                                 </span>
                             </p>
 
@@ -245,7 +245,7 @@ const isSelected = (contact: Contact) =>
 
                     <!-- Empty -->
                     <div
-                        v-if="!filteredContacts.length"
+                        v-if="!paginatedContact?.data.length"
                         class="flex min-h-64 items-center justify-center px-4 py-8 text-center text-sm text-muted-foreground"
                     >
                         No contacts found.
@@ -293,10 +293,10 @@ const isSelected = (contact: Contact) =>
                     <button
                         type="button"
                         class="rounded-lg bg-[rgb(var(--color-primary))] px-4 py-2 text-sm font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50 flex item-center gap-2"
-                        :disabled="!hasSelectedContact || loading"
+                        :disabled="!hasSelectedContact || createLoading"
                         @click="create"
                     >
-                        <Loader2 v-if="loading" class="animate-spin" />
+                        <Loader2 v-if="createLoading" class="animate-spin" />
                         <span>Create</span>
                     </button>
                 </div>
