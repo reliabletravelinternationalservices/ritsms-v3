@@ -1,6 +1,5 @@
-import { ApiResponse } from '@/types/api'
 import { Contact } from '@/types/contact'
-import { ChatConversation } from '@/types/conversation'
+import { ChatConversation, ChatConvoWithLatestMessage } from '@/types/conversation'
 import { CursorPaginated } from '@/types/cursor_paginate'
 import axios from 'axios'
 
@@ -27,6 +26,11 @@ export const convoChatService = {
         const { data } = await api.post<CursorPaginated<ChatConversation>>(route('admin.inbox.convo.store'),{
             codes: codes
         });
+        return data
+    },
+    
+    async fetchConversations(): Promise<CursorPaginated<ChatConvoWithLatestMessage>> {
+        const { data } = await api.get<CursorPaginated<ChatConvoWithLatestMessage>>(route('admin.inbox.convo'));
         return data
     },
     

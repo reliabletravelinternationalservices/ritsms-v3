@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\DeleteClientController;
 use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Conversation\ChatContactController;
+use App\Http\Controllers\Admin\Conversation\ConversationController;
 use App\Http\Controllers\Admin\Conversation\CreateConversationController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
@@ -118,11 +119,14 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
 
+            Route::controller(ConversationController::class)->group(function(){
+                Route::get('/convo', 'conversation')->name('inbox.convo');
+            });
+
 
             Route::controller(CreateConversationController::class)->group(function () {
                 Route::post('/convo/store', 'store')->name('inbox.convo.store');
             });
-
 
 
 

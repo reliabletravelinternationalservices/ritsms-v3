@@ -1,14 +1,12 @@
 import { defineStore } from "pinia"
-import { computed, ref, watch } from "vue"
-import { Mode } from "@/types/chat";
-import echo from "@/echo";
+import {  ref } from "vue"
 import { convoChatService as CCS, ContactFilters } from "@/services/convoChatService";
-import { ChatConversation, Message } from "@/types/conversation";
+import { ChatConversation, ChatConvoWithLatestMessage, Message } from "@/types/conversation";
 
 
 export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
 
-    const convoChats = ref<ChatConversation[]>([]);
+    const convoChats = ref<ChatConvoWithLatestMessage[]>([]);
     const convoMessages = ref< Message[]>([]);
 
 
@@ -31,13 +29,22 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     // FUNCTIONS
     //=====================================
     
+    const initializeChat=async()=>{
+        await getConvos();
+    }
+
     const getContactList = async (filters: ContactFilters)=>{
         const paginatedContacts = await fetchContacts(filters);
         return paginatedContacts
     }
 
     const createNewConvo = async (codes: string[])=>{
-        const paginatedData = await createConvo(codes);
+        await createConvo(codes);
+    }
+
+    const getConvos= async()=>{
+        const paginatedData = await fetchConvos();
+        convoChats.value = paginatedData?.data?? [];
     }
 
    
@@ -58,9 +65,19 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     
     async function createConvo(codes: string[]) {
         try{
-            const data = await CCS.createChat(codes);
+            await CCS.createChat(codes);
         }catch(e){
             console.log('Error creating conversation: ', e);
+        }
+    }
+
+
+    async function fetchConvos(){
+        try{
+            const data = await CCS.fetchConversations();
+            return data;
+        }catch(e){
+            console.log('Error fetching conversation: ', e);
         }
     }
 
@@ -71,5 +88,7 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     return {
         getContactList,
         createNewConvo,
+        getConvos,
+        initializeChat,
     }
 })
