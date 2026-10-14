@@ -5,6 +5,7 @@ import { Mode } from '@/types/chat.js';
 import { useAdminConvoChat } from '@/stores/adminConvoChat.js';
 import ChatBox from './ChatBox.vue';
 import NoConvoSelected from '../NoConvoSelected.vue';
+import { useDebounceFn } from '@vueuse/core';
 
 const props = defineProps<{ mode: Mode }>();
 
@@ -12,6 +13,9 @@ const props = defineProps<{ mode: Mode }>();
 const service = useAdminConvoChat();
 
 const chatboxRef = ref<InstanceType<typeof ChatBox> | null>(null)
+
+
+
 
 
 const selectChat = async (uuid: string) => {
@@ -30,11 +34,7 @@ const sendMessage = async (message: string) => {
     <div class="flex min-h-0 flex-1">
         <!-- LEFT -->
         <div class="w-[320px] shrink-0">
-            <InboxList 
-                :chats="[]" 
-                :loading="false" 
-                @select="selectChat" 
-            />
+            <InboxList />
         </div>
 
         <!-- CENTER -->
@@ -44,6 +44,6 @@ const sendMessage = async (message: string) => {
                 :loading="service.isLoadingChats" @send="sendMessage" /> -->
 
             <NoConvoSelected />
-        </main>    
+        </main>
     </div>
 </template>

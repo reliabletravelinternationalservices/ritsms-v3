@@ -7,6 +7,11 @@ export type Status = 'online' | 'away' | 'offline'
 
 // ===========================================
 
+export interface ChatStatus {
+    totalUnreadSessionChat: number;
+    totalUnreadConversationChat: number;
+}
+
 
 
 export interface StoredSession {

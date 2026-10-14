@@ -6,6 +6,7 @@ use App\Enums\Conversation\MessageType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 
@@ -25,6 +26,15 @@ class ChatConversationMessage extends Model
     protected $casts = [
         'type' => MessageType::class,
     ];
+
+
+    public function new_message(): MorphOne
+    {
+        return $this->morphOne(
+            ChatConversationMessageRead::class,
+            'reader'
+        )->whereNull('read_at');
+    }
 
     public function conversation(): BelongsTo
     {

@@ -2,12 +2,11 @@
 import { computed } from 'vue'
 import { formatMessageTime } from '@/lib/utils'
 
-import {
-    ChatSessionWithLatestMessage,
-} from '@/types/chat'
+
+import { ChatConvoWithLatestMessage } from '@/types/conversation';
 
 interface Props {
-    chat: ChatSessionWithLatestMessage
+    chat: ChatConvoWithLatestMessage
     active?: boolean
 }
 
@@ -16,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 
-const isSendMessage = computed(() => props.chat.latest_message?.sender_type === 'admin')
+const isSendMessage = computed(() => props.chat.last_message?. === 'admin')
 const hasUnreadMessages = computed(() => props.chat.new_messages_count > 0)
 
 

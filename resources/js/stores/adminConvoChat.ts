@@ -1,28 +1,33 @@
 import { defineStore } from "pinia"
-import {  ref } from "vue"
-import { convoChatService as CCS, ContactFilters } from "@/services/convoChatService";
-import { ChatConversation, ChatConvoWithLatestMessage, Message } from "@/types/conversation";
+import {  computed, ref } from "vue"
+import { chatService as CCS, ContactFilters, ConvoFilters } from "@/services/chatService";
+import { ChatConvoWithLatestMessage, Message } from "@/types/conversation";
+import { CursorPaginated } from "@/types/cursor_paginate";
 
 
 export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
 
-    const convoChats = ref<ChatConvoWithLatestMessage[]>([]);
-    const convoMessages = ref< Message[]>([]);
+    const conversations = ref<CursorPaginated<ChatConvoWithLatestMessage>>();
+    const messages = ref<CursorPaginated<Message>>();
+    const selectedID = ref<number | null>(null)
 
 
-    
-    const selectedChatID = ref<string| null>();
     const loadingChats = ref(false);
     const loadingMessages = ref(false);
  
-    //=====================================
-    // COMPUTED
-    //=====================================
 
-    
+        
     //==============================
     // WATCHERS
     //============================
+
+
+    
+    //=====================================
+    // COMPUTED
+    //=====================================
+    const convoDataList= computed(() => conversations.value?.data?? []);
+
   
 
     //=====================================
@@ -30,7 +35,7 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     //=====================================
     
     const initializeChat=async()=>{
-        await getConvos();
+        await getConversations({});
     }
 
     const getContactList = async (filters: ContactFilters)=>{
@@ -42,11 +47,18 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
         await createConvo(codes);
     }
 
-    const getConvos= async()=>{
-        const paginatedData = await fetchConvos();
-        convoChats.value = paginatedData?.data?? [];
+    const getConversations = async(filters: ConvoFilters)=>{
+        const data = await fetchConvos(filters);
+        conversations.value = data;
     }
 
+    const selectConvo = (id: number)=>{
+        selectedID.value = id;
+    }
+
+    const isSelectedConvoID=(id:number)=>{
+        return id === selectedID.value;
+    }
    
 
     // ==========================================
@@ -72,9 +84,10 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     }
 
 
-    async function fetchConvos(){
+    async function fetchConvos(filters: ConvoFilters){
         try{
-            const data = await CCS.fetchConversations();
+            const data = await CCS.fetchConversations(filters);
+            console.log(data);
             return data;
         }catch(e){
             console.log('Error fetching conversation: ', e);
@@ -88,7 +101,10 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     return {
         getContactList,
         createNewConvo,
-        getConvos,
+        convoDataList,
         initializeChat,
+        getConversations,
+        selectConvo,
+        isSelectedConvoID,
     }
 })

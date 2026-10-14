@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Client\CreateClientController;
 use App\Http\Controllers\Admin\Client\DeleteClientController;
 use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Conversation\ChatContactController;
+use App\Http\Controllers\Admin\Conversation\ChatStatusController;
 use App\Http\Controllers\Admin\Conversation\ConversationController;
 use App\Http\Controllers\Admin\Conversation\CreateConversationController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
@@ -119,7 +120,11 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
             });
 
 
-            Route::controller(ConversationController::class)->group(function(){
+            Route::controller(ChatStatusController::class)->group(function () {
+                Route::get('/chat/status', 'index')->name('inbox.chat.status');
+            });
+
+            Route::controller(ConversationController::class)->group(function () {
                 Route::get('/convo', 'conversation')->name('inbox.convo');
             });
 

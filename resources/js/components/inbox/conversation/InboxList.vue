@@ -1,50 +1,29 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import ChatCard from './ChatCard.vue'
-import { ChatConversation } from '@/types/conversation'
 import CreateConvoModal from './CreateConvoModal.vue'
+import { useAdminConvoChat } from '@/stores/adminConvoChat.js';
+import { useDebounceFn } from '@vueuse/core'
+import { Loader2 } from '@lucide/vue';
 
-interface Props {
-    chats: ChatConversation[]
-}
+const service = useAdminConvoChat();
 
-const props = withDefaults(defineProps<Props>(), {
-    chats: () => []
-})
-
-const showNewConversationDialog = ref(false)
-
-const emit = defineEmits<{
-    select: [id: string]
-}>()
-
-const search = ref('')
-const selectedID = ref<string | null>(null)
+const showNewConversationDialog = ref(false);
+const loadingConvos = ref(false);
 
 
-
-const filteredChats = computed(() => {
-    const query = search.value.trim().toLowerCase()
-
-    if (!query) {
-        return props.chats
+const filterChat = useDebounceFn(async (value: string | number) => {
+    loadingConvos.value = true;
+    if (!value) {
+        return
     }
-
-    // return props.chats.filter((chat) => {
-    //     return chat.code
-    //         ?.toLowerCase()
-    //         .includes(query)
-    // })
-})
+    await service.getConversations({ search: value.toString() })
+    loadingConvos.value = false;
+}, 300)
 
 
-
-const selectChat = (id: string) => {
-    selectedID.value = id;
-    emit('select', id)
-}
 
 
 
@@ -58,7 +37,7 @@ const selectChat = (id: string) => {
                 <Icon icon="lucide:search"
                     class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-                <input v-model="search" type="text" placeholder="Search convo name..."
+                <input type="text" placeholder="Search convo name..." @update:model-value="filterChat"
                     class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring" />
             </div>
 
@@ -72,11 +51,11 @@ const selectChat = (id: string) => {
 
         <!-- CHAT LIST -->
         <div class="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
-            <!-- <ChatCard v-for="chat in filteredChats" :key="chat.id" :chat="chat" :active="chat.uuid === selectedID"
-                @click="" /> -->
+            <ChatCard v-for="chat in service.convoDataList" :key="chat.id" :chat="chat"
+                :active="service.isSelectedConvoID(chat.id)" @click="service.selectConvo(chat.id)" />
 
             <!-- EMPTY -->
-            <!-- <div v-if="filteredChats.length === 0"
+            <div v-if="service.convoDataList.length === 0"
                 class="flex flex-col items-center justify-center px-4 py-12 text-center">
                 <Icon icon="lucide:search-x" class="mb-2 size-7 text-muted-foreground" />
 
@@ -87,11 +66,13 @@ const selectChat = (id: string) => {
                 <p class="mt-1 text-xs text-muted-foreground">
                     Try searching for another conversation.
                 </p>
-            </div> -->
+            </div>
+
+            <div v-if="loadingConvos" class="flex flex-col items-center justify-center px-4 py-12 text-center">
+                <Loader2 class="animate-spin" />
+            </div>
         </div>
 
-        <CreateConvoModal
-            v-model:open="showNewConversationDialog"
-        />
+        <CreateConvoModal v-model:open="showNewConversationDialog" />
     </aside>
 </template>

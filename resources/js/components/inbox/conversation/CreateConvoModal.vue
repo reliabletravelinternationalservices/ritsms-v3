@@ -3,11 +3,10 @@ import { computed, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { Input } from '@/components/ui/input'
 import { Contact } from '@/types/contact'
-import { router } from '@inertiajs/vue3'
 import { Loader2 } from '@lucide/vue'
 import { useAdminConvoChat } from '@/stores/adminConvoChat'
 import { CursorPaginated } from '@/types/cursor_paginate'
-import { ContactFilters } from '@/services/convoChatService'
+import { ContactFilters } from '@/services/chatService'
 import { useDebounceFn } from '@vueuse/core'
 
 const props = withDefaults(
@@ -24,7 +23,7 @@ const emit = defineEmits<{
     'update:open': [value: boolean]
 }>()
 
-const UCC = useAdminConvoChat(); 
+const UCC = useAdminConvoChat();
 const paginatedContact = ref<CursorPaginated<Contact>>()
 const createLoading = ref(false)
 const searchLoading = ref(false)
@@ -51,9 +50,9 @@ function toggleContact(contact: Contact) {
     }
 }
 
-const create = async() => {
+const create = async () => {
     createLoading.value = true;
-    const codes = selected.value.map((value)=> value.code);
+    const codes = selected.value.map((value) => value.code);
     await UCC.createNewConvo(codes)
     createLoading.value = false;
     close();
@@ -71,9 +70,9 @@ const isSelected = (contact: Contact) =>
 
 const loadContacts = async (filters?: ContactFilters) => {
     searchLoading.value = true;
-    paginatedContact.value =  await UCC.getContactList(filters?? {});
+    paginatedContact.value = await UCC.getContactList(filters ?? {});
     searchLoading.value = false;
-} 
+}
 
 
 
@@ -84,25 +83,19 @@ const searchContact = useDebounceFn(async (value: string | number) => {
 }, 300)
 
 
-onMounted(async()=>{
+onMounted(async () => {
     await loadContacts()
 })
 
 </script>
 
 <template>
-    <div
-        v-if="props.open"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 text-foreground"
-        @click.self="close"
-    >
+    <div v-if="props.open" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 text-foreground"
+        @click.self="close">
         <div
-            class="flex w-full max-w-md min-h-[500px] max-h-[90vh] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-xl"
-        >
+            class="flex w-full max-w-md min-h-[500px] max-h-[90vh] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-xl">
             <!-- Header -->
-            <div
-                class="flex shrink-0 items-center justify-between border-b border-border px-5 py-4"
-            >
+            <div class="flex shrink-0 items-center justify-between border-b border-border px-5 py-4">
                 <div>
                     <h2 class="font-semibold">
                         New Conversation
@@ -113,28 +106,16 @@ onMounted(async()=>{
                     </p>
                 </div>
 
-                <button
-                    type="button"
-                    class="rounded-lg p-2 text-muted-foreground hover:bg-muted"
-                    @click="close"
-                >
-                    <Icon
-                        icon="lucide:x"
-                        class="size-4"
-                    />
+                <button type="button" class="rounded-lg p-2 text-muted-foreground hover:bg-muted" @click="close">
+                    <Icon icon="lucide:x" class="size-4" />
                 </button>
             </div>
 
             <!-- Content -->
             <div class="min-h-0 flex-1 overflow-y-auto p-5">
                 <!-- Info -->
-                <div
-                    class="mb-4 flex gap-3 rounded-lg border border-border bg-muted/40 p-3"
-                >
-                    <Icon
-                        icon="lucide:info"
-                        class="mt-0.5 size-4 shrink-0 text-muted-foreground"
-                    />
+                <div class="mb-4 flex gap-3 rounded-lg border border-border bg-muted/40 p-3">
+                    <Icon icon="lucide:info" class="mt-0.5 size-4 shrink-0 text-muted-foreground" />
 
                     <div class="text-xs text-muted-foreground">
                         <p>
@@ -150,66 +131,42 @@ onMounted(async()=>{
 
                 <!-- Search -->
                 <div class="relative">
-                    <Icon
-                        icon="lucide:search"
-                        class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                    />
+                    <Icon icon="lucide:search"
+                        class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-                    <Input
-                        @update:model-value="searchContact"
-                        placeholder="Search code | name | email..."
-                        class="pl-9"
-                    />
+                    <Input @update:model-value="searchContact" placeholder="Search code | name | email..."
+                        class="pl-9" />
                 </div>
 
                 <!-- Selected Contacts -->
-                <div
-                    v-if="selected.length"
-                    class="mt-3 flex max-h-24 flex-wrap gap-2 overflow-y-auto"
-                >
-                    <div
-                        v-for="contact in selected"
-                        :key="`${contact.contact_type}-${contact.code}`"
-                        class="flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-xs"
-                    >
+                <div v-if="selected.length" class="mt-3 flex max-h-24 flex-wrap gap-2 overflow-y-auto">
+                    <div v-for="contact in selected" :key="`${contact.contact_type}-${contact.code}`"
+                        class="flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-xs">
                         <span class="max-w-32 truncate">
                             {{ contact.name }}
                         </span>
 
-                        <button
-                            type="button"
-                            class="text-muted-foreground hover:text-foreground"
-                            @click="toggleContact(contact)"
-                        >
-                            <Icon
-                                icon="lucide:x"
-                                class="size-3"
-                            />
+                        <button type="button" class="text-muted-foreground hover:text-foreground"
+                            @click="toggleContact(contact)">
+                            <Icon icon="lucide:x" class="size-3" />
                         </button>
                     </div>
                 </div>
 
                 <!-- Contacts -->
-                <div
-                    class="mt-3 min-h-64 max-h-[300px] overflow-y-auto rounded-lg border border-border"
-                >
+                <div class="mt-3 min-h-64 max-h-[300px] overflow-y-auto rounded-lg border border-border">
 
                     <div v-if="searchLoading" class="flex items-center justify-center min-h-64">
                         <Loader2 class="animate-spin" />
                     </div>
 
-                    <button
-                        v-else
-                        v-for="contact in paginatedContact?.data"
-                        :key="`${contact.contact_type}-${contact.code}`"
-                        type="button"
+                    <button v-else v-for="contact in paginatedContact?.data"
+                        :key="`${contact.contact_type}-${contact.code}`" type="button"
                         class="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted"
-                        @click="toggleContact(contact)"
-                    >
+                        @click="toggleContact(contact)">
                         <!-- Avatar -->
                         <div
-                            class="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold"
-                        >
+                            class="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
                             {{
                                 contact.initials ||
                                 contact.name?.charAt(0).toUpperCase()
@@ -221,42 +178,30 @@ onMounted(async()=>{
                             <p class="truncate text-sm font-medium">
                                 {{ contact.name }}
 
-                                <span
-                                    class="text-xs font-normal capitalize text-zinc-400"
-                                >
+                                <span class="text-xs font-normal capitalize text-zinc-400">
                                     ({{ contact.contact_type }})
                                 </span>
                             </p>
 
-                            <p
-                                class="truncate text-xs text-muted-foreground"
-                            >
+                            <p class="truncate text-xs text-muted-foreground">
                                 {{ contact.email || 'No email' }}
                             </p>
                         </div>
 
                         <!-- Selected -->
-                        <Icon
-                            v-if="isSelected(contact)"
-                            icon="lucide:check"
-                            class="size-4 shrink-0 text-[rgb(var(--color-primary))]"
-                        />
+                        <Icon v-if="isSelected(contact)" icon="lucide:check"
+                            class="size-4 shrink-0 text-[rgb(var(--color-primary))]" />
                     </button>
 
                     <!-- Empty -->
-                    <div
-                        v-if="!paginatedContact?.data.length"
-                        class="flex min-h-64 items-center justify-center px-4 py-8 text-center text-sm text-muted-foreground"
-                    >
+                    <div v-if="!paginatedContact?.data.length"
+                        class="flex min-h-64 items-center justify-center px-4 py-8 text-center text-sm text-muted-foreground">
                         No contacts found.
                     </div>
                 </div>
 
                 <!-- Selected Count -->
-                <div
-                    v-if="selected.length"
-                    class="mt-3 text-xs text-muted-foreground"
-                >
+                <div v-if="selected.length" class="mt-3 text-xs text-muted-foreground">
                     {{ selected.length }}
                     {{ selected.length === 1 ? 'contact' : 'contacts' }}
                     selected
@@ -264,9 +209,7 @@ onMounted(async()=>{
             </div>
 
             <!-- Footer -->
-            <div
-                class="flex shrink-0 items-center justify-between border-t border-border px-5 py-4"
-            >
+            <div class="flex shrink-0 items-center justify-between border-t border-border px-5 py-4">
                 <div class="flex items-center text-xs text-muted-foreground">
                     <template v-if="!hasSelectedContact">
                         Select a contact to continue.
@@ -282,20 +225,15 @@ onMounted(async()=>{
                 </div>
 
                 <div class="flex gap-2">
-                    <button
-                        type="button"
+                    <button type="button"
                         class="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:bg-muted"
-                        @click="close"
-                    >
+                        @click="close">
                         Cancel
                     </button>
 
-                    <button
-                        type="button"
+                    <button type="button"
                         class="rounded-lg bg-[rgb(var(--color-primary))] px-4 py-2 text-sm font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50 flex item-center gap-2"
-                        :disabled="!hasSelectedContact || createLoading"
-                        @click="create"
-                    >
+                        :disabled="!hasSelectedContact || createLoading" @click="create">
                         <Loader2 v-if="createLoading" class="animate-spin" />
                         <span>Create</span>
                     </button>

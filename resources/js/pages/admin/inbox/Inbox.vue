@@ -13,6 +13,7 @@ import { useAdminSessionChat } from '@/stores/adminSessionChat'
 import { useAdminConvoChat } from '@/stores/adminConvoChat'
 import SessionInbox from '@/components/inbox/session/SessionInbox.vue'
 import ConvoInbox from '@/components/inbox/conversation/ConvoInbox.vue'
+import { useAdminChatStatus } from '@/stores/adminChatStatusStore'
 
 
 interface Props {
@@ -32,6 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ]
 
+const ACST = useAdminChatStatus();
 const UACC = useAdminConvoChat();
 const UASC = useAdminSessionChat();
 const mode = ref<Mode>(props.filters.type);
@@ -41,6 +43,7 @@ watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
+        await ACST.initialize();
         await UASC.initializeChats();
         await UACC.initializeChat();
     },
@@ -72,6 +75,7 @@ const changeMode = (value: Mode) => {
 
 
 onMounted(async () => {
+    await ACST.initialize();
     await UASC.initializeChats()
     await UACC.initializeChat();
 
@@ -98,8 +102,8 @@ onMounted(async () => {
                     </p>
                 </div>
 
-                <SessionChatToggle :mode="mode" :total-new-convo-chat="0"
-                    :total-new-session-chat="UASC.totalUnreadSessionChat" @change-mode="changeMode" />
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="ACST.statusState.totalUnreadConversationChat"
+                    :total-new-session-chat="ACST.statusState.totalUnreadSessionChat" @change-mode="changeMode" />
             </header>
 
             <!-- CONTENT -->
