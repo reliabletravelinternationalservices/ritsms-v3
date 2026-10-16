@@ -49,6 +49,7 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
 
     const getConversations = async(filters: ConvoFilters)=>{
         const data = await fetchConvos(filters);
+        console.log(data);
         conversations.value = data;
     }
 
@@ -87,7 +88,6 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     async function fetchConvos(filters: ConvoFilters){
         try{
             const data = await CCS.fetchConversations(filters);
-            console.log(data);
             return data;
         }catch(e){
             console.log('Error fetching conversation: ', e);

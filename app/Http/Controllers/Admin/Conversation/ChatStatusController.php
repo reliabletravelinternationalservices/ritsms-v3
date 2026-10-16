@@ -15,10 +15,31 @@ class ChatStatusController extends Controller
 
         $totalUnreadSessionChat = ChatSession::has('newMessagesCount')
             ->count();
+
+
+
+        $user = auth('web')->user();
+
+        $userType = get_class($user);
+        $userId = $user->id;
+
+
+        $totalUnreadSessionChat = ChatSession::has('newMessagesCount')
+            ->count();
+
         $totalUnreadConvoChat = ChatConversation::whereHas(
-            'messages.reads',
-            fn($query) => $query->whereNull('read_at')
+            'messages',
+            function ($query) use ($userType, $userId) {
+                $query
+                    // The user has not read this message.
+                    ->whereDoesntHave('reads', function ($query) use ($userType, $userId) {
+                        $query->where('reader_type', $userType)
+                            ->where('reader_id', $userId)
+                            ->whereNotNull('read_at');
+                    });
+            }
         )->count();
+
 
         return response()->json([
             'totalUnreadSessionChat' => $totalUnreadSessionChat,

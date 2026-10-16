@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import InboxList from './InboxList.vue';
-import { Mode } from '@/types/chat.js';
 import { useAdminConvoChat } from '@/stores/adminConvoChat.js';
 import ChatBox from './ChatBox.vue';
 import NoConvoSelected from '../NoConvoSelected.vue';
-import { useDebounceFn } from '@vueuse/core';
 
-const props = defineProps<{ mode: Mode }>();
 
 //
 const service = useAdminConvoChat();

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\Conversation\MessageType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
 
 class ChatConversation extends Model
 {
@@ -35,6 +37,20 @@ class ChatConversation extends Model
             'chat_conversation_id'
         )->latestOfMany();
     }
+
+
+    // BOOT
+
+    protected static function booted(): void
+    {
+        static::created(function (ChatConversation $conversation) {
+            $conversation->messages()->create([
+                'message' => 'New conversation created.',
+                'type' => MessageType::SYSTEM,
+            ]);
+        });
+    }
+
 
 
     /**

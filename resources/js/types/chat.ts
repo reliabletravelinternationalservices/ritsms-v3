@@ -9,7 +9,7 @@ export type Status = 'online' | 'away' | 'offline'
 
 export interface ChatStatus {
     totalUnreadSessionChat: number;
-    totalUnreadConversationChat: number;
+    totalUnreadConvoChat: number;
 }
 
 

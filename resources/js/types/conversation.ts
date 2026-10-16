@@ -18,11 +18,26 @@ export interface Message {
     chat_conversation_id: number;
     message: string;
     type: MessageType;
+    sender_id: number | null;
+    sender_type: string | null;
     created_at: string;
     updated_at: string;
+    reads: Reader[]
 }
 
 
 export type ChatConvoWithLatestMessage = ChatConversation & {
-    last_message: Message
+    latest_message: Message
+    unread_messages_count: number
+}
+
+
+export interface Reader {
+    chat_conversation_message_id: number;
+    created_at: string | null;
+    id:number;
+    read_at: string;
+    reader_id: number;
+    reader_type: string;
+    updated_at: string | null;
 }

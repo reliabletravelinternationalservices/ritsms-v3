@@ -2,9 +2,10 @@
 import { computed } from 'vue'
 import { formatMessageTime } from '@/lib/utils'
 
-
+const page = usePage<SharedData>()
 import { ChatConvoWithLatestMessage } from '@/types/conversation';
-
+import { usePage } from '@inertiajs/vue3';
+import { SharedData } from '@/types';
 interface Props {
     chat: ChatConvoWithLatestMessage
     active?: boolean
@@ -15,9 +16,16 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 
-const isSendMessage = computed(() => props.chat.last_message?. === 'admin')
-const hasUnreadMessages = computed(() => props.chat.new_messages_count > 0)
-
+// const isSystemMessage = computed(() => props.chat.latest_message.type === MessageType.System);
+const hasUnreadMessages = computed(() => props.chat.unread_messages_count > 0)
+const isMyMessage = computed(() => props.chat.latest_message.sender_id === page.props.auth.user.id);
+const isNotRead = computed(() =>
+    !props.chat.latest_message?.reads?.some(
+        (reader) =>
+            reader.reader_id === page.props.auth.user.id &&
+            reader.reader_type === page.props.auth.user.role
+    )
+);
 
 </script>
 
@@ -34,22 +42,22 @@ const hasUnreadMessages = computed(() => props.chat.new_messages_count > 0)
             </div>
 
             <!-- STATUS -->
-            <span v-if="chat.status === 'open'"
+            <!-- <span v-if="chat.status === 'open'"
                 class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-green-500" />
 
             <span v-else-if="chat.status === 'closed'"
-                class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-gray-500" />
+                class="absolute bottom-0 right-0 size-2.5 rounded-full border-2 border-background bg-gray-500" /> -->
         </div>
 
         <!-- INFO -->
         <div class="min-w-0 flex-1">
             <div class="flex items-center justify-between gap-2">
                 <!-- NAME -->
-                <p class="truncate text-sm" :class="hasUnreadMessages
+                <p class="truncate text-sm" :class="isNotRead
                     ? 'font-semibold'
                     : 'font-medium'
                     ">
-                    {{ chat.code }}
+                    {{ chat.name }}
                 </p>
 
                 <!-- TIME -->
@@ -60,18 +68,18 @@ const hasUnreadMessages = computed(() => props.chat.new_messages_count > 0)
 
             <!-- LAST MESSAGE -->
             <div class="mt-1 flex items-center gap-2">
-                <p class="min-w-0 flex-1 truncate text-xs" :class="hasUnreadMessages
+                <p class="min-w-0 flex-1 truncate text-xs" :class="isNotRead
                     ? 'font-semibold text-foreground'
                     : 'text-muted-foreground'
                     ">
-                    <span v-if="isSendMessage">You:</span>
+                    <span v-if="isMyMessage">You:</span>
                     {{ chat.latest_message?.message || 'No messages yet' }}
                 </p>
 
                 <!-- UNREAD COUNT -->
-                <span v-if="chat.new_messages_count > 0"
+                <span v-if="hasUnreadMessages"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                    {{ chat.new_messages_count }}
+                    {{ chat.unread_messages_count }}
                 </span>
             </div>
         </div>

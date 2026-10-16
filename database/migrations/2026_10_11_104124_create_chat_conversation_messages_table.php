@@ -18,7 +18,7 @@ return new class extends Migration
                 ->constrained('chat_conversations')
                 ->cascadeOnDelete();
 
-            $table->morphs('sender');
+            $table->nullableMorphs('sender');
             $table->text('message');
             $table->enum('type', ['text', 'system', 'image', 'file'])->default('text');
             $table->timestamps();

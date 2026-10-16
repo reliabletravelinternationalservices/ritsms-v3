@@ -13,26 +13,16 @@ class ConversationController extends Controller
     {
         $user = auth('web')->user();
 
-        $data = ChatConversation::with([
-            'latestMessage.sender',
-            'latestMessage.reads' => function ($query) use ($user) {
-                $query->where('reader_type', get_class($user))
-                    ->where('reader_id', $user->id);
-            },
-        ])->cursorPaginate(15);
+        $userType = get_class($user);
+        $userId = $user->id;
 
-        $data->getCollection()->each(function ($conversation) {
-            $message = $conversation->latestMessage;
-
-            if ($message) {
-                $message->setAttribute(
-                    'is_read',
-                    $message->reads->contains(
-                        fn($read) => $read->read_at !== null
-                    )
-                );
-            }
-        });
+        $data = ChatConversation::query()
+            ->with([
+                'createdBy',
+                'latestMessage.sender',
+                'latestMessage.reads',
+            ])
+            ->cursorPaginate(15);
 
         return response()->json($data);
     }

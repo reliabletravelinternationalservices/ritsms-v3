@@ -102,7 +102,7 @@ onMounted(async () => {
                     </p>
                 </div>
 
-                <SessionChatToggle :mode="mode" :total-new-convo-chat="ACST.statusState.totalUnreadConversationChat"
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="ACST.statusState.totalUnreadConvoChat"
                     :total-new-session-chat="ACST.statusState.totalUnreadSessionChat" @change-mode="changeMode" />
             </header>
 
