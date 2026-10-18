@@ -5,14 +5,14 @@ import { ChatConvoWithLatestMessage, Message } from "@/types/conversation";
 import { CursorPaginated } from "@/types/cursor_paginate";
 
 
-export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
+export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () => {
 
     const conversations = ref<CursorPaginated<ChatConvoWithLatestMessage>>();
     const messages = ref<CursorPaginated<Message>>();
     const selectedID = ref<number | null>(null)
 
 
-    const loadingChats = ref(false);
+    const loadingConvos= ref(false);
     const loadingMessages = ref(false);
  
 
@@ -27,15 +27,25 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     // COMPUTED
     //=====================================
     const convoDataList= computed(() => conversations.value?.data?? []);
+    const isConvoLoading = computed(() => loadingConvos.value);
+    const isEmptyConvo = computed(()=>  conversations.value?.data.length === 0 && loadingConvos.value === false);
 
-  
+    const isNoSelectedChat = computed(()=> !selectedID.value );
+    const chatSelected = computed(() =>
+        conversations.value?.data.find(chat => chat.id === selectedID.value)
+    )
+    
+    const chatMessages = computed(()=> messages.value?.data?? []);
+    const isMessagesLoading = computed(()=> loadingMessages.value);
 
     //=====================================
     // FUNCTIONS
     //=====================================
     
     const initializeChat=async()=>{
+        loadingConvos.value =true;
         await getConversations({});
+        loadingConvos.value = false;
     }
 
     const getContactList = async (filters: ContactFilters)=>{
@@ -48,9 +58,10 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     }
 
     const getConversations = async(filters: ConvoFilters)=>{
+        loadingConvos.value = true;
         const data = await fetchConvos(filters);
-        console.log(data);
         conversations.value = data;
+        loadingConvos.value = false;
     }
 
     const selectConvo = (id: number)=>{
@@ -60,6 +71,7 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
     const isSelectedConvoID=(id:number)=>{
         return id === selectedID.value;
     }
+    
    
 
     // ==========================================
@@ -106,5 +118,11 @@ export const useAdminConvoChat = defineStore('admin-convo-chat', () => {
         getConversations,
         selectConvo,
         isSelectedConvoID,
+        isConvoLoading,
+        isEmptyConvo,
+        isNoSelectedChat,
+        chatSelected,
+        chatMessages,
+        isMessagesLoading,
     }
 })

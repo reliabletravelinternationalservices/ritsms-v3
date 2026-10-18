@@ -1,12 +1,12 @@
-```vue
 <script setup lang="ts">
 
-import { Loader2, X } from '@lucide/vue'
+// import { Loader2, X } from '@lucide/vue'
 
-import { formatMessageTime, isSenderType } from '@/lib/utils'
-import { Message } from '@/types/chat'
+import { formatMessageTime } from '@/lib/utils'
+import { Message } from '@/types/conversation';
 
 interface Props {
+    isMine: boolean
     message: Message
 }
 
@@ -26,14 +26,14 @@ function getMessageParts(message: string) {
 </script>
 
 <template>
-    <div class="flex" :class="isSenderType(message.sender_type, 'admin')
+    <div class="flex" :class="isMine
         ? 'justify-end'
         : 'justify-start'
         ">
         <div class="max-w-[80%]">
 
             <!-- Bubble -->
-            <div class="rounded-2xl px-3 py-2 text-sm w-fit" :class="isSenderType(message.sender_type, 'admin')
+            <div class="rounded-2xl px-3 py-2 text-sm w-fit" :class="isMine
                 ? 'bg-yellow-600 text-primary-foreground'
                 : 'bg-muted'
                 ">
@@ -55,20 +55,19 @@ function getMessageParts(message: string) {
             </div>
 
             <!-- Time -->
-            <div class="mt-1 text-[10px] text-muted-foreground flex items-center gap-1 justify-end" :class="isSenderType(message.sender_type, 'admin')
+            <div class="mt-1 text-[10px] text-muted-foreground flex items-center gap-1 justify-end" :class="isMine
                 ? 'text-right'
                 : 'text-left'
                 ">
                 <!-- Sending / Failed -->
-                <div v-if="
-                    isSenderType(message.sender_type, 'admin') &&
-                    message.status !== 'sent'
+                <!-- <div v-if="
+                    isMine
                 " class="mt-0.5 flex justify-end">
                     <Loader2 v-if="message.status === 'sending'" class="size-3 text-muted-foreground animate-spin" />
 
                     <X v-else-if="message.status === 'failed'" class="size-3 text-destructive" />
-                </div>
-                <span v-if="message.status !== 'sending'">
+                </div> -->
+                <span>
                     {{ formatMessageTime(message.created_at) }}
                 </span>
             </div>
@@ -76,4 +75,3 @@ function getMessageParts(message: string) {
         </div>
     </div>
 </template>
-```

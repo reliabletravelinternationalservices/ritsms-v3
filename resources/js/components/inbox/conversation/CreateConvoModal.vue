@@ -4,15 +4,20 @@ import { Icon } from '@iconify/vue'
 import { Input } from '@/components/ui/input'
 import { Contact } from '@/types/contact'
 import { Loader2 } from '@lucide/vue'
-import { useAdminConvoChat } from '@/stores/adminConvoChat'
 import { CursorPaginated } from '@/types/cursor_paginate'
 import { ContactFilters } from '@/services/chatService'
 import { useDebounceFn } from '@vueuse/core'
 
+interface Props {
+    chatCreating: boolean
+    contactLoading: boolean
+    open: boolean
+    contacts: Contact[]
+}
+
+
 const props = withDefaults(
-    defineProps<{
-        open: boolean
-    }>(),
+    defineProps<Props>(),
     {
         open: false,
         contacts: () => [],
@@ -23,7 +28,7 @@ const emit = defineEmits<{
     'update:open': [value: boolean]
 }>()
 
-const UCC = useAdminConvoChat();
+
 const paginatedContact = ref<CursorPaginated<Contact>>()
 const createLoading = ref(false)
 const searchLoading = ref(false)

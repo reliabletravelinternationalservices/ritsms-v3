@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import PresenceStatus from './PresenceStatus.vue'
 import ConversationMenu from './ConversationMenu.vue'
 
 interface Props {
-    name: string
-    initials: string
-    status?: 'open' | 'closed'
+    chatName: string
+    avatar?: string
 }
 
-withDefaults(defineProps<Props>(), {
-    status: 'closed',
-})
+const props = defineProps<Props>();
 
 
 const handleConversationAction = (
@@ -38,15 +34,13 @@ const handleConversationAction = (
         <div class="flex items-center gap-3">
 
             <div class="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-semibold">
-                {{ initials }}
+                {{ props.avatar ?? 'CC' }}
             </div>
 
             <div>
                 <h3 class="text-sm font-semibold">
-                    {{ name }}
+                    {{ props.chatName }}
                 </h3>
-
-                <PresenceStatus :status="status" />
             </div>
 
         </div>

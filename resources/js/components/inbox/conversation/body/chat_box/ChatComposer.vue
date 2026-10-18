@@ -2,14 +2,13 @@
 import { Send } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
-import { Textarea } from '../../ui/textarea'
-import { useAdminConvoChat } from '@/stores/adminConvoChat'
+import { Textarea } from '../../../../ui/textarea'
 import { ref, computed } from 'vue'
 
-const UAC = useAdminConvoChat()
 
 const emit = defineEmits<{
     send: [message: string, attachment?: unknown[] | null]
+    read: []
 }>()
 
 const composedMessage = ref('')
@@ -31,7 +30,7 @@ function sendMessage() {
         <div class="flex items-center gap-2">
             <Textarea v-model="composedMessage" placeholder="Write a message..."
                 class="flex-1 max-h-40 overflow-y-auto scrollbar-none" :min-height="20" :max-height="40"
-                @focus="UAC.markMessagesAsRead" @keydown.enter.exact.prevent="sendMessage" />
+                @focus="emit('read')" @keydown.enter.exact.prevent="sendMessage" />
 
             <Button type="button" size="icon" :disabled="!canSend" @click="sendMessage">
                 <Send class="size-4" />
