@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-between gap-2">
+    <div class="flex flex-col items-start justify-start">
         <slot />
     </div>
 </template>

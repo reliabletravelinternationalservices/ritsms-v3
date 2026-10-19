@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 
 <template>
-    <p class="truncate text-sm" :class="props.isRead
+    <p class="truncate text-sm max-w-[200px]" :class="props.isRead
         ? 'font-medium' : 'font-semibold'">
         {{ props.name }}
     </p>

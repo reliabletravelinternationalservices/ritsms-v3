@@ -33,8 +33,8 @@ import CardInfo from '@/components/inbox/conversation/body/chat_card/CardInfo.vu
 import Name from '@/components/inbox/conversation/body/chat_card/Name.vue'
 import Time from '@/components/inbox/conversation/body/chat_card/Time.vue'
 import LatestMessage from '@/components/inbox/conversation/body/chat_card/LatestMessage.vue'
-import CreateConvoModal from '@/components/inbox/conversation/CreateConvoModal.vue'
 import ChatMessage from '@/components/inbox/conversation/body/chat_box/ChatMessage.vue'
+import CreateConvoModal from '@/components/inbox/conversation/create_modal/CreateConvoModal.vue'
 
 
 interface Props {
@@ -138,19 +138,21 @@ onMounted(async () => {
                         <NavSearch @search="filterConvo" @create="createConvo" />
 
                         <ChatList>
+                            <!-- TODO: GET CONVO ID === SELECTED ID THEN ACTIVE-->
                             <ChatCard v-for="chat in service.convoDataList" :key="chat.id" :active="true">
                                 <CardAvatar />
 
                                 <CardInfo>
-                                    <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center justify-between gap-2 w-full">
                                         <Name :is-read="isRead(chat.latest_message)" :name="chat.name" />
 
                                         <Time :created-at="chat.latest_message.created_at" />
                                     </div>
 
+                                    <!-- TODO: GET LATEST MESSAGES THEN GET TOTAL UNSEEN MESSAGES -->
                                     <LatestMessage :is-read="isRead(chat.latest_message)"
                                         :is-mine="isMine(chat.latest_message.sender_id)"
-                                        :message="chat.latest_message.message" />
+                                        :message="chat.latest_message.message" :new-message-count="1" />
                                 </CardInfo>
                             </ChatCard>
 
