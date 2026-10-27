@@ -1,37 +1,81 @@
-services:
-  mysql:
-    image: mysql:8.4
-    container_name: rits_mysql
-    restart: unless-stopped
 
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ritsroot
-      MYSQL_DATABASE: rits_db
-      MYSQL_USER: rits
-      MYSQL_PASSWORD: secret
+      APP_NAME: "Reliable International Travel Services"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL:-http://localhost:8080}
+
+      LOG_CHANNEL: stderr
+
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: rits_db
+      DB_USERNAME: rits
+      DB_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD}
+
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
 
     ports:
-      - "3307:3306"
+      - "8080:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: rits_db
+      MYSQL_USER: rits
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
 
   redis:
     image: redis:8-alpine
-    container_name: rits_redis
     restart: unless-stopped
+    command:
+      - sh
+      - -c
+      - 'if [ -n "$$REDIS_PASSWORD" ]; then exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"; else exec redis-server --appendonly yes; fi'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
 
-    ports:
-      - "6379:6379"
-
-  mailpit:
-    image: axllent/mailpit:latest
-    container_name: rits_mailpit
+  phpmyadmin:
+    image: phpmyadmin:latest
     restart: unless-stopped
-
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 512M
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "127.0.0.1:8081:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
 
 volumes:
   mysql_data:
+  redis_data:

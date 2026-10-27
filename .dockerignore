@@ -1,0 +1,45 @@
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Node dependencies and local build artifacts
+node_modules
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+public/hot
+
+# PHP dependencies (installed inside Docker)
+vendor
+
+# Laravel runtime files
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing/*
+
+# Laravel generated cache files
+bootstrap/cache/*.php
+
+# IDE and operating system files
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Tests and development-only files (optional)
+.phpunit.cache
+.phpunit.result.cache
+
+# Docker files that do not need to be copied into the image
+docker-compose*.yml
+Dockerfile*
+.dockerignore
