@@ -55,13 +55,27 @@ export function useConvoInbox() {
         )
     }
 
+    const isSelectedChat = (id:number) => service.isSelectedConvoID(id);
+
+    const viewChat = async(id: number) =>{
+        await service.selectConvo(id);
+    }
+
+
+    const readMessages = async()=>{
+        await service.markMessageAsRead();
+    }
+
     return {
         service,
         showNewConvoDialog,
         filterConvo,
         createConvo,
         sendMessage,
+        viewChat,
         isMine,
         isRead,
+        isSelectedChat,
+        readMessages,
     }
 }

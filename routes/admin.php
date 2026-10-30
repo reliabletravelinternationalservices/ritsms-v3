@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Client\EditClientController;
 use App\Http\Controllers\Admin\Conversation\ChatContactController;
 use App\Http\Controllers\Admin\Conversation\ChatStatusController;
 use App\Http\Controllers\Admin\Conversation\ConversationController;
+use App\Http\Controllers\Admin\Conversation\ConvoMessagesController;
 use App\Http\Controllers\Admin\Conversation\CreateConversationController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Destination\CreateDestinationController;
@@ -126,6 +127,12 @@ Route::middleware(['adminAuth', 'accountAccess'])->group(function () {
 
             Route::controller(ConversationController::class)->group(function () {
                 Route::get('/convo', 'conversation')->name('inbox.convo');
+            });
+
+
+            Route::controller(ConvoMessagesController::class)->group(function () {
+                Route::get('/convo/{id}', 'messages')->name('inbox.convo.messages');
+                Route::post('/convo', 'read')->name('inbox.convo.messages.read');
             });
 
 

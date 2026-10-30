@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -65,6 +65,9 @@ const {
     sendMessage,
     isMine,
     isRead,
+    isSelectedChat,
+    viewChat,
+    readMessages,
 } = useConvoInbox()
 
 
@@ -110,11 +113,11 @@ const changeMode = (value: Mode) => {
 
 
 
-onMounted(async () => {
-    await ACST.initialize();
-    await UASC.initializeChats()
-    await service.initializeChat()
-})
+// onMounted(async () => {
+//     await ACST.initialize();
+//     await UASC.initializeChats()
+//     await service.initializeChat()
+// })
 
 </script>
 
@@ -132,14 +135,16 @@ onMounted(async () => {
             <InboxBody>
                 <SessionInbox v-if="mode === 'sessions'" :mode="mode" />
 
+
+                <!-- ================================================================= -->
                 <!-- CONVO -->
                 <ConvoInbox v-else>
                     <ConvoSidebar>
                         <NavSearch @search="filterConvo" @create="createConvo" />
 
                         <ChatList>
-                            <!-- TODO: GET CONVO ID === SELECTED ID THEN ACTIVE-->
-                            <ChatCard v-for="chat in service.convoDataList" :key="chat.id" :active="true">
+                            <ChatCard v-for="chat in service.convoDataList" :key="chat.id"
+                                :active="isSelectedChat(chat.id)" @view="viewChat(chat.id)">
                                 <CardAvatar />
 
                                 <CardInfo>
@@ -152,7 +157,8 @@ onMounted(async () => {
                                     <!-- TODO: GET LATEST MESSAGES THEN GET TOTAL UNSEEN MESSAGES -->
                                     <LatestMessage :is-read="isRead(chat.latest_message)"
                                         :is-mine="isMine(chat.latest_message.sender_id)"
-                                        :message="chat.latest_message.message" :new-message-count="1" />
+                                        :message="chat.latest_message.message"
+                                        :new-message-count="chat.unread_messages_count" />
                                 </CardInfo>
                             </ChatCard>
 
@@ -177,7 +183,7 @@ onMounted(async () => {
                             <!-- Composer always at bottom -->
                             <!-- ADD DRAG AND DROP FILE SOON -->
                             <ComposeContainer>
-                                <ChatComposer @send="sendMessage" @read="() => { }" />
+                                <ChatComposer @send="sendMessage" @read="readMessages" />
                             </ComposeContainer>
                         </ChatBox>
 

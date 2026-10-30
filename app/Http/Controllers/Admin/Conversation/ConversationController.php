@@ -11,10 +11,6 @@ class ConversationController extends Controller
 {
     public function conversation(Request $request)
     {
-        $user = auth('web')->user();
-
-        $userType = get_class($user);
-        $userId = $user->id;
 
         $data = ChatConversation::query()
             ->with([

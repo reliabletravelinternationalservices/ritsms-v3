@@ -11,6 +11,8 @@ class ChatConversationMessageRead extends Model
     protected $fillable = [
         'chat_conversation_message_id',
         'read_at',
+        'reader_type',
+        'reader_id',
     ];
 
     protected function casts(): array

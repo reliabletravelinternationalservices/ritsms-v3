@@ -16,11 +16,9 @@ class ChatStatusController extends Controller
         $totalUnreadSessionChat = ChatSession::has('newMessagesCount')
             ->count();
 
-
-
         $user = auth('web')->user();
 
-        $userType = get_class($user);
+        $userType = $user->role;
         $userId = $user->id;
 
 

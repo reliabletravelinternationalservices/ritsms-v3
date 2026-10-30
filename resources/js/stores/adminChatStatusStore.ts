@@ -24,7 +24,6 @@ export const useAdminChatStatus = defineStore('admin-status-chat', () => {
     
     const getStatus = async () => {
         const data = await fetchChatStatus();
-        console.log(data)
         status.value = data ?? { 
             totalUnreadSessionChat: 0,
             totalUnreadConvoChat: 0

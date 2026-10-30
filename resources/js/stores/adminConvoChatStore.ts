@@ -64,12 +64,21 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
         loadingConvos.value = false;
     }
 
-    const selectConvo = (id: number)=>{
+    const selectConvo = async (id: number)=>{
         selectedID.value = id;
+        loadingMessages.value = true;
+        messages.value = await getConvoMessages(id);
+        loadingMessages.value = false;
     }
 
     const isSelectedConvoID=(id:number)=>{
         return id === selectedID.value;
+    }
+
+
+    const markMessageAsRead = async()=>{
+        if(!selectedID.value) return;
+        await markConvoAsRead(selectedID.value);
     }
     
    
@@ -107,6 +116,25 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
     }
 
 
+    async function getConvoMessages(id:number){
+        try{
+            const data = await CCS.fetchConvoMessages(id);
+            return data;
+        }catch(e){
+            console.log('Error fetching convo: ', e);
+        }
+    }
+
+    async function markConvoAsRead(id:number) {
+        try{
+            const data = await CCS.readConversation(id);
+            return data;
+        }catch(e){
+            console.log('Error marking convo messages as read: ', e);
+        }
+    }
+
+
 
 
 
@@ -124,5 +152,6 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
         chatSelected,
         chatMessages,
         isMessagesLoading,
+        markMessageAsRead,
     }
-})
+}) 
