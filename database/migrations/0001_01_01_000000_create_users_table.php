@@ -16,13 +16,6 @@ return new class extends Migration
 
             $table->string('code', 20)->unique();
 
-            // Client relationship
-            $table->foreignId('client_id')
-                ->nullable()
-                ->unique()
-                ->constrained('clients')
-                ->nullOnDelete();
-
             // Account information
             $table->string('display_name');
             $table->string('email')->unique();
