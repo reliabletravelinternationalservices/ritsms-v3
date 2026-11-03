@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Title from '@/components/inbox/Title.vue';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input/Input.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Icon } from '@iconify/vue';
+import { Head } from '@inertiajs/vue3';
+import { PenSquareIcon } from '@lucide/vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,41 +20,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 <template>
 
-    <Head title="Dashboard" />
+    <Head title="Inbox" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full rounded-xl text-foreground w-full">
-            <div class="w-5/12 border border-border">
-                <Title title="Inquiries" />
-                <div class="p-4">
-                    <div class="flex items-center justify-between gap-2">
-                        <button type="button"
-                            class="p-1 border-2 border-[rgb(var(--color-primary))] rounded-md text-[rgb(var(--color-primary))]">
-                            <Icon icon="lucide:plus" class="text-xl" />
-                        </button>
-                        <Input type="text" placeholder="Search name..."
-                            class="w-full border-2 border-foreground-muted" />
-                        <Icon icon="lucide:filter" class="text-3xl text-foreground-muted" />
-                    </div>
-                    <div>
-                        All Filters
-                    </div>
-
+        <main class="flex h-full min-h-0 w-full flex-col p-2">
+            <aside class="text-foreground border-r h-full w-1/4 px-3 py-2">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold">Chats</h2>
+                    <PenSquareIcon class="h-5 w-5 cursor-pointer" />
                 </div>
                 <div>
-                    List of chats
+                    <Input
+                        placeholder="Search chat..."
+                        class="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
                 </div>
-            </div>
-            <div class="w-full border border-border">
-                Chatbox
-            </div>
-            <div class="border border-border p-2">
-                <button type="button"
-                    class="p-3 bg-[rgb(var(--color-primary)/0.2)] border-2 border-[rgb(var(--color-primary))] rounded-md text-[rgb(var(--color-primary))]">
-                    <Icon icon="lucide:message-circle-more" class="text-2xl" />
-                </button>
-            </div>
-        </div>
+            </aside>
+        </main>
     </AppLayout>
 
 </template>
