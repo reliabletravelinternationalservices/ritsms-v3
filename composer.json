@@ -14,6 +14,7 @@
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image-laravel": "4.1",
         "laravel/framework": "^12.0",
+        "laravel/reverb": "^1.0",
         "laravel/sanctum": "4.3",
         "laravel/tinker": "^2.10.1",
         "predis/predis": "^3.5",
