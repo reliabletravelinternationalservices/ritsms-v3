@@ -26,7 +26,9 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - @inertiajs/vue3 (INERTIA_VUE) - v2
 - tailwindcss (TAILWINDCSS) - v3
 - vue (VUE) - v3
+- @laravel/echo-vue (ECHO_VUE) - v2
 - eslint (ESLINT) - v10
+- laravel-echo (ECHO) - v2
 - prettier (PRETTIER) - v3
 
 ## Skills Activation
