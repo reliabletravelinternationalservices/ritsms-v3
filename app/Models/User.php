@@ -114,4 +114,21 @@ class User extends Authenticatable implements MustVerifyEmail
             new ResetPasswordMail($this, $resetUrl)
         );
     }
+
+
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_user', 'user_id', 'conversation_id')
+            ->withTimestamps();
+    }
+
+    public function conversationMessages()
+    {
+        return $this->hasMany(ConversationMessage::class);
+    }
+
+    public function conversationMessageReads()
+    {
+        return $this->hasMany(ConversationMessageRead::class);
+    }
 }

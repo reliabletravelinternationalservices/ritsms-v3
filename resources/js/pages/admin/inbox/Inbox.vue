@@ -36,7 +36,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <ul class="mt-2 space-y-1">
                         <li v-for="chat in 10" :key="chat"
                             class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
-                            Chat {{ chat }}
+                            <button @click="() => { }">
+                                Chat name {{ chat }}
+                            </button>
                         </li>
                     </ul>
                 </div>
