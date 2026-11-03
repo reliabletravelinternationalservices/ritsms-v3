@@ -2,7 +2,6 @@
 import Input from '@/components/ui/input/Input.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
-import { Icon } from '@iconify/vue';
 import { Head } from '@inertiajs/vue3';
 import { PenSquareIcon } from '@lucide/vue';
 
@@ -30,10 +29,16 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <PenSquareIcon class="h-5 w-5 cursor-pointer" />
                 </div>
                 <div>
-                    <Input
-                        placeholder="Search chat..."
-                        class="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    />
+                    <Input placeholder="Search chat..."
+                        class="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                </div>
+                <div>
+                    <ul class="mt-2 space-y-1">
+                        <li v-for="chat in 10" :key="chat"
+                            class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
+                            Chat {{ chat }}
+                        </li>
+                    </ul>
                 </div>
             </aside>
         </main>

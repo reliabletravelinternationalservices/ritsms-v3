@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'is_active' => true,
             'email' => 'reliabletravelinfo@gmail.com',
             'password' => bcrypt('password'),
+            'role' => 'admin',
         ]);
     }
 }

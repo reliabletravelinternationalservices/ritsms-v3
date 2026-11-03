@@ -13,14 +13,14 @@
         "@eslint/js": "^9.19.0",
         "@iconify/vue": "^5.0.0",
         "@types/lodash": "^4.17.25",
-        "@vue/eslint-config-typescript": "^14.3.0",
-        "eslint": "^10.8.0",
-        "eslint-config-prettier": "^10.0.1",
-        "eslint-plugin-vue": "^10.10.0",
+        "@vue/eslint-config-typescript": "^14.9.0",
+        "eslint": "^9.39.5",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-vue": "^9.28.0",
         "prettier": "^3.4.2",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-tailwindcss": "^0.6.9",
-        "typescript-eslint": "^8.23.0"
+        "typescript-eslint": "^8.14.0"
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.23",
@@ -79,5 +79,8 @@
     "allowScripts": {
         "vue-demi@0.14.10": true,
         "esbuild@0.25.12": true
+    },
+    "overrides": {
+        "minimatch": "11.0.1"
     }
 }
