@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -81,9 +81,6 @@ watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
-        await ACST.initialize();
-        await UASC.initializeChats();
-        await service.initializeChat();
     },
     {
         immediate: true,
@@ -113,11 +110,11 @@ const changeMode = (value: Mode) => {
 
 
 
-// onMounted(async () => {
-//     await ACST.initialize();
-//     await UASC.initializeChats()
-//     await service.initializeChat()
-// })
+onMounted(async () => {
+    await ACST.initialize();
+    await UASC.initializeChats()
+    await service.initializeChat()
+})
 
 </script>
 
