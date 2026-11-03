@@ -54,7 +54,11 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
     }
 
     const createNewConvo = async (codes: string[])=>{
-        await createConvo(codes);
+        const convo = await createConvo(codes);
+        if(!convo) return;
+        
+        conversations.value?.data.push(convo);
+        return convo;
     }
 
     const getConversations = async(filters: ConvoFilters)=>{
@@ -99,7 +103,8 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
     
     async function createConvo(codes: string[]) {
         try{
-            await CCS.createChat(codes);
+            const convo = await CCS.createChat(codes);
+            return convo;
         }catch(e){
             console.log('Error creating conversation: ', e);
         }

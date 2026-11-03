@@ -132,7 +132,6 @@ onMounted(async () => {
             <InboxBody>
                 <SessionInbox v-if="mode === 'sessions'" :mode="mode" />
 
-
                 <!-- ================================================================= -->
                 <!-- CONVO -->
                 <ConvoInbox v-else>

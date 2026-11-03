@@ -90,12 +90,12 @@ class CreateConversationController extends Controller
             return $convo;
         });
 
-        return response()->json([
-            'message' => 'Conversation created successfully.',
-            'conversation' => $convo->load([
-                'participants.participant',
+        $convo->load([
                 'createdBy',
-            ]),
-        ], 201);
+                'latestMessage.sender',
+                'latestMessage.reads',
+            ]);
+        
+        return response()->json($convo, 201);
     }
 }
