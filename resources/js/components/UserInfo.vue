@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/composables/useInitials';
 import type { User } from '@/types';
 import { computed } from 'vue';
+import AvatarPlaceholder from './AvatarPlaceholder.vue';
 
 interface Props {
     user: User;
@@ -23,7 +24,7 @@ const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
     <Avatar class="h-8 w-8 overflow-hidden rounded-lg bg-sidebar border border-sidebar-border">
         <AvatarImage v-if="showAvatar && user.avatar" :src="user.avatar" :alt="user.display_name" />
         <AvatarFallback class="rounded-lg text-white">
-            {{ getInitials(user.display_name) }}
+            <AvatarPlaceholder class="aspect-square h-full w-full" />
         </AvatarFallback>
     </Avatar>
 

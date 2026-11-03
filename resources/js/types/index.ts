@@ -51,14 +51,14 @@ export interface SharedData {
 
 export interface User {
     id: number;
-    name: string;
     email: string;
     avatar?: string;
     display_name: string;
     phone: string | null;
-    role: 'admin' | 'agent';
+    role: 'admin' | 'agent' | 'client';
     email_verified_at: string | null;
-    status: 'active' | 'inactive';
+    is_active: boolean;
+    deleted_at: string | null;
     created_at: string;
     updated_at: string;
 }

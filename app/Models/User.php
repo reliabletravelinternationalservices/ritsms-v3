@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\User\Type;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmployeeEmail;
 use Database\Factories\UserFactory;
@@ -60,7 +61,41 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'role' => Type::class,
         ];
+    }
+
+
+
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (!empty($user->code)) {
+                return;
+            }
+
+            $user->code = self::generateCode($user->role);
+        });
+    }
+
+
+    private static function generateCode(Type $type): string
+    {
+        if ($type->isAdmin()) {
+            $prefix = 'ADM';
+        } elseif ($type->isAgent()) {
+            $prefix = 'AGT';
+        } else {
+            $prefix = 'CLI';
+        }
+
+        $date = now()->format('Ymd');
+        $randomNumber = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+
+        return "{$prefix}-{$date}-{$randomNumber}";
     }
 
 

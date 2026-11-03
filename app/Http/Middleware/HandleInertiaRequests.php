@@ -50,11 +50,10 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user('web'),
-                'traveler' => $request->user('traveler'),
             ],
             'flash' => [
-                'type' => fn () => $request->session()->get('type'),
-                'message' => fn () => $request->session()->get('message'),
+                'type' => fn() => $request->session()->get('type'),
+                'message' => fn() => $request->session()->get('message'),
             ],
             'settings' => $settings,
         ]);
