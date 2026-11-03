@@ -3,10 +3,18 @@ import {  computed, ref } from "vue"
 import { chatService as CCS, ContactFilters, ConvoFilters } from "@/services/chatService";
 import { ChatConvoWithLatestMessage, Message } from "@/types/conversation";
 import { CursorPaginated } from "@/types/cursor_paginate";
+import { ChatStatus } from "@/types/chat";
 
 
 export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () => {
 
+
+    const chatStatuses = ref<ChatStatus>({
+        totalUnreadSessionChat: 0,
+        totalUnreadConvoChat: 0
+    });
+    
+    
     const conversations = ref<CursorPaginated<ChatConvoWithLatestMessage>>();
     const messages = ref<CursorPaginated<Message>>();
     const selectedID = ref<number | null>(null)
@@ -42,11 +50,30 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
     // FUNCTIONS
     //=====================================
     
+    const initialize =async()=>{
+        await initializeStatuses();
+        await initializeChat();
+    }
+
+
+    const initializeStatuses=async()=>{
+        await getStatus()
+    }
+
     const initializeChat=async()=>{
         loadingConvos.value =true;
         await getConversations({});
         loadingConvos.value = false;
     }
+
+    const getStatus = async () => {
+        const data = await fetchChatStatus();
+        chatStatuses.value = data ?? { 
+            totalUnreadSessionChat: 0,
+            totalUnreadConvoChat: 0
+         };
+    }
+
 
     const getContactList = async (filters: ContactFilters)=>{
         const paginatedContacts = await fetchContacts(filters);
@@ -87,6 +114,14 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
     // API SERVICE FUNCTION 
     // ==========================================
 
+    async function fetchChatStatus() {
+        try{
+            const data = await CCS.fetchChatStatus();
+            return data;
+        }catch(e){
+            console.error('Cannot fetch all chat status: ',e);
+        }
+    }
 
     async function fetchContacts(filters: ContactFilters) {
         try{
@@ -139,10 +174,11 @@ export const useAdminConvoChatStore = defineStore('admin-convo-chat-store', () =
 
 
     return {
+        initialize,
+        chatStatuses,
         getContactList,
         createNewConvo,
         convoDataList,
-        initializeChat,
         getConversations,
         selectConvo,
         isSelectedConvoID,

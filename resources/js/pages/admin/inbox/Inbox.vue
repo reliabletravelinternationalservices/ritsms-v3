@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -10,12 +10,11 @@ import { Client } from '@/types/client'
 import { useAdminSessionChat } from '@/stores/adminSessionChat'
 import SessionInbox from '@/components/inbox/session/SessionInbox.vue'
 import ConvoInbox from '@/components/inbox/conversation/ConvoInbox.vue'
-import { useAdminChatStatus } from '@/stores/adminChatStatusStore'
 import InboxContent from '@/components/inbox/InboxContent.vue'
 import InboxHeader from '@/components/inbox/InboxHeader.vue'
 import InboxBody from '@/components/inbox/InboxBody.vue'
 import { useConvoInbox } from '@/composables/inbox/conversation/useConvoInbox'
-import NavSearch from '@/components/inbox/conversation/sidebar/NavSearch.vue'
+import ConvoNavSearch from '@/components/inbox/conversation/sidebar/NavSearch.vue'
 import EmptyConvo from '@/components/inbox/conversation/sidebar/EmptyConvo.vue'
 import Loading from '@/components/inbox/conversation/sidebar/Loading.vue'
 import ConvoBody from '@/components/inbox/conversation/body/ConvoBody.vue'
@@ -28,13 +27,14 @@ import ChatComposer from '@/components/inbox/conversation/body/chat_box/ChatComp
 import ComposeContainer from '@/components/inbox/conversation/body/chat_box/ComposeContainer.vue'
 import ChatCard from '@/components/inbox/conversation/body/chat_card/ChatCard.vue'
 import ConvoSidebar from '@/components/inbox/conversation/ConvoSidebar.vue'
-import ChatList from '@/components/inbox/conversation/sidebar/ChatList.vue'
+import ChatList from '@/components/inbox/conversation/ChatList.vue'
 import CardInfo from '@/components/inbox/conversation/body/chat_card/CardInfo.vue'
 import Name from '@/components/inbox/conversation/body/chat_card/Name.vue'
 import Time from '@/components/inbox/conversation/body/chat_card/Time.vue'
 import LatestMessage from '@/components/inbox/conversation/body/chat_card/LatestMessage.vue'
 import ChatMessage from '@/components/inbox/conversation/body/chat_box/ChatMessage.vue'
 import CreateConvoModal from '@/components/inbox/conversation/create_modal/CreateConvoModal.vue'
+import SessionNavSearch from '@/components/inbox/session/sidebar/NavSearch.vue'
 
 
 interface Props {
@@ -70,9 +70,6 @@ const {
     readMessages,
 } = useConvoInbox()
 
-
-const ACST = useAdminChatStatus();
-
 const UASC = useAdminSessionChat();
 const mode = ref<Mode>(props.filters.type);
 
@@ -81,9 +78,6 @@ watch(
     () => props.filters.type,
     async (value) => {
         mode.value = value
-        await ACST.initialize();
-        await UASC.initializeChats();
-        await service.initializeChat();
     },
     {
         immediate: true,
@@ -113,11 +107,10 @@ const changeMode = (value: Mode) => {
 
 
 
-// onMounted(async () => {
-//     await ACST.initialize();
-//     await UASC.initializeChats()
-//     await service.initializeChat()
-// })
+onMounted(async () => {
+    await UASC.initializeChats();
+    await service.initialize();
+})
 
 </script>
 
@@ -128,21 +121,22 @@ const changeMode = (value: Mode) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
             <InboxHeader :mode="mode" :total-convo="0">
-                <SessionChatToggle :mode="mode" :total-new-convo-chat="ACST.statusState.totalUnreadConvoChat"
-                    :total-new-session-chat="ACST.statusState.totalUnreadSessionChat" @change-mode="changeMode" />
+                <SessionChatToggle :mode="mode" :total-new-convo-chat="service.chatStatuses.totalUnreadConvoChat"
+                    :total-new-session-chat="service.chatStatuses.totalUnreadSessionChat" @change-mode="changeMode" />
             </InboxHeader>
 
             <InboxBody>
-                <SessionInbox v-if="mode === 'sessions'" :mode="mode" />
-
-
-                <!-- ================================================================= -->
-                <!-- CONVO -->
-                <ConvoInbox v-else>
+                <ConvoInbox>
+                    <!-- <SessionInbox v-if="mode === 'sessions'" :mode="mode" /> -->
                     <ConvoSidebar>
-                        <NavSearch @search="filterConvo" @create="createConvo" />
 
-                        <ChatList>
+                        <!-- IF CONVERSATION CHAT -->
+                        <ConvoNavSearch v-if="mode === 'chats'"  @search="filterConvo" @create="createConvo" />
+                        <ChatList 
+                            v-if="mode === 'chats' 
+                            && service.isEmptyConvo === false 
+                            && service.isConvoLoading === false"
+                            >
                             <ChatCard v-for="chat in service.convoDataList" :key="chat.id"
                                 :active="isSelectedChat(chat.id)" @view="viewChat(chat.id)">
                                 <CardAvatar />
@@ -161,16 +155,38 @@ const changeMode = (value: Mode) => {
                                         :new-message-count="chat.unread_messages_count" />
                                 </CardInfo>
                             </ChatCard>
-
-                            <EmptyConvo v-if="service.isEmptyConvo" />
-
-                            <Loading v-if="service.isConvoLoading" />
                         </ChatList>
+
+
+                        <!-- IF SESSIONS CHAT -->
+                        <SessionNavSearch v-if="mode === 'sessions'" @search="()=>{}" />
+                        <ChatList v-if="mode === 'sessions'">
+                            <ChatCard v-for="chat in UASC.getSessionChats" :key="chat.code"
+                                :active="false" @view="()=>{}">
+                                <CardAvatar />
+
+                                <CardInfo>
+                                    <div class="flex items-center justify-between gap-2 w-full">
+                                        <Name :is-read="chat.latest_message?.sender_type === 'admin'" :name="chat.code" />
+
+                                        <Time :created-at="chat.latest_message?.created_at" />
+                                    </div>
+                                    <LatestMessage :is-read="chat.latest_message?.sender_type === 'admin'"
+                                        :is-mine="chat.latest_message?.sender_type === 'admin'"
+                                        :message="chat.latest_message?.message"
+                                        :new-message-count="chat.new_messages_count" />
+                                </CardInfo>
+                            </ChatCard>
+                        </ChatList>
+
+
+                        <EmptyConvo v-if="service.isEmptyConvo" />
+                        <Loading v-if="service.isConvoLoading" />
+
                     </ConvoSidebar>
 
-                    <!-- CENTER -->
                     <ConvoBody>
-                        <ChatBox v-if="!service.isNoSelectedChat">
+                        <ChatBox v-if="service.isNoSelectedChat === false && mode === 'chats'">
                             <ChatBoxHeader :chat-name="service.chatSelected!.name" />
 
                             <MessageContainer ref="messageContainer">
@@ -187,10 +203,25 @@ const changeMode = (value: Mode) => {
                             </ComposeContainer>
                         </ChatBox>
 
+
+                        <!-- FOR SESSION CHAT -->
+                        <ChatBox v-if="mode === 'sessions'">
+                            <ChatBoxHeader :chat-name="UASC.getSelectedSessionChat?.uuid!" />
+
+                            <MessageContainer ref="messageContainer">
+                                <div class="mt-6 space-y-4">
+                                    <ChatMessage v-for="message in service.chatMessages" :key="message.id"
+                                        :is-mine="isMine(message.sender_id)" :message="message" />
+                                </div>
+                            </MessageContainer>
+
+                            <ComposeContainer>
+                                <ChatComposer @send="sendMessage" @read="readMessages" />
+                            </ComposeContainer>
+                        </ChatBox>
+
                         <NoConvoSelected v-else />
                     </ConvoBody>
-
-
                 </ConvoInbox>
             </InboxBody>
         </InboxContent>

@@ -16,7 +16,7 @@ const emit = defineEmits<{
 <template>
     <button type="button" class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition" :class="props.active
         ? 'bg-muted'
-        : 'hover:bg-muted/60'
+        : 'hover:bg-muted/80'
         " @click="emit('view')">
         <slot />
     </button>

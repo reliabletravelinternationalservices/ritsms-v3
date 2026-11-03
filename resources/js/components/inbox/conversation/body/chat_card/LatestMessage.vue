@@ -18,16 +18,21 @@ const props = withDefaults(defineProps<Props>(), {
 
 
 <template>
-    <div class="mt-1 flex items-center  gap-2">
-        <p class="min-w-0 flex-1 truncate text-xs" :class="props.isRead
-            ? 'text-muted-foreground' : 'font-semibold text-foreground'">
-            <span v-if="isMine">You:</span>
-            {{ message }}
+    <div class="mt-1 flex min-w-0 items-center gap-2">
+        <p
+            class="min-w-0 max-w-[230px] flex-1 truncate text-xs"
+            :class="props.isRead
+                ? 'text-muted-foreground'
+                : 'font-semibold text-foreground'"
+        >
+            <span v-if="isMine">You: </span>{{ message }}
         </p>
 
         <!-- UNREAD COUNT -->
-        <span v-if="!props.isRead"
-            class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+        <span
+            v-if="!props.isRead"
+            class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
+        >
             {{ newMessageCount }}
         </span>
     </div>
