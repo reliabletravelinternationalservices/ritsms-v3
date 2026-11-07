@@ -6,8 +6,10 @@ import {  ref } from "vue";
 export function useInbox() {
     const pagedConversations = ref<CursorPaginated<ConvoWithParticipantsAndLatestMessage> | null>(null);
 
-    const loadingInitConvo = ref(false);
-    const loadingConversations = ref(false);
+    const convoFullLoading = ref(false);
+    const loadMoreLoading = ref(false);
+    const searchLoading = ref(false);
+    const searchKey = ref('');
     const openedConvo = ref<ConvoWithParticipants| null>(null)
 
     // ======================
@@ -20,9 +22,9 @@ export function useInbox() {
     // ======================
     // Initialize first page
     const initializeConvos = async (search?: string) => {
-        if (loadingInitConvo.value) return;
+        if (convoFullLoading.value) return;
 
-        loadingInitConvo.value = true;
+        convoFullLoading.value = true;
 
         try {
             const response = await conversationService.getConvos({ search });
@@ -33,27 +35,21 @@ export function useInbox() {
         } catch (e) {
             console.error("Error initializing conversations", e);
         } finally {
-            loadingInitConvo.value = false;
+            convoFullLoading.value = false;
         }
     };
 
     // Load next page
-    const loadConvos = async (filters: {
-        search?: string, nextCursor?: string | null
-    }) => {
+    const loadMoreConvo = async (nextCursor?: string | null) => {
 
-        console.log('loading convo')
-        if (loadingConversations.value) return;
-        
-
-        if (!filters.nextCursor) return;
-
-        loadingConversations.value = true;
+        if (loadMoreLoading.value ) return;
+        if (!nextCursor) return;
+        loadMoreLoading.value = true;
 
         try {
             const response = await conversationService.getConvos({
-                search: filters.search,
-                cursor: filters.nextCursor
+                search: searchKey.value,
+                cursor: nextCursor
             });
 
             if (response.data && pagedConversations.value) {
@@ -65,7 +61,7 @@ export function useInbox() {
         } catch (e) {
             console.error("Error loading conversations", e);
         } finally {
-            loadingConversations.value = false;
+            loadMoreLoading.value = false;
         }
     };
 
@@ -73,8 +69,29 @@ export function useInbox() {
         console.log("Create new chat");
     };
 
-    const search = (value?: string) => {
-        console.log("Search:", value);
+    const search = async (value?: string) => {
+
+        searchKey.value = value??''
+        if (searchLoading.value) return;
+
+        searchLoading.value = true;
+        try {
+            
+            const response = await conversationService.getConvos({
+                search: value
+            });
+
+            if (response.data && pagedConversations.value) {
+                pagedConversations.value.data = []
+                pagedConversations.value.data.push(...response.data)
+                pagedConversations.value.next_cursor = response.next_cursor;
+                pagedConversations.value.prev_cursor = response.prev_cursor;
+            }
+        } catch (e) {
+            console.error("Error searching conversations", e);
+        } finally {
+            searchLoading.value = false;
+        }
     };
 
     const openChat = (chat: ConvoWithParticipantsAndLatestMessage) => {
@@ -85,11 +102,12 @@ export function useInbox() {
 
     return {
         pagedConversations,
-        loadingInitConvo,
-        loadingConversations,
+        convoFullLoading,
+        loadMoreLoading,
         openedConvo,
+        searchLoading,
         initializeConvos,
-        loadConvos,
+        loadMoreConvo,
         create,
         search,
         openChat,

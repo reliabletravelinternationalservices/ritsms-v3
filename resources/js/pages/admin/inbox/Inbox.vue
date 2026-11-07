@@ -24,12 +24,13 @@ const {
     create,
     search,
     pagedConversations,
-    loadingInitConvo,
+    convoFullLoading,
     openedConvo,
     initializeConvos,
     openChat,
-    loadingConversations,
-    loadConvos,
+    loadMoreLoading,
+    loadMoreConvo,
+    searchLoading
 } = useInbox();
 
 
@@ -48,10 +49,9 @@ onMounted(async () => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
             <Sidebar @create="create" @search="search">
-                <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadingConversations"
-                    :has-more="Boolean(pagedConversations.next_cursor)" @load="() => loadConvos({
-                        nextCursor: pagedConversations?.next_cursor
-                    })">
+                <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadMoreLoading"
+                    :has-more="Boolean(pagedConversations.next_cursor)"
+                    @load="() => loadMoreConvo(pagedConversations?.next_cursor)">
                     <ul class="mt-2 space-y-1 w-full">
                         <li v-for="chat in pagedConversations.data" :key="chat.id"
                             class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
@@ -61,7 +61,7 @@ onMounted(async () => {
                 </SidebarBody>
 
                 <SidebarBodyPlaceholder v-else>
-                    <LoadingData v-if="loadingInitConvo" />
+                    <LoadingData v-if="convoFullLoading || searchLoading" />
 
                     <div v-else class="flex flex-col items-center justify-center gap-2">
                         <MessageSquareOff class="h-8 w-8" />
