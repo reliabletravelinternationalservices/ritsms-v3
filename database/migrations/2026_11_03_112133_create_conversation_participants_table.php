@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('conversation_id')->constrained()->onDelete('cascade');
             $table->morphs('participant');
             $table->enum('role', ['admin', 'member', 'owner'])->default('member');
-            $table->timestamp('joined_at')->nullable();
+            $table->timestamp('joined_at')->useCurrent();
             $table->timestamp('left_at')->nullable();
+            $table->timestamp('last_read_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

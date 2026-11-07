@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { ChatButton, ChatContent, ChatList, InboxBody, InboxContent, Sidebar, SidebarBody, SidebarBodyPlaceholder } from '@/components/inbox';
+import OtherChatBubble from '@/components/inbox/bubble/OtherChatBubble.vue';
+import OwnerChatBubble from '@/components/inbox/bubble/OwnerChatBubble.vue';
 import InfiniteScroll from '@/components/InfiniteScroll.vue';
-import Input from '@/components/ui/input/Input.vue';
+import LoadingData from '@/components/LoadingData.vue';
+import { useInbox } from '@/composables/inbox/useInbox';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { PenSquareIcon } from '@lucide/vue';
-import { ref } from 'vue';
+import { MessageSquareOff } from '@lucide/vue';
+import { onMounted } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,39 +20,25 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 
+const {
+    create,
+    search,
+    pagedConversations,
+    loadingInitConvo,
+    openedConvo,
+    initializeConvos,
+    openChat,
+    loadingConversations,
+    loadConvos,
+} = useInbox();
 
-const items = ref<number[]>(Array.from({ length: 20 }, (_, i) => i + 1));
 
-const loading = ref(false);
-const hasMore = ref(true);
-
-const loadMore = async () => {
-    if (loading.value || !hasMore.value) return;
-
-    loading.value = true;
-
-    try {
-        // Simulate API request
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        const nextItems = Array.from(
-            { length: 20 },
-            (_, i) => items.value.length + i + 1
-        );
-
-        items.value.push(...nextItems);
-
-        if (items.value.length >= 100) {
-            hasMore.value = false;
-        }
-    } finally {
-        loading.value = false;
-    }
-};
+onMounted(async () => {
+    await initializeConvos()
+})
 
 
 </script>
-
 
 
 <template>
@@ -56,40 +46,95 @@ const loadMore = async () => {
     <Head title="Inbox" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <main class="flex h-full min-h-0 w-full flex-col p-2">
-            <aside class="text-foreground border-r h-full w-1/4 py-4">
-                <div class="flex items-center justify-between px-3">
-                    <h2 class="text-xl font-bold">Chats</h2>
-                    <PenSquareIcon class="h-5 w-5 cursor-pointer" />
-                </div>
-                <div class="px-3">
-                    <Input placeholder="Search chat..."
-                        class="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
-                </div>
-                <!-- Chat list -->
-                <InfiniteScroll class="mt-2 h-[calc(100vh-220px)] overflow-y-auto px-3" :loading="loading"
-                    :has-more="hasMore" @load="loadMore">
-                    <ul class="mt-2 space-y-1">
-                        <li v-for="chat in items" :key="chat"
+        <InboxContent>
+            <Sidebar @create="create" @search="search">
+                <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadingConversations"
+                    :has-more="true" @load="() => loadConvos({
+                        nextCursor: pagedConversations?.next_cursor
+                    })">
+                    <ul class="mt-2 space-y-1 w-full">
+                        <li v-for="chat in pagedConversations.data" :key="chat.id"
                             class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
-                            <button @click="() => { }" class="w-full text-left">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-bold ">Chat {{ chat }}</span>
-                                    <span
-                                        class="text-xs text-muted-foreground bg-red-600 rounded-lg p-1 w-4 h-4 flex items-center justify-center text-white">2</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <p class="text-sm text-muted-foreground">Last message preview...</p>
-                                    <span class="text-xs text-muted-foreground">12:30 PM</span>
-                                </div>
-                            </button>
+                            <ChatButton :is-open="chat.id === openedConvo?.id" :chat="chat" @click="openChat" />
                         </li>
                     </ul>
-                </InfiniteScroll>
-            </aside>
+                </SidebarBody>
 
+                <SidebarBodyPlaceholder v-else>
+                    <LoadingData v-if="loadingInitConvo" />
 
-        </main>
+                    <div v-else class="flex flex-col items-center justify-center gap-2">
+                        <MessageSquareOff class="h-8 w-8" />
+                        <span class="italic">Start a new chat</span>
+                    </div>
+                </SidebarBodyPlaceholder>
+
+            </Sidebar>
+
+            <InboxBody>
+                <ChatContent v-if="openedConvo" :chat="openedConvo" @info="() => { }">
+                    <InfiniteScroll class="py-2 w-full h-full overflow-y-auto" :loading="false" :has-more="false"
+                        @load="() => { }" direction="bottom-to-top">
+                        <ChatList>
+                            <OtherChatBubble class="self-start" message="Hello! How are you?" time="10:30 AM"
+                                :is-edited="true" />
+                            <OwnerChatBubble class="self-end" message="Hi! I'm good, thanks for asking. How about you?"
+                                time="10:31 AM" :isRead="true" />
+                            <OtherChatBubble message="I'm good, thanks! How about you?" time="10:32 AM" />
+                            <OwnerChatBubble class="self-end" message="I'm doing well too. Just working on a project."
+                                time="10:33 AM" :isRead="true" />
+                            <OtherChatBubble message="That's great! What kind of project are you working on?"
+                                time="10:34 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="It's a web application for managing tasks and projects." time="10:34 AM"
+                                :isRead="true" />
+                            <OtherChatBubble message="That sounds interesting! Good luck with your project."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end" message="Thank you! I appreciate it." time="10:35 AM"
+                                :isRead="true" />
+                            <OtherChatBubble message="By the way, have you tried the new feature in our app?"
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="Yes, I have. It's really useful and saves a lot of time." time="10:35 AM"
+                                :isRead="true" />
+                            <OtherChatBubble
+                                message="I'm glad to hear that! We put a lot of effort into making it user-friendly."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="Absolutely! The interface is intuitive and easy to navigate." time="10:35 AM"
+                                :isRead="true" />
+                            <OtherChatBubble
+                                message="That's great feedback! We'll continue to improve and add more features in the future."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="I'm looking forward to seeing what you come up with next!" time="10:35 AM"
+                                :isRead="true" />
+                            <OtherChatBubble message="Thank you for your support! It means a lot to us."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end" message="You're welcome! Keep up the good work."
+                                time="10:35 AM" :isRead="true" />
+                            <OtherChatBubble
+                                message="Thanks! We'll keep striving to make our app even better for our users."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="I'm sure you will. Your dedication is evident in the quality of the app."
+                                time="10:35 AM" :isRead="true" />
+                            <OtherChatBubble message="We appreciate your kind words! It motivates us to keep improving."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="I'm happy to provide feedback. It's important to recognize the hard work that goes into creating a great product."
+                                time="10:35 AM" :isRead="true" />
+                            <OtherChatBubble
+                                message="Absolutely! Your feedback helps us understand what our users value and what we can do better."
+                                time="10:35 AM" />
+                            <OwnerChatBubble class="self-end"
+                                message="I'm glad to be of help. Keep up the excellent work!" time="10:35 AM"
+                                :isRead="true" />
+                        </ChatList>
+                    </InfiniteScroll>
+                </ChatContent>
+            </InboxBody>
+        </InboxContent>
     </AppLayout>
 
 </template>

@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             // PackageGroupSeeder::class,
             // PackageGroupItemSeeder::class,
             SettingSeeder::class,
+            ConversationSeeder::class,
+            MessageSeeder::class,
             // PackageScheduleSeeder::class,
             // DestinationSeeder::class,
             // DestinationLocationSeeder::class

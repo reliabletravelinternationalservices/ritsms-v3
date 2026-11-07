@@ -5,6 +5,11 @@ import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import type { Destination } from '@/types/destination';
 import { Media } from "@/types/media-v2"
+import { formatDistanceToNowStrict } from 'date-fns';
+import { usePage } from "@inertiajs/vue3"
+import { SharedData } from "@/types"
+
+const page = usePage<SharedData>();
 const appUrl = import.meta.env.VITE_APP_URL
 
 export function cn(...inputs: ClassValue[]) {
@@ -410,3 +415,27 @@ export const formatTime = (time: string | null | undefined): string => {
 
     return time.slice(0, 5);
 }
+
+
+export function formatTimeAgo(date: Date | number | string): string {
+
+  const parsedDate = typeof date === 'string' ? new Date(date) : date;
+
+  if (parsedDate instanceof Date && isNaN(parsedDate.getTime())) {
+    return 'unknown';
+  }
+
+  const verbose = formatDistanceToNowStrict(parsedDate);
+
+  return verbose
+    .replace(/ years?/, 'y')
+    .replace(/ months?/, 'mo')
+    .replace(/ weeks?/, 'w')
+    .replace(/ days?/, 'd')
+    .replace(/ hours?/, 'h')
+    .replace(/ minutes?/, 'm')
+    .replace(/ seconds?/, 's');
+}
+
+
+export const getAuthUser = ()=> page.props.auth.user;

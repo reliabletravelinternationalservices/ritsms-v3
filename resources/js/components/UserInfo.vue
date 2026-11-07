@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useInitials } from '@/composables/useInitials';
+// import { useInitials } from '@/composables/useInitials';
 import type { User } from '@/types';
 import { computed } from 'vue';
 import AvatarPlaceholder from './AvatarPlaceholder.vue';
@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
     showEmail: false,
 });
 
-const { getInitials } = useInitials();
+// const { getInitials } = useInitials();
 
 // Compute whether we should show the avatar image
 const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '');

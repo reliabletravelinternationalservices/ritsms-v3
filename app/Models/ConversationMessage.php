@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ConvoMessage\Type;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,6 +24,7 @@ class ConversationMessage extends Model
     protected $casts = [
         'sent_at' => 'datetime',
         'is_edited' => 'boolean',
+        'type' => Type::class,
     ];
 
 
@@ -46,8 +48,19 @@ class ConversationMessage extends Model
         return $this->belongsTo(self::class, 'reply_to_id');
     }
 
-    public function reads()
+    public function isRead(): bool
     {
-        return $this->hasMany(ConversationMessageRead::class);
+        if (!$this->sent_at || !$this->conversation) {
+            return false;
+        }
+
+        return $this->conversation
+            ->participants()
+            ->where(function ($query) {
+                $query->where('participant_id', '!=', $this->sender_id)
+                    ->orWhere('participant_type', '!=', $this->sender_type);
+            })
+            ->where('last_read_at', '>=', $this->sent_at)
+            ->exists();
     }
 }

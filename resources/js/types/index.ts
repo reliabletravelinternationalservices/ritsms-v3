@@ -2,7 +2,6 @@
 
 export interface Auth {
     user: User;
-    traveler: Traveler;
 }
 
 export interface BreadcrumbItem {

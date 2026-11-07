@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Conversation;
 use App\Models\Destination;
 use App\Models\Package;
+use App\Models\User;
+use App\Observers\ConversationObserver;
 use App\Observers\DestinationObserver;
 use App\Observers\PackageObserver;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -39,7 +43,6 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute($maxAttempts)
                 ->by($request->ip());
         });
-
     }
 
 
