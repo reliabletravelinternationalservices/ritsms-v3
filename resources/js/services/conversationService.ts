@@ -7,15 +7,21 @@ export const conversationService = {
         search?: string
         cursor?: string | null
     }): Promise<CursorPaginated<ConvoWithParticipantsAndLatestMessage>> {
-        const { data } = await api.get<CursorPaginated<ConvoWithParticipantsAndLatestMessage>>(route('convo.list'), {
-            params: filters
+        const { data: response } = await api.get<{
+            data: ConvoWithParticipantsAndLatestMessage[]
+            meta: Omit<CursorPaginated<ConvoWithParticipantsAndLatestMessage>, 'data'>
+        }>(route('convo.list'), {
+            params: filters,
         })
-        return data
+
+        return {
+            ...response.meta,
+            data: response.data,
+        }
     },
 
 
 }
-
 
 
 

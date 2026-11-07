@@ -49,7 +49,7 @@ onMounted(async () => {
         <InboxContent>
             <Sidebar @create="create" @search="search">
                 <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadingConversations"
-                    :has-more="true" @load="() => loadConvos({
+                    :has-more="Boolean(pagedConversations.next_cursor)" @load="() => loadConvos({
                         nextCursor: pagedConversations?.next_cursor
                     })">
                     <ul class="mt-2 space-y-1 w-full">

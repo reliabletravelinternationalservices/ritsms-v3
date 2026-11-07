@@ -2,7 +2,7 @@
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
 import GroupAvatarPlaceholder from '@/components/GroupAvatarPlaceholder.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { formatTimeAgo, getAuthUser } from '@/lib/utils';
+import { formatTimeAgo, getAuthUser, getFirstName } from '@/lib/utils';
 import { ConvoWithParticipantsAndLatestMessage, Type as ConvoType } from '@/types/convo/conversation';
 import { Type as MessageType } from '@/types/convo/message';
 import { Image, Paperclip, Video } from '@lucide/vue';
@@ -50,12 +50,14 @@ const name = computed(() =>
         : privateParticipant.value?.display_name ?? 'Unknown user'
 );
 
+
 const totalUnreadMessage = computed(() => currentAuthParticipant.value?.total_unread ?? 0)
+const isNotRead = computed(() => props.chat.latest_message.is_read === false)
 
 const latestMessage = computed(() => props.chat.latest_message)
 
 const isYou = computed(() => authUser.value.id === props.chat.latest_message.sender?.id)
-
+const senderName = computed(() => isYou.value ? 'You: ' : getFirstName(props.chat.latest_message.sender!.display_name) + ': ')
 </script>
 
 <template>
@@ -95,9 +97,12 @@ const isYou = computed(() => authUser.value.id === props.chat.latest_message.sen
 
                 <!-- LATEST MESSAGE -->
                 <div class="flex min-w-0 items-center gap-2">
-                    <p class="flex min-w-0 flex-1 items-center gap-1 truncate text-sm" :class="latestMessage.type === MessageType.System
-                        ? 'italic text-muted-foreground'
-                        : 'text-muted-foreground'">
+                    <p class="flex min-w-0 flex-1 items-center gap-1 truncate text-sm" :class="[
+                        latestMessage.type === MessageType.System
+                            ? 'italic text-muted-foreground'
+                            : 'text-muted-foreground',
+                        isNotRead && 'font-semibold text-foreground'
+                    ]">
                         <!-- SYSTEM -->
                         <template v-if="latestMessage.type === MessageType.System">
                             <span class="truncate">{{ latestMessage.body }}</span>
@@ -106,25 +111,25 @@ const isYou = computed(() => authUser.value.id === props.chat.latest_message.sen
                         <!-- IMAGE -->
                         <template v-else-if="latestMessage.type === MessageType.Image">
                             <Image class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ isYou ? 'You: ' : '' }}Sent an image</span>
+                            <span class="truncate">{{ senderName }}Sent an image</span>
                         </template>
 
                         <!-- VIDEO -->
                         <template v-else-if="latestMessage.type === MessageType.Video">
                             <Video class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ isYou ? 'You: ' : '' }}Sent a video</span>
+                            <span class="truncate">{{ senderName }}Sent a video</span>
                         </template>
 
                         <!-- FILE -->
                         <template v-else-if="latestMessage.type === MessageType.File">
                             <Paperclip class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ isYou ? 'You: ' : '' }}Sent a file</span>
+                            <span class="truncate">{{ senderName }}Sent a file</span>
                         </template>
 
                         <!-- TEXT -->
                         <template v-else>
-                            <span v-if="isYou" class="font-medium text-foreground">
-                                You:
+                            <span v-if="isYou || isGroup">
+                                {{ senderName }}
                             </span>
                             <span class="truncate">{{ latestMessage.body }}</span>
                         </template>

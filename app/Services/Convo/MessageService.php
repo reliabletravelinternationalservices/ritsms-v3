@@ -40,6 +40,7 @@ class MessageService
                 'body' => $message,
                 'sender_id' => $sender->id,
                 'sender_type' => get_class($sender),
+                'sent_at' => now(),
             ]);
 
             return $message;

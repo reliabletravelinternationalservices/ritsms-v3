@@ -439,3 +439,8 @@ export function formatTimeAgo(date: Date | number | string): string {
 
 
 export const getAuthUser = ()=> page.props.auth.user;
+
+
+export const getFirstName = (value: string): string => {
+    return value.trim().split(' ')[0];
+};
