@@ -18,5 +18,6 @@ Route::domain(config('app.public_domain'))
     ->group(base_path('routes/client.php'));
 
 require __DIR__ . '/convo.php';
+require __DIR__ . '/user.php';
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

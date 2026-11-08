@@ -6,9 +6,9 @@ use App\Http\Controllers\Convo\MessageController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('auth')->name('convo.')->group(function () {
+Route::middleware('auth')->prefix('convo')->name('convo.')->group(function () {
     Route::controller(ConvoController::class)->group(function () {
-        Route::get('/', 'getConvos')->name('list');
+        Route::get('/list', 'getConvos')->name('list');
     });
 
 

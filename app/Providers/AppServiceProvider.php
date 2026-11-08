@@ -10,6 +10,7 @@ use App\Observers\ConversationObserver;
 use App\Observers\DestinationObserver;
 use App\Observers\PackageObserver;
 use App\Policies\Convo\ConversationPolicy;
+use App\Policies\User\UserPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -60,5 +61,6 @@ class AppServiceProvider extends ServiceProvider
     private function getPolicy()
     {
         Gate::policy(Conversation::class, ConversationPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
     }
 }

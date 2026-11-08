@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChatButton, ChatComposer, ChatContent, ChatHeader, ChatList, InboxBody, InboxContent, Sidebar, SidebarBody, SidebarBodyPlaceholder } from '@/components/inbox';
 import ChatBubble from '@/components/inbox/bubble/ChatBubble.vue';
+import CreateConversation from '@/components/inbox/create-convo/CreateConversation.vue';
 import InfiniteScroll from '@/components/InfiniteScroll.vue';
 import LoadingData from '@/components/LoadingData.vue';
 import { useInbox } from '@/composables/inbox/useInbox';
@@ -22,7 +23,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const {
-    create,
     search,
     pagedConversations,
     convoFullLoading,
@@ -36,6 +36,8 @@ const {
     openedConvoMessagesLoading,
     isOwnerChat,
     sendMessage,
+    createConvo,
+    createNewConvo,
 } = useInbox();
 
 
@@ -53,7 +55,7 @@ onMounted(async () => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
-            <Sidebar @create="create" @search="search">
+            <Sidebar @create="createNewConvo" @search="search">
                 <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadMoreLoading"
                     :has-more="Boolean(pagedConversations.next_cursor)"
                     @load="() => loadMoreConvo(pagedConversations?.next_cursor)">
@@ -77,7 +79,11 @@ onMounted(async () => {
             </Sidebar>
 
             <InboxBody>
-                <ChatContent v-if="openedConvo" :chat="openedConvo">
+
+                <div v-if="createConvo" class="text-foreground">
+                    <CreateConversation />
+                </div>
+                <ChatContent v-else-if="openedConvo" :chat="openedConvo">
                     <ChatHeader :chat="openedConvo" @info="() => { }" />
 
                     <InfiniteScroll v-if="openedConvoMessages" class="py-2 w-full h-full overflow-y-auto"

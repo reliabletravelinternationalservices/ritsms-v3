@@ -11,6 +11,7 @@ export function useInbox() {
     const searchKey = ref('');
     const openedConvo = ref<ConvoWithParticipants| null>(null);
     const openedConvoMessages = ref<CursorPaginated<Message> | null>(null);
+    const createConvo = ref(false);
 
     const convoFullLoading = ref(false);
     const loadMoreLoading = ref(false);
@@ -93,8 +94,9 @@ export function useInbox() {
         }
     };
 
-    const create = () => {
-        console.log("Create new chat");
+    const createNewConvo = () => {
+        openedConvo.value = null
+        toggleCreateConvo(true)
     };
 
     const search = async (value?: string) => {
@@ -123,6 +125,7 @@ export function useInbox() {
     };
 
     const openChat = async (chat: ConvoWithParticipantsAndLatestMessage) => {
+        toggleCreateConvo(false);
         openedConvo.value = chat
         await initializeOpenedConvoMessages();
     }
@@ -201,6 +204,9 @@ export function useInbox() {
         conversations.unshift(convo);
     };
 
+
+    const toggleCreateConvo = (value:boolean) =>  createConvo.value = value;
+
     return {
         pagedConversations,
         convoFullLoading,
@@ -209,7 +215,6 @@ export function useInbox() {
         searchLoading,
         initializeConvos,
         loadMoreConvo,
-        create,
         search,
         openChat,
         initializeOpenedConvoMessages,
@@ -217,5 +222,8 @@ export function useInbox() {
         openedConvoMessagesLoading,
         isOwnerChat,
         sendMessage,
+        createConvo,
+        toggleCreateConvo,
+        createNewConvo
     };
 }

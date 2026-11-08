@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Enums\User\Type;
+use App\Enums\User\Role;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmployeeEmail;
 use Database\Factories\UserFactory;
@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
-            'role' => Type::class,
+            'role' => Role::class,
         ];
     }
 
@@ -82,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    private static function generateCode(Type $type): string
+    private static function generateCode(Role $type): string
     {
         if ($type->isAdmin()) {
             $prefix = 'ADM';
@@ -151,19 +151,31 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function conversations()
-    {
-        return $this->belongsToMany(Conversation::class, 'conversation_user', 'user_id', 'conversation_id')
-            ->withTimestamps();
-    }
 
     public function conversationMessages()
     {
         return $this->hasMany(ConversationMessage::class);
     }
 
-    public function conversationMessageReads()
+
+
+    public function conversationParticipants()
     {
-        return $this->hasMany(ConversationMessageRead::class);
+        return $this->morphMany(
+            ConversationParticipant::class,
+            'participant'
+        );
+    }
+
+    public function conversations()
+    {
+        return $this->hasManyThrough(
+            Conversation::class,
+            ConversationParticipant::class,
+            'participant_id',
+            'id',
+            'id',
+            'conversation_id'
+        )->where('conversation_participants.participant_type', $this->getMorphClass());
     }
 }
