@@ -89,8 +89,8 @@ class ConversationSeeder extends Seeder
             ],
             [
                 "id" => 2,
-                "name" => null,
-                "type" => Type::PRIVATE,
+                "name" => "Brainwashing 2026",
+                "type" => Type::GROUP,
                 "creatorID" => 1,
                 "participants" => [1, 2],
                 "firstMessage" => "Hi! Welcome. You can contact me here for your travel concerns.",

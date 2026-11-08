@@ -444,3 +444,26 @@ export const getAuthUser = ()=> page.props.auth.user;
 export const getFirstName = (value: string): string => {
     return value.trim().split(' ')[0];
 };
+
+export function formatTimestamp(timestamp: string | number | Date): string {
+    const date = new Date(timestamp)
+
+    if (isNaN(date.getTime())) return ""
+
+    return date
+        .toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        })
+        .replace(/\s/g, "")
+        .toUpperCase()
+}
+
+export const generateTempMessageId = (): number => {
+    return -Date.now() * 1000 - Math.floor(Math.random() * 1000);
+};
+
+export const generateClientId = (): string => {
+    return `${Date.now()}${Math.floor(Math.random() * 1000000)}`;
+};

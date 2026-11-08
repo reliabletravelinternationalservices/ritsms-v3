@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue"
-import { nextTick, watch } from "vue"
+import { nextTick, watch, onMounted, ref } from "vue"
 import { useVModel } from "@vueuse/core"
 import { cn } from "@/lib/utils"
 
@@ -13,7 +13,7 @@ const props = withDefaults(
     maxHeight?: number
   }>(),
   {
-    minHeight: 100,
+    minHeight: 40,
     maxHeight: 250,
   }
 )
@@ -27,49 +27,50 @@ const modelValue = useVModel(props, "modelValue", emits, {
   defaultValue: props.defaultValue,
 })
 
-const resizeTextarea = (element: HTMLTextAreaElement) => {
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
+
+const resizeTextarea = () => {
+  const element = textareaRef.value
+  if (!element) return
+
+  // Reset height to calculate actual content height
   element.style.height = "auto"
 
-  const height = Math.min(
-    Math.max(element.scrollHeight, props.minHeight),
-    props.maxHeight
+  const height = Math.max(
+    props.minHeight,
+    Math.min(element.scrollHeight, props.maxHeight)
   )
 
   element.style.height = `${height}px`
+
+  // Show scrollbar only when content exceeds max height
   element.style.overflowY =
     element.scrollHeight > props.maxHeight ? "auto" : "hidden"
 }
 
-const handleInput = async (event: Event) => {
-  const element = event.target as HTMLTextAreaElement
-
-  resizeTextarea(element)
+const handleInput = () => {
+  resizeTextarea()
 }
 
 watch(
-  () => modelValue.value,
+  modelValue,
   async () => {
     await nextTick()
-
-    const textarea = document.querySelector(
-      "textarea[data-auto-resize]"
-    ) as HTMLTextAreaElement | null
-
-    if (textarea) {
-      resizeTextarea(textarea)
-    }
+    resizeTextarea()
   }
 )
+
+onMounted(() => {
+  resizeTextarea()
+})
 </script>
 
 <template>
-  <textarea v-model="modelValue" data-auto-resize :class="cn(
-    'flex w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  <textarea ref="textareaRef" v-model="modelValue" data-auto-resize :class="cn(
+    'flex w-full box-border resize-none rounded-md border border-input bg-background px-3 py-2 text-sm leading-5 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
     props.class
-  )
-    " :style="{
-      minHeight: `${minHeight}px`,
-      maxHeight: `${maxHeight}px`,
-      overflowY: 'hidden',
-    }" @input="handleInput" />
+  )" :style="{
+    minHeight: `${minHeight}px`,
+    maxHeight: `${maxHeight}px`,
+  }" rows="1" @input="handleInput" />
 </template>

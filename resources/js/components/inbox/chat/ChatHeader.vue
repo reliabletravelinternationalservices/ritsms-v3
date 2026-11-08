@@ -2,24 +2,40 @@
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
 import GroupAvatarPlaceholder from '@/components/GroupAvatarPlaceholder.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getAuthUser } from '@/lib/utils';
+import { ConvoWithParticipants, Type } from '@/types/convo/conversation';
 import { Info } from '@lucide/vue';
+import { computed } from 'vue';
 
 
 interface Props {
-    name: string;
-    avatar?: string | null;
-    isGroup: boolean
+    chat: ConvoWithParticipants
 }
 
-withDefaults(defineProps<Props>(), {
-    isGroup: false
-})
+const props = defineProps<Props>()
 
 
 const emit = defineEmits<{
-    info: [];
+    info: [chat: ConvoWithParticipants];
 }>();
 
+const authUser = computed(() => getAuthUser());
+const isGroup = computed(() => props.chat.type === Type.Group)
+const privateParticipant = computed(() =>
+    props.chat.participants.find(
+        (pt) => pt.participant.id !== authUser.value.id
+    )?.participant
+);
+const avatar = computed(() =>
+    isGroup.value
+        ? props.chat.avatar
+        : privateParticipant.value?.avatar ?? null
+);
+const name = computed(() =>
+    isGroup.value
+        ? props.chat.name
+        : privateParticipant.value?.display_name ?? 'Unknown user'
+);
 
 </script>
 
@@ -36,7 +52,7 @@ const emit = defineEmits<{
             <h3 class="text-lg font-semibold">{{ name }}</h3>
         </div>
 
-        <button class="btn btn-ghost btn-sm gap-2" @click="emit('info')">
+        <button class="btn btn-ghost btn-sm gap-2" @click="emit('info', chat)">
             <Info class="w-6 h-6" />
         </button>
 

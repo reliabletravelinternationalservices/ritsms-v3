@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { ChatButton, ChatContent, ChatList, InboxBody, InboxContent, Sidebar, SidebarBody, SidebarBodyPlaceholder } from '@/components/inbox';
-import OtherChatBubble from '@/components/inbox/bubble/OtherChatBubble.vue';
-import OwnerChatBubble from '@/components/inbox/bubble/OwnerChatBubble.vue';
+import { ChatButton, ChatComposer, ChatContent, ChatHeader, ChatList, InboxBody, InboxContent, Sidebar, SidebarBody, SidebarBodyPlaceholder } from '@/components/inbox';
+import ChatBubble from '@/components/inbox/bubble/ChatBubble.vue';
 import InfiniteScroll from '@/components/InfiniteScroll.vue';
 import LoadingData from '@/components/LoadingData.vue';
 import { useInbox } from '@/composables/inbox/useInbox';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { MessageSquareOff } from '@lucide/vue';
+import { MessageSquareOff, SendIcon } from '@lucide/vue';
 import { onMounted } from 'vue';
+
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -30,7 +31,11 @@ const {
     openChat,
     loadMoreLoading,
     loadMoreConvo,
-    searchLoading
+    searchLoading,
+    openedConvoMessages,
+    openedConvoMessagesLoading,
+    isOwnerChat,
+    sendMessage,
 } = useInbox();
 
 
@@ -72,67 +77,33 @@ onMounted(async () => {
             </Sidebar>
 
             <InboxBody>
-                <ChatContent v-if="openedConvo" :chat="openedConvo" @info="() => { }">
-                    <InfiniteScroll class="py-2 w-full h-full overflow-y-auto" :loading="false" :has-more="false"
-                        @load="() => { }" direction="bottom-to-top">
-                        <ChatList>
-                            <OtherChatBubble class="self-start" message="Hello! How are you?" time="10:30 AM"
-                                :is-edited="true" />
-                            <OwnerChatBubble class="self-end" message="Hi! I'm good, thanks for asking. How about you?"
-                                time="10:31 AM" :isRead="true" />
-                            <OtherChatBubble message="I'm good, thanks! How about you?" time="10:32 AM" />
-                            <OwnerChatBubble class="self-end" message="I'm doing well too. Just working on a project."
-                                time="10:33 AM" :isRead="true" />
-                            <OtherChatBubble message="That's great! What kind of project are you working on?"
-                                time="10:34 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="It's a web application for managing tasks and projects." time="10:34 AM"
-                                :isRead="true" />
-                            <OtherChatBubble message="That sounds interesting! Good luck with your project."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end" message="Thank you! I appreciate it." time="10:35 AM"
-                                :isRead="true" />
-                            <OtherChatBubble message="By the way, have you tried the new feature in our app?"
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="Yes, I have. It's really useful and saves a lot of time." time="10:35 AM"
-                                :isRead="true" />
-                            <OtherChatBubble
-                                message="I'm glad to hear that! We put a lot of effort into making it user-friendly."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="Absolutely! The interface is intuitive and easy to navigate." time="10:35 AM"
-                                :isRead="true" />
-                            <OtherChatBubble
-                                message="That's great feedback! We'll continue to improve and add more features in the future."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="I'm looking forward to seeing what you come up with next!" time="10:35 AM"
-                                :isRead="true" />
-                            <OtherChatBubble message="Thank you for your support! It means a lot to us."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end" message="You're welcome! Keep up the good work."
-                                time="10:35 AM" :isRead="true" />
-                            <OtherChatBubble
-                                message="Thanks! We'll keep striving to make our app even better for our users."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="I'm sure you will. Your dedication is evident in the quality of the app."
-                                time="10:35 AM" :isRead="true" />
-                            <OtherChatBubble message="We appreciate your kind words! It motivates us to keep improving."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="I'm happy to provide feedback. It's important to recognize the hard work that goes into creating a great product."
-                                time="10:35 AM" :isRead="true" />
-                            <OtherChatBubble
-                                message="Absolutely! Your feedback helps us understand what our users value and what we can do better."
-                                time="10:35 AM" />
-                            <OwnerChatBubble class="self-end"
-                                message="I'm glad to be of help. Keep up the excellent work!" time="10:35 AM"
-                                :isRead="true" />
+                <ChatContent v-if="openedConvo" :chat="openedConvo">
+                    <ChatHeader :chat="openedConvo" @info="() => { }" />
+
+                    <InfiniteScroll v-if="openedConvoMessages" class="py-2 w-full h-full overflow-y-auto"
+                        :loading="false" :has-more="false" @load="() => { }" direction="bottom-to-top">
+                        <ChatList v-for="message in openedConvoMessages.data" :key="message.id">
+                            <ChatBubble :message="message" :is-owner="isOwnerChat(message)" />
                         </ChatList>
                     </InfiniteScroll>
+
+                    <div v-else>
+                        <LoadingData v-if="openedConvoMessagesLoading" />
+
+                        <div v-else class="flex flex-col items-center justify-center gap-2">
+                            <SendIcon class="h-8 w-8" />
+                            <span class="italic">Send a new message</span>
+                        </div>
+                    </div>
+
+
+                    <ChatComposer v-if="!openedConvoMessagesLoading" @send="sendMessage" />
                 </ChatContent>
+
+                <div v-else class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
+                    <MessageSquareOff class="h-8 w-8" />
+                    <span class="italic">Select a conversation</span>
+                </div>
             </InboxBody>
         </InboxContent>
     </AppLayout>

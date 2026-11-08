@@ -14,13 +14,10 @@ class ConversationObserver
      */
     public function created(Conversation $conversation): void
     {
-        if ($conversation->type === Type::GROUP) {
-            $creator = User::findOrFail($conversation->created_by_id);
-            app(MessageService::class)->createSystemMessage(
-                $conversation,
-                $creator->name . ' Created a new conversation'
-            );
-        }
+        app(MessageService::class)->createSystemMessage(
+            $conversation,
+            'Started a new conversation'
+        );
     }
 
     /**

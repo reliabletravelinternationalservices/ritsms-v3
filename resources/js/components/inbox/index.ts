@@ -15,4 +15,6 @@ export { default as InboxBody } from './InboxBody.vue';
 
 
 export { default as ChatContent } from './chat/ChatContent.vue';
-export { default as ChatList } from './chat/ChatList.vue'
+export { default as ChatList } from './chat/ChatList.vue';
+export { default as ChatComposer } from './chat/ChatComposer.vue';
+export { default as ChatHeader } from './chat/ChatHeader.vue';

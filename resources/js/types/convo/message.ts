@@ -9,6 +9,7 @@ export enum Type {
 
 export interface Message {
     id:number
+    client_id: string | null
     sender: User | null
     body: string | null
     type: Type

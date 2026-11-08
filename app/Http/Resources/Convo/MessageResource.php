@@ -17,6 +17,7 @@ class MessageResource extends JsonResource
             'sender' => UserResource::make(
                 $this->whenLoaded('sender'),
             ),
+            'client_id' => $this->client_id,
             'is_read' => $this->isRead(),
         ];
     }

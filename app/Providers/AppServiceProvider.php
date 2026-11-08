@@ -9,9 +9,11 @@ use App\Models\User;
 use App\Observers\ConversationObserver;
 use App\Observers\DestinationObserver;
 use App\Observers\PackageObserver;
+use App\Policies\Convo\ConversationPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->getLimit('packages');
         $this->getLimit('countries', 120);
         $this->getObserver();
+        $this->getPolicy();
     }
 
 
@@ -50,5 +53,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Destination::observe(DestinationObserver::class);
         Package::observe(PackageObserver::class);
+        Conversation::observe(ConversationObserver::class);
+    }
+
+
+    private function getPolicy()
+    {
+        Gate::policy(Conversation::class, ConversationPolicy::class);
     }
 }

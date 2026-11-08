@@ -6,13 +6,16 @@ use App\Enums\Convo\Type;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Convo\ConversationResource;
 use App\Models\Conversation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class ConvoController extends Controller
 {
+    use AuthorizesRequests;
 
     public function getConvos(Request $request)
     {
+
         $user = auth('web')->user();
 
         abort_unless($user, 401);

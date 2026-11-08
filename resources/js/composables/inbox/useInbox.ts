@@ -1,33 +1,42 @@
+import { generateClientId, generateTempMessageId, getAuthUser } from "@/lib/utils";
 import { conversationService } from "@/services/conversationService";
 import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage } from "@/types/convo/conversation";
+import { Message, Type } from "@/types/convo/message";
 import { CursorPaginated } from "@/types/cursor/cursor-paginated";
-import {  ref } from "vue";
+import {  computed, ref } from "vue";
 
 export function useInbox() {
     const pagedConversations = ref<CursorPaginated<ConvoWithParticipantsAndLatestMessage> | null>(null);
+    
+    const searchKey = ref('');
+    const openedConvo = ref<ConvoWithParticipants| null>(null);
+    const openedConvoMessages = ref<CursorPaginated<Message> | null>(null);
 
     const convoFullLoading = ref(false);
     const loadMoreLoading = ref(false);
     const searchLoading = ref(false);
-    const searchKey = ref('');
-    const openedConvo = ref<ConvoWithParticipants| null>(null)
+    const openedConvoMessagesLoading = ref(false);
+
 
     // ======================
     // COMPUTED
     // ======================
+    const authUser = computed(()=> getAuthUser());
+
    
 
     // ======================
     // FUNCTIONS
     // ======================
     // Initialize first page
-    const initializeConvos = async (search?: string) => {
+    const initializeConvos = async () => {
+        pagedConversations.value = null
         if (convoFullLoading.value) return;
 
         convoFullLoading.value = true;
 
         try {
-            const response = await conversationService.getConvos({ search });
+            const response = await conversationService.getConvos({});
 
             if (response.data) {
                 pagedConversations.value = response;
@@ -39,7 +48,26 @@ export function useInbox() {
         }
     };
 
-    // Load next page
+    const initializeOpenedConvoMessages = async () => {
+        openedConvoMessages.value = null
+        if (openedConvoMessagesLoading.value || !openedConvo.value) return;
+
+        openedConvoMessagesLoading.value = true;
+
+        try {
+            const response = await conversationService.getConvoMessages(openedConvo.value.id, {});
+
+            if (response.data) {
+                openedConvoMessages.value = response;
+            }
+        } catch (e) {
+            console.error("Error initializing open convo messages", e);
+        } finally {
+            openedConvoMessagesLoading.value = false;
+        }
+    }
+
+    // Load convo next page
     const loadMoreConvo = async (nextCursor?: string | null) => {
 
         if (loadMoreLoading.value ) return;
@@ -94,11 +122,84 @@ export function useInbox() {
         }
     };
 
-    const openChat = (chat: ConvoWithParticipantsAndLatestMessage) => {
+    const openChat = async (chat: ConvoWithParticipantsAndLatestMessage) => {
         openedConvo.value = chat
+        await initializeOpenedConvoMessages();
     }
 
+
+    const isOwnerChat = (message: Message) =>
+        Number(message.sender?.id) === Number(authUser.value.id);
+
+
     
+    const sendMessage = async(payload: {
+        message: string;
+        attachments: File[];
+    }) => {
+
+        if(!openedConvo.value) return;
+
+        const sender = {
+            id: authUser.value.id,
+            display_name: authUser.value.display_name,
+            avatar: authUser.value.avatar,
+            role: authUser.value.role,
+        }
+        const clientID = generateClientId()
+
+        openedConvoMessages.value?.data.push({
+            id: generateTempMessageId(),
+            client_id: clientID,
+            sender: sender,
+            body: payload.message,
+            type: Type.Text,
+            reply_to:  null,
+            sent_at: null,
+            is_edited: false,
+            is_read: false,
+            deleted_at:  null,
+        })
+        
+       try {
+            const data = await conversationService.storeConvoMessage(
+                openedConvo.value.id,
+                {
+                    ...payload,
+                    client_id: clientID
+                }
+            );
+
+           const index = openedConvoMessages.value?.data.findIndex(
+                message => message.client_id === clientID
+            ) ?? -1;
+
+            if (index !== -1) {
+                openedConvoMessages.value!.data[index] = data
+                updateSelectedConvoLastMessage(data)
+            }
+
+        } catch (e) {
+            console.error("Error sending message", e);
+        }
+    }
+
+    const updateSelectedConvoLastMessage = (message: Message) => {
+        const conversations = pagedConversations.value?.data;
+        if (!conversations || !openedConvo.value) return;
+
+        const index = conversations.findIndex(
+            convo => convo.id === openedConvo.value!.id
+        );
+
+        if (index === -1) return;
+
+        const [convo] = conversations.splice(index, 1);
+
+        convo.latest_message = message;
+
+        conversations.unshift(convo);
+    };
 
     return {
         pagedConversations,
@@ -111,6 +212,10 @@ export function useInbox() {
         create,
         search,
         openChat,
-
+        initializeOpenedConvoMessages,
+        openedConvoMessages,
+        openedConvoMessagesLoading,
+        isOwnerChat,
+        sendMessage,
     };
 }

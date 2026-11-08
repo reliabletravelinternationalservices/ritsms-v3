@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Convo;
 
 use App\Models\Conversation;
 use App\Models\User;
@@ -22,7 +22,8 @@ class ConversationPolicy
     public function view(User $user, Conversation $conversation): bool
     {
         return $conversation->participants()
-            ->where('user_id', $user->id)
+            ->where("participant_id", $user->id)
+            ->where("participant_type", $user->getMorphClass())
             ->exists();
     }
 
@@ -64,5 +65,13 @@ class ConversationPolicy
     public function forceDelete(User $user, Conversation $conversation): bool
     {
         return false;
+    }
+
+    /**
+     * Determine whether the user can send messages.
+     */
+    public function sendMessage(User $user, Conversation $conversation): bool
+    {
+        return $this->view($user, $conversation);
     }
 }

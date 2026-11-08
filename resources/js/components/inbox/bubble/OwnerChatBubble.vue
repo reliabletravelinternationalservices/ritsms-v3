@@ -9,18 +9,14 @@ import {
     Trash2,
     Pen,
 } from '@lucide/vue';
+import { Message } from '@/types/convo/message';
+import { formatTimestamp } from '@/lib/utils';
 
 interface Props {
-    message: string;
-    time: string;
-    isRead?: boolean;
-    isEdited?: boolean;
+    message: Message
 }
 
-withDefaults(defineProps<Props>(), {
-    isRead: false,
-    isEdited: false
-});
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
     reply: [];
@@ -56,23 +52,23 @@ const handleAction = (action: 'reply' | 'copy' | 'edit' | 'delete') => {
 
         <!-- MESSAGE -->
         <div class="flex flex-col w-fit min-w-0 max-w-[85%] sm:max-w-[75%] lg:max-w-[60%]">
-            <span v-if="isEdited" class="text-xs text-muted-foreground w-full text-end">
+            <span v-if="props.message.is_edited" class="text-xs text-muted-foreground w-full text-end">
                 Edited
             </span>
             <div class="w-full rounded-2xl rounded-br-sm bg-yellow-400 p-3 transition-colors ">
                 <div class="flex flex-col gap-2">
                     <p class="break-words whitespace-pre-wrap text-left text-sm text-zinc-800">
-                        {{ message }}
+                        {{ message.body }}
                     </p>
 
-                    <div class="flex items-center justify-end gap-1">
+                    <div v-if="message.sent_at" class="flex items-center justify-end gap-1">
                         <span class="text-xs text-muted-foreground">
-                            {{ time }}
+                            {{ formatTimestamp(message.sent_at) }}
                         </span>
 
                         <!-- READ / SENT INDICATOR -->
                         <span class="text-muted-foreground">
-                            <CheckCheck v-if="isRead" class="h-3 w-3" />
+                            <CheckCheck v-if="message.is_read" class="h-3 w-3" />
                             <Check v-else class="h-3 w-3" />
                         </span>
                     </div>

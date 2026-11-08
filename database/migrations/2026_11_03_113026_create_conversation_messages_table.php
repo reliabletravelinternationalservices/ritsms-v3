@@ -24,10 +24,15 @@ return new class extends Migration
 
             $table->timestamp('sent_at')->nullable();
             $table->boolean('is_edited')->default(false);
+            $table->string('client_id', 50)->nullable();
+
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index(['conversation_id', 'id'], 'conversation_message_index');
+            $table->unique(
+                ['conversation_id', 'sender_type', 'sender_id', 'client_id'],
+                'conversation_message_client_unique'
+            );
         });
     }
 

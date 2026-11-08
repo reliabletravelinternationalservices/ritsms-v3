@@ -31,8 +31,9 @@ class MessageService
         Conversation $convo,
         string $message,
         int $senderID,
+        ?string $clientID = null
     ): ConversationMessage {
-        return DB::transaction(function () use ($convo, $message, $senderID) {
+        return DB::transaction(function () use ($convo, $message, $senderID, $clientID) {
             $sender = User::findOrFail($senderID);
 
             $message = $convo->messages()->create([
@@ -41,7 +42,10 @@ class MessageService
                 'sender_id' => $sender->id,
                 'sender_type' => get_class($sender),
                 'sent_at' => now(),
+                'client_id' => $clientID,
             ]);
+
+            $convo->touch();
 
             return $message;
         });

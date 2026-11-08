@@ -11,6 +11,7 @@ class ConversationMessage extends Model
     use SoftDeletes;
     protected $fillable = [
         'conversation_id',
+        'client_id',
         'sender_type',
         'sender_id',
         'body',
