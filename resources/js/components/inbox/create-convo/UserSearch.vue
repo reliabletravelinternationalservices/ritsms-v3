@@ -227,11 +227,10 @@ onBeforeUnmount(() => {
                     <button v-for="user in contacts.data" :key="user.id" type="button"
                         class="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-accent hover:text-accent-foreground"
                         @click="selectUser(user)">
-                        <Avatar class="size-10 shrink-0">
+                        <Avatar class="h-10 w-10 overflow-hidden rounded-circle border border-sidebar-border bg-sidebar">
                             <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.display_name" />
-
-                            <AvatarFallback>
-                                <AvatarPlaceholder />
+                            <AvatarFallback class="rounded-circle text-white">
+                                <AvatarPlaceholder class="aspect-square h-full w-full" />
                             </AvatarFallback>
                         </Avatar>
 

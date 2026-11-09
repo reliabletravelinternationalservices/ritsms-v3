@@ -46,4 +46,19 @@ class Conversation extends Model
     {
         return $this->hasMany(ConversationParticipant::class);
     }
+
+    public function generateGroupName(): string
+    {
+        $names = $this->participants
+            ->pluck('participant.display_name')
+            ->map(fn ($name) => explode(' ', trim($name))[0]);
+
+        $displayNames = $names->take(3)->implode(', ');
+
+        if ($names->count() > 3) {
+            $displayNames .= ' and ' . ($names->count() - 3) . ' others';
+        }
+
+        return $displayNames;
+    }
 }

@@ -25,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const {
-    search,
+    searchConvo,
     pagedConversations,
     convoFullLoading,
     openedConvo,
@@ -44,7 +44,8 @@ const {
     loadMoreMessages,
     addContact,
     removeContact,
-    selectedContacts
+    selectedContacts,
+    createConversation,
 } = useInbox();
 
 
@@ -63,7 +64,7 @@ onMounted(async () => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
-            <Sidebar @create="openCreateConvo" @search="search">
+            <Sidebar @create="openCreateConvo" @search="searchConvo">
                 <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadMoreLoading"
                     :has-more="Boolean(pagedConversations.next_cursor)"
                     @load="() => loadMoreConvo(pagedConversations?.next_cursor)">
@@ -101,11 +102,21 @@ onMounted(async () => {
                         </ChatList>
                     </InfiniteScroll>
                     
+                    <div v-else-if="selectedContacts.length === 1 && selectedContacts[0].private_conversation === null" class="h-full">
+                       <div class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
+                            <MessageCirclePlusIcon class="h-8 w-8" />
+                            <span class="italic">Start a conversation with 
+                                <span class="font-bold">{{ selectedContacts[0].display_name }}</span>
+                            </span>
+                            <Button variant="ghost" @click="createConversation" class="capitalize text-yellow-600 underline">Start now</Button>
+                        </div>
+                    </div>
+
                     <div v-else-if="selectedContacts.length > 1" class="h-full">
                        <div class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
                             <MessageCirclePlusIcon class="h-8 w-8" />
                             <span class="italic">Create a group conversation</span>
-                            <Button variant="ghost" @click="()=>{}" class="capitalize text-yellow-600 underline">Create now</Button>
+                            <Button variant="ghost" @click="createConversation" class="capitalize text-yellow-600 underline">Create now</Button>
                         </div>
                     </div>
 

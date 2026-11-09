@@ -2,6 +2,7 @@
 
 namespace App\Policies\Convo;
 
+use App\Enums\User\Role;
 use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -32,7 +33,10 @@ class ConversationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, [
+            Role::ADMIN,
+            Role::AGENT,
+        ]);
     }
 
     /**

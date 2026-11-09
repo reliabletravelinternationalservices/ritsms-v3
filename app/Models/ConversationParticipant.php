@@ -26,7 +26,8 @@ class ConversationParticipant extends Model
     }
 
     protected $casts = [
-        'role' => Role::class
+        'role' => Role::class,
+        'last_read_at' => 'datetime',
     ];
 
     public function conversation()
@@ -35,27 +36,27 @@ class ConversationParticipant extends Model
     }
 
     public function getUnreadMessagesCount(): int
-    {
-        if (!$this->conversation) {
-            return 0;
-        }
-
-        return $this->conversation
-            ->messages()
-            ->where(function ($query) {
-                $query->whereNull('sender_type')
-                    ->orWhere('sender_type', '!=', $this->participant_type)
-                    ->orWhere('sender_id', '!=', $this->participant_id);
-            })
-            ->whereNotNull('sent_at')
-            ->when(
-                $this->last_read_at,
-                fn($query) => $query->where('sent_at', '>', $this->last_read_at)
-            )
-            ->when(
-                !$this->last_read_at,
-                fn($query) => $query
-            )
-            ->count();
+{
+    if (!$this->conversation) {
+        return 1;
     }
+
+    return $this->conversation
+        ->messages()
+        ->whereNotNull('sent_at')
+        ->where(function ($query) {
+            $query->whereNull('sender_id')
+                ->orWhere(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('sender_type', '!=', $this->participant_type)
+                            ->orWhere('sender_id', '!=', $this->participant_id);
+                    });
+                });
+        })
+        ->when(
+            $this->last_read_at,
+            fn ($query) => $query->where('sent_at', '>', $this->last_read_at)
+        )
+        ->count();
+}
 }

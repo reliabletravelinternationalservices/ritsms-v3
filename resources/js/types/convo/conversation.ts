@@ -9,7 +9,7 @@ export enum Type {
 export interface Conversation {
     id: number
     type: Type
-    name: string
+    name: string | null
     avatar: string | null
     created_by: User
     deleted_at: string | null

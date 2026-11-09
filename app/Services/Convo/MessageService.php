@@ -35,15 +35,23 @@ class MessageService
     ): ConversationMessage {
         return DB::transaction(function () use ($convo, $message, $senderID, $clientID) {
             $sender = User::findOrFail($senderID);
+            $now = now();
 
             $message = $convo->messages()->create([
                 'type' => Type::TEXT,
                 'body' => $message,
                 'sender_id' => $sender->id,
-                'sender_type' => get_class($sender),
-                'sent_at' => now(),
+                'sender_type' => $sender->getMorphClass(),
+                'sent_at' => $now,
                 'client_id' => $clientID,
             ]);
+
+            $convo->participants()
+                ->where('participant_id', $sender->id)
+                ->where('participant_type', $sender->getMorphClass())
+                ->update([
+                    'last_read_at' => $now,
+                ]);
 
             $convo->touch();
 

@@ -55,13 +55,19 @@ class ConversationMessage extends Model
             return false;
         }
 
-        return $this->conversation
+        $user = auth('web')->user();
+
+        if (!$user) {
+            return false;
+        }
+
+        $participant = $this->conversation
             ->participants()
-            ->where(function ($query) {
-                $query->where('participant_id', '!=', $this->sender_id)
-                    ->orWhere('participant_type', '!=', $this->sender_type);
-            })
-            ->where('last_read_at', '>=', $this->sent_at)
-            ->exists();
+            ->where('participant_id', $user->id)
+            ->where('participant_type', $user->getMorphClass())
+            ->first();
+
+        return $participant?->last_read_at !== null
+            && $participant->last_read_at->greaterThanOrEqualTo($this->sent_at);
     }
 }

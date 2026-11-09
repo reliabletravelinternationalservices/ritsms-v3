@@ -24,6 +24,7 @@ class ConvoController extends Controller
 
         $convos = Conversation::query()
             ->with([
+                'participants.conversation',
                 'participants.participant',
                 'createdBy',
                 'latestMessage.sender',

@@ -64,6 +64,27 @@ export const conversationService = {
         }
     },
 
+   
+    async storeConvo(
+        participantsID: number[],
+        convoType: Type,
+        signal?: AbortSignal
+    ): Promise<{ data: ConvoWithParticipantsAndLatestMessage }> {
+        const { data: response } = await api.post<{data: ConvoWithParticipantsAndLatestMessage}>(
+            route('convo.store'),
+            {
+                participant_ids: participantsID,
+                convo_type: convoType,
+            },
+            {
+                signal,
+            }
+        )
+
+        return response
+    },
+
+
 
     async storeConvoMessage(
         convoID: number,
