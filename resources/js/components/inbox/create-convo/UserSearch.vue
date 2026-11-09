@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { ref, watch, onBeforeUnmount, onMounted, computed } from 'vue'
 import { Input } from '@/components/ui/input'
@@ -27,45 +28,83 @@ const searchContainer = ref<HTMLElement | null>(null)
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 let searchVersion = 0
+let searchAbortController: AbortController | null = null
 
 const hasMore = computed(() => !!contacts.value?.next_cursor)
 
-watch(search, (value) => {
-    if (debounceTimer) clearTimeout(debounceTimer)
+// ======================
+// ABORT REQUEST
+// ======================
 
-    // Invalidate previous requests
+function abortSearch() {
     searchVersion++
 
-    // Reset pagination
+    searchAbortController?.abort()
+    searchAbortController = null
+
+    isLoading.value = false
+}
+
+// ======================
+// WATCH SEARCH
+// ======================
+
+watch(search, (value) => {
+    if (debounceTimer) {
+        clearTimeout(debounceTimer)
+        debounceTimer = null
+    }
+
+    // Cancel previous request
+    abortSearch()
+
+    // Reset results
     contacts.value = null
 
     if (!value.trim()) {
         isOpen.value = false
-        isLoading.value = false
         return
     }
 
     isOpen.value = true
 
     debounceTimer = setTimeout(() => {
+        debounceTimer = null
         fetchUsers(value.trim())
     }, 400)
 })
 
+// ======================
+// FETCH USERS
+// ======================
+
 async function fetchUsers(query: string, cursor?: string | null) {
-    if (isLoading.value) return
+    if (!query || isLoading.value) return
+
+    // Cancel previous request if any
+    searchAbortController?.abort()
+
+    const controller = new AbortController()
+    searchAbortController = controller
 
     const version = searchVersion
+
     isLoading.value = true
 
     try {
         const response = await userService.searchUserContacts(
-            query,
-            cursor
+            {
+                search: query,
+                cursor: cursor || null,
+            },
+            controller.signal
         )
 
-        // Ignore outdated search results
-        if (version !== searchVersion) return
+        // Ignore outdated or cancelled requests
+        if (
+            controller.signal.aborted ||
+            version !== searchVersion
+        ) return
 
         if (cursor && contacts.value) {
             contacts.value = {
@@ -79,16 +118,25 @@ async function fetchUsers(query: string, cursor?: string | null) {
             contacts.value = response
         }
 
-    } catch (error) {
-        if (version === searchVersion) {
+    } catch (error: any) {
+        if (
+            error.name !== 'CanceledError' &&
+            error.code !== 'ERR_CANCELED' &&
+            version === searchVersion
+        ) {
             console.error('Failed to search users:', error)
         }
     } finally {
-        if (version === searchVersion) {
+        if (searchAbortController === controller) {
+            searchAbortController = null
             isLoading.value = false
         }
     }
 }
+
+// ======================
+// LOAD MORE
+// ======================
 
 function loadMoreUsers() {
     if (isLoading.value || !hasMore.value) return
@@ -99,7 +147,14 @@ function loadMoreUsers() {
     )
 }
 
+// ======================
+// SELECT USER
+// ======================
+
 function selectUser(user: Contact) {
+    // Cancel pending request
+    abortSearch()
+
     emit('select', user)
 
     search.value = ''
@@ -107,20 +162,33 @@ function selectUser(user: Contact) {
     isOpen.value = false
 }
 
+// ======================
+// CLICK OUTSIDE
+// ======================
+
 function handleClickOutside(event: MouseEvent) {
     if (
         searchContainer.value &&
         !searchContainer.value.contains(event.target as Node)
     ) {
         isOpen.value = false
+        abortSearch()
     }
 }
+
+// ======================
+// FOCUS
+// ======================
 
 function handleFocus() {
     if (search.value.trim()) {
         isOpen.value = true
     }
 }
+
+// ======================
+// LIFECYCLE
+// ======================
 
 onMounted(() => {
     document.addEventListener('mousedown', handleClickOutside)
@@ -129,11 +197,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.removeEventListener('mousedown', handleClickOutside)
 
-    if (debounceTimer) clearTimeout(debounceTimer)
+    if (debounceTimer) {
+        clearTimeout(debounceTimer)
+    }
 
-    searchVersion++
+    abortSearch()
 })
 </script>
+
 
 <template>
     <div ref="searchContainer" class="relative w-full">

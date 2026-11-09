@@ -15,16 +15,25 @@ class UserController extends Controller
 
     public function searchContacts(Request $request)
     {
-        $authId = auth('web')->id();
+        $user = auth('web')->user();
+
+        abort_unless($user, 401);
 
         $users = User::query()
-            ->withExists([
-                'conversations as has_private_conversation' => function ($query) use ($authId) {
+            ->with([
+                'conversations' => function ($query) use ($user) {
                     $query->where('type', Type::PRIVATE)
-                        ->whereHas('participants', function ($q) use ($authId) {
-                            $q->where('participant_type', (new User)->getMorphClass())
-                                ->where('participant_id', $authId);
-                        });
+                        ->whereHas('participants', function ($q) use ($user) {
+                            $q->where('participant_type', $user->getMorphClass())
+                                ->where('participant_id', $user->id);
+                        })
+                        ->with([
+                            'participants.participant',
+                            'createdBy',
+                            'latestMessage.sender',
+                        ])
+                        ->latest('updated_at')
+                        ->limit(1);
                 },
             ])
             ->when($request->search, function ($query, $search) {

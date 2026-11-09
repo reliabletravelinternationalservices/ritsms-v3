@@ -24,8 +24,6 @@ const removeContact = (user: Contact) => {
 };
 
 
-
-
 </script>
 
 <template>
@@ -65,7 +63,7 @@ const removeContact = (user: Contact) => {
                                 </p>
                             </div>
 
-                            <Button @click="" class="w-full underline text-yellow-600" variant="outline">
+                            <Button  class="w-full underline text-yellow-600" variant="outline">
                                 View Conversation
                             </Button>
                         </template>

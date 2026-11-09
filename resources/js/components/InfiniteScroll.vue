@@ -36,6 +36,8 @@ const container = ref<HTMLElement | null>(null);
 const target = ref<HTMLElement | null>(null);
 
 let observer: IntersectionObserver | null = null;
+let previousScrollHeight = 0;
+let preservingScrollPosition = false;
 
 const scrollToBottom = async () => {
     await nextTick();
@@ -58,8 +60,14 @@ const setupObserver = () => {
             if (
                 entry.isIntersecting &&
                 !props.loading &&
-                props.hasMore
+                props.hasMore &&
+                !preservingScrollPosition
             ) {
+                if (props.direction === 'bottom-to-top' && container.value) {
+                    previousScrollHeight = container.value.scrollHeight;
+                    preservingScrollPosition = true;
+                }
+
                 emit('load');
             }
         },
@@ -101,13 +109,33 @@ watch(
     { flush: 'post' }
 );
 
+watch(
+    () => props.loading,
+    async (loading, wasLoading) => {
+        if (loading || !wasLoading || !preservingScrollPosition) return;
+
+        await nextTick();
+
+        if (container.value) {
+            container.value.scrollTop +=
+                container.value.scrollHeight - previousScrollHeight;
+        }
+
+        preservingScrollPosition = false;
+    }
+);
+
 onUnmounted(() => {
     observer?.disconnect();
 });
 </script>
 
 <template>
-    <div ref="container" v-bind="$attrs">
+    <div
+        ref="container"
+        v-bind="$attrs"
+        :style="direction === 'bottom-to-top' ? { overflowAnchor: 'none' } : undefined"
+    >
         <!-- TOP LOADER -->
         <div v-if="loading && direction === 'bottom-to-top'" class="flex items-center justify-center py-4">
             <Loader2 class="h-5 w-5 animate-spin text-muted-foreground" />

@@ -14,22 +14,26 @@ class MessageController extends Controller
 
     public function getMessages(Request $request, Conversation $convo)
     {
-
         $this->authorize("view", $convo);
 
         $messages = $convo->messages()
+            ->reorder()
             ->with([
                 "sender",
                 "replyTo.sender",
             ])
+            ->orderByDesc("sent_at")
             ->orderByDesc("id")
             ->cursorPaginate(
-                30,
+                $request->input('per_page', 30),
                 ["*"],
                 "cursor",
                 $request->input("cursor")
-            )
-            ->withQueryString();
+            );
+
+        $messages->setCollection(
+            $messages->getCollection()->reverse()->values()
+        );
 
         return MessageResource::collection($messages);
     }

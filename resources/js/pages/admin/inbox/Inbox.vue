@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { ChatButton, ChatComposer, ChatContent, ChatHeader, ChatList, InboxBody, InboxContent, Sidebar, SidebarBody, SidebarBodyPlaceholder } from '@/components/inbox';
 import ChatBubble from '@/components/inbox/bubble/ChatBubble.vue';
-import CreateConversation from '@/components/inbox/create-convo/CreateConversation.vue';
+import SelectedContact from '@/components/inbox/create-convo/SelectedContact.vue';
+import UserSearch from '@/components/inbox/create-convo/UserSearch.vue';
 import InfiniteScroll from '@/components/InfiniteScroll.vue';
 import LoadingData from '@/components/LoadingData.vue';
+import { Button } from '@/components/ui/button';
 import { useInbox } from '@/composables/inbox/useInbox';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { MessageSquareOff, SendIcon } from '@lucide/vue';
+import { MessageCirclePlusIcon, MessageSquareOff } from '@lucide/vue';
 import { onMounted } from 'vue';
 
 
@@ -34,16 +36,22 @@ const {
     searchLoading,
     openedConvoMessages,
     openedConvoMessagesLoading,
+    loadMoreMessagesLoading,
     isOwnerChat,
     sendMessage,
     createConvo,
-    createNewConvo,
+    openCreateConvo,
+    loadMoreMessages,
+    addContact,
+    removeContact,
+    selectedContacts
 } = useInbox();
 
 
 onMounted(async () => {
     await initializeConvos()
 })
+
 
 
 </script>
@@ -55,7 +63,7 @@ onMounted(async () => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
-            <Sidebar @create="createNewConvo" @search="search">
+            <Sidebar @create="openCreateConvo" @search="search">
                 <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadMoreLoading"
                     :has-more="Boolean(pagedConversations.next_cursor)"
                     @load="() => loadMoreConvo(pagedConversations?.next_cursor)">
@@ -70,7 +78,7 @@ onMounted(async () => {
                 <SidebarBodyPlaceholder v-else>
                     <LoadingData v-if="convoFullLoading || searchLoading" />
 
-                    <div v-else class="flex flex-col items-center justify-center gap-2">
+                    <div v-else class="flex flex-col items-center justify-center gap-2 h-full">
                         <MessageSquareOff class="h-8 w-8" />
                         <span class="italic">Start a new chat</span>
                     </div>
@@ -79,37 +87,40 @@ onMounted(async () => {
             </Sidebar>
 
             <InboxBody>
-
-                <div v-if="createConvo" class="text-foreground">
-                    <CreateConversation />
-                </div>
-                <ChatContent v-else-if="openedConvo" :chat="openedConvo">
-                    <ChatHeader :chat="openedConvo" @info="() => { }" />
+                <ChatContent>
+                    <ChatHeader v-if="!createConvo && openedConvo" :chat="openedConvo" @info="() => { }" />
+                    <div v-else-if="createConvo" class="p-4 text-foreground space-y-2">
+                        <UserSearch @select="addContact" />
+                        <SelectedContact :contacts="selectedContacts" @remove="removeContact" />
+                    </div>
 
                     <InfiniteScroll v-if="openedConvoMessages" class="py-2 w-full h-full overflow-y-auto"
-                        :loading="false" :has-more="false" @load="() => { }" direction="bottom-to-top">
+                        :loading="loadMoreMessagesLoading" :has-more="Boolean(openedConvoMessages.next_cursor)" @load="loadMoreMessages(openedConvoMessages.next_cursor)" direction="bottom-to-top">
                         <ChatList v-for="message in openedConvoMessages.data" :key="message.id">
                             <ChatBubble :message="message" :is-owner="isOwnerChat(message)" />
                         </ChatList>
                     </InfiniteScroll>
+                    
+                    <div v-else-if="selectedContacts.length > 1" class="h-full">
+                       <div class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
+                            <MessageCirclePlusIcon class="h-8 w-8" />
+                            <span class="italic">Create a group conversation</span>
+                            <Button variant="ghost" @click="()=>{}" class="capitalize text-yellow-600 underline">Create now</Button>
+                        </div>
+                    </div>
 
-                    <div v-else>
+                    <div v-else class="h-full">
                         <LoadingData v-if="openedConvoMessagesLoading" />
 
-                        <div v-else class="flex flex-col items-center justify-center gap-2">
-                            <SendIcon class="h-8 w-8" />
-                            <span class="italic">Send a new message</span>
+                       <div v-else class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
+                            <MessageSquareOff class="h-8 w-8" />
+                            <span class="italic">Select a conversation</span>
                         </div>
                     </div>
 
 
-                    <ChatComposer v-if="!openedConvoMessagesLoading" @send="sendMessage" />
+                    <ChatComposer v-if="!openedConvoMessagesLoading && openedConvo" @send="sendMessage" />
                 </ChatContent>
-
-                <div v-else class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground">
-                    <MessageSquareOff class="h-8 w-8" />
-                    <span class="italic">Select a conversation</span>
-                </div>
             </InboxBody>
         </InboxContent>
     </AppLayout>

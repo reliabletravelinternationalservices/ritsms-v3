@@ -1,22 +1,23 @@
 import api from '@/lib/api'
-import { CursorPaginated } from '@/types/cursor/cursor-paginated'
+import { CursorPaginated, CursorPaginatedFiltersWithSearch } from '@/types/cursor/cursor-paginated'
 import { Contact } from '@/types/user/contact'
 
 
 
 export const userService = {
   
-    async searchUserContacts(search?: string, cursor?: string | null): Promise<CursorPaginated<Contact>> {
+    async searchUserContacts(
+        filters: CursorPaginatedFiltersWithSearch,
+        signal?: AbortSignal    
+    ): Promise<CursorPaginated<Contact>> {
         const { data: response } = await api.get<{
                     data: Contact[]
                     meta: Omit<CursorPaginated<Contact>, 'data'>
                 }>(
             route('users.contacts'),
             {
-                params: {
-                    search,
-                    cursor,
-                },
+                params: filters,
+                signal
             }
         )
 

@@ -72,6 +72,22 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'role' => 'client',
             ],
+            [
+                'id' => 8,
+                'display_name' => 'Kim Mendoza',
+                'is_active' => true,
+                'email' => 'kim@gmail.com',
+                'password' => bcrypt('password'),
+                'role' => 'client',
+            ],
+            [
+                'id' => 9,
+                'display_name' => 'Jenny Perez',
+                'is_active' => true,
+                'email' => 'jenny@gmail.com',
+                'password' => bcrypt('password'),
+                'role' => 'client',
+            ],
         ];
 
         DB::transaction(function () use ($userData) {

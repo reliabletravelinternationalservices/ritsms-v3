@@ -57,7 +57,7 @@ class ConvoController extends Controller
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
             ->cursorPaginate(
-                20,
+                $request->input('per_page', 20),
                 ['*'],
                 'cursor',
                 $request->input('cursor')

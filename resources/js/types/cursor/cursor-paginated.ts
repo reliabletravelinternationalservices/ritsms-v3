@@ -6,3 +6,14 @@ export interface CursorPaginated<T> {
     prev_page_url: string | null;
     per_page: number;
 }
+
+
+export interface CursorPaginatedFilters {
+    cursor?: string | null;
+    per_page?: number;
+}
+
+
+export type CursorPaginatedFiltersWithSearch = CursorPaginatedFilters & {
+    search?: string;
+};

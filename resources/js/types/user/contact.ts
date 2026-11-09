@@ -1,3 +1,5 @@
+import { ConvoWithParticipantsAndLatestMessage } from "../convo/conversation";
+
 export interface Contact {
     id: number;
     email: string;
@@ -5,6 +7,6 @@ export interface Contact {
     display_name: string;
     phone: string | null;
     role: 'admin' | 'agent' | 'client';
-    has_existing_private_convo: boolean;
+    private_conversation: ConvoWithParticipantsAndLatestMessage;
 }
 

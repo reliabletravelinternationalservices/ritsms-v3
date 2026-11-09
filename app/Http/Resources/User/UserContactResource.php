@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\Convo\ConversationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,10 @@ class UserContactResource extends JsonResource
             'avatar' => $this->avatar,
             'email' => $this->email,
             'role' => $this->role,
-            'has_existing_private_convo' => $this->has_private_conversation,
+            'private_conversation' => $this->whenLoaded(
+                'conversations',
+                fn () => ConversationResource::make($this->conversations->first())
+            ),
         ];
     }
 }

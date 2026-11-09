@@ -39,9 +39,7 @@ class Conversation extends Model
 
     public function messages()
     {
-        return $this->hasMany(ConversationMessage::class)
-            ->orderBy('created_at', 'asc')
-            ->orderBy('id', 'asc');
+        return $this->hasMany(ConversationMessage::class);
     }
 
     public function participants()
