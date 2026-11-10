@@ -63,7 +63,7 @@ class ConversationMessage extends Model
 
         $participant = $this->conversation
             ->participants()
-            ->where('participant_id', $user->id)
+            ->where('participant_id', '!=' , $user->id)
             ->where('participant_type', $user->getMorphClass())
             ->first();
 

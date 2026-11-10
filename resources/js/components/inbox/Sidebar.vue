@@ -11,7 +11,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <aside class="text-foreground border-r h-full w-1/4 py-4">
+    <aside class="text-foreground border-r h-full w-[28%] py-4">
         <SidebarHeader title="Chats" @create="emit('create')" />
         <SidebarFilter @search="emit('search', $event)" />
         <slot />

@@ -19,16 +19,16 @@ class MessageController extends Controller
         $messages = $convo->messages()
             ->reorder()
             ->with([
-                "sender",
-                "replyTo.sender",
+                'sender',
+                'replyTo.sender',
             ])
-            ->orderByDesc("sent_at")
-            ->orderByDesc("id")
+            ->orderByRaw('COALESCE(sent_at, created_at) DESC')
+            ->orderByDesc('id')
             ->cursorPaginate(
                 $request->input('per_page', 30),
-                ["*"],
-                "cursor",
-                $request->input("cursor")
+                ['*'],
+                'cursor',
+                $request->input('cursor')
             );
 
         $messages->setCollection(
@@ -36,5 +36,6 @@ class MessageController extends Controller
         );
 
         return MessageResource::collection($messages);
+
     }
 }

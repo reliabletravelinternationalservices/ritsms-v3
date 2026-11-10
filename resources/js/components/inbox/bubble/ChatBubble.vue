@@ -86,6 +86,7 @@ const handleDownload = () => {
 
         <!-- MESSAGE CONTENT -->
         <div class="flex w-fit min-w-0 max-w-[85%] flex-col sm:max-w-[75%] lg:max-w-[60%]">
+            <div v-if="!isOwner" class="text-foreground text-xs">{{ message.sender?.display_name }}</div>
             <!-- EDITED -->
             <span v-if="message.is_edited" class="w-full text-xs text-muted-foreground"
                 :class="isOwner ? 'text-end' : 'text-start'">

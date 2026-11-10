@@ -4,6 +4,7 @@ namespace App\Services\Convo;
 
 use App\Enums\Convo\Type;
 use App\Enums\ConvoParticipant\Role;
+use App\Enums\User\Role as UserRole;
 use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -34,19 +35,29 @@ class ConvoService
             ]);
 
             foreach ($participantIDs as $id) {
-                User::findOrFail($id);
+                $user = User::findOrFail($id);
+                $partcipantRole = Role::MEMBER;
+
+                if($id === $creatorID){
+                    $partcipantRole = Role::OWNER;
+                }
+                elseif(
+                    $user->role === UserRole::ADMIN ||
+                    $user->role === UserRole::AGENT
+                ){
+                    $partcipantRole = Role::ADMIN;
+                }else{
+                    $partcipantRole = Role::MEMBER;
+                }
 
                 $conversation->participants()->create([
                     'participant_id' => $id,
                     'participant_type' => User::class,
-                    'role' => $type === Type::GROUP && $id === $creatorID
-                        ? Role::OWNER
-                        : Role::MEMBER,
+                    'role' => $partcipantRole,
                     'joined_at' => now(),
                 ]);
             }
-
-
+    
             return $conversation;
         });
     }

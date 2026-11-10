@@ -45,6 +45,7 @@ export function useInbox() {
     const searchLoading = ref(false);
     const openedConvoMessagesLoading = ref(false);
     const loadMoreMessagesLoading = ref(false);
+    const loadingCreatingConvo = ref(false);
 
     // =====================================================
     // REQUEST TRACKING
@@ -140,8 +141,8 @@ export function useInbox() {
         } finally {
             if (convoAbortController === controller) {
                 convoAbortController = null;
+                convoFullLoading.value = false;
             }
-            convoFullLoading.value = false;
         }
     };
 
@@ -177,8 +178,8 @@ export function useInbox() {
         } finally {
             if(loadMoreConvoAbortController === controller){
                 loadMoreConvoAbortController = null
+                loadMoreLoading.value = false;
             }
-            loadMoreLoading.value = false;
         }
     };
 
@@ -235,8 +236,8 @@ export function useInbox() {
         } finally {
             if (searchConvosAbortController === controller) {
                 searchConvosAbortController = null;
+                searchLoading.value = false;
             }
-            searchLoading.value = false;
         }
     };
 
@@ -289,8 +290,9 @@ export function useInbox() {
         } finally {
             if (messageAbortController === controller) {
                 messageAbortController = null;
+                openedConvoMessagesLoading.value = false;
             }
-            openedConvoMessagesLoading.value = false;
+
         }
     };
 
@@ -375,7 +377,9 @@ export function useInbox() {
         message: Message,
         convo: ConvoWithParticipantsAndLatestMessage
     ) => {
-        const conversations = pagedConversations.value?.data;
+        const conversations = tempLoadedConvos.value
+            ? tempLoadedConvos.value.data
+            : pagedConversations.value?.data;
 
         if (!conversations) return;
 
@@ -383,14 +387,26 @@ export function useInbox() {
             item => item.id === convo.id
         );
 
-        // Remove old position if conversation already exists.
         if (index !== -1) {
             conversations.splice(index, 1);
+        }
+
+
+        const participants = convo.participants;
+
+        const senderIndex = participants.findIndex(
+            p => p.participant.id === message.sender?.id
+        );
+
+        if (senderIndex !== -1) {
+            participants[senderIndex].last_read_at = new Date().toISOString();
+            participants[senderIndex].total_unread = 0;
         }
 
         conversations.unshift({
             ...convo,
             latest_message: message,
+            participants,
         });
     };
 
@@ -517,8 +533,9 @@ export function useInbox() {
         } finally {
             if (loadMoreMessagesAbortController === controller) {
                 loadMoreMessagesAbortController = null;
+                loadMoreMessagesLoading.value = false;
             }
-            loadMoreMessagesLoading.value = false;
+     
         }
     };
 
@@ -577,9 +594,11 @@ export function useInbox() {
      */
     const createConversation = async () => {
 
-        if (!createConvo.value || selectedContacts.value.length === 0) {
+        if (!createConvo.value || selectedContacts.value.length === 0 ||  loadingCreatingConvo.value) {
             return;
         }
+
+        loadingCreatingConvo.value=true;
 
         const contactIds = selectedContacts.value.map(
             contact => contact.id
@@ -598,6 +617,8 @@ export function useInbox() {
             updateSelectedConvo(chat.latest_message, chat);
         } catch (error) {
             console.error("Error creating conversation", error);
+        }finally{
+            loadingCreatingConvo.value = false;
         }
     }
     
@@ -642,5 +663,6 @@ export function useInbox() {
 
         // create conversation action
         createConversation,
+        loadingCreatingConvo,
     };
 }
