@@ -13,7 +13,7 @@ import {
     Type,
 } from "@/types/convo/conversation";
 
-import { Message, Type as MessageType } from "@/types/convo/message";
+import { Message, MessageGroup, Type as MessageType } from "@/types/convo/message";
 import { CursorPaginated } from "@/types/cursor/cursor-paginated";
 import { Contact } from "@/types/user/contact";
 
@@ -29,8 +29,7 @@ export function useInbox() {
 
     const openedConvo = ref<ConvoWithParticipants | null>(null);
 
-    const openedConvoMessages =
-        ref<CursorPaginated<Message> | null>(null);
+    const openedConvoMessages = ref<CursorPaginated<MessageGroup> | null>(null)
 
     const searchKey = ref("");
     const createConvo = ref(false);

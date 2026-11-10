@@ -31,7 +31,6 @@ class ConversationMessage extends Model
 
     protected $with = [
         'sender',
-        'replyTo',
     ];
 
     public function conversation()
@@ -46,7 +45,10 @@ class ConversationMessage extends Model
 
     public function replyTo()
     {
-        return $this->belongsTo(self::class, 'reply_to_id');
+        return $this->belongsTo(
+            self::class,
+            'reply_to_id'
+        )->withTrashed();
     }
 
     public function isRead(): bool

@@ -1,6 +1,6 @@
 import api from '@/lib/api'
 import { ConvoWithParticipantsAndLatestMessage, Type } from '@/types/convo/conversation'
-import { Message } from '@/types/convo/message'
+import { Message, MessageGroup } from '@/types/convo/message'
 import { CursorPaginated, CursorPaginatedFiltersWithSearch } from '@/types/cursor/cursor-paginated'
 
 export const conversationService = {
@@ -45,17 +45,17 @@ export const conversationService = {
     },
 
 
-    async getConvoMessages(
+   async getConvoMessages(
         convoID: number,
         filters: CursorPaginatedFiltersWithSearch,
         signal?: AbortSignal
-    ): Promise<CursorPaginated<Message>> {
+    ): Promise<CursorPaginated<MessageGroup>> {
         const { data: response } = await api.get<{
-            data: Message[]
-            meta: Omit<CursorPaginated<Message>, 'data'>
-        }>(route('convo.messages', {convo: convoID}), {
+            data: MessageGroup[]
+            meta: Omit<CursorPaginated<MessageGroup>, 'data'>
+        }>(route('convo.messages', { convo: convoID }), {
             params: filters,
-            signal
+            signal,
         })
 
         return {
