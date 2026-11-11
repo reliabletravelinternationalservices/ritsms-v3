@@ -1,229 +1,489 @@
+
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+
+import { MessageGroup, Type } from '@/types/convo/message';
+import { cn, formatTimestamp, getAuthUser, getFirstName } from '@/lib/utils';
+
 import {
-    Check,
-    CheckCheck,
-    EllipsisVertical,
-    CornerUpLeft,
-    Copy,
-    Trash2,
-    Pen,
-    Download,
-    FileText,
-    Loader2,
-} from '@lucide/vue';
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/avatar';
 
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { Type, type Message } from '@/types/convo/message';
-import { formatTimestamp } from '@/lib/utils';
+import {
+    CornerUpLeft,
+    EllipsisVertical,
+    Copy,
+    Pen,
+    Trash2,
+} from '@lucide/vue';
 
 interface Props {
-    message: Message;
-    isOwner: boolean;
+    messageBatch: MessageGroup;
 }
+
+type ChatMessage = MessageGroup['messages'][number];
+type MessageAction = 'reply' | 'copy' | 'edit' | 'delete';
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-    reply: [message: Message];
-    copy: [message: Message];
-    edit: [message: Message];
-    delete: [message: Message];
+    (e: 'reply', message: ChatMessage): void;
+    (e: 'edit', message: ChatMessage): void;
+    (e: 'delete', message: ChatMessage): void;
 }>();
 
-const menuOpen = ref(false);
-const menuRef = ref<HTMLElement | null>(null);
+const authUser = getAuthUser();
 
-const handleClickOutside = (event: MouseEvent) => {
-    if (!menuRef.value?.contains(event.target as Node)) {
-        menuOpen.value = false;
+const messages = computed(() => props.messageBatch.messages);
+const sender = computed(() => props.messageBatch.sender);
+
+const isNoSender = computed(() => sender.value === null);
+
+const isOwner = computed(() =>
+    sender.value !== null && sender.value.id === authUser.id
+);
+
+const isSystemBatchMessageOnly = computed(() =>
+    messages.value.length > 0 &&
+    messages.value.every(message => message.type === Type.System)
+);
+
+const messageAlignment = computed(() =>
+    isOwner.value ? 'items-end' : 'items-start'
+);
+
+// --------------------------------------------------
+// MESSAGE BUBBLE CORNERS
+// --------------------------------------------------
+
+const bubbleClass = (index: number) => {
+    const total = messages.value.length;
+
+    if (total <= 1) {
+        return 'rounded-2xl';
     }
+
+    if (index === 0) {
+        return isOwner.value
+            ? 'rounded-2xl rounded-br-md'
+            : 'rounded-2xl rounded-bl-md';
+    }
+
+    if (index === total - 1) {
+        return isOwner.value
+            ? 'rounded-2xl rounded-tr-md'
+            : 'rounded-2xl rounded-tl-md';
+    }
+
+    return isOwner.value
+        ? 'rounded-l-2xl rounded-r-md'
+        : 'rounded-r-2xl rounded-l-md';
+};
+
+// --------------------------------------------------
+// MORE OPTIONS MENU
+// --------------------------------------------------
+
+const menuOpenId = ref<number | null>(null);
+
+const toggleMenu = (messageId: number) => {
+    menuOpenId.value =
+        menuOpenId.value === messageId ? null : messageId;
+};
+
+const closeMenu = () => {
+    menuOpenId.value = null;
+};
+
+// Close dropdown when clicking outside the component
+const handleOutsideClick = () => {
+    closeMenu();
 };
 
 onMounted(() => {
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleOutsideClick);
 });
 
-onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside);
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleOutsideClick);
 });
 
-const handleAction = (action: 'reply' | 'copy' | 'edit' | 'delete') => {
-    emit(action as keyof typeof emit, props.message);
-    menuOpen.value = false;
-};
+// --------------------------------------------------
+// MESSAGE ACTIONS
+// --------------------------------------------------
 
-// Assuming body contains the file URL for image/video/file messages.
-const fileUrl = (props: Message) => props.body ?? '';
+const handleAction = async (
+    action: MessageAction,
+    message: ChatMessage
+) => {
+    closeMenu();
 
-const handleDownload = () => {
-    if (props.message.body) {
-        window.open(props.message.body, '_blank');
+    switch (action) {
+        case 'reply':
+            emit('reply', message);
+            break;
+
+        case 'copy':
+            try {
+                await navigator.clipboard.writeText(message.body ?? '');
+            } catch (error) {
+                console.error('Failed to copy message:', error);
+            }
+            break;
+
+        case 'edit':
+            if (message.type !== Type.Text || !isOwner.value) return;
+
+            emit('edit', message);
+            break;
+
+        case 'delete':
+            if (!isOwner.value) return;
+
+            emit('delete', message);
+            break;
     }
 };
+
+const getReplyPreview = (message: ChatMessage) => {
+    const reply = message.reply_to;
+
+    if (!reply) return '';
+
+    if (reply.deleted_at) {
+        return 'This message was deleted';
+    }
+
+    switch (reply.type) {
+        case Type.Text:
+            return reply.body || 'Message';
+
+        case Type.Image:
+            return '📷 Photo';
+
+        case Type.Video:
+            return '🎥 Video';
+
+        case Type.File:
+            return '📎 File';
+
+        case Type.System:
+            return reply.body || 'System message';
+
+        default:
+            return 'Message';
+    }
+};
+
+const getReplySender = (message: ChatMessage) => {
+    const reply = message.reply_to;
+
+    if (!reply?.sender) return 'Unknown';
+
+    return reply.sender.id === authUser.id
+        ? 'You'
+        : getFirstName(reply.sender.display_name);
+};
+
 </script>
 
 <template>
-    <!-- SYSTEM MESSAGE -->
-    <div v-if="message.type === Type.System" class="flex justify-center py-2">
-        <div class="max-w-[85%] rounded-full bg-muted px-4 py-2 text-center text-xs text-muted-foreground">
+    <!-- SYSTEM MESSAGES -->
+    <div
+        v-if="isNoSender && isSystemBatchMessageOnly"
+        class="flex w-full flex-col items-center gap-2 py-2"
+    >
+        <div
+            v-for="message in messages"
+            :key="message.id"
+            class="max-w-[85%] rounded-full bg-muted px-4 py-2 text-center text-xs text-muted-foreground"
+        >
             {{ message.body }}
         </div>
     </div>
 
-    <!-- NORMAL MESSAGE -->
-    <div v-else class="group flex items-end gap-2" :class="isOwner ? 'flex-row-reverse' : ''">
-        <!-- AVATAR: RECEIVED ONLY -->
-        <Avatar v-if="!isOwner"
-            class="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-sidebar-border bg-sidebar">
-            <AvatarImage v-if="message.sender?.avatar" :src="message.sender.avatar" alt="avatar-user" />
-            <AvatarFallback class="rounded-full text-white">
-                <AvatarPlaceholder class="aspect-square h-full w-full" />
-            </AvatarFallback>
-        </Avatar>
-
-        <!-- MESSAGE CONTENT -->
-        <div class="flex w-fit min-w-0 max-w-[85%] flex-col sm:max-w-[75%] lg:max-w-[60%]">
-            <div v-if="!isOwner" class="text-foreground text-xs">{{ message.sender?.display_name }}</div>
-            <!-- EDITED -->
-            <span v-if="message.is_edited" class="w-full text-xs text-muted-foreground"
-                :class="isOwner ? 'text-end' : 'text-start'">
-                Edited
+    <!-- NORMAL MESSAGES -->
+    <div
+        v-else
+        class="flex w-full min-w-0 flex-col gap-2"
+        @click="closeMenu"
+    >
+        <!-- GROUP TIMESTAMP -->
+        <div
+            v-if="messageBatch.sent_at"
+            class="flex w-full justify-center py-1"
+        >
+            <span class="text-[11px] font-medium text-muted-foreground">
+                {{ formatTimestamp(messageBatch.sent_at) }}
             </span>
-
-            <!-- BUBBLE -->
-            <div class="w-full rounded-2xl p-3 transition-colors" :class="[
-                isOwner
-                    ? 'rounded-br-sm bg-yellow-400'
-                    : 'rounded-bl-sm bg-zinc-200'
-            ]">
-                <div class="flex flex-col gap-2">
-
-                    <!-- TEXT -->
-                    <p v-if="message.type === Type.Text"
-                        class="break-words whitespace-pre-wrap text-left text-sm text-zinc-800">
-                        {{ message.body }}
-                    </p>
-
-                    <!-- IMAGE -->
-                    <div v-else-if="message.type === Type.Image">
-                        <a :href="fileUrl(message)" target="_blank" rel="noopener noreferrer">
-                            <img :src="fileUrl(message)" alt="Message image"
-                                class="max-h-80 max-w-full rounded-lg object-contain" />
-                        </a>
-                    </div>
-
-                    <!-- VIDEO -->
-                    <div v-else-if="message.type === Type.Video">
-                        <video :src="fileUrl(message)" controls preload="metadata"
-                            class="max-h-80 max-w-full rounded-lg" />
-                    </div>
-
-                    <!-- FILE -->
-                    <div v-else-if="message.type === Type.File" class="flex min-w-[180px] items-center gap-3">
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/70">
-                            <FileText class="h-5 w-5 text-zinc-700" />
-                        </div>
-
-                        <div class="min-w-0 flex-1">
-                            <p class="truncate text-sm font-medium text-zinc-800">
-                                {{ fileUrl(message).split('/').pop() || 'Attachment' }}
-                            </p>
-                            <span class="text-xs text-zinc-600">
-                                Attachment
-                            </span>
-                        </div>
-
-                        <button @click="handleDownload" title="Open attachment"
-                            class="rounded-full p-2 transition-colors hover:bg-black/10">
-                            <Download class="h-4 w-4 text-zinc-700" />
-                        </button>
-                    </div>
-
-                    <!-- TIMESTAMP / STATUS -->
-                    <div v-if="message.sent_at" class="flex items-center gap-1"
-                        :class="isOwner ? 'justify-end' : 'justify-start'">
-                        <span class="text-xs text-zinc-600">
-                            {{ formatTimestamp(message.sent_at) }}
-                        </span>
-
-                        <span v-if="isOwner" class="text-zinc-600">
-                            <CheckCheck v-if="message.is_read" class="h-3 w-3" />
-                            <Check v-else class="h-3 w-3" />
-                        </span>
-                    </div>
-
-                    <div v-else class="flex items-center" :class="isOwner ? 'justify-end' : 'justify-start'">
-                        <span v-if="isOwner" class="text-zinc-600">
-                            <Loader2 class="h-3 w-3 animate-spin" />
-                        </span>
-                    </div>
-
-                </div>
-            </div>
         </div>
 
-        <!-- ACTION BUTTONS -->
-        <div v-if="message.sent_at" class="flex shrink-0 items-center gap-1 self-center text-foreground
-                invisible translate-y-1 opacity-0
-                transition-all duration-200
-                group-hover:visible group-hover:translate-y-0 group-hover:opacity-100
-                group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100" :class="[
-                    isOwner ? 'flex-row-reverse' : '',
-                    menuOpen ? 'visible translate-y-0 opacity-100' : ''
-                ]">
-            <!-- REPLY -->
-            <button @click="handleAction('reply')" title="Reply"
-                class="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground">
-                <CornerUpLeft class="h-4 w-4" />
-            </button>
+        <!-- MESSAGE ROW -->
+        <div
+            :class="cn(
+                'flex w-full min-w-0 items-end gap-2',
+                isOwner ? 'justify-end' : 'justify-start'
+            )"
+        >
+            <!-- SENDER AVATAR -->
+            <Avatar
+                v-if="!isOwner && !isNoSender"
+                class="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-sidebar-border bg-sidebar"
+            >
+                <AvatarImage
+                    v-if="sender?.avatar"
+                    :src="sender.avatar"
+                    :alt="sender.display_name"
+                />
 
-            <!-- MORE OPTIONS -->
-            <div ref="menuRef" class="relative">
-                <button @click.stop="menuOpen = !menuOpen" title="More options"
-                    class="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground"
-                    :class="menuOpen ? 'bg-accent text-accent-foreground' : ''">
-                    <EllipsisVertical class="h-4 w-4" />
-                </button>
+                <AvatarFallback class="rounded-full text-white">
+                    <AvatarPlaceholder class="aspect-square h-full w-full" />
+                </AvatarFallback>
+            </Avatar>
 
-                <Transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 scale-95"
-                    enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-100 ease-in"
-                    leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-                    <div v-if="menuOpen"
-                        class="absolute top-full z-50 mt-2 w-40 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg"
-                        :class="isOwner ? 'right-0' : 'left-0'">
-                        <button @click="handleAction('reply')"
-                            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent">
-                            <CornerUpLeft class="h-4 w-4" />
-                            Reply
-                        </button>
+            <!-- MESSAGE CONTENT -->
+            <div
+                :class="cn(
+                    'flex min-w-0 max-w-[80%] flex-col gap-1',
+                    messageAlignment
+                )"
+            >
+                <!-- SENDER NAME -->
+                <span
+                    v-if="!isNoSender && !isOwner"
+                    class="px-1 text-xs font-medium text-muted-foreground"
+                >
+                    {{ getFirstName(sender!.display_name!) }}
+                </span>
 
-                        <button @click="handleAction('copy')"
-                            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent">
-                            <Copy class="h-4 w-4" />
-                            Copy
-                        </button>
+                <!-- GROUPED MESSAGES -->
+                <div class="flex w-full flex-col gap-[2px]">
+                    <div
+                        v-for="(message, index) in messages"
+                        :key="message.id"
+                        :class="cn(
+                            'group relative flex min-w-0 items-center gap-1',
+                            isOwner ? 'flex-row-reverse' : 'flex-row'
+                        )"
+                    >
+                        <!-- MESSAGE BUBBLE -->
+                        <div
+                            class="min-w-0 max-w-full"
+                            :title="message.sent_at
+                                ? formatTimestamp(message.sent_at)
+                                : undefined"
+                        >
+                            <!-- EDITED LABEL -->
+                            <div
+                                v-if="message.is_edited"
+                                :class="cn(
+                                    'mb-1 text-[10px] text-muted-foreground',
+                                    isOwner ? 'text-right' : 'text-left'
+                                )"
+                            >
+                                Edited
+                            </div>
 
-                        <!-- OWNER ACTIONS -->
-                        <template v-if="isOwner">
-                            <div class="my-1 border-t border-border" />
+                            <!-- REPLY PREVIEW -->
+                            <div
+                                v-if="message.reply_to"
+                                :class="cn(
+                                    'mb-1 max-w-full overflow-hidden rounded-lg border-l-[3px] px-3 py-2',
+                                    isOwner
+                                        ? 'border-primary-foreground/60 bg-black/10'
+                                        : 'border-primary bg-background/70'
+                                )"
+                            >
+                                <!-- REPLY SENDER -->
+                                <div
+                                    :class="cn(
+                                        'mb-0.5 text-[11px] font-semibold',
+                                        isOwner
+                                            ? 'text-primary-foreground/90'
+                                            : 'text-foreground'
+                                    )"
+                                >
+                                    {{ getReplySender(message) }}
+                                </div>
 
-                            <button @click="handleAction('edit')" :disabled="message.type !== Type.Text"
-                                class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
-                                <Pen class="h-4 w-4" />
-                                Edit
+                                <!-- REPLY CONTENT -->
+                                <p
+                                    :class="cn(
+                                        'line-clamp-2 break-words text-xs',
+                                        isOwner
+                                            ? 'text-primary-foreground/75'
+                                            : 'text-muted-foreground'
+                                    )"
+                                >
+                                    {{ getReplyPreview(message) }}
+                                </p>
+                            </div>
+
+                            <!-- TEXT -->
+                            <p
+                                v-if="message.type === Type.Text"
+                                :class="cn(
+                                    'w-fit max-w-full cursor-default whitespace-pre-wrap break-words px-3 py-2 text-sm leading-relaxed',
+                                    bubbleClass(index),
+                                    isOwner
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'bg-muted text-foreground'
+                                )"
+                            >
+                                {{ message.body }}
+                            </p>
+
+                            <!-- FILE -->
+                            <div
+                                v-else-if="message.type === Type.File"
+                                :class="cn(
+                                    'w-fit max-w-full bg-muted px-3 py-2 text-sm',
+                                    bubbleClass(index)
+                                )"
+                            >
+                                {{ message.body }}
+                            </div>
+
+                            <!-- VIDEO -->
+                            <div
+                                v-else-if="message.type === Type.Video"
+                                :class="cn(
+                                    'w-fit max-w-full overflow-hidden bg-muted px-3 py-2 text-sm',
+                                    bubbleClass(index)
+                                )"
+                            >
+                                {{ message.body }}
+                            </div>
+
+                            <!-- IMAGE -->
+                            <div
+                                v-else-if="message.type === Type.Image"
+                                :class="cn(
+                                    'w-fit max-w-full overflow-hidden bg-muted',
+                                    bubbleClass(index)
+                                )"
+                            >
+                                {{ message.body }}
+                            </div>
+
+                            <!-- OTHER TYPES -->
+                            <div
+                                v-else
+                                :class="cn(
+                                    'w-fit max-w-full bg-muted px-3 py-2 text-sm',
+                                    bubbleClass(index)
+                                )"
+                            >
+                                {{ message.body }}
+                            </div>
+                        </div>
+
+                        <!-- MESSAGE ACTIONS -->
+                        <div
+                            :class="cn(
+                                'flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100',
+                                isOwner ? 'flex-row-reverse' : 'flex-row'
+                            )"
+                        >
+                            <!-- REPLY -->
+                            <button
+                                type="button"
+                                title="Reply"
+                                @click.stop="handleAction('reply', message)"
+                                class="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                            >
+                                <CornerUpLeft class="h-4 w-4" />
                             </button>
 
-                            <button @click="handleAction('delete')"
-                                class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10">
-                                <Trash2 class="h-4 w-4" />
-                                Delete
-                            </button>
-                        </template>
+                            <!-- MORE OPTIONS -->
+                            <div
+                                class="relative"
+                                @click.stop
+                            >
+                                <button
+                                    type="button"
+                                    title="More options"
+                                    :aria-expanded="menuOpenId === message.id"
+                                    @click="toggleMenu(message.id)"
+                                    :class="cn(
+                                        'flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',
+                                        menuOpenId === message.id && 'bg-accent text-accent-foreground'
+                                    )"
+                                >
+                                    <EllipsisVertical class="h-4 w-4" />
+                                </button>
+
+                                <!-- DROPDOWN -->
+                                <Transition
+                                    enter-active-class="transition duration-150 ease-out"
+                                    enter-from-class="opacity-0 scale-95"
+                                    enter-to-class="opacity-100 scale-100"
+                                    leave-active-class="transition duration-100 ease-in"
+                                    leave-from-class="opacity-100 scale-100"
+                                    leave-to-class="opacity-0 scale-95"
+                                >
+                                    <div
+                                        v-if="menuOpenId === message.id"
+                                        :class="cn(
+                                            'absolute top-full z-50 mt-2 w-40 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg',
+                                            isOwner ? 'right-0 origin-top-right' : 'left-0 origin-top-left'
+                                        )"
+                                    >
+                                        <!-- REPLY -->
+                                        <button
+                                            type="button"
+                                            @click="handleAction('reply', message)"
+                                            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent"
+                                        >
+                                            <CornerUpLeft class="h-4 w-4" />
+                                            Reply
+                                        </button>
+
+                                        <!-- COPY -->
+                                        <button
+                                            type="button"
+                                            @click="handleAction('copy', message)"
+                                            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent"
+                                        >
+                                            <Copy class="h-4 w-4" />
+                                            Copy
+                                        </button>
+
+                                        <!-- OWNER ACTIONS -->
+                                        <template v-if="isOwner">
+                                            <div class="my-1 border-t border-border" />
+
+                                            <!-- EDIT -->
+                                            <button
+                                                type="button"
+                                                :disabled="message.type !== Type.Text"
+                                                @click="handleAction('edit', message)"
+                                                class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+                                            >
+                                                <Pen class="h-4 w-4" />
+                                                Edit
+                                            </button>
+
+                                            <!-- DELETE -->
+                                            <button
+                                                type="button"
+                                                @click="handleAction('delete', message)"
+                                                class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
+                                            >
+                                                <Trash2 class="h-4 w-4" />
+                                                Delete
+                                            </button>
+                                        </template>
+                                    </div>
+                                </Transition>
+                            </div>
+                        </div>
                     </div>
-                </Transition>
+                </div>
             </div>
         </div>
     </div>
