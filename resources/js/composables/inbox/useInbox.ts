@@ -18,30 +18,44 @@ import { CursorPaginated } from "@/types/cursor/cursor-paginated";
 import { Contact } from "@/types/user/contact";
 
 import { computed, ref } from "vue";
+import { useConversations } from "./useConversations";
 
 export function useInbox() {
+
+    const {
+        conversationList,
+        loadingConvos,
+
+        loadingMoreConvos,
+
+        oldConversationList,
+        searchingConvos,
+
+        initializeConvos,
+        loadMoreConvo,
+        searchConvo,
+
+    } = useConversations()
+
     // =====================================================
     // STATE
     // =====================================================
 
-    const pagedConversations =
-        ref<CursorPaginated<ConvoWithParticipantsAndLatestMessage> | null>(null);
+
 
     const openedConvo = ref<ConvoWithParticipants | null>(null);
 
     const openedConvoMessages = ref<CursorPaginated<MessageGroup> | null>(null)
 
-    const searchKey = ref("");
+
     const createConvo = ref(false);
     const selectedContacts = ref<Contact[]>([]);
 
+    const selectedReplyMessage = ref<Message | null>(null);
+
     // SEARCH CONVO
-    const tempLoadedConvos = ref<CursorPaginated<ConvoWithParticipantsAndLatestMessage> | null>(null);
 
     // Loading states
-    const convoFullLoading = ref(false);
-    const loadMoreLoading = ref(false);
-    const searchLoading = ref(false);
     const openedConvoMessagesLoading = ref(false);
     const loadMoreMessagesLoading = ref(false);
     const loadingCreatingConvo = ref(false);
@@ -52,9 +66,7 @@ export function useInbox() {
 
     let messageAbortController: AbortController | null = null;
     let loadMoreMessagesAbortController: AbortController | null = null;
-    let convoAbortController: AbortController | null = null;
-    let loadMoreConvoAbortController: AbortController | null = null;
-    let searchConvosAbortController: AbortController | null = null;
+
 
     // =====================================================
     // COMPUTED
@@ -109,138 +121,6 @@ export function useInbox() {
         error?.code === "ERR_CANCELED";
 
     // =====================================================
-    // CONVERSATIONS
-    // =====================================================
-
-    /**
-     * Initialize conversation list.
-     */
-    const initializeConvos = async () => {
-        if (convoFullLoading.value) return;
-
-        convoAbortController?.abort()
-        const controller = new AbortController();
-        convoAbortController = controller;
-
-        convoFullLoading.value = true;
-        pagedConversations.value = null;
-
-        try {
-            const response = await conversationService.getConvos({
-                per_page: 10,
-            });
-
-            if (response.data) {
-                pagedConversations.value = response;
-            }
-        } catch (error) {
-            if(isRequestCanceled(error)) return;
-
-            console.error("Error initializing conversations", error);
-        } finally {
-            if (convoAbortController === controller) {
-                convoAbortController = null;
-                convoFullLoading.value = false;
-            }
-        }
-    };
-
-    /**
-     * Load more conversations.
-     */
-    const loadMoreConvo = async (nextCursor?: string | null) => {
-        if (loadMoreLoading.value || !nextCursor) return;
-        
-        loadMoreConvoAbortController?.abort();
-        const controller = new AbortController();
-        loadMoreConvoAbortController = controller;
-        loadMoreLoading.value = true;
-
-        try {
-            const response = await conversationService.getConvos({
-                    search: searchKey.value,
-                    cursor: nextCursor,
-                    per_page: 10,
-                },
-                controller.signal
-            );
-
-            if (response.data && pagedConversations.value) {
-                pagedConversations.value.data.push(...response.data);
-
-                updatePagination(pagedConversations.value, response);
-            }
-        } catch (error) {
-            if(isRequestCanceled(error)) return;
-
-            console.error("Error loading conversations", error);
-        } finally {
-            if(loadMoreConvoAbortController === controller){
-                loadMoreConvoAbortController = null
-                loadMoreLoading.value = false;
-            }
-        }
-    };
-
-    /**
-     * Search conversations by name.
-     */
-    const searchConvo = async (value?: string) => {
-        const search = value?.trim();
-
-        // Restore original conversations
-        if (!search) {
-            searchConvosAbortController?.abort();
-            searchConvosAbortController = null;
-
-            pagedConversations.value = tempLoadedConvos.value;
-            tempLoadedConvos.value = null;
-
-            searchLoading.value = false;
-            return;
-        }
-
-        // Save original conversations before searching
-        if (!tempLoadedConvos.value) {
-            tempLoadedConvos.value = pagedConversations.value;
-        }
-
-        searchConvosAbortController?.abort();
-
-        const controller = new AbortController();
-        searchConvosAbortController = controller;
-
-        searchLoading.value = true;
-        pagedConversations.value = null;
-
-        try {
-
-            const response = await conversationService.getConvos(
-                {
-                    search,
-                    per_page: 10,
-                },
-                controller.signal
-            );
-
-
-            if (!response.data) return;
-
-            pagedConversations.value = response;
-
-        } catch (error) {
-            if (isRequestCanceled(error)) return;
-
-            console.error('Error searching conversations', error);
-        } finally {
-            if (searchConvosAbortController === controller) {
-                searchConvosAbortController = null;
-                searchLoading.value = false;
-            }
-        }
-    };
-
-    // =====================================================
     // OPEN CONVERSATION
     // =====================================================
 
@@ -264,7 +144,7 @@ export function useInbox() {
         try {
             const response = await conversationService.getConvoMessages(
                 convoId,
-                { per_page: 5 },
+                { per_page: 10 },
                 controller.signal
             );
 
@@ -286,6 +166,7 @@ export function useInbox() {
                 "Error initializing open convo messages",
                 error
             );
+
         } finally {
             if (messageAbortController === controller) {
                 messageAbortController = null;
@@ -340,6 +221,42 @@ export function useInbox() {
     // =====================================================
 
     /**
+     * Check if can appent to last message group.
+     */
+
+    const canAppendToLastGroup = (
+        lastGroup: MessageGroup | undefined,
+        message: Message
+    ): boolean => {
+        if (!lastGroup?.sender || !message.sender) {
+            return false;
+        }
+
+        // Same sender
+        if (lastGroup.sender.id !== message.sender.id) {
+            return false;
+        }
+
+        const lastMessage = lastGroup.messages.at(-1);
+
+        if (!lastMessage?.sent_at || !message.sent_at) {
+            return false;
+        }
+
+        const lastTime = new Date(lastMessage.sent_at).getTime();
+        const currentTime = new Date(message.sent_at).getTime();
+
+        if (!Number.isFinite(lastTime) || !Number.isFinite(currentTime)) {
+            return false;
+        }
+
+        const difference = currentTime - lastTime;
+
+        // Same sender, chronological order, within 5 minutes
+        return difference >= 0 && difference <= 5 * 60 * 1000;
+    };
+
+    /**
      * Check if message belongs to authenticated user.
      */
     const isOwnerChat = (message: Message) =>
@@ -363,10 +280,17 @@ export function useInbox() {
         body: message,
         type: MessageType.Text,
         reply_to: null,
-        sent_at: null,
+        sent_at: new Date().toISOString(),
         is_edited: false,
         is_read: false,
         deleted_at: null,
+    });
+
+    const createNewBatch = (message: Message): MessageGroup => ({
+        id: typeof message.id === 'number' ? message.id : generateTempMessageId(),
+        sender: message.sender,
+        sent_at: message.sent_at,
+        messages: [message],
     });
 
     /**
@@ -376,9 +300,9 @@ export function useInbox() {
         message: Message,
         convo: ConvoWithParticipantsAndLatestMessage
     ) => {
-        const conversations = tempLoadedConvos.value
-            ? tempLoadedConvos.value.data
-            : pagedConversations.value?.data;
+        const conversations = oldConversationList.value
+            ? oldConversationList.value.data
+            : conversationList.value?.data;
 
         if (!conversations) return;
 
@@ -412,6 +336,7 @@ export function useInbox() {
     /**
      * Send a message with optimistic UI.
      */
+
     const sendMessage = async (payload: {
         message: string;
         attachments: File[];
@@ -419,9 +344,6 @@ export function useInbox() {
         const convo = openedConvo.value;
 
         if (!convo) return;
-
-        createConvo.value = false;
-        selectedContacts.value = [];
 
         const convoId = convo.id;
         const clientID = generateClientId();
@@ -436,11 +358,23 @@ export function useInbox() {
             openedConvo.value?.id === convoId &&
             openedConvoMessages.value
         ) {
-            openedConvoMessages.value.data.push(tempMessage);
+            const groups = openedConvoMessages.value.data;
+            const lastGroup = groups.at(-1);
+
+            // Append to the last group if the sender is the same.
+            if (lastGroup && canAppendToLastGroup(lastGroup, tempMessage)) {
+                lastGroup.messages.push(tempMessage);
+            } else {
+                groups.push(createNewBatch(tempMessage));
+            }
         }
 
+        createConvo.value = false;
+        selectedContacts.value = [];
+        resetReply()
+
         try {
-            const data = await conversationService.storeConvoMessage(
+            const response = await conversationService.storeConvoMessage(
                 convoId,
                 {
                     ...payload,
@@ -453,25 +387,52 @@ export function useInbox() {
                 openedConvo.value?.id === convoId &&
                 openedConvoMessages.value
             ) {
-                const index = openedConvoMessages.value.data.findIndex(
-                    message => message.client_id === clientID
-                );
+                const groups = openedConvoMessages.value.data;
 
-                if (index !== -1) {
-                    openedConvoMessages.value.data[index] = data;
+                for (const group of groups) {
+                    const messageIndex = group.messages.findIndex(
+                        message => message.client_id === clientID
+                    );
+
+                    if (messageIndex !== -1) {
+                        group.messages[messageIndex] = response;
+                        break;
+                    }
                 }
             }
 
             // Update conversation list.
-            updateSelectedConvo(data, {
+            updateSelectedConvo(response, {
                 ...convo,
-                latest_message: data,
+                latest_message: response,
             });
 
         } catch (error) {
             console.error("Error sending message", error);
+
+            // Remove temporary message if sending failed.
+            if (
+                openedConvo.value?.id === convoId &&
+                openedConvoMessages.value
+            ) {
+                const groups = openedConvoMessages.value.data;
+
+                for (let i = groups.length - 1; i >= 0; i--) {
+                    const group = groups[i];
+
+                    group.messages = group.messages.filter(
+                        message => message.client_id !== clientID
+                    );
+
+                    // Remove empty groups.
+                    if (group.messages.length === 0) {
+                        groups.splice(i, 1);
+                    }
+                }
+            }
         }
     };
+
 
     /**
      * Load older messages.
@@ -537,6 +498,21 @@ export function useInbox() {
      
         }
     };
+
+    
+
+    // =====================================================
+    // REPLY MESSAGE
+    // =====================================================
+    const replyMessage =(message: Message)=>{
+        selectedReplyMessage.value = message;
+    }
+
+    const resetReply =()=>{
+        selectedReplyMessage.value = null;
+    }
+
+
 
     // =====================================================
     // CONTACTS
@@ -626,12 +602,17 @@ export function useInbox() {
     // =====================================================
 
     return {
-        // Conversation state
-        pagedConversations,
-        convoFullLoading,
-        loadMoreLoading,
+        // SIDEBAR
+        conversationList,
+        loadingConvos,
+        loadingMoreConvos,
+        searchingConvos,
+        initializeConvos,
+        loadMoreConvo,
+        searchConvo,
+
+
         openedConvo,
-        searchLoading,
 
         // Message state
         openedConvoMessages,
@@ -642,10 +623,6 @@ export function useInbox() {
         createConvo,
         selectedContacts,
 
-        // Conversation actions
-        initializeConvos,
-        loadMoreConvo,
-        searchConvo,
         openChat,
         openCreateConvo,
         toggleCreateConvo,
@@ -663,5 +640,10 @@ export function useInbox() {
         // create conversation action
         createConversation,
         loadingCreatingConvo,
+
+        // reply message
+        selectedReplyMessage,
+        replyMessage,
+        resetReply,
     };
 }
