@@ -8,6 +8,7 @@ import { Media } from "@/types/media-v2"
 import { formatDistanceToNowStrict } from 'date-fns';
 import { usePage } from "@inertiajs/vue3"
 import { SharedData } from "@/types"
+import { CursorPaginated } from "@/types/cursor/cursor-paginated"
 
 const page = usePage<SharedData>();
 const appUrl = import.meta.env.VITE_APP_URL
@@ -466,4 +467,28 @@ export const generateTempMessageId = (): number => {
 
 export const generateClientId = (): string => {
     return `${Date.now()}${Math.floor(Math.random() * 1000000)}`;
+};
+
+export const isRequestCanceled = (error: any) =>{
+    return error?.name === "CanceledError" || error?.code === "ERR_CANCELED";
+}
+
+export const isSameRequestAbort=(
+    firstController?: AbortController | null, 
+    secondController?: AbortController | null
+)=>{
+    return firstController === secondController;
+}
+
+
+export const isLoading=(value:boolean)=>{
+    return value === true;
+}
+
+export const updatePagination = <T>(
+    target: CursorPaginated<T>,
+    response: CursorPaginated<T>
+) => {
+    target.next_cursor = response.next_cursor;
+    target.prev_cursor = response.prev_cursor;
 };
