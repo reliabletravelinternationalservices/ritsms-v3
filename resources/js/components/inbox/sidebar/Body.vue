@@ -9,7 +9,7 @@ withDefaults(defineProps<InfiniteScrollProps>(), {
 
 
 const emit = defineEmits<{
-    load: [];
+    load: [nextCursor?: string | null];
 }>();
 
 </script>
