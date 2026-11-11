@@ -32,19 +32,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const {
-    searchConvo,
-    pagedConversations,
-    convoFullLoading,
-    openedConvo,
+    conversationList,
+    loadingConvos,
+    loadingMoreConvos,
+    searchingConvos,
+    
     initializeConvos,
-    openChat,
-    loadMoreLoading,
     loadMoreConvo,
-    searchLoading,
+    searchConvo,
+    
+    openedConvo,
+    openChat,
     openedConvoMessages,
     openedConvoMessagesLoading,
     loadMoreMessagesLoading,
-    isOwnerChat,
     sendMessage,
     createConvo,
     openCreateConvo,
@@ -54,6 +55,9 @@ const {
     selectedContacts,
     createConversation,
     loadingCreatingConvo,
+    selectedReplyMessage,
+    replyMessage,
+    resetReply,
 } = useInbox();
 
 
@@ -71,11 +75,14 @@ onMounted(async () => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
             <Sidebar @create="openCreateConvo" @search="searchConvo">
-                <SidebarBody v-if="pagedConversations && pagedConversations.data" :loading="loadMoreLoading"
-                    :has-more="Boolean(pagedConversations.next_cursor)"
-                    @load="() => loadMoreConvo(pagedConversations?.next_cursor)">
+                <SidebarBody 
+                    v-if="conversationList && conversationList.data" 
+                    :loading="loadingMoreConvos"
+                    :has-more="Boolean(conversationList.next_cursor)"
+                    @load="loadMoreConvo(conversationList?.next_cursor)">
+
                     <ul class="mt-2 space-y-1 w-full">
-                        <li v-for="chat in pagedConversations.data" :key="chat.id"
+                        <li v-for="chat in conversationList.data" :key="chat.id"
                             class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
                             <ChatButton :is-open="chat.id === openedConvo?.id" :chat="chat" @click="openChat" />
                         </li>
@@ -83,7 +90,7 @@ onMounted(async () => {
                 </SidebarBody>
 
                 <SidebarBodyPlaceholder v-else>
-                    <LoadingData v-if="convoFullLoading || searchLoading" />
+                    <LoadingData v-if="loadingConvos || searchingConvos" />
 
                     <EmptyPlaceholder
                         v-else
@@ -112,8 +119,11 @@ onMounted(async () => {
 
                     <InfiniteScroll v-if="openedConvoMessages" class="py-2 w-full h-full overflow-y-auto"
                         :loading="loadMoreMessagesLoading" :has-more="Boolean(openedConvoMessages.next_cursor)" @load="loadMoreMessages(openedConvoMessages.next_cursor)" direction="bottom-to-top">
-                        <ChatList v-for="message in openedConvoMessages.data" :key="message.id">
-                            <ChatBubble :message="message" :is-owner="isOwnerChat(message)" />
+                        <ChatList v-for="messageBatch in openedConvoMessages.data" :key="messageBatch.id">
+                            <ChatBubble 
+                                :messageBatch="messageBatch" 
+                                @reply="replyMessage"
+                            />
                         </ChatList>
                     </InfiniteScroll>
                     
@@ -145,7 +155,12 @@ onMounted(async () => {
                         />
                     </ChatPlaceholder>
                     
-                    <ChatComposer v-if="!openedConvoMessagesLoading && openedConvo" @send="sendMessage" />
+                    <ChatComposer 
+                        v-if="!openedConvoMessagesLoading && openedConvo" 
+                        :is-reply="selectedReplyMessage!==null"
+                        :reply-message="selectedReplyMessage"
+                        @cancel-reply="resetReply"
+                        @send="sendMessage" />
                 </ChatContent>
             </InboxBody>
 
