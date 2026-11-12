@@ -10,15 +10,17 @@ import { conversationService } from "@/services/conversationService";
 import {
     ConvoWithParticipants,
     ConvoWithParticipantsAndLatestMessage,
-    Type,
 } from "@/types/convo/conversation";
 
 import { Message, MessageGroup, Type as MessageType } from "@/types/convo/message";
-import { CursorPaginated } from "@/types/cursor/cursor-paginated";
 import { Contact } from "@/types/user/contact";
 
 import { computed, ref } from "vue";
 import { useConversations } from "./useConversations";
+import { useMessages } from "./useMessages";
+import { useContacts } from "./useContacts";
+import { useCreateConvo } from "./useCreateConvo";
+import { useConvo } from "./useConvo";
 
 export function useInbox() {
 
@@ -35,38 +37,50 @@ export function useInbox() {
         loadMoreConvo,
         searchConvo,
 
-    } = useConversations()
+    } = useConversations();
+
+
+    const {
+        messageGroupList,
+        loadingMessages,
+        loadingMoreMessages,
+
+        initializeMessages,
+        loadMoreMessages,
+        resetMessageGroupList,
+    } = useMessages();
+
+
+    const {
+        contactList,
+        singleContact,
+        isMultipleContact,
+        addContact,
+        removeContact,
+        resetContactList,
+    } = useContacts();
+
+    const {
+        createModal,
+        creatingConvo,
+        createConversation,
+        toggleCreate,
+    } = useCreateConvo();
+
+    const {
+        openedConvo,
+        isNoOpenConvo,
+        assignOpenConvo,
+        resetOpenedConvo,
+    } = useConvo();
+
 
     // =====================================================
     // STATE
     // =====================================================
 
 
-
-    const openedConvo = ref<ConvoWithParticipants | null>(null);
-
-    const openedConvoMessages = ref<CursorPaginated<MessageGroup> | null>(null)
-
-
-    const createConvo = ref(false);
-    const selectedContacts = ref<Contact[]>([]);
-
     const selectedReplyMessage = ref<Message | null>(null);
-
-    // SEARCH CONVO
-
-    // Loading states
-    const openedConvoMessagesLoading = ref(false);
-    const loadMoreMessagesLoading = ref(false);
-    const loadingCreatingConvo = ref(false);
-
-    // =====================================================
-    // REQUEST TRACKING
-    // =====================================================
-
-    let messageAbortController: AbortController | null = null;
-    let loadMoreMessagesAbortController: AbortController | null = null;
-
 
     // =====================================================
     // COMPUTED
@@ -74,147 +88,38 @@ export function useInbox() {
 
     const authUser = computed(() => getAuthUser());
 
-    // =====================================================
-    // SHARED HELPERS
-    // =====================================================
-
-    /**
-     * Cancel ongoing message requests.
-     */
-    const cancelMessageRequests = () => {
-        messageAbortController?.abort();
-        loadMoreMessagesAbortController?.abort();
-
-        messageAbortController = null;
-        loadMoreMessagesAbortController = null;
-    };
-
-    /**
-     * Reset opened conversation and its messages.
-     */
-    const resetOpenedConvo = () => {
-        cancelMessageRequests();
-
-        openedConvo.value = null;
-        openedConvoMessages.value = null;
-
-        openedConvoMessagesLoading.value = false;
-        loadMoreMessagesLoading.value = false;
-    };
-
-    /**
-     * Update cursor pagination metadata.
-     */
-    const updatePagination = <T>(
-        target: CursorPaginated<T>,
-        response: CursorPaginated<T>
-    ) => {
-        target.next_cursor = response.next_cursor;
-        target.prev_cursor = response.prev_cursor;
-    };
-
-    /**
-     * Check whether an error is an aborted request.
-     */
-    const isRequestCanceled = (error: any) =>
-        error?.name === "CanceledError" ||
-        error?.code === "ERR_CANCELED";
 
     // =====================================================
     // OPEN CONVERSATION
     // =====================================================
-
-    /**
-     * Initialize messages of the opened conversation.
-     */
-    const initializeOpenedConvoMessages = async () => {
-        const convoId = openedConvo.value?.id;
-
-        if (!convoId) return;
-
-        // Cancel previous request.
-        messageAbortController?.abort();
-
-        const controller = new AbortController();
-        messageAbortController = controller;
-
-        openedConvoMessages.value = null;
-        openedConvoMessagesLoading.value = true;
-
-        try {
-            const response = await conversationService.getConvoMessages(
-                convoId,
-                { per_page: 10 },
-                controller.signal
-            );
-
-            // Ignore stale responses.
-            if (
-                controller.signal.aborted ||
-                openedConvo.value?.id !== convoId
-            ) {
-                return;
-            }
-
-            if (response.data) {
-                openedConvoMessages.value = response;
-            }
-        } catch (error) {
-            if (isRequestCanceled(error)) return;
-
-            console.error(
-                "Error initializing open convo messages",
-                error
-            );
-
-        } finally {
-            if (messageAbortController === controller) {
-                messageAbortController = null;
-                openedConvoMessagesLoading.value = false;
-            }
-
-        }
-    };
-
-    /**
-     * Open a conversation.
-     */
     const openChat = async (
         chat: ConvoWithParticipantsAndLatestMessage,
         isCreate = false
     ) => {
-
-        toggleCreateConvo(isCreate);
-
-        // Cancel previous requests.
-        cancelMessageRequests();
-
-        openedConvo.value = chat;
-        openedConvoMessages.value = null;
-
-        openedConvoMessagesLoading.value = false;
-        loadMoreMessagesLoading.value = false;
-
-        await initializeOpenedConvoMessages();
+        toggleCreate(isCreate);
+        assignOpenConvo(chat)
+        if(isNoOpenConvo) return
+        await initializeMessages(openedConvo.value!);
     };
+
+    const closeOpenConvo = () => {
+        resetOpenedConvo()
+        resetMessageGroupList()
+    };
+
 
     /**
      * Create a new conversation.
      */
-    const openCreateConvo = () => {
-        toggleCreateConvo(true);
+    const openCreateModal = () => {
+        toggleCreate(true);
+        resetOpenedConvo();
     };
 
     /**
      * Toggle conversation creation mode.
      */
-    const toggleCreateConvo = (value: boolean) => {
-        createConvo.value = value;
 
-        if (value) {
-            resetOpenedConvo();
-        }
-    };
 
     // =====================================================
     // MESSAGES
@@ -356,9 +261,9 @@ export function useInbox() {
         // Immediately display temporary message.
         if (
             openedConvo.value?.id === convoId &&
-            openedConvoMessages.value
+            messageGroupList.value
         ) {
-            const groups = openedConvoMessages.value.data;
+            const groups =  messageGroupList.value.data;
             const lastGroup = groups.at(-1);
 
             // Append to the last group if the sender is the same.
@@ -369,8 +274,8 @@ export function useInbox() {
             }
         }
 
-        createConvo.value = false;
-        selectedContacts.value = [];
+        toggleCreate(false)
+        resetContactList()
         resetReply()
 
         try {
@@ -411,91 +316,25 @@ export function useInbox() {
             console.error("Error sending message", error);
 
             // Remove temporary message if sending failed.
-            if (
-                openedConvo.value?.id === convoId &&
-                openedConvoMessages.value
-            ) {
-                const groups = openedConvoMessages.value.data;
+            // if (
+            //     openedConvo.value?.id === convoId &&
+            //     openedConvoMessages.value
+            // ) {
+            //     const groups = openedConvoMessages.value.data;
 
-                for (let i = groups.length - 1; i >= 0; i--) {
-                    const group = groups[i];
+            //     for (let i = groups.length - 1; i >= 0; i--) {
+            //         const group = groups[i];
 
-                    group.messages = group.messages.filter(
-                        message => message.client_id !== clientID
-                    );
+            //         group.messages = group.messages.filter(
+            //             message => message.client_id !== clientID
+            //         );
 
-                    // Remove empty groups.
-                    if (group.messages.length === 0) {
-                        groups.splice(i, 1);
-                    }
-                }
-            }
-        }
-    };
-
-
-    /**
-     * Load older messages.
-     */
-    const loadMoreMessages = async (
-        nextCursor?: string | null
-    ) => {
-        const convoId = openedConvo.value?.id;
-
-        if (
-            !convoId ||
-            !nextCursor ||
-            loadMoreMessagesLoading.value
-        ) {
-            return;
-        }
-
-        // Cancel previous pagination request.
-        loadMoreMessagesAbortController?.abort();
-
-        const controller = new AbortController();
-        loadMoreMessagesAbortController = controller;
-
-        loadMoreMessagesLoading.value = true;
-
-        try {
-            const response = await conversationService.getConvoMessages(
-                convoId,
-                {
-                    cursor: nextCursor,
-                    per_page: 20,
-                },
-                controller.signal
-            );
-
-            // Ignore stale responses.
-            if (
-                controller.signal.aborted ||
-                openedConvo.value?.id !== convoId
-            ) {
-                return;
-            }
-
-            if (response.data && openedConvoMessages.value) {
-                openedConvoMessages.value.data.unshift(
-                    ...response.data
-                );
-
-                updatePagination(
-                    openedConvoMessages.value,
-                    response
-                );
-            }
-        } catch (error) {
-            if (isRequestCanceled(error)) return;
-
-            console.error("Error loading conversation messages", error);
-        } finally {
-            if (loadMoreMessagesAbortController === controller) {
-                loadMoreMessagesAbortController = null;
-                loadMoreMessagesLoading.value = false;
-            }
-     
+            //         // Remove empty groups.
+            //         if (group.messages.length === 0) {
+            //             groups.splice(i, 1);
+            //         }
+            //     }
+            // }
         }
     };
 
@@ -517,84 +356,45 @@ export function useInbox() {
     // =====================================================
     // CONTACTS
     // =====================================================
-
-    /**
-     * Sync opened conversation based on selected contacts.
-     */
+    
     const syncSelectedContactChat = () => {
-        if (selectedContacts.value.length === 1) {
-            const contact = selectedContacts.value[0];
-
-            if (contact.private_conversation) {
-                openChat(contact.private_conversation, true);
-                return;
-            }
-        }
+        const isNotSingleContact = singleContact.value === null;
 
         resetOpenedConvo();
+
+        if(isNotSingleContact) return
+        if(!singleContact.value.private_conversation) return
+        openChat(singleContact.value.private_conversation, true)
     };
+
+
 
     /**
      * Add contact to selection.
      */
-    const addContact = (user: Contact) => {
-        if (!createConvo.value) return;
-
-        const exists = selectedContacts.value.some(
-            contact => contact.id === user.id
-        );
-
-        if (exists) return;
-
-        selectedContacts.value.push(user);
-
+    const addNewContact = (contact: Contact) => {
+        if (!createModal.value) return;
+        addContact(contact);
         syncSelectedContactChat();
     };
 
     /**
      * Remove contact from selection.
      */
-    const removeContact = (user: Contact) => {
-        if (!createConvo.value) return;
-
-        selectedContacts.value = selectedContacts.value.filter(
-            contact => contact.id !== user.id
-        );
-
+    const removeExistingContact = (contact: Contact) => {
+        if (!createModal.value) return;
+        removeContact(contact);
         syncSelectedContactChat();
     };
 
     /**
      * Create a new conversation with selected contacts.
      */
-    const createConversation = async () => {
-
-        if (!createConvo.value || selectedContacts.value.length === 0 ||  loadingCreatingConvo.value) {
-            return;
-        }
-
-        loadingCreatingConvo.value=true;
-
-        const contactIds = selectedContacts.value.map(
-            contact => contact.id
-        );
-
-        const isSingleContact = contactIds.length === 1;
-
-        try {
-            const response = await conversationService.storeConvo(
-                contactIds,
-                isSingleContact ? Type.Private : Type.Group
-            );
-
-            const chat = response.data;
-            openChat(chat, false);
-            updateSelectedConvo(chat.latest_message, chat);
-        } catch (error) {
-            console.error("Error creating conversation", error);
-        }finally{
-            loadingCreatingConvo.value = false;
-        }
+    const createNewConversation = async () => {
+        const chat = await createConversation(contactList.value)
+        if(!chat) return
+        openChat(chat, false);
+        updateSelectedConvo(chat.latest_message, chat);
     }
     
     // =====================================================
@@ -602,7 +402,7 @@ export function useInbox() {
     // =====================================================
 
     return {
-        // SIDEBAR
+        // conversations
         conversationList,
         loadingConvos,
         loadingMoreConvos,
@@ -612,34 +412,39 @@ export function useInbox() {
         searchConvo,
 
 
-        openedConvo,
-
-        // Message state
-        openedConvoMessages,
-        openedConvoMessagesLoading,
-        loadMoreMessagesLoading,
-
-        // Create conversation state
-        createConvo,
-        selectedContacts,
-
-        openChat,
-        openCreateConvo,
-        toggleCreateConvo,
-
-        // Message actions
-        initializeOpenedConvoMessages,
-        isOwnerChat,
-        sendMessage,
+        // Messages
+        messageGroupList,
+        loadingMessages,
+        loadingMoreMessages,
+        initializeMessages,
         loadMoreMessages,
 
-        // Contact actions
-        addContact,
-        removeContact,
 
-        // create conversation action
-        createConversation,
-        loadingCreatingConvo,
+        // CONTACTS
+        contactList,
+        singleContact,
+        isMultipleContact,
+        addNewContact,
+        removeExistingContact,
+
+
+        // CREATE CONVO
+        openCreateModal,
+        createModal,
+        creatingConvo,
+        createNewConversation,
+
+
+
+        openedConvo,
+
+
+
+        openChat,
+
+        // Message actions
+        isOwnerChat,
+        sendMessage,
 
         // reply message
         selectedReplyMessage,

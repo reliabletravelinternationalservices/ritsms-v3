@@ -20,7 +20,7 @@ const emit = defineEmits<{
 
 <template>
     <div class="p-4 text-foreground space-y-2">
-        <UserSearch @select="emit('select')" />
-        <SelectedContact :contacts="contacts" @remove="emit('remove')" />
+        <UserSearch @select="emit('select', $event)" />
+        <SelectedContact :contacts="contacts" @remove="emit('remove', $event)" />
     </div>
 </template>

@@ -60,83 +60,121 @@ const isYou = computed(() => authUser.value.id === props.chat.latest_message.sen
 const senderName = computed(() => isYou.value ? 'You: ' : getFirstName(props.chat.latest_message.sender!.display_name) + ': ')
 </script>
 
+
 <template>
-    <button @click="emit('click', props.chat)"
-        class="group relative w-full rounded-md border border-transparent p-2 text-left transition-all duration-200"
+    <button
+        @click="emit('click', props.chat)"
+        class="group relative block w-full min-w-0 max-w-full overflow-hidden rounded-md border border-transparent p-2 text-left transition-all duration-200"
         :class="isOpen
             ? 'border-[#edbd53]/30 bg-[#edbd53]/10'
-            : 'hover:bg-muted/60'">
+            : 'hover:bg-muted/60'"
+    >
         <!-- ACTIVE INDICATOR -->
-        <span v-if="isOpen" class="absolute left-0 top-2 bottom-2 w-1 rounded-full bg-[#edbd53]" />
+        <span
+            v-if="isOpen"
+            class="absolute bottom-2 left-0 top-2 w-1 rounded-full bg-[#edbd53]"
+        />
 
-        <div class="flex items-center gap-2">
-            <div>
-                <Avatar class="h-12 w-12 overflow-hidden rounded-circle border border-sidebar-border bg-sidebar">
-                    <AvatarImage v-if="avatar" :src="avatar" :alt="name" />
-                    <AvatarFallback class="rounded-circle text-white">
-                        <GroupAvatarPlaceholder v-if="isGroup" class="aspect-square h-full w-full" />
-                        <AvatarPlaceholder v-else class="aspect-square h-full w-full" />
-                    </AvatarFallback>
-                </Avatar>
-            </div>
+        <div class="flex w-full min-w-0 items-center gap-2">
 
-            <div class="w-full min-w-0">
+            <!-- AVATAR -->
+            <Avatar class="h-12 w-12 shrink-0 overflow-hidden rounded-circle border border-sidebar-border bg-sidebar">
+                <AvatarImage v-if="avatar" :src="avatar" :alt="name" />
+
+                <AvatarFallback class="rounded-circle text-white">
+                    <GroupAvatarPlaceholder
+                        v-if="isGroup"
+                        class="aspect-square h-full w-full"
+                    />
+                    <AvatarPlaceholder
+                        v-else
+                        class="aspect-square h-full w-full"
+                    />
+                </AvatarFallback>
+            </Avatar>
+
+            <!-- CONTENT -->
+            <div class="min-w-0 flex-1">
+
                 <!-- HEADER -->
-                <div class="flex items-center justify-between gap-2">
-                    <span class="truncate" :class="isOpen
-                        ? 'font-bold text-foreground'
-                        : 'font-semibold text-foreground'">
+                <div class="flex min-w-0 w-full items-center justify-between gap-2">
+                    <span
+                        class="min-w-0 flex-1 truncate"
+                        :class="isOpen
+                            ? 'font-bold text-foreground'
+                            : 'font-semibold text-foreground'"
+                    >
                         {{ name }}
                     </span>
 
-                    <span v-if="totalUnreadMessage > 0"
-                        class="flex h-4 w-4 shrink-0 items-center justify-center rounded-lg bg-red-600 p-1 text-xs text-white">
+                    <span
+                        v-if="totalUnreadMessage > 0"
+                        class="flex h-4 shrink-0 items-center justify-center rounded-lg bg-red-600 px-1 text-xs text-white"
+                    >
                         {{ totalUnreadMessage }}
                     </span>
                 </div>
 
                 <!-- LATEST MESSAGE -->
-                <div class="flex min-w-0 items-center gap-2">
-                    <p class="flex min-w-0 flex-1 items-center gap-1 truncate text-sm" :class="[
-                        latestMessage.type === MessageType.System
-                            ? 'italic text-muted-foreground'
-                            : 'text-muted-foreground',
-                        isNotRead && 'font-semibold text-foreground'
-                    ]">
+                <div class="flex min-w-0 w-full items-center gap-2">
+
+                    <p
+                        class="flex min-w-0 flex-1 items-center gap-1 overflow-hidden text-sm"
+                        :class="[
+                            latestMessage.type === MessageType.System
+                                ? 'italic text-muted-foreground'
+                                : 'text-muted-foreground',
+                            isNotRead && 'font-semibold text-foreground'
+                        ]"
+                    >
                         <!-- SYSTEM -->
                         <template v-if="latestMessage.type === MessageType.System">
-                            <span class="truncate">{{ latestMessage.body }}</span>
+                            <span class="min-w-0 flex-1 truncate">
+                                {{ latestMessage.body }}
+                            </span>
                         </template>
 
                         <!-- IMAGE -->
                         <template v-else-if="latestMessage.type === MessageType.Image">
                             <Image class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ senderName }}Sent an image</span>
+                            <span class="min-w-0 truncate">
+                                {{ senderName }}Sent an image
+                            </span>
                         </template>
 
                         <!-- VIDEO -->
                         <template v-else-if="latestMessage.type === MessageType.Video">
                             <Video class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ senderName }}Sent a video</span>
+                            <span class="min-w-0 truncate">
+                                {{ senderName }}Sent a video
+                            </span>
                         </template>
 
                         <!-- FILE -->
                         <template v-else-if="latestMessage.type === MessageType.File">
                             <Paperclip class="h-3.5 w-3.5 shrink-0" />
-                            <span class="truncate">{{ senderName }}Sent a file</span>
+                            <span class="min-w-0 truncate">
+                                {{ senderName }}Sent a file
+                            </span>
                         </template>
 
                         <!-- TEXT -->
                         <template v-else>
-                            <span v-if="isYou || isGroup">
+                            <span v-if="isYou || isGroup" class="shrink-0">
                                 {{ senderName }}
                             </span>
-                            <span class="truncate">{{ latestMessage.body }}</span>
+
+                            <span class="min-w-0 flex-1 truncate">
+                                {{ latestMessage.body }}
+                            </span>
                         </template>
                     </p>
 
                     <!-- SENT TIME -->
-                    <span v-if="latestMessage.sent_at" class="shrink-0 text-xs text-muted-foreground">
+                    <span
+                        v-if="latestMessage.sent_at"
+                        class="shrink-0 whitespace-nowrap text-xs text-muted-foreground"
+                    >
                         {{ formatTimeAgo(latestMessage.sent_at) }}
                     </span>
                 </div>

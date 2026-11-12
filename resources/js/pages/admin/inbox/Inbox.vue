@@ -36,25 +36,34 @@ const {
     loadingConvos,
     loadingMoreConvos,
     searchingConvos,
-    
     initializeConvos,
     loadMoreConvo,
     searchConvo,
     
+    messageGroupList,
+    loadingMessages,
+    loadingMoreMessages,
+    loadMoreMessages,
+
+    contactList,
+    singleContact,
+    isMultipleContact,
+    addNewContact,
+    removeExistingContact,
+
+    // CREATE CONVO
+    openCreateModal,
+    creatingConvo,
+    createModal,
+    createNewConversation,
+
+
+
     openedConvo,
     openChat,
-    openedConvoMessages,
-    openedConvoMessagesLoading,
-    loadMoreMessagesLoading,
+
     sendMessage,
-    createConvo,
-    openCreateConvo,
-    loadMoreMessages,
-    addContact,
-    removeContact,
-    selectedContacts,
-    createConversation,
-    loadingCreatingConvo,
+
     selectedReplyMessage,
     replyMessage,
     resetReply,
@@ -74,17 +83,24 @@ onMounted(async () => {
     <Head title="Inbox" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
-            <Sidebar @create="openCreateConvo" @search="searchConvo">
+            <Sidebar @create="openCreateModal" @search="searchConvo">
                 <SidebarBody 
                     v-if="conversationList && conversationList.data" 
                     :loading="loadingMoreConvos"
                     :has-more="Boolean(conversationList.next_cursor)"
                     @load="loadMoreConvo(conversationList?.next_cursor)">
 
-                    <ul class="mt-2 space-y-1 w-full">
-                        <li v-for="chat in conversationList.data" :key="chat.id"
-                            class="cursor-pointer rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground">
-                            <ChatButton :is-open="chat.id === openedConvo?.id" :chat="chat" @click="openChat" />
+                   <ul class="mt-2 flex w-full min-w-0 flex-col space-y-1">
+                        <li
+                            v-for="chat in conversationList.data"
+                            :key="chat.id"
+                            class="w-full min-w-0 overflow-hidden rounded-md px-2 py-1"
+                        >
+                            <ChatButton
+                                :is-open="chat.id === openedConvo?.id"
+                                :chat="chat"
+                                @click="openChat"
+                            />
                         </li>
                     </ul>
                 </SidebarBody>
@@ -105,21 +121,23 @@ onMounted(async () => {
             <InboxBody>
                 <ChatContent>
                     <ChatHeader 
-                        v-if="!createConvo && openedConvo" 
+                        v-if="!createModal && openedConvo" 
                         :chat="openedConvo" 
                         @info="() => { }" 
                     />
 
                     <CreateHeader 
-                        v-if="createConvo" 
-                        :contacts="selectedContacts" 
-                        @select="addContact" 
-                        @remove="removeContact"
+                        v-if="createModal" 
+                        :contacts="contactList" 
+                        @select="addNewContact" 
+                        @remove="removeExistingContact"
                     />
 
-                    <InfiniteScroll v-if="openedConvoMessages" class="py-2 w-full h-full overflow-y-auto"
-                        :loading="loadMoreMessagesLoading" :has-more="Boolean(openedConvoMessages.next_cursor)" @load="loadMoreMessages(openedConvoMessages.next_cursor)" direction="bottom-to-top">
-                        <ChatList v-for="messageBatch in openedConvoMessages.data" :key="messageBatch.id">
+                    <InfiniteScroll v-if="messageGroupList" class="py-2 w-full h-full overflow-y-auto"
+                        :loading="loadingMoreMessages" 
+                        :has-more="Boolean(messageGroupList.next_cursor)" 
+                        @load="loadMoreMessages(openedConvo, messageGroupList.next_cursor)" direction="bottom-to-top">
+                        <ChatList v-for="messageBatch in messageGroupList.data" :key="messageBatch.id">
                             <ChatBubble 
                                 :messageBatch="messageBatch" 
                                 @reply="replyMessage"
@@ -128,25 +146,25 @@ onMounted(async () => {
                     </InfiniteScroll>
                     
                     <CreateConvo 
-                        v-else-if="selectedContacts.length === 1 && selectedContacts[0].private_conversation === null"
-                        :message="`Start a conversation with ${selectedContacts[0].display_name}`"
+                        v-else-if="singleContact"
+                        :message="`Start a conversation with ${singleContact.display_name}`"
                         button-label="Start now"
                         loading-text="Starting..."
-                        :loading="loadingCreatingConvo"
-                        @create="createConversation"
+                        :loading="creatingConvo"
+                        @create="createNewConversation"
                     /> 
 
                     <CreateConvo
-                        v-else-if="selectedContacts.length > 1"
+                        v-else-if="isMultipleContact"
                         message="Create a group conversation"
                         button-label="Create now"
                         loading-text="Creating..."
-                        :loading="loadingCreatingConvo"
-                        @create="createConversation"
+                        :loading="creatingConvo"
+                        @create="createNewConversation"
                     />
 
                     <ChatPlaceholder v-else>
-                        <LoadingData v-if="openedConvoMessagesLoading" />
+                        <LoadingData v-if="loadingMessages" />
 
                         <EmptyPlaceholder
                             v-else
@@ -156,13 +174,17 @@ onMounted(async () => {
                     </ChatPlaceholder>
                     
                     <ChatComposer 
-                        v-if="!openedConvoMessagesLoading && openedConvo" 
+                        v-if="!loadingMessages && openedConvo" 
                         :is-reply="selectedReplyMessage!==null"
                         :reply-message="selectedReplyMessage"
                         @cancel-reply="resetReply"
                         @send="sendMessage" />
                 </ChatContent>
             </InboxBody>
+
+
+
+
 
             <div
                 class="flex h-[calc(100vh-80px)] w-1/4 shrink-0 flex-col gap-5 overflow-y-auto border-l bg-background p-4 text-foreground"

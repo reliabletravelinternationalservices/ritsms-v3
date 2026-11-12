@@ -139,7 +139,7 @@ const sendMessage = () => {
 </script>
 
 <template>
-    <div class="w-full self-end border-t border-border bg-background p-3 sm:p-4">
+    <div class="self-end border-t border-border bg-background p-3 sm:p-4 min-w-0 w-full shrink-0">
 
         <!-- File Picker -->
         <input
@@ -161,16 +161,16 @@ const sendMessage = () => {
                 leave-from-class="opacity-100 translate-y-0"
                 leave-to-class="opacity-0 -translate-y-1"
             >
-                <div
+               <div
                     v-if="isReply && replyMessage"
-                    class="flex min-w-0 items-center gap-3 rounded-lg border border-border bg-muted/30 p-3"
+                    class="flex min-w-0 w-fill items-center gap-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-3"
                 >
                     <!-- Accent Line -->
                     <div class="h-10 w-1 shrink-0 rounded-full bg-yellow-500" />
 
                     <!-- Reply Information -->
-                    <div class="min-w-0 flex-1 space-y-0.5">
-                        <p class="text-xs font-semibold text-foreground">
+                    <div class="min-w-0 flex-1 overflow-hidden space-y-0.5">
+                        <p class="truncate text-xs font-semibold text-foreground">
                             Replying to {{ replySender }}
                         </p>
 

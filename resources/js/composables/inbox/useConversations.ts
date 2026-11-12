@@ -1,4 +1,4 @@
-import { isLoading, isRequestCanceled, isSameRequestAbort, updatePagination } from "@/lib/utils";
+import { isRequestCanceled, isSameRequestAbort, updatePagination } from "@/lib/utils";
 import { conversationService as convoService } from "@/services/conversationService";
 import { ConvoWithParticipantsAndLatestMessage } from "@/types/convo/conversation";
 import { CursorPaginated, CursorPaginatedFiltersWithSearch } from "@/types/cursor/cursor-paginated";
@@ -32,7 +32,6 @@ export function useConversations() {
 
     // INITIALIZE CONVERSATIONS
     const initializeConvos = async () => {
-        if (isLoading(loadingConvos.value)) return;
 
         const controller = initializeConvoRequestAbort()
 
@@ -45,7 +44,6 @@ export function useConversations() {
             controller.signal
         );
         
-        console.log(conversationList.value)
         if (isSameRequestAbort(convoAbortController, controller)) {
             endConvoListLoading()
         }
@@ -55,25 +53,21 @@ export function useConversations() {
         conversationList.value = null;
     }
 
-    const startConvoListLoading=()=>{
-        resetConversationList()
-        loadingConvos.value = true;
-    }
-
-    const endConvoListLoading=()=>{
-        resetConvoRequestAbort()
-        loadingConvos.value = false;
-    }
 
 
 
-    // LOAD MORE CONVO
+
+
+
+    // =====================================
+    // LOAD CONVO
+    // =====================================
     const loadMoreConvo = async (
         nextCursor?: string | null
     ) => {
 
         const hasNextCursor = nextCursor !== null;
-        if (isLoading(loadingMoreConvos.value) || hasNextCursor) return;
+        if (hasNextCursor) return;
         
         const controller = initializeLoadMoreConvoRequestAbort();
 
@@ -97,15 +91,6 @@ export function useConversations() {
         }
     };
 
-    const startLoadingMoreConvo=()=>{
-        loadingMoreConvos.value = true;
-    }
-
-    const endLoadingMoreConvo=()=>{
-        resetLoadingMoreConvoRequestAbort()
-        loadingConvos.value = false;
-    }
-
     const addConversationListData=(data:ConvoWithParticipantsAndLatestMessage[])=>{
         conversationList.value!.data.push(...data);
     }
@@ -120,9 +105,9 @@ export function useConversations() {
 
 
 
-
-
+    // =====================================
     // SEARCH CONVO
+    // =====================================
     const searchConvo = async (value?: string) => {
         const search = value?.trim();
         
@@ -169,6 +154,32 @@ export function useConversations() {
 
     
     
+
+
+
+
+    // =====================================
+    // LOADING STATES
+    // =====================================
+    const startLoadingMoreConvo=()=>{
+        loadingMoreConvos.value = true;
+    }
+
+    const endLoadingMoreConvo=()=>{
+        resetLoadMoreConvoRequestAbort()
+        loadingConvos.value = false;
+    }
+    
+    const startConvoListLoading=()=>{
+        resetConversationList()
+        loadingConvos.value = true;
+    }
+
+    const endConvoListLoading=()=>{
+        resetConvoRequestAbort()
+        loadingConvos.value = false;
+    }
+
     const startSearchingLoading=()=>{
         resetConversationList()
         searchingConvos.value = true;
@@ -181,11 +192,10 @@ export function useConversations() {
 
 
 
-
-
     
-
+    // =====================================
     // REQUEST ABORT FUNCTIONS
+    // =====================================
     const initializeConvoRequestAbort=()=>{
         convoAbortController?.abort()
         const controller = new AbortController();
@@ -211,10 +221,9 @@ export function useConversations() {
         convoAbortController = null;
     }
 
-    const resetLoadingMoreConvoRequestAbort=()=>{
+    const resetLoadMoreConvoRequestAbort=()=>{
         convoLoadMoreAbortController = null;
     }
-
 
     const resetSearchConvoRequestAbort=()=>{
         convoSearchAbortController = null;
@@ -232,6 +241,8 @@ export function useConversations() {
     ) {
         try {
             const response = await convoService.getConvos(filters, signal);
+            
+            if(signal?.aborted) return null;
 
             return response.data ? response : null;
 
