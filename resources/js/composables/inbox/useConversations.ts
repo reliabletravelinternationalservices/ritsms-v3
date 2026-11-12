@@ -171,7 +171,7 @@ export function useConversations() {
 
     const endLoadingMoreConvo=()=>{
         resetLoadMoreConvoRequestAbort()
-        loadingConvos.value = false;
+        loadingMoreConvos.value = false;
     }
     
     const startConvoListLoading=()=>{
