@@ -82,7 +82,7 @@ class MessageGroupingService
         // Maximum one-minute difference.
         return $previous->sent_at->diffInSeconds(
             $message->sent_at
-        ) <= 60;
+        ) <= 300;
     }
 
     private function getType(ConversationMessage $message): string

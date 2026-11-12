@@ -16,6 +16,8 @@ export function useConversations() {
     // search convo
     const oldConversationList = ref<CursorPaginated<ConvoWithParticipantsAndLatestMessage> | null>(null);
     const searchingConvos = ref(false);
+
+    const searchFlag = ref<string | null>(null);
     
     let convoAbortController: AbortController | null = null;
     let convoLoadMoreAbortController: AbortController | null = null;
@@ -58,16 +60,15 @@ export function useConversations() {
 
 
 
-
     // =====================================
     // LOAD CONVO
     // =====================================
     const loadMoreConvo = async (
         nextCursor?: string | null
     ) => {
-
-        const hasNextCursor = nextCursor !== null;
-        if (hasNextCursor) return;
+        
+        const isNoNextCursor = nextCursor === null;
+        if (isNoNextCursor) return;
         
         const controller = initializeLoadMoreConvoRequestAbort();
 
@@ -82,18 +83,18 @@ export function useConversations() {
         )
 
         if (!isNoConvoOnList.value && response) {
-            addConversationListData(response.data)
+            conversationList.value!.data.push(...response.data);
             updatePagination(conversationList.value!, response);
+            
         }
         
         if(isSameRequestAbort(convoLoadMoreAbortController, controller)){
             endLoadingMoreConvo()
         }
+
+        console.log(conversationList.value)
     };
 
-    const addConversationListData=(data:ConvoWithParticipantsAndLatestMessage[])=>{
-        conversationList.value!.data.push(...data);
-    }
 
     const assignConversationListValue=(value: CursorPaginated<ConvoWithParticipantsAndLatestMessage> )=>{
         conversationList.value = value
@@ -113,6 +114,8 @@ export function useConversations() {
         
         // Restore original conversations
         if (!search) {
+            searchFlag.value = null
+
             convoSearchAbortController?.abort();
             convoSearchAbortController = null;
 
@@ -122,11 +125,12 @@ export function useConversations() {
             searchingConvos.value = false;
             return;
         }
-
+        
         if (isNoOldConvoOnList.value) {
             saveOldConvo()
         }
 
+        searchFlag.value = search
         const controller = initializeSearchConvoRequestAbort()
         startSearchingLoading()
 
@@ -260,6 +264,7 @@ export function useConversations() {
         loadingConvos,
         loadingMoreConvos,
         searchingConvos,
+        searchFlag,
         initializeConvos,
         loadMoreConvo,
         searchConvo,

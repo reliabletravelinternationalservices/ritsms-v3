@@ -1,18 +1,14 @@
 
 import {
-    generateClientId,
-    generateTempMessageId,
     getAuthUser,
 } from "@/lib/utils";
 
-import { conversationService } from "@/services/conversationService";
 
 import {
-    ConvoWithParticipants,
     ConvoWithParticipantsAndLatestMessage,
 } from "@/types/convo/conversation";
 
-import { Message, MessageGroup, Type as MessageType } from "@/types/convo/message";
+import { Message} from "@/types/convo/message";
 import { Contact } from "@/types/user/contact";
 
 import { computed, ref } from "vue";
@@ -21,6 +17,7 @@ import { useMessages } from "./useMessages";
 import { useContacts } from "./useContacts";
 import { useCreateConvo } from "./useCreateConvo";
 import { useConvo } from "./useConvo";
+import { useCreateMessage } from "./useCreateMessage";
 
 export function useInbox() {
 
@@ -44,6 +41,7 @@ export function useInbox() {
         messageGroupList,
         loadingMessages,
         loadingMoreMessages,
+        isNoMessageGroupList,
 
         initializeMessages,
         loadMoreMessages,
@@ -72,8 +70,16 @@ export function useInbox() {
         isNoOpenConvo,
         assignOpenConvo,
         resetOpenedConvo,
+        updateSelectedConvo,
     } = useConvo();
 
+    const {
+        createTempMessage,
+        storeTempMessageLocally,
+        storeMessage,
+        replaceTempMessage,
+        removeTempMessage,
+    } = useCreateMessage()
 
     // =====================================================
     // STATE
@@ -98,7 +104,7 @@ export function useInbox() {
     ) => {
         toggleCreate(isCreate);
         assignOpenConvo(chat)
-        if(isNoOpenConvo) return
+        if(isNoOpenConvo.value) return
         await initializeMessages(openedConvo.value!);
     };
 
@@ -108,235 +114,79 @@ export function useInbox() {
     };
 
 
-    /**
-     * Create a new conversation.
-     */
+    // =====================================================
+    // OPEN CREATE MODAL
+    // =====================================================
     const openCreateModal = () => {
         toggleCreate(true);
-        resetOpenedConvo();
+        closeOpenConvo()
     };
-
-    /**
-     * Toggle conversation creation mode.
-     */
 
 
     // =====================================================
-    // MESSAGES
+    // CHECK OWNER CHAT
     // =====================================================
-
-    /**
-     * Check if can appent to last message group.
-     */
-
-    const canAppendToLastGroup = (
-        lastGroup: MessageGroup | undefined,
-        message: Message
-    ): boolean => {
-        if (!lastGroup?.sender || !message.sender) {
-            return false;
-        }
-
-        // Same sender
-        if (lastGroup.sender.id !== message.sender.id) {
-            return false;
-        }
-
-        const lastMessage = lastGroup.messages.at(-1);
-
-        if (!lastMessage?.sent_at || !message.sent_at) {
-            return false;
-        }
-
-        const lastTime = new Date(lastMessage.sent_at).getTime();
-        const currentTime = new Date(message.sent_at).getTime();
-
-        if (!Number.isFinite(lastTime) || !Number.isFinite(currentTime)) {
-            return false;
-        }
-
-        const difference = currentTime - lastTime;
-
-        // Same sender, chronological order, within 5 minutes
-        return difference >= 0 && difference <= 5 * 60 * 1000;
-    };
-
-    /**
-     * Check if message belongs to authenticated user.
-     */
     const isOwnerChat = (message: Message) =>
         Number(message.sender?.id) === Number(authUser.value.id);
 
-    /**
-     * Create optimistic message.
-     */
-    const createTempMessage = (
-        message: string,
-        clientID: string
-    ): Message => ({
-        id: generateTempMessageId(),
-        client_id: clientID,
-        sender: {
-            id: authUser.value.id,
-            display_name: authUser.value.display_name,
-            avatar: authUser.value.avatar,
-            role: authUser.value.role,
-        },
-        body: message,
-        type: MessageType.Text,
-        reply_to: null,
-        sent_at: new Date().toISOString(),
-        is_edited: false,
-        is_read: false,
-        deleted_at: null,
-    });
-
-    const createNewBatch = (message: Message): MessageGroup => ({
-        id: typeof message.id === 'number' ? message.id : generateTempMessageId(),
-        sender: message.sender,
-        sent_at: message.sent_at,
-        messages: [message],
-    });
-
-    /**
-     * Update conversation position and latest message.
-     */
-    const updateSelectedConvo = (
-        message: Message,
-        convo: ConvoWithParticipantsAndLatestMessage
-    ) => {
-        const conversations = oldConversationList.value
-            ? oldConversationList.value.data
-            : conversationList.value?.data;
-
-        if (!conversations) return;
-
-        const index = conversations.findIndex(
-            item => item.id === convo.id
-        );
-
-        if (index !== -1) {
-            conversations.splice(index, 1);
-        }
 
 
-        const participants = convo.participants;
+    
 
-        const senderIndex = participants.findIndex(
-            p => p.participant.id === message.sender?.id
-        );
-
-        if (senderIndex !== -1) {
-            participants[senderIndex].last_read_at = new Date().toISOString();
-            participants[senderIndex].total_unread = 0;
-        }
-
-        conversations.unshift({
-            ...convo,
-            latest_message: message,
-            participants,
-        });
-    };
-
-    /**
-     * Send a message with optimistic UI.
-     */
-
+    // =====================================================
+    // MESSAGES
+    // ==================================================
     const sendMessage = async (payload: {
         message: string;
         attachments: File[];
     }) => {
-        const convo = openedConvo.value;
 
-        if (!convo) return;
-
-        const convoId = convo.id;
-        const clientID = generateClientId();
+        if (isNoMessageGroupList.value || isNoOpenConvo.value) return
 
         const tempMessage = createTempMessage(
+            authUser.value,
             payload.message,
-            clientID
+            payload.attachments,
         );
 
-        // Immediately display temporary message.
-        if (
-            openedConvo.value?.id === convoId &&
-            messageGroupList.value
-        ) {
-            const groups =  messageGroupList.value.data;
-            const lastGroup = groups.at(-1);
+        const convo = openedConvo.value;
 
-            // Append to the last group if the sender is the same.
-            if (lastGroup && canAppendToLastGroup(lastGroup, tempMessage)) {
-                lastGroup.messages.push(tempMessage);
-            } else {
-                groups.push(createNewBatch(tempMessage));
+        storeTempMessageLocally(messageGroupList.value!.data, tempMessage)
+
+        const message = await storeMessage(convo!.id, {
+            client_id: tempMessage.client_id!,
+            message: tempMessage.body!,
+            attachments: payload.attachments,
+        })
+
+
+
+        if(message){
+            replaceTempMessage(messageGroupList.value!.data, tempMessage)
+
+            const conversations = oldConversationList.value
+                ? oldConversationList.value
+                : conversationList.value
+
+            if(conversations){
+
+                updateSelectedConvo(
+                    conversations.data,
+                    message,
+                    convo!
+                );
             }
+
+        }else{
+            removeTempMessage(messageGroupList.value!.data, tempMessage)
         }
 
         toggleCreate(false)
         resetContactList()
         resetReply()
-
-        try {
-            const response = await conversationService.storeConvoMessage(
-                convoId,
-                {
-                    ...payload,
-                    client_id: clientID,
-                }
-            );
-
-            // Replace temporary message with actual response.
-            if (
-                openedConvo.value?.id === convoId &&
-                openedConvoMessages.value
-            ) {
-                const groups = openedConvoMessages.value.data;
-
-                for (const group of groups) {
-                    const messageIndex = group.messages.findIndex(
-                        message => message.client_id === clientID
-                    );
-
-                    if (messageIndex !== -1) {
-                        group.messages[messageIndex] = response;
-                        break;
-                    }
-                }
-            }
-
-            // Update conversation list.
-            updateSelectedConvo(response, {
-                ...convo,
-                latest_message: response,
-            });
-
-        } catch (error) {
-            console.error("Error sending message", error);
-
-            // Remove temporary message if sending failed.
-            // if (
-            //     openedConvo.value?.id === convoId &&
-            //     openedConvoMessages.value
-            // ) {
-            //     const groups = openedConvoMessages.value.data;
-
-            //     for (let i = groups.length - 1; i >= 0; i--) {
-            //         const group = groups[i];
-
-            //         group.messages = group.messages.filter(
-            //             message => message.client_id !== clientID
-            //         );
-
-            //         // Remove empty groups.
-            //         if (group.messages.length === 0) {
-            //             groups.splice(i, 1);
-            //         }
-            //     }
-            // }
-        }
     };
+
+    
 
     
 
@@ -357,35 +207,28 @@ export function useInbox() {
     // CONTACTS
     // =====================================================
     
-    const syncSelectedContactChat = () => {
-        const isNotSingleContact = singleContact.value === null;
-
-        resetOpenedConvo();
-
-        if(isNotSingleContact) return
-        if(!singleContact.value.private_conversation) return
-        openChat(singleContact.value.private_conversation, true)
-    };
-
-
-
-    /**
-     * Add contact to selection.
-     */
     const addNewContact = (contact: Contact) => {
         if (!createModal.value) return;
         addContact(contact);
         syncSelectedContactChat();
     };
 
-    /**
-     * Remove contact from selection.
-     */
     const removeExistingContact = (contact: Contact) => {
         if (!createModal.value) return;
         removeContact(contact);
         syncSelectedContactChat();
     };
+
+    const syncSelectedContactChat = () => {
+        resetOpenedConvo()
+        resetMessageGroupList()
+
+        const isNotSingleContact = singleContact.value === null;
+        if(isNotSingleContact) return
+        if(!singleContact.value.private_conversation) return
+        openChat(singleContact.value.private_conversation, true)
+    };
+
 
     /**
      * Create a new conversation with selected contacts.
@@ -394,7 +237,13 @@ export function useInbox() {
         const chat = await createConversation(contactList.value)
         if(!chat) return
         openChat(chat, false);
-        updateSelectedConvo(chat.latest_message, chat);
+
+        const conversations = oldConversationList.value
+            ? oldConversationList.value
+            : conversationList.value
+
+        if(!conversations) return;
+        updateSelectedConvo(conversations.data, chat.latest_message, chat);
     }
     
     // =====================================================

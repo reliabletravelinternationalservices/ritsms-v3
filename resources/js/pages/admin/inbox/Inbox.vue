@@ -11,10 +11,10 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Camera, Ellipsis, Info, LogOut, Pen, Settings, Users } from '@lucide/vue';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -39,7 +39,7 @@ const {
     initializeConvos,
     loadMoreConvo,
     searchConvo,
-    
+
     messageGroupList,
     loadingMessages,
     loadingMoreMessages,
@@ -80,27 +80,19 @@ onMounted(async () => {
 
 
 <template>
+
     <Head title="Inbox" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <InboxContent>
             <Sidebar @create="openCreateModal" @search="searchConvo">
-                <SidebarBody 
-                    v-if="conversationList && conversationList.data" 
-                    :loading="loadingMoreConvos"
+                <SidebarBody v-if="conversationList && conversationList.data" :loading="loadingMoreConvos"
                     :has-more="Boolean(conversationList.next_cursor)"
-                    @load="loadMoreConvo(conversationList?.next_cursor)">
+                    @load="loadMoreConvo(conversationList.next_cursor)">
 
-                   <ul class="mt-2 flex w-full min-w-0 flex-col space-y-1">
-                        <li
-                            v-for="chat in conversationList.data"
-                            :key="chat.id"
-                            class="w-full min-w-0 overflow-hidden rounded-md px-2 py-1"
-                        >
-                            <ChatButton
-                                :is-open="chat.id === openedConvo?.id"
-                                :chat="chat"
-                                @click="openChat"
-                            />
+                    <ul class="mt-2 flex w-full min-w-0 flex-col space-y-1">
+                        <li v-for="chat in conversationList.data" :key="chat.id"
+                            class="w-full min-w-0 overflow-hidden rounded-md px-2 py-1">
+                            <ChatButton :is-open="chat.id === openedConvo?.id" :chat="chat" @click="openChat" />
                         </li>
                     </ul>
                 </SidebarBody>
@@ -108,11 +100,8 @@ onMounted(async () => {
                 <SidebarBodyPlaceholder v-else>
                     <LoadingData v-if="loadingConvos || searchingConvos" />
 
-                    <EmptyPlaceholder
-                        v-else
-                        class="flex flex-col items-center justify-center gap-2 h-full"
-                        label="Start a new conversation"
-                    />
+                    <EmptyPlaceholder v-else class="flex flex-col items-center justify-center gap-2 h-full"
+                        label="Start a new conversation" />
 
                 </SidebarBodyPlaceholder>
 
@@ -120,65 +109,37 @@ onMounted(async () => {
 
             <InboxBody>
                 <ChatContent>
-                    <ChatHeader 
-                        v-if="!createModal && openedConvo" 
-                        :chat="openedConvo" 
-                        @info="() => { }" 
-                    />
+                    <ChatHeader v-if="!createModal && openedConvo" :chat="openedConvo" @info="() => { }" />
 
-                    <CreateHeader 
-                        v-if="createModal" 
-                        :contacts="contactList" 
-                        @select="addNewContact" 
-                        @remove="removeExistingContact"
-                    />
+                    <CreateHeader v-if="createModal" :contacts="contactList" @select="addNewContact"
+                        @remove="removeExistingContact" />
 
                     <InfiniteScroll v-if="messageGroupList" class="py-2 w-full h-full overflow-y-auto"
-                        :loading="loadingMoreMessages" 
-                        :has-more="Boolean(messageGroupList.next_cursor)" 
+                        :loading="loadingMoreMessages" :has-more="Boolean(messageGroupList.next_cursor)"
                         @load="loadMoreMessages(openedConvo, messageGroupList.next_cursor)" direction="bottom-to-top">
                         <ChatList v-for="messageBatch in messageGroupList.data" :key="messageBatch.id">
-                            <ChatBubble 
-                                :messageBatch="messageBatch" 
-                                @reply="replyMessage"
-                            />
+                            <ChatBubble :messageBatch="messageBatch" @reply="replyMessage" />
                         </ChatList>
                     </InfiniteScroll>
-                    
-                    <CreateConvo 
-                        v-else-if="singleContact"
-                        :message="`Start a conversation with ${singleContact.display_name}`"
-                        button-label="Start now"
-                        loading-text="Starting..."
-                        :loading="creatingConvo"
-                        @create="createNewConversation"
-                    /> 
 
-                    <CreateConvo
-                        v-else-if="isMultipleContact"
-                        message="Create a group conversation"
-                        button-label="Create now"
-                        loading-text="Creating..."
-                        :loading="creatingConvo"
-                        @create="createNewConversation"
-                    />
+                    <CreateConvo v-else-if="singleContact"
+                        :message="`Start a conversation with ${singleContact.display_name}`" button-label="Start now"
+                        loading-text="Starting..." :loading="creatingConvo" @create="createNewConversation" />
+
+                    <CreateConvo v-else-if="isMultipleContact" message="Create a group conversation"
+                        button-label="Create now" loading-text="Creating..." :loading="creatingConvo"
+                        @create="createNewConversation" />
 
                     <ChatPlaceholder v-else>
                         <LoadingData v-if="loadingMessages" />
 
-                        <EmptyPlaceholder
-                            v-else
+                        <EmptyPlaceholder v-else
                             class="flex flex-col items-center justify-center gap-2 h-full w-full text-muted-foreground"
-                            label="Select a conversation"
-                        />
+                            label="Select a conversation" />
                     </ChatPlaceholder>
-                    
-                    <ChatComposer 
-                        v-if="!loadingMessages && openedConvo" 
-                        :is-reply="selectedReplyMessage!==null"
-                        :reply-message="selectedReplyMessage"
-                        @cancel-reply="resetReply"
-                        @send="sendMessage" />
+
+                    <ChatComposer v-if="!loadingMessages && openedConvo" :is-reply="selectedReplyMessage !== null"
+                        :reply-message="selectedReplyMessage" @cancel-reply="resetReply" @send="sendMessage" />
                 </ChatContent>
             </InboxBody>
 
@@ -187,16 +148,11 @@ onMounted(async () => {
 
 
             <div
-                class="flex h-[calc(100vh-80px)] w-1/4 shrink-0 flex-col gap-5 overflow-y-auto border-l bg-background p-4 text-foreground"
-            >
+                class="flex h-[calc(100vh-80px)] w-1/4 shrink-0 flex-col gap-5 overflow-y-auto border-l bg-background p-4 text-foreground">
                 <!-- Conversation Profile -->
                 <div class="flex flex-col items-center gap-3 py-4">
                     <Avatar class="h-20 w-20 overflow-hidden rounded-full border bg-sidebar">
-                        <AvatarImage
-                            v-if="openedConvo?.avatar"
-                            :src="openedConvo.avatar"
-                            :alt="openedConvo.name"
-                        />
+                        <AvatarImage v-if="openedConvo?.avatar" :src="openedConvo.avatar" :alt="openedConvo.name" />
                         <AvatarFallback class="rounded-full">
                             <AvatarPlaceholder class="h-full w-full" />
                         </AvatarFallback>
@@ -218,11 +174,7 @@ onMounted(async () => {
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger as-child>
-                                <Button
-                                    variant="secondary"
-                                    size="icon"
-                                    class="h-10 w-10 rounded-full"
-                                >
+                                <Button variant="secondary" size="icon" class="h-10 w-10 rounded-full">
                                     <Pen class="h-4 w-4" />
                                 </Button>
                             </TooltipTrigger>
@@ -233,11 +185,7 @@ onMounted(async () => {
 
                         <Tooltip>
                             <TooltipTrigger as-child>
-                                <Button
-                                    variant="secondary"
-                                    size="icon"
-                                    class="h-10 w-10 rounded-full"
-                                >
+                                <Button variant="secondary" size="icon" class="h-10 w-10 rounded-full">
                                     <Camera class="h-4 w-4" />
                                 </Button>
                             </TooltipTrigger>
@@ -249,11 +197,7 @@ onMounted(async () => {
                 </div>
 
                 <!-- Conversation Details -->
-                <Accordion
-                    type="multiple"
-                    class="w-full"
-                    default-value="information"
-                >
+                <Accordion type="multiple" class="w-full" default-value="information">
                     <!-- Information -->
                     <AccordionItem value="information">
                         <AccordionTrigger class="text-sm font-semibold hover:no-underline">
@@ -299,17 +243,12 @@ onMounted(async () => {
 
                         <AccordionContent>
                             <div class="space-y-1 pt-2">
-                                <button
-                                    v-for="participant in openedConvo?.participants ?? []"
-                                    :key="participant.id"
-                                    class="group flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors hover:bg-muted"
-                                >
+                                <div v-for="participant in openedConvo?.participants ?? []" :key="participant.id"
+                                    class="group flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors hover:bg-muted">
                                     <Avatar class="h-10 w-10 shrink-0">
-                                        <AvatarImage
-                                            v-if="participant.participant.avatar"
+                                        <AvatarImage v-if="participant.participant.avatar"
                                             :src="participant.participant.avatar"
-                                            :alt="participant.participant.display_name"
-                                        />
+                                            :alt="participant.participant.display_name" />
                                         <AvatarFallback>
                                             <AvatarPlaceholder class="h-full w-full" />
                                         </AvatarFallback>
@@ -327,11 +266,10 @@ onMounted(async () => {
 
                                     <button
                                         class="rounded-md p-1.5 opacity-0 transition-opacity hover:bg-background group-hover:opacity-100"
-                                        @click.stop
-                                    >
+                                        @click.stop>
                                         <Ellipsis class="h-4 w-4" />
                                     </button>
-                                </button>
+                                </div>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -348,8 +286,7 @@ onMounted(async () => {
                         <AccordionContent>
                             <div class="space-y-1 pt-2">
                                 <button
-                                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
-                                >
+                                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10">
                                     <LogOut class="h-4 w-4" />
                                     Leave Group
                                 </button>
