@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 
-import { MessageGroup, Type } from '@/types/convo/message';
+import { Message, MessageGroup, Type } from '@/types/convo/message';
 import { cn, formatTimestamp, getAuthUser, getFirstName } from '@/lib/utils';
 
 import {
@@ -54,6 +54,7 @@ const isSystemBatchMessageOnly = computed(() =>
 const messageAlignment = computed(() =>
     isOwner.value ? 'items-end' : 'items-start'
 );
+
 
 // --------------------------------------------------
 // MESSAGE BUBBLE CORNERS
@@ -188,6 +189,27 @@ const getReplySender = (message: ChatMessage) => {
         : getFirstName(reply.sender.display_name);
 };
 
+
+
+const getMessageStatus = (
+    message: Message,
+    isIncludeTime = false
+): string => {
+    let status = 'Sending';
+
+    if (message.is_read) {
+        status = 'Delivered';
+    } else if (message.sent_at) {
+        status = 'Sent';
+    }
+
+    if (isIncludeTime && message.sent_at) {
+        return `${status} at ${formatTimestamp(message.sent_at)}`;
+    }
+
+    return status;
+};
+
 </script>
 
 <template>
@@ -240,9 +262,7 @@ const getReplySender = (message: ChatMessage) => {
                         isOwner ? 'flex-row-reverse' : 'flex-row'
                     )">
                         <!-- MESSAGE BUBBLE -->
-                        <div class="min-w-0 max-w-full" :title="message.sent_at
-                            ? formatTimestamp(message.sent_at)
-                            : 'sending...'">
+                        <div class="min-w-0 max-w-full" :title="getMessageStatus(message, true)">
                             <!-- EDITED LABEL -->
                             <div v-if="message.is_edited" :class="cn(
                                 'mb-1 text-[10px] text-muted-foreground',
@@ -390,6 +410,9 @@ const getReplySender = (message: ChatMessage) => {
                                 </Transition>
                             </div>
                         </div>
+                    </div>
+                    <div v-if="isOwner" class="text-xs text-muted-foreground w-min self-end">
+                        <span>{{ getMessageStatus(messages[messages.length -1]) }}</span>
                     </div>
                 </div>
             </div>

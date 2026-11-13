@@ -158,11 +158,11 @@ export function useInbox() {
             message: tempMessage.body!,
             attachments: payload.attachments,
         })
-
-
+        
 
         if(message){
-            replaceTempMessage(messageGroupList.value!.data, tempMessage)
+            
+            replaceTempMessage(messageGroupList.value!.data, message)
 
             const conversations = oldConversationList.value
                 ? oldConversationList.value
