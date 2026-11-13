@@ -22,3 +22,12 @@ export { default as CreateHeader } from './create-convo/CreateHeader.vue';
 export { default as CreateConvo } from './create-convo/CreateConvo.vue';
 
 export { default as EmptyPlaceholder } from './placeholder/EmptyPlaceholder.vue';
+
+
+
+
+export { default as RightSidebar } from './RightSidebar.vue';
+export { default as ConvoProfile } from './right-sidebar/ConvoProfile.vue';
+export { default as ConvoAction } from './right-sidebar/ActionSection.vue';
+export { default as ConvoOptions } from './right-sidebar/ConvoOptions.vue';
+export { default as EditConvoModal } from './right-sidebar/modal/EditConvoModal.vue';

@@ -1,4 +1,5 @@
-import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage } from "@/types/convo/conversation";
+import { getAuthUser } from "@/lib/utils";
+import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage, Type } from "@/types/convo/conversation";
 import { Message } from "@/types/convo/message";
 import { computed, ref } from "vue";
 
@@ -6,12 +7,38 @@ import { computed, ref } from "vue";
 export function useConvo() {
 
     const openedConvo = ref<ConvoWithParticipants | null>(null);
+    const openInfo = ref(true);
+    const openEditModal = ref(false);
 
     // ==================================
     // COMPUTED
     // ==================================
 
     const isNoOpenConvo = computed(()=> openedConvo.value === null)
+    const authUser = computed(() => getAuthUser());
+    
+    const isOpenConvoGroup = computed(() =>
+        openedConvo.value?.type === Type.Group
+    );
+    
+    const openConvoPrivateParticipant = computed(() =>
+        openedConvo.value!.participants.find(
+            (pt) => pt.participant.id !== authUser.value.id
+        )?.participant
+    );
+    const openConvoAvatar = computed(() =>
+        isOpenConvoGroup.value
+            ? openedConvo.value!.avatar
+            : openConvoPrivateParticipant.value!.avatar
+    );
+    const openConvoName = computed(() =>
+        isOpenConvoGroup.value
+            ? openedConvo.value!.name
+            : openConvoPrivateParticipant.value!.display_name
+    );
+
+
+
 
 
     // =====================================
@@ -59,11 +86,53 @@ export function useConvo() {
     };
 
 
+
+    // =====================================
+    // CONVO INFO FUNCTIONS
+    // =====================================
+    const infoToggle=()=>{
+        openInfo.value = !openInfo.value
+    }
+
+
+    // =====================================
+    // EDIT CONVO
+    // =====================================
+    const editConvo=()=>{
+        openEditModal.value = true
+    }
+
+    const updateConvo=()=>{
+        // update
+    }
+
+
+    // =====================================
+    // LEAVE CONVO
+    // =====================================
+
+    const leaveConvo=()=>{
+        // leave
+    }
+
+
     return {
         openedConvo,
         isNoOpenConvo,
         assignOpenConvo,
         resetOpenedConvo,
         updateSelectedConvo,
+
+        openInfo,
+        infoToggle,
+
+        isOpenConvoGroup,
+        openConvoAvatar,
+        openConvoName,
+
+        openEditModal,
+        updateConvo,
+        editConvo,
+        leaveConvo,
     };
 }

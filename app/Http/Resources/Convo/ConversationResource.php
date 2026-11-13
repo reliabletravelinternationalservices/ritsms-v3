@@ -14,6 +14,7 @@ class ConversationResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'avatar' => $this->avatar,
+            'created_at' => $this->created_at,
             'created_by' => UserResource::make(
                 $this->whenLoaded('createdBy')
             ),

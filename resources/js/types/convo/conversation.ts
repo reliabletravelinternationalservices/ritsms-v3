@@ -12,6 +12,7 @@ export interface Conversation {
     name: string | null
     avatar: string | null
     created_by: User
+    created_at: string
     deleted_at: string | null
 }
 

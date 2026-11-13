@@ -71,6 +71,19 @@ export function useInbox() {
         assignOpenConvo,
         resetOpenedConvo,
         updateSelectedConvo,
+
+        infoToggle,
+        openInfo,
+
+        isOpenConvoGroup,
+        openConvoAvatar,
+        openConvoName,
+
+        
+        openEditModal,
+        editConvo,
+        updateConvo,
+        leaveConvo,
     } = useConvo();
 
     const {
@@ -120,6 +133,8 @@ export function useInbox() {
     const openCreateModal = () => {
         toggleCreate(true);
         closeOpenConvo()
+        resetContactList()
+        resetReply()
     };
 
 
@@ -158,7 +173,7 @@ export function useInbox() {
             message: tempMessage.body!,
             attachments: payload.attachments,
         })
-        
+
 
         if(message){
             
@@ -285,11 +300,18 @@ export function useInbox() {
 
 
 
+        // ACTIVE CONVO
         openedConvo,
-
-
-
         openChat,
+        isOpenConvoGroup,
+        openConvoAvatar,
+        openConvoName,
+        infoToggle,
+        openInfo,
+        openEditModal,
+        editConvo,
+        updateConvo,
+        leaveConvo,
 
         // Message actions
         isOwnerChat,

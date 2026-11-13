@@ -91,7 +91,7 @@ export function useCreateMessage() {
     const createNewBatch = (message: Message): MessageGroup => ({
         id: typeof message.id === 'number' ? message.id : generateTempMessageId(),
         sender: message.sender,
-        sent_at: message.sent_at,
+        sent_at: new Date().toISOString(),
         messages: [message],
     });
     
