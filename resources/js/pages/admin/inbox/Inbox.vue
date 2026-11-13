@@ -65,7 +65,7 @@ const {
     sendMessage,
 
     selectedReplyMessage,
-    replyMessage,
+  
     resetReply,
 } = useInbox();
 
@@ -118,7 +118,7 @@ onMounted(async () => {
                         :loading="loadingMoreMessages" :has-more="Boolean(messageGroupList.next_cursor)"
                         @load="loadMoreMessages(openedConvo, messageGroupList.next_cursor)" direction="bottom-to-top">
                         <ChatList v-for="messageBatch in messageGroupList.data" :key="messageBatch.id">
-                            <ChatBubble :messageBatch="messageBatch" @reply="replyMessage" />
+                            <ChatBubble :messageBatch="messageBatch" />
                         </ChatList>
                     </InfiniteScroll>
 

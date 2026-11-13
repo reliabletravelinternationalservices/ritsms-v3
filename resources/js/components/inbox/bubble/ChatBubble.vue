@@ -342,7 +342,7 @@ const getMessageStatus = (
                                 {{ message.body }}
                             </div>
                         </div>
-
+                        
                         <!-- MESSAGE ACTIONS -->
                         <div :class="cn(
                             'flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100',
