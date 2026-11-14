@@ -2,10 +2,10 @@
 
 namespace App\Policies\Convo;
 
+use App\Enums\Convo\Type;
 use App\Enums\User\Role;
 use App\Models\Conversation;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ConversationPolicy
 {
@@ -23,8 +23,8 @@ class ConversationPolicy
     public function view(User $user, Conversation $conversation): bool
     {
         return $conversation->participants()
-            ->where("participant_id", $user->id)
-            ->where("participant_type", $user->getMorphClass())
+            ->where('participant_id', $user->id)
+            ->where('participant_type', $user->getMorphClass())
             ->exists();
     }
 
@@ -44,7 +44,7 @@ class ConversationPolicy
      */
     public function update(User $user, Conversation $conversation): bool
     {
-        return false;
+        return $conversation->type === Type::GROUP && $this->view($user, $conversation);
     }
 
     /**

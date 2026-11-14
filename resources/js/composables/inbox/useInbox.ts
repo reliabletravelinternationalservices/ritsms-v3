@@ -136,10 +136,13 @@ export function useInbox() {
     const updateConvoInfo = async (payload: {
         name: string;
         avatar?: File | null;
+        removeAvatar?: boolean;
     }) => {
         const newConvo = await updateConvo(payload);
 
         if (!newConvo) return;
+
+        openEditModal.value = false;
 
         const index = conversationList.value?.data.findIndex(
             (convo) => convo.id === newConvo.id

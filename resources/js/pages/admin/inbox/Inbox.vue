@@ -5,6 +5,7 @@ import InfiniteScroll from '@/components/InfiniteScroll.vue';
 import LoadingData from '@/components/LoadingData.vue';
 import { useInbox } from '@/composables/inbox/useInbox';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { getImageUrl } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
@@ -169,7 +170,7 @@ onMounted(async () => {
             v-if="openEditModal"
             v-model:open="openEditModal"
             :current-name="openConvoName!"
-            :current-photo="openConvoAvatar"
+            :current-photo="openConvoAvatar? getImageUrl(openConvoAvatar) : null"
             @save="updateConvoInfo"
         />
     </AppLayout>

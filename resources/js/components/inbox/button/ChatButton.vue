@@ -2,7 +2,7 @@
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
 import GroupAvatarPlaceholder from '@/components/GroupAvatarPlaceholder.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { formatTimeAgo, getAuthUser, getFirstName } from '@/lib/utils';
+import { formatTimeAgo, getAuthUser, getFirstName, getImageUrl } from '@/lib/utils';
 import { ConvoWithParticipantsAndLatestMessage, Type as ConvoType } from '@/types/convo/conversation';
 import { Type as MessageType } from '@/types/convo/message';
 import { Image, Paperclip, Video } from '@lucide/vue';
@@ -78,8 +78,8 @@ const senderName = computed(() => isYou.value ? 'You: ' : getFirstName(props.cha
         <div class="flex w-full min-w-0 items-center gap-2">
 
             <!-- AVATAR -->
-            <Avatar class="h-12 w-12 shrink-0 overflow-hidden rounded-circle border border-sidebar-border bg-sidebar">
-                <AvatarImage v-if="avatar" :src="avatar" :alt="name" />
+            <Avatar class="h-12 w-12 shrink-0 overflow-hidden rounded-circle border border-border bg-sidebar">
+                <AvatarImage v-if="avatar" :src="getImageUrl(avatar)" :alt="name" />
 
                 <AvatarFallback class="rounded-circle text-white">
                     <GroupAvatarPlaceholder

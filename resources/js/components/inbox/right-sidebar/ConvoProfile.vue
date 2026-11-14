@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
 import GroupAvatarPlaceholder from '@/components/GroupAvatarPlaceholder.vue';
-import { Avatar, AvatarImage } from '@/components/ui/avatar/index.js';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/index.js';
+import { getImageUrl } from '@/lib/utils';
 
 interface Props {
     avatar?: string | null
@@ -21,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
     <!-- Conversation Profile -->
         <div class="flex flex-col items-center gap-3 py-4">
             <Avatar class="h-20 w-20 overflow-hidden rounded-full border bg-sidebar">
-                <AvatarImage v-if="props.avatar" :src="props.avatar" :alt="props.name" />
+                <AvatarImage v-if="props.avatar" :src="getImageUrl(props.avatar)" :alt="props.name" />
                 <AvatarFallback class="rounded-full">
                     <AvatarPlaceholder v-if="!isGroup" class="h-full w-full" />
                     <GroupAvatarPlaceholder v-else class="h-full w-full" />

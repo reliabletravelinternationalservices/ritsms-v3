@@ -48,17 +48,31 @@ export const conversationService = {
     async updateConvo(
         convoID: number,
         payload: {
-            name:string;
-            avatar?:File | null
+            name: string;
+            avatar?: File | null;
+            removeAvatar?: boolean;
         },
         signal?: AbortSignal
     ): Promise<{data: ConvoWithParticipants}> {
-        const { data: response } = await api.get<{
+        const formData = new FormData();
+        formData.append('name', payload.name);
+
+        if (payload.avatar) {
+            formData.append('avatar', payload.avatar);
+        }
+
+        if (payload.removeAvatar) {
+            formData.append('remove_avatar', '1');
+        }
+
+        const { data: response } = await api.post<{
             data: ConvoWithParticipants
-        }>(route('convo.update', { convo: convoID }), {
-            params: payload,
+        }>(route('convo.update', { convo: convoID }), formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
             signal,
-        })
+        });
 
         return response;
     },

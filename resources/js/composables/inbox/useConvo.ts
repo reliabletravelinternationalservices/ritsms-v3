@@ -105,8 +105,9 @@ export function useConvo() {
 
     const updateConvo= async(
         payload: {
-            name:string;
-            avatar?:File | null
+            name: string;
+            avatar?: File | null;
+            removeAvatar?: boolean;
         })=>{
             if(!openedConvo.value)return
             const id = openedConvo.value.id
@@ -138,8 +139,9 @@ export function useConvo() {
     async function updateConvoInfo(
         convoID: number,
         payload: {
-            name:string;
-            avatar?:File | null
+            name: string;
+            avatar?: File | null;
+            removeAvatar?: boolean;
         },
     ){
         try{

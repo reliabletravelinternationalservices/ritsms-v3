@@ -22,13 +22,15 @@ const emit = defineEmits<{
     'update:open': [value: boolean];
     save: [payload: {
         name: string;
-        photo: File | null;
+        avatar: File | null;
+        removeAvatar: boolean;
     }];
 }>();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const name = ref(props.currentName);
 const photoFile = ref<File | null>(null);
+const photoRemoved = ref(false);
 const photoPreview = ref<string | null>(props.currentPhoto);
 const errorMessage = ref('');
 
@@ -45,6 +47,7 @@ const reset = () => {
 
     name.value = props.currentName;
     photoFile.value = null;
+    photoRemoved.value = false;
     photoPreview.value = props.currentPhoto;
     errorMessage.value = '';
 
@@ -86,6 +89,7 @@ const handleFileChange = (event: Event) => {
     clearPreview();
 
     photoFile.value = file;
+    photoRemoved.value = false;
     photoPreview.value = URL.createObjectURL(file);
 };
 
@@ -93,6 +97,7 @@ const removePhoto = () => {
     clearPreview();
 
     photoFile.value = null;
+    photoRemoved.value = true;
     photoPreview.value = null;
     errorMessage.value = '';
 
@@ -106,7 +111,8 @@ const close = () => {
 const saveProfile = () => {
     emit('save', {
         name: name.value.trim(),
-        photo: photoFile.value,
+        avatar: photoFile.value,
+        removeAvatar: photoRemoved.value,
     });
 };
 
