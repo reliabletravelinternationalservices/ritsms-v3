@@ -1,4 +1,5 @@
 import { getAuthUser } from "@/lib/utils";
+import { conversationService } from "@/services/conversationService";
 import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage, Type } from "@/types/convo/conversation";
 import { Message } from "@/types/convo/message";
 import { computed, ref } from "vue";
@@ -102,8 +103,21 @@ export function useConvo() {
         openEditModal.value = true
     }
 
-    const updateConvo=()=>{
-        // update
+    const updateConvo= async(
+        payload: {
+            name:string;
+            avatar?:File | null
+        })=>{
+            if(!openedConvo.value)return
+            const id = openedConvo.value.id
+            const data = await updateConvoInfo(id, payload)
+
+            if(data){
+                openedConvo.value = {
+                    ...data
+                }
+            }
+            return openedConvo.value;
     }
 
 
@@ -115,6 +129,35 @@ export function useConvo() {
         // leave
     }
 
+
+
+
+    // =====================================
+    // ASYNC FUNCTIONS
+    // =====================================
+    async function updateConvoInfo(
+        convoID: number,
+        payload: {
+            name:string;
+            avatar?:File | null
+        },
+    ){
+        try{
+            const response = await conversationService.updateConvo(
+                convoID,
+                payload
+            )
+
+            if(response.data){
+                return response.data
+            }
+
+            return null
+        }catch(err){
+            console.log('Error updating convo: ', err)
+            return null
+        }
+    }
 
     return {
         openedConvo,

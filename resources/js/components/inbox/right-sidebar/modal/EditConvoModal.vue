@@ -23,7 +23,6 @@ const emit = defineEmits<{
     save: [payload: {
         name: string;
         photo: File | null;
-        preview: string | null;
     }];
 }>();
 
@@ -108,7 +107,6 @@ const saveProfile = () => {
     emit('save', {
         name: name.value.trim(),
         photo: photoFile.value,
-        preview: photoPreview.value,
     });
 };
 

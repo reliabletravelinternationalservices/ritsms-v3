@@ -58,7 +58,7 @@ const {
     infoToggle,
     openEditModal,
     editConvo,
-    updateConvo,
+    updateConvoInfo,
     leaveConvo,
 
 
@@ -170,7 +170,7 @@ onMounted(async () => {
             v-model:open="openEditModal"
             :current-name="openConvoName!"
             :current-photo="openConvoAvatar"
-            @save="updateConvo"
+            @save="updateConvoInfo"
         />
     </AppLayout>
 

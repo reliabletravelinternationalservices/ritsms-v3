@@ -127,6 +127,36 @@ export function useInbox() {
     };
 
 
+
+
+    
+    // =====================================================
+    // UPDATE CONVERSATION
+    // =====================================================
+    const updateConvoInfo = async (payload: {
+        name: string;
+        avatar?: File | null;
+    }) => {
+        const newConvo = await updateConvo(payload);
+
+        if (!newConvo) return;
+
+        const index = conversationList.value?.data.findIndex(
+            (convo) => convo.id === newConvo.id
+        );
+
+        if (index === undefined || index === -1) return;
+
+        const currentConvo = conversationList.value!.data[index];
+
+        conversationList.value!.data[index] = {
+            ...newConvo,
+            latest_message: currentConvo.latest_message,
+        };
+    };
+
+
+
     // =====================================================
     // OPEN CREATE MODAL
     // =====================================================
@@ -310,7 +340,7 @@ export function useInbox() {
         openInfo,
         openEditModal,
         editConvo,
-        updateConvo,
+        updateConvoInfo,
         leaveConvo,
 
         // Message actions

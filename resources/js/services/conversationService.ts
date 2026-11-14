@@ -1,5 +1,5 @@
 import api from '@/lib/api'
-import { ConvoWithParticipantsAndLatestMessage, Type } from '@/types/convo/conversation'
+import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage, Type } from '@/types/convo/conversation'
 import { Message, MessageGroup } from '@/types/convo/message'
 import { CursorPaginated, CursorPaginatedFiltersWithSearch } from '@/types/cursor/cursor-paginated'
 
@@ -42,6 +42,25 @@ export const conversationService = {
         return {
             data: response.data
         }
+    },
+
+
+    async updateConvo(
+        convoID: number,
+        payload: {
+            name:string;
+            avatar?:File | null
+        },
+        signal?: AbortSignal
+    ): Promise<{data: ConvoWithParticipants}> {
+        const { data: response } = await api.get<{
+            data: ConvoWithParticipants
+        }>(route('convo.update', { convo: convoID }), {
+            params: payload,
+            signal,
+        })
+
+        return response;
     },
 
 
