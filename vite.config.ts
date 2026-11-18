@@ -9,6 +9,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
+            ssr: 'resources/js/ssr.ts',
             refresh: true,
         }),
         vue({
@@ -29,5 +30,10 @@ export default defineConfig({
         postcss: {
             plugins: [tailwindcss, autoprefixer],
         },
+    },
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
     },
 });

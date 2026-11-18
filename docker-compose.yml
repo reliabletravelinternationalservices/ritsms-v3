@@ -1,42 +1,138 @@
 
 services:
+
+  # REVERB
+  reverb:
+    image: rits-php-tools:8.4.27
+    container_name: rits-reverb
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env.docker
+    volumes:
+      - .:/app
+    ports:
+      - "127.0.0.1:8080:8080"
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    
+  # SCHEDULER
+  scheduler:
+    image: rits-php-tools:8.4.27
+    container_name: rits-scheduler
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env.docker
+    volumes:
+      - .:/app
+    command: php artisan schedule:work
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # QUEUE WORKER
+  queue:
+    image: rits-php-tools:8.4.27
+    container_name: rits-queue
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env.docker
+    volumes:
+      - .:/app
+    command: php artisan queue:work redis --sleep=3 --tries=3 --timeout=90
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # COMPOSER / PHP DEPENDENCY MANAGER
+  composer:
+    build:
+      context: .
+      dockerfile: docker/php-tools.Dockerfile
+    image: rits-php-tools:8.4.27
+    container_name: rits-composer
+    working_dir: /app
+    env_file:
+      - .env.docker
+    volumes:
+      - .:/app
+      - composer_cache:/tmp/composer-cache
+    environment:
+      COMPOSER_HOME: /tmp/composer-cache
+    entrypoint: ["composer"]
+
+
+  # NODE.JS / VITE DEVELOPMENT SERVER
+  node:
+    image: node:24.19.0-alpine
+    container_name: rits-node
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "127.0.0.1:5173:5173"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+
+  # DATABASE
   mysql:
     image: mysql:8.4
+    container_name: rits-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERN
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE is required}
+      MYSQL_USER: ${DB_USERNAME:?DB_USERNAME is required}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
     ports:
-      - "${DB_PORT}:3306"
+      - "127.0.0.1:${DB_PORT:-3307}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
       test:
         - CMD-SHELL
-        - 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent'
+        - 'mysqladmin ping -h 127.0.0.1 -uroot -p"$${MYSQL_ROOT_PASSWORD}" --silent'
       interval: 10s
       timeout: 5s
       retries: 15
       start_period: 30s
 
+  # CACHE / QUEUE BACKEND
   redis:
     image: redis:8-alpine
+    container_name: rits-redis
     restart: unless-stopped
     command:
       - redis-server
       - --appendonly
       - "yes"
       - --requirepass
-      - ${REDIS_PASSWORD}
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
     ports:
-      - "${REDIS_PORT}:6379"
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'redis-cli -a "$${REDIS_PASSWORD}" ping | grep -q PONG'
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # DATABASE MANAGEMENT
   phpmyadmin:
     image: phpmyadmin:latest
+    container_name: rits-phpmyadmin
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
@@ -48,6 +144,18 @@ services:
       mysql:
         condition: service_healthy
 
+  # EMAIL TESTING
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: rits-mailpit
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8025:8025"
+      - "127.0.0.1:1025:1025"
+      
+
 volumes:
   mysql_data:
   redis_data:
+  node_modules:
+  composer_cache:
