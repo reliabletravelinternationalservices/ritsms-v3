@@ -3,23 +3,14 @@
 namespace App\Models;
 
 use App\Enums\Convo\Type;
-use App\Services\Convo\MessageService;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Override;
 
+#[Fillable(['type','name','avatar','created_by_type','created_by_id'])]
 class Conversation extends Model
 {
-
     use SoftDeletes;
-
-    protected $fillable = [
-        'type',
-        'name',
-        'avatar',
-        'created_by_type',
-        'created_by_id',
-    ];
 
     protected $casts = [
         'type' => Type::class
@@ -47,18 +38,4 @@ class Conversation extends Model
         return $this->hasMany(ConversationParticipant::class);
     }
 
-    public function generateGroupName(): string
-    {
-        $names = $this->participants
-            ->pluck('participant.display_name')
-            ->map(fn ($name) => explode(' ', trim($name))[0]);
-
-        $displayNames = $names->take(3)->implode(', ');
-
-        if ($names->count() > 3) {
-            $displayNames .= ' and ' . ($names->count() - 3) . ' others';
-        }
-
-        return $displayNames;
-    }
 }
