@@ -53,7 +53,6 @@ const {
     openedConvo,
     openChat,
     isOpenConvoGroup,
-    openConvoId,
     openConvoAvatar,
     openConvoName,
     openInfo,
@@ -114,8 +113,8 @@ onMounted(async () => {
             <!-- MAIN INBOX -->
             <InboxBody>
                 <ChatContent>
-                    <ChatHeader v-if="!createModal && openedConvo" @info="infoToggle" :chat-id="openConvoId"
-                        :name="openConvoName" :avatar="openConvoAvatar" :is-group="isOpenConvoGroup" />
+                    <ChatHeader v-if="!createModal && openedConvo" @info="infoToggle" :name="openConvoName"
+                        :avatar="openConvoAvatar" :is-group="isOpenConvoGroup" />
 
                     <CreateHeader v-if="createModal" :contacts="contactList" @select="addNewContact"
                         @remove="removeExistingContact" />

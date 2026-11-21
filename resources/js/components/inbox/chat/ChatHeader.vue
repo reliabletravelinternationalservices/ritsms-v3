@@ -6,7 +6,6 @@ import { Info } from '@lucide/vue';
 
 
 interface Props {
-    chatId: number;
     avatar: string | null;
     name: string;
     isGroup: boolean
@@ -16,7 +15,7 @@ defineProps<Props>()
 
 
 const emit = defineEmits<{
-    info: [chatId: number];
+    info: [];
 }>();
 
 
@@ -36,7 +35,7 @@ const emit = defineEmits<{
             <h3 class="text-lg font-semibold">{{ name }}</h3>
         </div>
 
-        <button class="btn btn-ghost btn-sm gap-2" @click="emit('info', chatId)">
+        <button class="btn btn-ghost btn-sm gap-2" @click="emit('info')">
             <Info class="w-6 h-6" />
         </button>
 
