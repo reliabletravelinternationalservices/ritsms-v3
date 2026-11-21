@@ -12,20 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class ConvoService
 {
-    public function __construct(protected GroupNameGenerator $nameGenerator)
-    {
-    }
+    public function __construct(protected GroupNameGenerator $nameGenerator) {}
     public function create(
         array $participantIDs,
         string $type,
         int $creatorID,
+        ?string $name = null
     ): Conversation {
 
-        return DB::transaction(function () use ($participantIDs, $type, $creatorID) {
+        return DB::transaction(function () use ($participantIDs, $type, $creatorID, $name) {
 
             $creator = User::findOrFail($creatorID);
 
             $conversation = Conversation::create([
+                'name' => $name,
                 'type' => Type::getType($type),
                 'created_by_id' => $creator->id,
                 'created_by_type' => User::class,
@@ -40,15 +40,14 @@ class ConvoService
                 $user = User::findOrFail($id);
                 $partcipantRole = Role::MEMBER;
 
-                if($id === $creatorID){
+                if ($id === $creatorID) {
                     $partcipantRole = Role::OWNER;
-                }
-                elseif(
+                } elseif (
                     $user->role === UserRole::ADMIN ||
                     $user->role === UserRole::AGENT
-                ){
+                ) {
                     $partcipantRole = Role::ADMIN;
-                }else{
+                } else {
                     $partcipantRole = Role::MEMBER;
                 }
 
@@ -68,13 +67,13 @@ class ConvoService
             ]);
 
             // Generate group name.
-            if ($conversation->type === Type::GROUP) {
-                $name = $this->nameGenerator->generate($conversation);
+            if ($conversation->type === Type::GROUP && empty($name)) {
+                $defaultName = $this->nameGenerator->generate($conversation);
                 $conversation->update([
-                    'name' => $name
+                    'name' => $defaultName
                 ]);
             }
-    
+
             return $conversation;
         });
     }

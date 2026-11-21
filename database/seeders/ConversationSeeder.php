@@ -22,7 +22,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 1,
                 "name" => "Japan Group 2027",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 5],
                 "firstMessage" => "Hello guys! Let's use this conversation for our Japan 2027 trip updates.",
@@ -30,7 +30,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 2,
                 "name" => "Brainwashing 2026",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2],
                 "firstMessage" => "Hi! Welcome. You can contact me here for your travel concerns.",
@@ -38,7 +38,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 3,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 1,
                 "participants" => [1, 3],
                 "firstMessage" => "Hello! Thank you for choosing Reliable International Travel Services.",
@@ -46,7 +46,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 4,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 1,
                 "participants" => [1, 4],
                 "firstMessage" => "Welcome! Feel free to send your travel inquiries here.",
@@ -54,7 +54,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 5,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 1,
                 "participants" => [1, 5],
                 "firstMessage" => "I'll contact you here for your booking updates.",
@@ -62,7 +62,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 6,
                 "name" => "Visa Korea Only",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 6, 7],
                 "firstMessage" => "Hello everyone! Let's discuss the Korea visa requirements here.",
@@ -70,7 +70,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 7,
                 "name" => "Reliable Agents",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2],
                 "firstMessage" => "This conversation is for our internal agent coordination.",
@@ -80,7 +80,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 8,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [2, 3],
                 "firstMessage" => "Good morning! I'm Agent 2. How can I assist you with your booking?",
@@ -88,7 +88,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 9,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [2, 4],
                 "firstMessage" => "Hello! I will be assisting you with your travel arrangements.",
@@ -96,7 +96,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 10,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [2, 5],
                 "firstMessage" => "Hi! Just checking if you have already decided on your travel dates.",
@@ -104,7 +104,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 11,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [2, 6],
                 "firstMessage" => "Hello! I received your inquiry about our international tour packages.",
@@ -112,7 +112,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 12,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [2, 7],
                 "firstMessage" => "Good afternoon! Let me know if you need help with your visa application.",
@@ -120,7 +120,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 13,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 1,
                 "participants" => [1, 6],
                 "firstMessage" => "Hello! We received your inquiry. Are you still interested in the tour?",
@@ -128,7 +128,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 14,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 1,
                 "participants" => [1, 7],
                 "firstMessage" => "Hi! Please send your preferred travel dates so we can assist you.",
@@ -136,7 +136,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 15,
                 "name" => null,
-                "type" => Type::PRIVATE,
+                "type" => Type::PRIVATE->value,
                 "creatorID" => 2,
                 "participants" => [1, 2],
                 "firstMessage" => "Admin, I have completed the latest client booking updates.",
@@ -146,7 +146,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 16,
                 "name" => "Japan Tour Inquiry",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5],
                 "firstMessage" => "Welcome! This group is for discussing our Japan tour options.",
@@ -154,7 +154,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 17,
                 "name" => "Hong Kong Disneyland 2027",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 6],
                 "firstMessage" => "Hello everyone! Let's coordinate your Hong Kong Disneyland trip.",
@@ -162,7 +162,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 18,
                 "name" => "Korea Visa Applicants",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 6, 7],
                 "firstMessage" => "Please use this group for sharing your Korea visa requirements.",
@@ -170,7 +170,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 19,
                 "name" => "Singapore Holiday",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 4, 7],
                 "firstMessage" => "Welcome! We will be discussing your Singapore holiday arrangements here.",
@@ -178,7 +178,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 20,
                 "name" => "Taiwan Group Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5],
                 "firstMessage" => "Hi everyone! Here are the initial details for your Taiwan tour.",
@@ -186,7 +186,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 21,
                 "name" => "Vietnam Travel Package",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 7],
                 "firstMessage" => "Hello! Let's discuss the itinerary and package inclusions.",
@@ -194,7 +194,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 22,
                 "name" => "Dubai Travel Inquiry",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5, 6],
                 "firstMessage" => "Welcome! We can use this group for your Dubai travel inquiries.",
@@ -202,7 +202,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 23,
                 "name" => "Japan Visa Processing",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 6, 7],
                 "firstMessage" => "Please send your visa documents here for checking.",
@@ -210,7 +210,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 24,
                 "name" => "Family Vacation 2027",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5, 6],
                 "firstMessage" => "Hello family! Let's start planning your vacation.",
@@ -218,7 +218,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 25,
                 "name" => "Palawan Holiday",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 6, 7],
                 "firstMessage" => "Welcome! We will coordinate your Palawan package here.",
@@ -228,7 +228,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 26,
                 "name" => "Bali Honeymoon Package",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 7],
                 "firstMessage" => "Congratulations! Let's plan your Bali honeymoon.",
@@ -236,7 +236,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 27,
                 "name" => "Thailand Tour 2027",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 4, 5, 7],
                 "firstMessage" => "Hello! Here is where we will share your Thailand tour updates.",
@@ -244,7 +244,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 28,
                 "name" => "Cruise Booking Inquiry",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6],
                 "firstMessage" => "Hi! We received your cruise booking inquiry.",
@@ -252,7 +252,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 29,
                 "name" => "Airport Transfer Arrangements",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 6],
                 "firstMessage" => "Let's coordinate your airport pickup and drop-off schedules.",
@@ -260,7 +260,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 30,
                 "name" => "Japan Cherry Blossom Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 7],
                 "firstMessage" => "Welcome! Let's prepare for the cherry blossom season.",
@@ -268,7 +268,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 31,
                 "name" => "Hong Kong Package Updates",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 4, 6],
                 "firstMessage" => "Good day! We will post all your package updates here.",
@@ -276,7 +276,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 32,
                 "name" => "South Korea Winter Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5, 7],
                 "firstMessage" => "Hello everyone! Let's prepare for your winter tour.",
@@ -284,7 +284,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 33,
                 "name" => "Passport Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 7],
                 "firstMessage" => "You can send your passport-related questions here.",
@@ -292,7 +292,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 34,
                 "name" => "Travel Insurance Inquiry",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 5, 6, 7],
                 "firstMessage" => "Welcome! Let's discuss your travel insurance requirements.",
@@ -300,7 +300,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 35,
                 "name" => "Europe Summer Vacation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 5, 6, 7],
                 "firstMessage" => "Welcome everyone! Let's discuss our Europe summer vacation plans.",
@@ -310,7 +310,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 36,
                 "name" => "Booking Confirmation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4],
                 "firstMessage" => "Your booking confirmation details will be shared here.",
@@ -318,7 +318,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 37,
                 "name" => "Flight Schedule Updates",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 6],
                 "firstMessage" => "We will post any flight schedule changes in this group.",
@@ -326,7 +326,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 38,
                 "name" => "Hotel Reservation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 7],
                 "firstMessage" => "Hello! Let's finalize your hotel reservation details.",
@@ -334,7 +334,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 39,
                 "name" => "Group Tour Coordination",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 6],
                 "firstMessage" => "This group will be used for coordinating the group tour.",
@@ -342,7 +342,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 40,
                 "name" => "Client Follow-ups",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 6, 7],
                 "firstMessage" => "Hello! We will use this group for your pending travel inquiries.",
@@ -350,7 +350,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 41,
                 "name" => "Reliable Travel Operations",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2],
                 "firstMessage" => "Please share your daily booking and operational updates here.",
@@ -358,7 +358,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 42,
                 "name" => "Client Documents",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 6],
                 "firstMessage" => "You may upload your required travel documents here.",
@@ -366,7 +366,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 43,
                 "name" => "Flight Booking Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 5],
                 "firstMessage" => "Let's review your preferred flight schedules and options.",
@@ -374,7 +374,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 44,
                 "name" => "Visa Requirements Discussion",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 7],
                 "firstMessage" => "Feel free to ask questions about your visa requirements.",
@@ -382,7 +382,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 45,
                 "name" => "Upcoming Departures",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 6, 7],
                 "firstMessage" => "Here we will coordinate upcoming departure schedules.",
@@ -392,7 +392,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 46,
                 "name" => "Singapore Weekend Getaway",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4],
                 "firstMessage" => "Let's finalize your weekend getaway arrangements.",
@@ -400,7 +400,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 47,
                 "name" => "Macau Day Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 5, 6, 7],
                 "firstMessage" => "Welcome! We will share your Macau day tour details here.",
@@ -408,7 +408,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 48,
                 "name" => "Kuala Lumpur Package",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6, 7],
                 "firstMessage" => "Hello! Let's discuss your Kuala Lumpur package.",
@@ -416,7 +416,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 49,
                 "name" => "Da Nang and Hoi An Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 5],
                 "firstMessage" => "Your Da Nang and Hoi An travel coordination starts here.",
@@ -424,7 +424,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 50,
                 "name" => "China Adventure Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 7],
                 "firstMessage" => "Welcome! Let's discuss your China adventure itinerary.",
@@ -432,7 +432,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 51,
                 "name" => "Travel Payment Updates",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 6],
                 "firstMessage" => "Please send your payment confirmations and inquiries here.",
@@ -440,7 +440,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 52,
                 "name" => "Family Japan Vacation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 7],
                 "firstMessage" => "Hello! Let's organize your family trip to Japan.",
@@ -448,7 +448,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 53,
                 "name" => "Travel Package Inclusions",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 4, 5, 6],
                 "firstMessage" => "We can discuss the package inclusions and exclusions here.",
@@ -456,7 +456,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 54,
                 "name" => "Travel Insurance Documents",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6, 7],
                 "firstMessage" => "Please send your travel insurance requirements here.",
@@ -464,7 +464,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 55,
                 "name" => "Airport Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 5, 7],
                 "firstMessage" => "This group is for coordinating your airport assistance.",
@@ -474,7 +474,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 56,
                 "name" => "Baguio Family Trip",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 6],
                 "firstMessage" => "Let's plan your upcoming Baguio family trip.",
@@ -482,7 +482,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 57,
                 "name" => "Boracay Summer Vacation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 4, 5],
                 "firstMessage" => "Welcome! Let's coordinate your Boracay summer vacation.",
@@ -490,7 +490,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 58,
                 "name" => "Cebu Holiday Package",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 5, 6, 7],
                 "firstMessage" => "Hello! We will discuss your Cebu holiday arrangements here.",
@@ -498,7 +498,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 59,
                 "name" => "Palawan Island Hopping",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 6],
                 "firstMessage" => "Let's coordinate your island hopping activities.",
@@ -506,7 +506,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 60,
                 "name" => "Domestic Flight Booking",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5],
                 "firstMessage" => "Please share your preferred domestic flight schedule.",
@@ -514,7 +514,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 61,
                 "name" => "International Flight Booking",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 7],
                 "firstMessage" => "We will coordinate your international flight booking here.",
@@ -522,7 +522,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 62,
                 "name" => "Travel Itinerary Review",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 6],
                 "firstMessage" => "Please review the proposed itinerary and share your feedback.",
@@ -530,7 +530,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 63,
                 "name" => "Passport Renewal Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 4, 6, 7],
                 "firstMessage" => "We can assist you with your passport renewal questions here.",
@@ -538,7 +538,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 64,
                 "name" => "Travel Inquiry Follow-up",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5],
                 "firstMessage" => "Just following up on your recent travel inquiries.",
@@ -546,7 +546,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 65,
                 "name" => "Confirmed Travel Bookings",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 6, 7],
                 "firstMessage" => "Congratulations on your confirmed bookings!",
@@ -556,7 +556,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 66,
                 "name" => "Client Support",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6],
                 "firstMessage" => "Hello! You can raise your travel concerns in this group.",
@@ -564,7 +564,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 67,
                 "name" => "Hotel Booking Updates",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 7],
                 "firstMessage" => "We will share hotel booking confirmations and updates here.",
@@ -572,7 +572,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 68,
                 "name" => "Tour Payment Confirmation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5],
                 "firstMessage" => "Please send your payment receipt for verification.",
@@ -580,7 +580,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 69,
                 "name" => "Travel Advisory Updates",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 5, 6, 7],
                 "firstMessage" => "Important travel advisories and reminders will be posted here.",
@@ -588,7 +588,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 70,
                 "name" => "Visa Document Verification",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5, 6],
                 "firstMessage" => "We are checking the submitted visa documents.",
@@ -596,7 +596,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 71,
                 "name" => "Japan Departure Coordination",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 5, 7],
                 "firstMessage" => "Let's confirm everyone's departure details.",
@@ -604,7 +604,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 72,
                 "name" => "Client Booking Concerns",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 6],
                 "firstMessage" => "Please let us know if you have any concerns with your booking.",
@@ -612,7 +612,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 73,
                 "name" => "Travel Schedule Changes",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 7],
                 "firstMessage" => "We will communicate any changes to your travel schedule here.",
@@ -620,7 +620,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 74,
                 "name" => "Group Tour Reminders",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5, 6],
                 "firstMessage" => "Here are some reminders before your scheduled group tour.",
@@ -628,7 +628,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 75,
                 "name" => "Travel Documents Checklist",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 6, 7],
                 "firstMessage" => "Please check the required documents before your departure.",
@@ -638,7 +638,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 76,
                 "name" => "Korea Tour Preparation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 7],
                 "firstMessage" => "Let's prepare everything for your upcoming Korea trip.",
@@ -646,7 +646,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 77,
                 "name" => "Hong Kong Family Tour",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 5],
                 "firstMessage" => "Welcome! We will coordinate your family tour arrangements.",
@@ -654,7 +654,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 78,
                 "name" => "Singapore Visa Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6, 7],
                 "firstMessage" => "Hello! Let's review your visa assistance requirements.",
@@ -662,7 +662,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 79,
                 "name" => "Travel Insurance Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 4, 6],
                 "firstMessage" => "We can discuss your travel insurance coverage here.",
@@ -670,7 +670,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 80,
                 "name" => "Cruise Vacation 2027",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5, 7],
                 "firstMessage" => "Welcome aboard! Let's discuss your cruise vacation.",
@@ -678,7 +678,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 81,
                 "name" => "Client Travel Feedback",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 6],
                 "firstMessage" => "We would love to hear your feedback about our services.",
@@ -686,7 +686,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 82,
                 "name" => "Flight Rebooking Assistance",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5, 6],
                 "firstMessage" => "We will assist you with your flight rebooking concerns.",
@@ -694,7 +694,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 83,
                 "name" => "Holiday Package Inquiry",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 5, 7],
                 "firstMessage" => "Thank you for your inquiry! Let's discuss your preferred holiday package.",
@@ -702,7 +702,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 84,
                 "name" => "Travel Assistance Team",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 6, 7],
                 "firstMessage" => "Our team is here to help with your travel arrangements.",
@@ -710,7 +710,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 85,
                 "name" => "Final Booking Confirmation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 5, 6, 7],
                 "firstMessage" => "Please review the final booking details before confirmation.",
@@ -720,7 +720,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 86,
                 "name" => "Japan Tour Payment",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6],
                 "firstMessage" => "Good morning! Just a reminder about your remaining tour balance.",
@@ -728,7 +728,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 87,
                 "name" => "Hotel Check-in Details",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 7],
                 "firstMessage" => "Your hotel check-in information is now available.",
@@ -736,7 +736,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 88,
                 "name" => "Travel Date Confirmation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5, 6],
                 "firstMessage" => "Can you confirm your preferred departure date?",
@@ -744,7 +744,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 89,
                 "name" => "Japan Travel Requirements",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 7],
                 "firstMessage" => "Here are the latest travel requirements for your Japan trip.",
@@ -752,7 +752,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 90,
                 "name" => "Domestic Tour Coordination",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5, 7],
                 "firstMessage" => "Let's finalize the schedule for your domestic tour.",
@@ -760,7 +760,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 91,
                 "name" => "Travel Package Quotation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 3, 4, 6],
                 "firstMessage" => "We have prepared your requested travel package quotation.",
@@ -768,7 +768,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 92,
                 "name" => "Client Departure Reminder",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 5],
                 "firstMessage" => "Your departure date is approaching. Please review your travel documents.",
@@ -776,7 +776,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 93,
                 "name" => "Visa Application Status",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 6, 7],
                 "firstMessage" => "We have an update regarding your visa application.",
@@ -784,7 +784,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 94,
                 "name" => "Family Vacation Coordination",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5, 7],
                 "firstMessage" => "Let's make sure everyone is updated with the vacation arrangements.",
@@ -792,7 +792,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 95,
                 "name" => "Travel Package Reservations",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 4, 6],
                 "firstMessage" => "We will share your reservation details and confirmation here.",
@@ -800,7 +800,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 96,
                 "name" => "Client Support Follow-up",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 6, 7],
                 "firstMessage" => "Hi! Just checking if your concern has already been resolved.",
@@ -808,7 +808,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 97,
                 "name" => "Upcoming Travel Promotions",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 4, 5, 6, 7],
                 "firstMessage" => "We will share available travel promotions and special offers here.",
@@ -816,7 +816,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 98,
                 "name" => "Flight Ticket Details",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 4, 5],
                 "firstMessage" => "Your flight ticket details are ready for review.",
@@ -824,7 +824,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 99,
                 "name" => "Final Travel Preparation",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 1,
                 "participants" => [1, 2, 3, 5, 6, 7],
                 "firstMessage" => "We are almost ready for your trip! Let's review the final preparations.",
@@ -832,7 +832,7 @@ class ConversationSeeder extends Seeder
             [
                 "id" => 100,
                 "name" => "Reliable International Travel Support",
-                "type" => Type::GROUP,
+                "type" => Type::GROUP->value,
                 "creatorID" => 2,
                 "participants" => [2, 3, 4, 5, 6, 7],
                 "firstMessage" => "Hello everyone! This group is for coordinating your travel concerns and updates.",
@@ -843,16 +843,16 @@ class ConversationSeeder extends Seeder
 
         foreach ($convoData as $convo) {
             $newConvo = $this->convoService->create(
-                $convo['participants'],
-                $convo['type'],
-                $convo['creatorID'],
-                $convo['name']
+                participantIDs: $convo['participants'],
+                type: $convo['type'],
+                creatorID: $convo['creatorID'],
+                name: $convo['name']
             );
 
             $this->messageService->createTextMessage(
-                $newConvo,
-                $convo['firstMessage'],
-                $convo['creatorID'],
+                convo: $newConvo,
+                message: $convo['firstMessage'],
+                senderID: $convo['creatorID'],
             );
         }
     }
