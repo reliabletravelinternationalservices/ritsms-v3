@@ -53,7 +53,7 @@ const {
     openedConvo,
     openChat,
     isOpenConvoGroup,
-    openConvId,
+    openConvoId,
     openConvoAvatar,
     openConvoName,
     openInfo,
@@ -68,7 +68,7 @@ const {
     sendMessage,
 
     selectedReplyMessage,
-  
+
     resetReply,
 } = useInbox();
 
@@ -114,14 +114,8 @@ onMounted(async () => {
             <!-- MAIN INBOX -->
             <InboxBody>
                 <ChatContent>
-                    <ChatHeader 
-                        v-if="!createModal && openedConvo"
-                        @info="infoToggle" 
-                        :chat-id="openConvId"
-                        :name="openConvoName"
-                        :avatar="openConvoAvatar"
-                        :is-group="isOpenConvoGroup"
-                    />
+                    <ChatHeader v-if="!createModal && openedConvo" @info="infoToggle" :chat-id="openConvoId"
+                        :name="openConvoName" :avatar="openConvoAvatar" :is-group="isOpenConvoGroup" />
 
                     <CreateHeader v-if="createModal" :contacts="contactList" @select="addNewContact"
                         @remove="removeExistingContact" />
@@ -156,31 +150,19 @@ onMounted(async () => {
             </InboxBody>
 
             <!-- RIGHT SIDEBAR -->
-            <RightSidebar v-if="openInfo && openedConvo"> 
-                <ConvoProfile
-                    :avatar="openConvoAvatar"
-                    :name="openConvoName?? 'Unknown User'"
-                    :is-group="isOpenConvoGroup"
-                />
+            <RightSidebar v-if="openInfo && openedConvo">
+                <ConvoProfile :avatar="openConvoAvatar" :name="openConvoName ?? 'Unknown User'"
+                    :is-group="isOpenConvoGroup" />
 
-                <ConvoAction v-if="isOpenConvoGroup" @edit="editConvo"/>
-                
-                <ConvoOptions 
-                    :is-group="isOpenConvoGroup"
-                    :chat="openedConvo"
-                    @leave-convo="leaveConvo"
-                />
-            
+                <ConvoAction v-if="isOpenConvoGroup" @edit="editConvo" />
+
+                <ConvoOptions :is-group="isOpenConvoGroup" :chat="openedConvo" @leave-convo="leaveConvo" />
+
             </RightSidebar>
         </InboxContent>
 
-        <EditConvoModal
-            v-if="openEditModal"
-            v-model:open="openEditModal"
-            :current-name="openConvoName!"
-            :current-photo="openConvoAvatar? getImageUrl(openConvoAvatar) : null"
-            @save="updateConvoInfo"
-        />
+        <EditConvoModal v-if="openEditModal" v-model:open="openEditModal" :current-name="openConvoName!"
+            :current-photo="openConvoAvatar ? getImageUrl(openConvoAvatar) : null" @save="updateConvoInfo" />
     </AppLayout>
 
 </template>

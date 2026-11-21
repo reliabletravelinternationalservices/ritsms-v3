@@ -78,7 +78,7 @@ export function useInbox() {
         isOpenConvoGroup,
         openConvoAvatar,
         openConvoName,
-        openConvId,
+        openConvoId,
 
         
         openEditModal,
@@ -338,7 +338,7 @@ export function useInbox() {
         openedConvo,
         openChat,
         isOpenConvoGroup,
-        openConvId,
+        openConvoId,
         openConvoAvatar,
         openConvoName,
         infoToggle,

@@ -27,7 +27,7 @@ export function useConvo() {
             (pt) => pt.participant.id !== authUser.value.id
         )?.participant
     );
-    const openConvId = computed(() => openedConvo.value!.id);
+    const openConvoId = computed(() => openedConvo.value!.id);
     const openConvoAvatar = computed(() =>
         isOpenConvoGroup.value
             ? openedConvo.value!.avatar
@@ -175,7 +175,7 @@ export function useConvo() {
         isOpenConvoGroup,
         openConvoAvatar,
         openConvoName,
-        openConvId,
+        openConvoId,
 
         openEditModal,
         updateConvo,
