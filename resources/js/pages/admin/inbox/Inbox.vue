@@ -47,6 +47,7 @@ const {
     creatingConvo,
     createModal,
     createNewConversation,
+    updatingConvo,
 
 
     // ACTIVE CONVO
@@ -150,8 +151,7 @@ onMounted(async () => {
 
             <!-- RIGHT SIDEBAR -->
             <RightSidebar v-if="openInfo && openedConvo">
-                <ConvoProfile :avatar="openConvoAvatar" :name="openConvoName ?? 'Unknown User'"
-                    :is-group="isOpenConvoGroup" />
+                <ConvoProfile :avatar="openConvoAvatar" :name="openConvoName" :is-group="isOpenConvoGroup" />
 
                 <ConvoAction v-if="isOpenConvoGroup" @edit="editConvo" />
 
@@ -161,7 +161,8 @@ onMounted(async () => {
         </InboxContent>
 
         <EditConvoModal v-if="openEditModal" v-model:open="openEditModal" :current-name="openConvoName!"
-            :current-photo="openConvoAvatar ? getImageUrl(openConvoAvatar) : null" @save="updateConvoInfo" />
+            :current-photo="openConvoAvatar ? getImageUrl(openConvoAvatar) : null" @save="updateConvoInfo"
+            :is-updating="updatingConvo" />
     </AppLayout>
 
 </template>

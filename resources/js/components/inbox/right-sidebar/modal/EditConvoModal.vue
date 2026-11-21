@@ -1,7 +1,6 @@
-
 <script setup lang="ts">
 import { ref, watch, onBeforeUnmount } from 'vue';
-import { Camera, UserRound, X } from '@lucide/vue';
+import { Camera, Loader2, UserRound, X } from '@lucide/vue';
 import CustomizedModal from '@/components/CustomizedModal.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,11 +10,13 @@ interface Props {
     open: boolean;
     currentPhoto?: string | null;
     currentName?: string;
+    isUpdating?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     currentPhoto: null,
     currentName: '',
+    isUpdating: false,
 });
 
 const emit = defineEmits<{
@@ -120,10 +121,7 @@ onBeforeUnmount(clearPreview);
 </script>
 
 <template>
-    <CustomizedModal
-        :open="open"
-        @update:open="emit('update:open', $event)"
-    >
+    <CustomizedModal :open="open" @update:open="emit('update:open', $event)">
         <div class="flex flex-col gap-5">
             <div>
                 <h3 class="text-lg font-semibold">Edit Profile</h3>
@@ -135,42 +133,26 @@ onBeforeUnmount(clearPreview);
             <!-- Profile Photo -->
             <div class="flex flex-col items-center gap-3">
                 <div class="relative">
-                    <button
-                        type="button"
-                        @click="openFilePicker"
-                        class="group relative flex size-28 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-border bg-muted transition hover:border-primary"
-                    >
-                        <img
-                            v-if="photoPreview"
-                            :src="photoPreview"
-                            alt="Profile preview"
-                            class="size-full object-cover"
-                        />
+                    <button type="button" @click="openFilePicker"
+                        class="group relative flex size-28 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-border bg-muted transition hover:border-primary">
+                        <img v-if="photoPreview" :src="photoPreview" alt="Profile preview"
+                            class="size-full object-cover" />
 
-                        <UserRound
-                            v-else
-                            class="size-12 text-muted-foreground"
-                        />
+                        <UserRound v-else class="size-12 text-muted-foreground" />
 
-                        <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+                        <div
+                            class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
                             <Camera class="size-7 text-white" />
                         </div>
                     </button>
 
-                    <button
-                        v-if="photoPreview"
-                        type="button"
-                        @click="removePhoto"
-                        class="absolute -right-1 -top-1 flex size-7 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-destructive hover:text-white"
-                    >
+                    <button v-if="photoPreview" type="button" @click="removePhoto"
+                        class="absolute -right-1 -top-1 flex size-7 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-destructive hover:text-white">
                         <X class="size-4" />
                     </button>
 
-                    <button
-                        type="button"
-                        @click="openFilePicker"
-                        class="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-muted"
-                    >
+                    <button type="button" @click="openFilePicker"
+                        class="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-muted">
                         <Camera class="size-4" />
                     </button>
                 </div>
@@ -184,13 +166,8 @@ onBeforeUnmount(clearPreview);
                     </p>
                 </div>
 
-                <input
-                    ref="fileInput"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    class="hidden"
-                    @change="handleFileChange"
-                />
+                <input ref="fileInput" type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+                    @change="handleFileChange" />
 
                 <p v-if="errorMessage" class="text-xs text-destructive">
                     {{ errorMessage }}
@@ -200,25 +177,21 @@ onBeforeUnmount(clearPreview);
             <!-- Profile Name -->
             <div class="flex flex-col gap-2">
                 <Label for="profile-name">Display Name</Label>
-                <Input
-                    id="profile-name"
-                    v-model="name"
-                    placeholder="Enter your name..."
-                    maxlength="255"
-                />
+                <Input id="profile-name" v-model="name" placeholder="Enter your name..." maxlength="255" />
             </div>
 
             <!-- Actions -->
             <div class="flex items-center justify-end gap-2">
-                <Button variant="secondary" @click="close">
+                <Button :disabled="isUpdating" variant="secondary" @click="close">
                     Cancel
                 </Button>
 
-                <Button
-                    :disabled="!name.trim()"
-                    @click="saveProfile"
-                >
-                    Save Changes
+                <Button :disabled="!name.trim() || isUpdating" @click="saveProfile">
+                    <span v-if="!isUpdating">Save Changes</span>
+                    <span v-else class="flex items-center gap-2">
+                        <Loader2 class="animate-spin" />
+                        Saving...
+                    </span>
                 </Button>
             </div>
         </div>

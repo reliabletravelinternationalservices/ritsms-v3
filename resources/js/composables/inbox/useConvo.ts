@@ -11,6 +11,8 @@ export function useConvo() {
     const openInfo = ref(true);
     const openEditModal = ref(false);
 
+    const updatingConvo = ref(false);
+
     // ==================================
     // COMPUTED
     // ==================================
@@ -104,6 +106,10 @@ export function useConvo() {
         openEditModal.value = true
     }
 
+    const closeEditConvo=()=>{
+        openEditModal.value = false
+    }
+
     const updateConvo= async(
         payload: {
             name: string;
@@ -111,6 +117,7 @@ export function useConvo() {
             removeAvatar?: boolean;
         })=>{
             if(!openedConvo.value)return
+            updatingConvo.value = true
             const id = openedConvo.value.id
             const data = await updateConvoInfo(id, payload)
 
@@ -119,7 +126,8 @@ export function useConvo() {
                     ...data
                 }
             }
-            return openedConvo.value;
+            updatingConvo.value = false;
+            return data;
     }
 
 
@@ -179,7 +187,9 @@ export function useConvo() {
 
         openEditModal,
         updateConvo,
+        updatingConvo,
         editConvo,
+        closeEditConvo,
         leaveConvo,
     };
 }

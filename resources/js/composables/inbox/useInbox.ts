@@ -82,8 +82,10 @@ export function useInbox() {
 
         
         openEditModal,
+        updatingConvo,
         editConvo,
         updateConvo,
+        closeEditConvo,
         leaveConvo,
     } = useConvo();
 
@@ -143,8 +145,6 @@ export function useInbox() {
 
         if (!newConvo) return;
 
-        openEditModal.value = false;
-
         const index = conversationList.value?.data.findIndex(
             (convo) => convo.id === newConvo.id
         );
@@ -154,11 +154,14 @@ export function useInbox() {
         const currentConvo = conversationList.value!.data[index];
 
         conversationList.value!.data[index] = {
+            ...currentConvo,
             ...newConvo,
             latest_message: currentConvo.latest_message,
         };
-    };
 
+        openEditModal.value = false;
+        closeEditConvo();
+    };
 
 
     // =====================================================
@@ -346,6 +349,7 @@ export function useInbox() {
         openEditModal,
         editConvo,
         updateConvoInfo,
+        updatingConvo,
         leaveConvo,
 
         // Message actions
