@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
     <!-- Conversation Profile -->
         <div class="flex flex-col items-center gap-3 py-4">
-            <Avatar class="h-20 w-20 overflow-hidden rounded-full border bg-sidebar">
+            <Avatar :key="props.avatar ?? 'fallback'" class="h-20 w-20 overflow-hidden rounded-full border bg-sidebar">
                 <AvatarImage v-if="props.avatar" :src="getImageUrl(props.avatar)" :alt="props.name" />
                 <AvatarFallback class="rounded-full">
                     <AvatarPlaceholder v-if="!isGroup" class="h-full w-full" />

@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getImageUrl } from '@/lib/utils';
 import { Info } from '@lucide/vue';
 
-
 interface Props {
     avatar: string | null;
     name: string;
@@ -13,7 +12,6 @@ interface Props {
 }
 
 defineProps<Props>()
-
 
 const emit = defineEmits<{
     info: [];
@@ -26,7 +24,7 @@ const emit = defineEmits<{
 <template>
     <div class="flex items-center justify-between w-full p-4 gap-4 text-foreground  border-b border-border">
         <div class="flex gap-2 items-center">
-            <Avatar class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-sidebar-border bg-sidebar">
+            <Avatar :key="avatar ?? 'fallback'" class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-sidebar-border bg-sidebar">
                 <AvatarImage v-if="avatar" class="aspect-square h-full w-full" :src="getImageUrl(avatar)"
                     alt="User Avatar" />
                 <AvatarFallback class="rounded-full text-white">
