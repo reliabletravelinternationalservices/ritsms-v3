@@ -8,7 +8,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { getImageUrl } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 
 
@@ -72,6 +72,15 @@ const {
     resetReply,
 } = useInbox();
 
+const messageList = ref<{ scrollToBottom: () => Promise<void> } | null>(null);
+
+const handleSendMessage = async (payload: { message: string; attachments: File[] }) => {
+    const sending = sendMessage(payload);
+
+    await messageList.value?.scrollToBottom();
+    await sending;
+};
+
 
 onMounted(async () => {
     await initializeConvos()
@@ -120,7 +129,7 @@ onMounted(async () => {
                     <CreateHeader v-if="createModal" :contacts="contactList" @select="addNewContact"
                         @remove="removeExistingContact" />
 
-                    <InfiniteScroll v-if="messageGroupList" class="py-2 w-full h-full overflow-y-auto"
+                    <InfiniteScroll ref="messageList" v-if="messageGroupList" class="py-2 w-full h-full overflow-y-auto"
                         :loading="loadingMoreMessages" :has-more="Boolean(messageGroupList.next_cursor)"
                         @load="loadMoreMessages(openedConvo, messageGroupList.next_cursor)" direction="bottom-to-top">
                         <ChatList v-for="messageBatch in messageGroupList.data" :key="messageBatch.id">
@@ -145,7 +154,7 @@ onMounted(async () => {
                     </ChatPlaceholder>
 
                     <ChatComposer v-if="!loadingMessages && openedConvo" :is-reply="selectedReplyMessage !== null"
-                        :reply-message="selectedReplyMessage" @cancel-reply="resetReply" @send="sendMessage" />
+                        :reply-message="selectedReplyMessage" @cancel-reply="resetReply" @send="handleSendMessage" />
                 </ChatContent>
             </InboxBody>
 

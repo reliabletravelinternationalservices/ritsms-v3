@@ -50,6 +50,10 @@ const scrollToBottom = async () => {
     });
 };
 
+defineExpose({
+    scrollToBottom,
+});
+
 const setupObserver = () => {
     observer?.disconnect();
 
