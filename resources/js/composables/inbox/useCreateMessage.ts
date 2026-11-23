@@ -82,6 +82,7 @@ export function useCreateMessage() {
         type: Type.Text,
         reply_to: null,
         sent_at: null,
+        local_sent_at: new Date().toISOString(),
         is_edited: false,
         is_read: false,
         deleted_at: null,
@@ -91,7 +92,10 @@ export function useCreateMessage() {
     const createNewBatch = (message: Message): MessageGroup => ({
         id: typeof message.id === 'number' ? message.id : generateTempMessageId(),
         sender: message.sender,
-        sent_at: new Date().toISOString(),
+        sent_at:
+            message.local_sent_at ??
+            message.sent_at ??
+            new Date().toISOString(),
         messages: [message],
     });
     
@@ -111,14 +115,34 @@ export function useCreateMessage() {
 
         const lastMessage = lastGroup.messages.at(-1);
 
-        if (!lastMessage?.sent_at || !message.sent_at) {
+        if (
+            !lastMessage ||
+            lastMessage.type === Type.System ||
+            message.type === Type.System
+        ) {
             return false;
         }
 
-        const lastTime = new Date(lastMessage.sent_at).getTime();
-        const currentTime = new Date(message.sent_at).getTime();
+        const lastSentAt =
+            lastMessage.sent_at ??
+            lastMessage.local_sent_at ??
+            lastGroup.sent_at;
+        const currentSentAt = message.sent_at ?? message.local_sent_at;
+
+        if (!lastSentAt || !currentSentAt) {
+            return false;
+        }
+
+        const lastDate = new Date(lastSentAt);
+        const currentDate = new Date(currentSentAt);
+        const lastTime = lastDate.getTime();
+        const currentTime = currentDate.getTime();
 
         if (!Number.isFinite(lastTime) || !Number.isFinite(currentTime)) {
+            return false;
+        }
+
+        if (lastDate.toDateString() !== currentDate.toDateString()) {
             return false;
         }
 

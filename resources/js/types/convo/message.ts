@@ -22,6 +22,7 @@ export interface Message {
     type: Type
     reply_to: ReplyMessage | null
     sent_at: string | null
+    local_sent_at?: string
     is_edited: boolean
     is_read: boolean
     deleted_at: string | null
