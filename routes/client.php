@@ -1,20 +1,62 @@
 <?php
 
 use App\Http\Controllers\Client\About\AboutUsController;
+use App\Http\Controllers\Client\Auth\LoginController;
+use App\Http\Controllers\Client\Auth\LogoutController;
+use App\Http\Controllers\Client\Auth\SignupController;
+use App\Http\Controllers\Client\ChatSession\ChatMessageController;
+use App\Http\Controllers\Client\ChatSession\ChatSessionController;
 use App\Http\Controllers\Client\Contact\ContactPageController;
+use App\Http\Controllers\Client\Conversation\CreateConversationController;
 use App\Http\Controllers\Client\Destination\DestinationPageController;
-use App\Http\Controllers\Client\InboundPageController;
 use App\Http\Controllers\Client\Home\LandingPageController;
+use App\Http\Controllers\Client\InboundPageController;
+use App\Http\Controllers\Client\Inbox\MessageInboxController;
 use App\Http\Controllers\Client\Message\InquiryResultController;
 use App\Http\Controllers\Client\Outbound\OutboundPageController;
 use App\Http\Controllers\Client\Policy\InquiryPolicyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [LandingPageController::class, 'index'])->name('client.landing');
 // Route::get('/updateTable', [LandingPageController::class, 'updateTableData'])->name('client.update');
 
 // DESTINATIONS
+
+Route::name('client.')->group(function () {
+
+    Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+
+    Route::prefix('auth')->group(function () {
+        Route::controller(LoginController::class)->group(function () {
+            Route::get('/login', 'login')->name('login');
+            Route::post('login/store', 'store')->name('login.store');
+        });
+
+        Route::controller(SignupController::class)->group(function () {
+            Route::get('/signup', 'signup')->name('signup');
+            Route::post('signup/store', 'store')->name('signup.store');
+        });
+
+        Route::controller(LogoutController::class)->group(function () {
+            Route::get('/logout', 'logout')->name('logout');
+        });
+
+    });
+
+    // Route::middleware('clientAuth')->group(function () {
+    //     Route::prefix('inbox')->group(function () {
+    //         Route::controller(MessageInboxController::class)->group(function () {
+    //             Route::get('/messages', 'index')->name('inbox');
+    //         });
+
+    //         Route::controller(CreateConversationController::class)->group(function () {
+    //             Route::post('/convo/store', 'store')->name('convo.store');
+    //         });
+    //     });
+    // });
+
+});
+
 Route::prefix('destinations')->group(function () {
     Route::get('/', [DestinationPageController::class, 'index'])->name('client.destination');
     Route::prefix('countries')->group(function () {
@@ -54,9 +96,6 @@ Route::prefix('inquiry')->group(function () {
     Route::get('/success', [InquiryResultController::class, 'index'])->name('client.inquiry.success');
     Route::get('/policy', [InquiryPolicyController::class, 'index'])->name('client.inquiry.policy');
 });
-
-
-
 
 Route::get('/contacts', [ContactPageController::class, 'index'])->name('client.contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('client.about');
