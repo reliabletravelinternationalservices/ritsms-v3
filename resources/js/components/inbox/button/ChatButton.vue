@@ -78,7 +78,7 @@ const senderName = computed(() => isYou.value ? 'You: ' : getFirstName(props.cha
         <div class="flex w-full min-w-0 items-center gap-2">
 
             <!-- AVATAR -->
-            <Avatar class="h-12 w-12 shrink-0 overflow-hidden rounded-circle border border-border bg-sidebar">
+            <Avatar :key="avatar ?? 'fallback'" class="h-12 w-12 shrink-0 overflow-hidden rounded-circle border border-border bg-sidebar">
                 <AvatarImage v-if="avatar" :src="getImageUrl(avatar)" :alt="name" />
 
                 <AvatarFallback class="rounded-circle text-white">
