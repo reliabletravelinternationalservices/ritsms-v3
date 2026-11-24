@@ -1,5 +1,5 @@
 import api from '@/lib/api'
-import { ConvoWithParticipants, ConvoWithParticipantsAndLatestMessage, Type } from '@/types/convo/conversation'
+import { ConvoWithLatestMessage, ConvoWithParticipantsAndLatestMessage, Type } from '@/types/convo/conversation'
 import { Message, MessageGroup } from '@/types/convo/message'
 import { CursorPaginated, CursorPaginatedFiltersWithSearch } from '@/types/cursor/cursor-paginated'
 
@@ -53,7 +53,7 @@ export const conversationService = {
             removeAvatar?: boolean;
         },
         signal?: AbortSignal
-    ): Promise<{data: ConvoWithParticipants}> {
+    ): Promise<{data: ConvoWithLatestMessage}> {
         const formData = new FormData();
         formData.append('name', payload.name);
 
@@ -66,7 +66,7 @@ export const conversationService = {
         }
 
         const { data: response } = await api.post<{
-            data: ConvoWithParticipants
+            data: ConvoWithLatestMessage
         }>(route('convo.update', { convo: convoID }), formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

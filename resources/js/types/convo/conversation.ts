@@ -29,6 +29,10 @@ export type ConvoWithParticipants = Conversation & {
     participants: Participant[]
 }
 
+export type ConvoWithLatestMessage = Conversation & {
+    latest_message: Message
+}
+
 export type ConvoWithParticipantsAndLatestMessage = ConvoWithParticipants & {
     latest_message: Message
 }
