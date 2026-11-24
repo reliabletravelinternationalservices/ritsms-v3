@@ -156,8 +156,16 @@ export function useInbox() {
         conversationList.value!.data[index] = {
             ...currentConvo,
             ...newConvo,
-            latest_message: currentConvo.latest_message,
+            participants: currentConvo.participants,
         };
+
+
+        if(!isNoMessageGroupList){
+            storeTempMessageLocally(
+                messageGroupList.value!.data,
+                newConvo.latest_message
+            )
+        }
 
         openEditModal.value = false;
         closeEditConvo();

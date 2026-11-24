@@ -123,7 +123,9 @@ export function useConvo() {
 
             if(data){
                 openedConvo.value = {
-                    ...data
+                    ...openedConvo.value,
+                    ...data,
+                    participants: openedConvo.value.participants
                 }
             }
             updatingConvo.value = false;
