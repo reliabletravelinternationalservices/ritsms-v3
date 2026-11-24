@@ -3,7 +3,7 @@
 import { Textarea } from '@/components/ui/textarea';
 import { createObjectURL } from '@/lib/utils';
 import { Message, Type } from '@/types/convo/message';
-import { Send, Paperclip, X, File as FileIcon } from '@lucide/vue';
+import { Send, Paperclip, X, File as FileIcon, FileVideo } from '@lucide/vue';
 import { computed, ref } from 'vue';
 
 interface Props {
@@ -228,7 +228,15 @@ const sendMessage = () => {
                         :title="`${item.file.name} (${fileSize(item.file.size)})`"
                         class="group flex h-9 max-w-[220px] min-w-0 items-center gap-2 rounded-lg border border-border bg-muted/30 px-2"
                     >
-                        <FileIcon class="h-4 w-4 shrink-0 text-yellow-600" />
+                        <FileVideo
+                            v-if="item.file.type.startsWith('video/')"
+                            class="h-4 w-4 shrink-0 text-yellow-600"
+                        />
+
+                        <FileIcon
+                            v-else
+                            class="h-4 w-4 shrink-0 text-yellow-600"
+                        />
 
                         <span class="min-w-0 flex-1 truncate text-xs font-medium text-foreground">
                             {{ item.file.name }}

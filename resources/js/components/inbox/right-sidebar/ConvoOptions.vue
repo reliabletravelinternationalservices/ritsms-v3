@@ -2,20 +2,26 @@
 import AvatarPlaceholder from '@/components/AvatarPlaceholder.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { formatDateString } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { formatDateString, getAuthUser } from '@/lib/utils';
 import { ConvoWithParticipants } from '@/types/convo/conversation';
 import { Ellipsis, Info, LogOut, Settings, Users } from '@lucide/vue';
+import { computed } from 'vue';
 interface Props {
     isGroup: boolean
     chat: ConvoWithParticipants
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     leaveConvo:[]
 }>()
 
+
+const authUser = computed(()=> getAuthUser())
+
+const isOwner = authUser.value.id ===  props.chat.created_by.id
 
 </script>
 
@@ -107,14 +113,24 @@ const emit = defineEmits<{
             </AccordionTrigger>
 
             <AccordionContent>
-                <div class="space-y-1 pt-2">
-                    <button
-                        @click="emit('leaveConvo')"
-                        class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10">
-                        <LogOut class="h-4 w-4" />
-                        Leave Group
-                    </button>
-                </div>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger as-child>
+                            <button
+                                :disabled="isOwner"
+                                @click="emit('leaveConvo')"
+                                class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+                            >
+                                <LogOut class="h-4 w-4" />
+                                Leave Group
+                            </button>
+                        </TooltipTrigger>
+
+                        <TooltipContent v-if="isOwner">
+                            Group owners cannot leave the group.
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </AccordionContent>
         </AccordionItem>
     </Accordion>

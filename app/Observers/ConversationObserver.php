@@ -25,10 +25,7 @@ class ConversationObserver
      */
     public function updated(Conversation $conversation): void
     {
-        app(MessageService::class)->createSystemMessage(
-            $conversation,
-            'Conversation has been updated'
-        );
+        
     }
 
     /**
