@@ -12,8 +12,6 @@ services:
     depends_on:
       - mysql
       - redis
-    networks:
-      - default
 
   node:
     build:
@@ -24,7 +22,6 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
-      - node_modules:/var/www/html/node_modules
     ports:
       - "5173:5173"
     command: sleep infinity
