@@ -10,9 +10,3 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('rate:update')->everySixHours();
-
-
-
-Artisan::command('strore', function () {
-   Storage::disk('r2')->put('example.txt', 'Contents');
-});
