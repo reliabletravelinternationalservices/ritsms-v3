@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'display_name' => 'Developer Account',
             'role' => 'admin',
             'email' => 'reliabletravelinfo@gmail.com',
+            'status' => 'active',
             'password' => bcrypt('reliable@password'),
         ]);
     }
