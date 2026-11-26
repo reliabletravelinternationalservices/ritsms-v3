@@ -1,37 +1,33 @@
+
 services:
   mysql:
     image: mysql:8.4
-    container_name: rits_mysql
     restart: unless-stopped
-
     environment:
-      MYSQL_ROOT_PASSWORD: ritsroot
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: rits_db
       MYSQL_USER: rits
-      MYSQL_PASSWORD: secret
-
-    ports:
-      - "3307:3306"
-
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - dokploy-network
 
   redis:
     image: redis:8-alpine
-    container_name: rits_redis
     restart: unless-stopped
-
-    ports:
-      - "6379:6379"
+    networks:
+      - dokploy-network
 
   mailpit:
     image: axllent/mailpit:latest
-    container_name: rits_mailpit
     restart: unless-stopped
-
-    ports:
-      - "1025:1025"
-      - "8025:8025"
+    networks:
+      - dokploy-network
 
 volumes:
   mysql_data:
+
+networks:
+  dokploy-network:
+    external: true
