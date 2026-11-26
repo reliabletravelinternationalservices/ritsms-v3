@@ -16,6 +16,10 @@ let vm: ImageViewerInstance | null = null
 
 export const imageViewer = {
   install(app: App) {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
     mountEl = document.createElement("div")
     document.body.appendChild(mountEl)
 

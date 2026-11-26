@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import Button from './ui/button/Button.vue';
 import { cn } from '@/lib/utils';
@@ -10,6 +11,14 @@ import AppLogoIcon from './AppLogoIcon.vue';
 
 const isMobileMenuOpen = ref(false);
 const isMobilePackagesOpen = ref(false);
+const page = usePage();
+
+const isCurrentRoute = (name: string) => {
+    const currentPath = new URL(page.url, 'http://localhost').pathname.replace(/\/+$/, '') || '/';
+    const targetPath = new URL(route(name), 'http://localhost').pathname.replace(/\/+$/, '') || '/';
+
+    return currentPath === targetPath;
+};
 </script>
 
 <template>
@@ -22,7 +31,7 @@ const isMobilePackagesOpen = ref(false);
 
             <nav class="hidden md:flex space-x-6 text-xs font-normal font-roboto text-[var(--muted-custom)]">
                 <a :href="route('client.landing')"
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })">
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.landing') })">
                     <span>Home</span>
                 </a>
                 <Menu as="div" class="relative">
@@ -37,26 +46,26 @@ const isMobilePackagesOpen = ref(false);
                         class="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg ring-1 ring-black/5 focus:outline-none">
                         <MenuItem v-slot="{ active }">
                             <a :href="route('client.inbound')" 
-                            :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': route().current('client.inbound') || active })">
+                            :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': isCurrentRoute('client.inbound') || active })">
                                 Inbound Packages</a>
                         </MenuItem>
                         <MenuItem v-slot="{ active }">
                             <a :href="route('client.outbound')" class="block px-4 py-2 text-sm"
-                                :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': route().current('client.outbound') || active })">
+                                :class="cn('block px-4 py-2 text-sm', { 'bg-[var(--primary-custom)] text-[var(--tertiary-custom)]': isCurrentRoute('client.outbound') || active })">
                                 Outbound Packages</a>
                         </MenuItem>
                     </MenuItems>
                 </Menu>
                 <a :href="route('client.destination')"
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })">
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.destination') })">
                     <span>Destinations</span>
                 </a>
                 <a :href="route('client.contact')"
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })">
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.contact') })">
                     <span>Contact us</span>
                 </a>
                 <a :href="route('client.about')"
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })">
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.about') })">
                     <span>About us</span>
                 </a>
             </nav>
@@ -83,10 +92,10 @@ const isMobilePackagesOpen = ref(false);
             <div v-if="isMobileMenuOpen"
                 class="md:hidden bg-[var(--primary-custom)] border-t border-[var(--shadow-custom)] p-4 space-y-4 flex flex-col">
                 <a :href="route('client.landing')" 
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.landing') })"
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.landing') })"
                     >Home</a>
                 <a :href="route('client.destination')"
-                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.destination') })"
+                    :class="cn('font-medium text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.destination') })"
                     >Destinations</a>
                 <div class="pt-2">
                     <button type="button" @click="isMobilePackagesOpen = !isMobilePackagesOpen"
@@ -100,22 +109,22 @@ const isMobilePackagesOpen = ref(false);
                     <Transition name="fade-slide">
                         <div v-if="isMobilePackagesOpen" class="mt-2 space-y-2 pl-4">
                             <a :href="route('client.inbound')"
-                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.inbound') })">
+                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.inbound') })">
                                 Inbound Packages
                             </a>
                             <a :href="route('client.outbound')"
-                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.outbound') })">
+                                :class="cn('block text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.outbound') })">
                                 Outbound Packages
                             </a>
                         </div>
                     </Transition>
                 </div>
                 <a :href="route('client.contact')"
-                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.contact') })">
+                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.contact') })">
                     Contact us
                 </a>
                 <a :href="route('client.about')"
-                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': route().current('client.about') })">
+                    :class="cn('text-[var(--muted-custom)] hover:text-[var(--secondary-custom)] duration-75', { 'text-[var(--tertiary-custom)]': isCurrentRoute('client.about') })">
                     About us
                 </a>
                 <hr class="border-[var(--shadow-custom)]" />

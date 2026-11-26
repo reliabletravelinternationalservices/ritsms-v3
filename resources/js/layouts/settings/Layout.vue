@@ -24,7 +24,7 @@ const sidebarNavItems: NavItem[] = [
     },
 ];
 
-const currentPath = window.location.pathname;
+const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 </script>
 
 <template>
