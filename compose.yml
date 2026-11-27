@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: rits_db
+      MYSQL_ROOT_PASSWORD: secret
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
