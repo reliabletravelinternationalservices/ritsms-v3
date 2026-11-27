@@ -1,17 +1,17 @@
-import { defineComponent, unref, mergeProps, withCtx, createVNode, useSSRContext, reactive, renderSlot, computed, createTextVNode, toDisplayString, openBlock, createBlock, createCommentVNode, ref, resolveDynamicComponent, createSSRApp, h as h$1 } from "vue";
-import { renderToString } from "@vue/server-renderer";
 import { createInertiaApp } from "@inertiajs/vue3";
 import createServer from "@inertiajs/vue3/server";
-import { ssrRenderComponent, ssrRenderSlot, ssrRenderAttrs, ssrInterpolate, ssrRenderAttr, ssrRenderClass, ssrRenderVNode, ssrRenderList } from "vue/server-renderer";
-import { reactiveOmit } from "@vueuse/core";
-import { XIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, InfoIcon, CircleCheckIcon, X, Check, Copy } from "lucide-vue-next";
-import { Toaster } from "vue-sonner";
+import { reactive, defineComponent, unref, mergeProps, withCtx, renderSlot, useSSRContext, computed, createVNode, createTextVNode, toDisplayString, openBlock, createBlock, createCommentVNode, ref, resolveDynamicComponent, render, onMounted, Fragment, renderList, createSSRApp, h as h$1 } from "vue";
+import { ssrRenderComponent, ssrRenderSlot, ssrRenderAttrs, ssrInterpolate, ssrRenderAttr, ssrRenderClass, ssrRenderVNode, ssrRenderList, renderToString } from "vue/server-renderer";
 import { useForwardPropsEmits, DialogRoot, DialogClose, DialogPortal, DialogOverlay, DialogContent, useForwardProps, DialogDescription, DialogTitle, DialogTrigger } from "radix-vue";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { X, Check, Copy, XIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, InfoIcon, CircleCheckIcon, ArrowRight, ArrowLeft } from "lucide-vue-next";
 import { cva } from "class-variance-authority";
 import { Primitive } from "reka-ui";
 import { Icon } from "@iconify/vue";
+import { reactiveOmit, createInjectionState } from "@vueuse/core";
+import { Toaster } from "vue-sonner";
+import emblaCarouselVue from "embla-carousel-vue";
 async function resolvePageComponent(path, pages) {
   for (const p2 of Array.isArray(path) ? path : [path]) {
     const page = pages[p2];
@@ -410,120 +410,6 @@ const U = { install(t3, e2) {
   const o2 = (t4, o3, n2, r2 = e2) => P(t4, o3, n2, r2);
   parseInt(t3.version) > 2 ? (t3.config.globalProperties.route = o2, t3.provide("route", o2)) : t3.mixin({ methods: { route: o2 } });
 } };
-const Ziggy$1 = { "url": "http://127.0.0.1:8000", "port": 8e3, "defaults": {}, "routes": { "boost.browser-logs": { "uri": "_boost/browser-logs", "methods": ["POST"] }, "sanctum.csrf-cookie": { "uri": "sanctum/csrf-cookie", "methods": ["GET", "HEAD"] }, "client.landing": { "uri": "/", "methods": ["GET", "HEAD"] }, "client.destination": { "uri": "destinations", "methods": ["GET", "HEAD"] }, "client.destination.countries": { "uri": "destinations/countries", "methods": ["GET", "HEAD"] }, "client.destination.country": { "uri": "destinations/countries/{slug}", "methods": ["GET", "HEAD"], "parameters": ["slug"] }, "client.outbound": { "uri": "outbound", "methods": ["GET", "HEAD"] }, "client.outbound.group": { "uri": "outbound/groups/{slug}", "methods": ["GET", "HEAD"], "parameters": ["slug"] }, "client.outbound.package.detail": { "uri": "outbound/packages/{slug}", "methods": ["GET", "HEAD"], "parameters": ["slug"] }, "client.inbound": { "uri": "inbound", "methods": ["GET", "HEAD"] }, "client.inbound.group": { "uri": "inbound/groups/{slug}", "methods": ["GET", "HEAD"], "parameters": ["slug"] }, "client.inbound.package.detail": { "uri": "inbound/packages/{slug}", "methods": ["GET", "HEAD"], "parameters": ["slug"] }, "client.inquiry.store": { "uri": "inquiry/store", "methods": ["POST"] }, "client.inquiry.success": { "uri": "inquiry/success", "methods": ["GET", "HEAD"] }, "client.inquiry.policy": { "uri": "inquiry/policy", "methods": ["GET", "HEAD"] }, "client.contact": { "uri": "contacts", "methods": ["GET", "HEAD"] }, "client.about": { "uri": "about", "methods": ["GET", "HEAD"] }, "admin.dashboard": { "uri": "admin/dashboard", "methods": ["GET", "HEAD"] }, "admin.packages": { "uri": "admin/packages", "methods": ["GET", "HEAD"] }, "admin.packages.details": { "uri": "admin/packages/{id}/details", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.packages.create": { "uri": "admin/packages/create", "methods": ["GET", "HEAD"] }, "admin.packages.store": { "uri": "admin/packages/store", "methods": ["POST"] }, "admin.packages.edit": { "uri": "admin/packages/edit/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.packages.update": { "uri": "admin/packages/update/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.packages.destroy": { "uri": "admin/packages/destroy/{id}", "methods": ["DELETE"], "parameters": ["id"] }, "admin.packages.images.store": { "uri": "admin/packages/images/store/{id}", "methods": ["POST"], "parameters": ["id"] }, "admin.packages.images.update": { "uri": "admin/packages/images/update/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.packages.batches.create": { "uri": "admin/packages/{id}/travelBatches/create", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.packages.batches.store": { "uri": "admin/packages/{id}/travelBatches/store", "methods": ["POST"], "parameters": ["id"] }, "admin.packages.batches.edit": { "uri": "admin/packages/{id}/travelBatches/{scheduleId}/edit", "methods": ["GET", "HEAD"], "parameters": ["id", "scheduleId"] }, "admin.packages.batches.update": { "uri": "admin/packages/{id}/travelBatches/{scheduleId}", "methods": ["PUT"], "parameters": ["id", "scheduleId"] }, "admin.packages.batches.destroy": { "uri": "admin/packages/{id}/travelBatches/{scheduleId}", "methods": ["DELETE"], "parameters": ["id", "scheduleId"] }, "admin.packages.groups": { "uri": "admin/packageGroups", "methods": ["GET", "HEAD"] }, "admin.packages.groups.create": { "uri": "admin/packageGroups/create", "methods": ["GET", "HEAD"] }, "admin.packages.groups.store": { "uri": "admin/packageGroups/store", "methods": ["POST"] }, "admin.packages.groups.edit": { "uri": "admin/packageGroups/edit/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.packages.groups.update": { "uri": "admin/packageGroups/update/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.packages.groups.feature": { "uri": "admin/packageGroups/feature/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.packages.groups.destroy": { "uri": "admin/packageGroups/destroy/{id}", "methods": ["DELETE"], "parameters": ["id"] }, "admin.packages.groups.pin": { "uri": "admin/packageGroups/pin/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.packages.groups.pin.update": { "uri": "admin/packageGroups/pin/update/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.destinations": { "uri": "admin/destinations", "methods": ["GET", "HEAD"] }, "admin.destinations.details": { "uri": "admin/destinations/{id}/details", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.destinations.create": { "uri": "admin/destinations/create", "methods": ["GET", "HEAD"] }, "admin.destinations.store": { "uri": "admin/destinations/store", "methods": ["POST"] }, "admin.destinations.edit": { "uri": "admin/destinations/edit/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.destinations.update": { "uri": "admin/destinations/update/{id}", "methods": ["PUT"], "parameters": ["id"] }, "admin.destinations.destroy": { "uri": "admin/destinations/destroy/{id}", "methods": ["DELETE"], "parameters": ["id"] }, "admin.destinations.locations.create": { "uri": "admin/destinations/{destID}/locations/create", "methods": ["GET", "HEAD"], "parameters": ["destID"] }, "admin.destinations.locations.store": { "uri": "admin/destinations/{destID}/locations/store", "methods": ["POST"], "parameters": ["destID"] }, "admin.destinations.locations.edit": { "uri": "admin/destinations/{destID}/locations/edit/{id}", "methods": ["GET", "HEAD"], "parameters": ["destID", "id"] }, "admin.destinations.locations.update": { "uri": "admin/destinations/{destID}/locations/update/{id}", "methods": ["PUT"], "parameters": ["destID", "id"] }, "admin.destinations.locations.destroy": { "uri": "admin/destinations/{destID}/locations/destroy/{id}", "methods": ["DELETE"], "parameters": ["destID", "id"] }, "admin.inquiries": { "uri": "admin/inquiries", "methods": ["GET", "HEAD"] }, "admin.inquiries.details": { "uri": "admin/inquiries/{id}/details", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.inquiries.status.update": { "uri": "admin/inquiries/{id}/patch", "methods": ["PATCH"], "parameters": ["id"] }, "admin.inquiries.destroy": { "uri": "admin/inquiries/destroy/{id}", "methods": ["DELETE"], "parameters": ["id"] }, "admin.users.admins": { "uri": "admin/users/admins", "methods": ["GET", "HEAD"] }, "admin.users.admins.create": { "uri": "admin/users/admins/create", "methods": ["GET", "HEAD"] }, "admin.users.admins.store": { "uri": "admin/users/admins/store", "methods": ["POST"] }, "admin.users.admins.destroy": { "uri": "admin/users/admins/destroy/{id}", "methods": ["DELETE"], "parameters": ["id"] }, "admin.users.admins.details": { "uri": "admin/users/admins/details/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.users.admins.details.update": { "uri": "admin/users/admins/details/{id}/update", "methods": ["PATCH"], "parameters": ["id"] }, "admin.users.admins.edit": { "uri": "admin/users/admins/details/{id}/edit", "methods": ["GET", "HEAD"], "parameters": ["id"] }, "admin.users.admins.update": { "uri": "admin/users/admins/details/{id}/update", "methods": ["PUT"], "parameters": ["id"] }, "admin.users.clients": { "uri": "admin/users/clients", "methods": ["GET", "HEAD"] }, "admin.bookings": { "uri": "admin/bookings", "methods": ["GET", "HEAD"] }, "admin.logs": { "uri": "admin/logs", "methods": ["GET", "HEAD"] }, "admin.verify.email.send": { "uri": "admin/verify/email", "methods": ["POST"] }, "admin.verification.verify": { "uri": "admin/verify/{hash}", "methods": ["GET", "HEAD"], "parameters": ["hash"] }, "admin.access.denied": { "uri": "admin/accessDenied", "methods": ["GET", "HEAD"] }, "admin.forgot.password": { "uri": "admin/forgot-password", "methods": ["GET", "HEAD"] }, "admin.forgot.password.send": { "uri": "admin/forgot-password", "methods": ["POST"] }, "admin.forgot.password.reset": { "uri": "admin/reset-password/{token}", "methods": ["GET", "HEAD"], "parameters": ["token"] }, "admin.password.store": { "uri": "admin/reset-password", "methods": ["POST"] }, "profile.edit": { "uri": "admin/settings/profile", "methods": ["GET", "HEAD"] }, "profile.update": { "uri": "admin/settings/profile", "methods": ["PATCH"] }, "profile.destroy": { "uri": "admin/settings/profile", "methods": ["DELETE"] }, "password.edit": { "uri": "admin/settings/password", "methods": ["GET", "HEAD"] }, "password.update": { "uri": "admin/settings/password", "methods": ["PUT"] }, "currency.edit": { "uri": "admin/settings/currency", "methods": ["GET", "HEAD"] }, "currency.update": { "uri": "admin/settings/currency", "methods": ["PUT"] }, "appearance": { "uri": "admin/settings/appearance", "methods": ["GET", "HEAD"] }, "admin.login": { "uri": "admin/login", "methods": ["GET", "HEAD"] }, "admin.login.store": { "uri": "admin/login", "methods": ["POST"] }, "admin.register": { "uri": "admin/register", "methods": ["GET", "HEAD"] }, "verification.notice": { "uri": "verify-email", "methods": ["GET", "HEAD"] }, "verification.verify": { "uri": "verify-email/{id}/{hash}", "methods": ["GET", "HEAD"], "parameters": ["id", "hash"] }, "verification.send": { "uri": "email/verification-notification", "methods": ["POST"] }, "password.confirm": { "uri": "confirm-password", "methods": ["GET", "HEAD"] }, "logout": { "uri": "logout", "methods": ["POST"] }, "storage.local": { "uri": "storage/{path}", "methods": ["GET", "HEAD"], "wheres": { "path": ".*" }, "parameters": ["path"] }, "storage.local.upload": { "uri": "storage/{path}", "methods": ["PUT"], "wheres": { "path": ".*" }, "parameters": ["path"] } } };
-if (typeof window !== "undefined" && typeof window.Ziggy !== "undefined") {
-  Object.assign(Ziggy$1.routes, window.Ziggy.routes);
-}
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
-  __name: "Sonner",
-  __ssrInlineRender: true,
-  props: {
-    id: {},
-    invert: { type: Boolean },
-    theme: {},
-    position: {},
-    closeButtonPosition: {},
-    hotkey: {},
-    richColors: { type: Boolean },
-    expand: { type: Boolean },
-    duration: {},
-    gap: {},
-    visibleToasts: {},
-    closeButton: { type: Boolean },
-    toastOptions: {},
-    class: {},
-    style: {},
-    offset: {},
-    mobileOffset: {},
-    dir: {},
-    swipeDirections: {},
-    icons: {},
-    containerAriaLabel: {}
-  },
-  setup(__props) {
-    const props = __props;
-    const delegatedProps = reactiveOmit(props, "toastOptions");
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(ssrRenderComponent(unref(Toaster), mergeProps({
-        class: "toaster group",
-        "toast-options": {
-          classes: {
-            toast: "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
-            description: "group-[.toast]:text-muted-foreground",
-            actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
-            cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground"
-          }
-        }
-      }, unref(delegatedProps), _attrs), {
-        "success-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(unref(CircleCheckIcon), { class: "size-4" }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(unref(CircleCheckIcon), { class: "size-4" })
-            ];
-          }
-        }),
-        "info-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(unref(InfoIcon), { class: "size-4" }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(unref(InfoIcon), { class: "size-4" })
-            ];
-          }
-        }),
-        "warning-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(unref(TriangleAlertIcon), { class: "size-4" }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(unref(TriangleAlertIcon), { class: "size-4" })
-            ];
-          }
-        }),
-        "error-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(unref(OctagonXIcon), { class: "size-4" }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(unref(OctagonXIcon), { class: "size-4" })
-            ];
-          }
-        }),
-        "loading-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(`<div${_scopeId}>`);
-            _push2(ssrRenderComponent(unref(Loader2Icon), { class: "size-4 animate-spin" }, null, _parent2, _scopeId));
-            _push2(`</div>`);
-          } else {
-            return [
-              createVNode("div", null, [
-                createVNode(unref(Loader2Icon), { class: "size-4 animate-spin" })
-              ])
-            ];
-          }
-        }),
-        "close-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(unref(XIcon), { class: "size-4" }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(unref(XIcon), { class: "size-4" })
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-    };
-  }
-});
-const _sfc_setup$c = _sfc_main$c.setup;
-_sfc_main$c.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/sonner/Sonner.vue");
-  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
-};
 const state = reactive({
   show: false,
   title: "Confirm delete",
@@ -560,7 +446,7 @@ async function confirmDelete() {
     closeDeleteDialog();
   }
 }
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
   __name: "Dialog",
   __ssrInlineRender: true,
   props: {
@@ -589,18 +475,18 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$b = _sfc_main$b.setup;
-_sfc_main$b.setup = (props, ctx) => {
+const _sfc_setup$j = _sfc_main$j.setup;
+_sfc_main$j.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/Dialog.vue");
-  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
+  return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
 };
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "DialogClose",
   __ssrInlineRender: true,
   props: {
     asChild: { type: Boolean },
-    as: {}
+    as: { type: [String, Object, Function] }
   },
   setup(__props) {
     const props = __props;
@@ -620,11 +506,11 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$a = _sfc_main$a.setup;
-_sfc_main$a.setup = (props, ctx) => {
+const _sfc_setup$i = _sfc_main$i.setup;
+_sfc_main$i.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogClose.vue");
-  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
+  return _sfc_setup$i ? _sfc_setup$i(props, ctx) : void 0;
 };
 const appUrl = "http://127.0.0.1:8000/";
 function cn(...inputs) {
@@ -729,7 +615,7 @@ ${activities}`;
 const getImageUrl = (path) => {
   return `${appUrl}/storage/${path}`;
 };
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   __name: "DialogContent",
   __ssrInlineRender: true,
   props: {
@@ -737,7 +623,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     trapFocus: { type: Boolean },
     disableOutsidePointerEvents: { type: Boolean },
     asChild: { type: Boolean },
-    as: {},
+    as: { type: [String, Object, Function] },
     class: { type: [Boolean, null, String, Object, Array] }
   },
   emits: ["escapeKeyDown", "pointerDownOutside", "focusOutside", "interactOutside", "openAutoFocus", "closeAutoFocus"],
@@ -821,18 +707,18 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$9 = _sfc_main$9.setup;
-_sfc_main$9.setup = (props, ctx) => {
+const _sfc_setup$h = _sfc_main$h.setup;
+_sfc_main$h.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogContent.vue");
-  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
+  return _sfc_setup$h ? _sfc_setup$h(props, ctx) : void 0;
 };
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   __name: "DialogDescription",
   __ssrInlineRender: true,
   props: {
     asChild: { type: Boolean },
-    as: {},
+    as: { type: [String, Object, Function] },
     class: { type: [Boolean, null, String, Object, Array] }
   },
   setup(__props) {
@@ -860,13 +746,13 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
+const _sfc_setup$g = _sfc_main$g.setup;
+_sfc_main$g.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogDescription.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+  return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
 };
-const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   __name: "DialogFooter",
   __ssrInlineRender: true,
   props: {
@@ -883,13 +769,13 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$7 = _sfc_main$7.setup;
-_sfc_main$7.setup = (props, ctx) => {
+const _sfc_setup$f = _sfc_main$f.setup;
+_sfc_main$f.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogFooter.vue");
-  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+  return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
 };
-const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   __name: "DialogHeader",
   __ssrInlineRender: true,
   props: {
@@ -906,13 +792,13 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$e = _sfc_main$e.setup;
+_sfc_main$e.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogHeader.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
 };
-const _sfc_main$5 = /* @__PURE__ */ defineComponent({
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   __name: "DialogScrollContent",
   __ssrInlineRender: true,
   props: {
@@ -920,7 +806,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     trapFocus: { type: Boolean },
     disableOutsidePointerEvents: { type: Boolean },
     asChild: { type: Boolean },
-    as: {},
+    as: { type: [String, Object, Function] },
     class: { type: [Boolean, null, String, Object, Array] }
   },
   emits: ["escapeKeyDown", "pointerDownOutside", "focusOutside", "interactOutside", "openAutoFocus", "closeAutoFocus"],
@@ -1059,18 +945,18 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$d = _sfc_main$d.setup;
+_sfc_main$d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogScrollContent.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$d ? _sfc_setup$d(props, ctx) : void 0;
 };
-const _sfc_main$4 = /* @__PURE__ */ defineComponent({
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   __name: "DialogTitle",
   __ssrInlineRender: true,
   props: {
     asChild: { type: Boolean },
-    as: {},
+    as: { type: [String, Object, Function] },
     class: { type: [Boolean, null, String, Object, Array] }
   },
   setup(__props) {
@@ -1098,18 +984,18 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$4 = _sfc_main$4.setup;
-_sfc_main$4.setup = (props, ctx) => {
+const _sfc_setup$c = _sfc_main$c.setup;
+_sfc_main$c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogTitle.vue");
-  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
 };
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "DialogTrigger",
   __ssrInlineRender: true,
   props: {
     asChild: { type: Boolean },
-    as: {}
+    as: { type: [String, Object, Function] }
   },
   setup(__props) {
     const props = __props;
@@ -1129,13 +1015,13 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$3 = _sfc_main$3.setup;
-_sfc_main$3.setup = (props, ctx) => {
+const _sfc_setup$b = _sfc_main$b.setup;
+_sfc_main$b.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/dialog/DialogTrigger.vue");
-  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
 };
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   __name: "Button",
   __ssrInlineRender: true,
   props: {
@@ -1143,7 +1029,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     size: {},
     class: { type: [Boolean, null, String, Object, Array] },
     asChild: { type: Boolean },
-    as: { default: "button" }
+    as: { type: [String, Object, Function], default: "button" }
   },
   setup(__props) {
     const props = __props;
@@ -1167,11 +1053,11 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$2 = _sfc_main$2.setup;
-_sfc_main$2.setup = (props, ctx) => {
+const _sfc_setup$a = _sfc_main$a.setup;
+_sfc_main$a.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/button/Button.vue");
-  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
 };
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -1200,25 +1086,25 @@ const buttonVariants = cva(
     }
   }
 );
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "DeleteDialog",
   __ssrInlineRender: true,
   setup(__props) {
     const confirm = () => confirmDelete();
     return (_ctx, _push, _parent, _attrs) => {
-      _push(ssrRenderComponent(unref(_sfc_main$b), mergeProps({
+      _push(ssrRenderComponent(unref(_sfc_main$j), mergeProps({
         open: unref(state).show,
         "onUpdate:open": (val) => unref(state).show = val
       }, _attrs), {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(ssrRenderComponent(unref(_sfc_main$9), null, {
+            _push2(ssrRenderComponent(unref(_sfc_main$h), null, {
               default: withCtx((_22, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(ssrRenderComponent(unref(_sfc_main$6), { class: "space-y-2" }, {
+                  _push3(ssrRenderComponent(unref(_sfc_main$e), { class: "space-y-2" }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(ssrRenderComponent(unref(_sfc_main$4), null, {
+                        _push4(ssrRenderComponent(unref(_sfc_main$c), null, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
                               _push5(`${ssrInterpolate(unref(state).title)}`);
@@ -1230,16 +1116,16 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                           }),
                           _: 1
                         }, _parent4, _scopeId3));
-                        _push4(ssrRenderComponent(unref(_sfc_main$8), null, null, _parent4, _scopeId3));
+                        _push4(ssrRenderComponent(unref(_sfc_main$g), null, null, _parent4, _scopeId3));
                       } else {
                         return [
-                          createVNode(unref(_sfc_main$4), null, {
+                          createVNode(unref(_sfc_main$c), null, {
                             default: withCtx(() => [
                               createTextVNode(toDisplayString(unref(state).title), 1)
                             ]),
                             _: 1
                           }),
-                          createVNode(unref(_sfc_main$8), {
+                          createVNode(unref(_sfc_main$g), {
                             innerHTML: unref(state).message
                           }, null, 8, ["innerHTML"])
                         ];
@@ -1247,13 +1133,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(ssrRenderComponent(unref(_sfc_main$7), { class: "border-t pt-4 flex justify-end gap-2" }, {
+                  _push3(ssrRenderComponent(unref(_sfc_main$f), { class: "border-t pt-4 flex justify-end gap-2" }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(ssrRenderComponent(unref(_sfc_main$a), { "as-child": "" }, {
+                        _push4(ssrRenderComponent(unref(_sfc_main$i), { "as-child": "" }, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
-                              _push5(ssrRenderComponent(unref(_sfc_main$2), {
+                              _push5(ssrRenderComponent(unref(_sfc_main$a), {
                                 variant: "secondary",
                                 disabled: unref(state).loading
                               }, {
@@ -1270,7 +1156,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                               }, _parent5, _scopeId4));
                             } else {
                               return [
-                                createVNode(unref(_sfc_main$2), {
+                                createVNode(unref(_sfc_main$a), {
                                   variant: "secondary",
                                   disabled: unref(state).loading
                                 }, {
@@ -1284,7 +1170,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                           }),
                           _: 1
                         }, _parent4, _scopeId3));
-                        _push4(ssrRenderComponent(unref(_sfc_main$2), {
+                        _push4(ssrRenderComponent(unref(_sfc_main$a), {
                           variant: "destructive",
                           disabled: unref(state).loading,
                           onClick: confirm
@@ -1311,9 +1197,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                         }, _parent4, _scopeId3));
                       } else {
                         return [
-                          createVNode(unref(_sfc_main$a), { "as-child": "" }, {
+                          createVNode(unref(_sfc_main$i), { "as-child": "" }, {
                             default: withCtx(() => [
-                              createVNode(unref(_sfc_main$2), {
+                              createVNode(unref(_sfc_main$a), {
                                 variant: "secondary",
                                 disabled: unref(state).loading
                               }, {
@@ -1325,7 +1211,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                             ]),
                             _: 1
                           }),
-                          createVNode(unref(_sfc_main$2), {
+                          createVNode(unref(_sfc_main$a), {
                             variant: "destructive",
                             disabled: unref(state).loading,
                             onClick: confirm
@@ -1346,25 +1232,25 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                   }, _parent3, _scopeId2));
                 } else {
                   return [
-                    createVNode(unref(_sfc_main$6), { class: "space-y-2" }, {
+                    createVNode(unref(_sfc_main$e), { class: "space-y-2" }, {
                       default: withCtx(() => [
-                        createVNode(unref(_sfc_main$4), null, {
+                        createVNode(unref(_sfc_main$c), null, {
                           default: withCtx(() => [
                             createTextVNode(toDisplayString(unref(state).title), 1)
                           ]),
                           _: 1
                         }),
-                        createVNode(unref(_sfc_main$8), {
+                        createVNode(unref(_sfc_main$g), {
                           innerHTML: unref(state).message
                         }, null, 8, ["innerHTML"])
                       ]),
                       _: 1
                     }),
-                    createVNode(unref(_sfc_main$7), { class: "border-t pt-4 flex justify-end gap-2" }, {
+                    createVNode(unref(_sfc_main$f), { class: "border-t pt-4 flex justify-end gap-2" }, {
                       default: withCtx(() => [
-                        createVNode(unref(_sfc_main$a), { "as-child": "" }, {
+                        createVNode(unref(_sfc_main$i), { "as-child": "" }, {
                           default: withCtx(() => [
-                            createVNode(unref(_sfc_main$2), {
+                            createVNode(unref(_sfc_main$a), {
                               variant: "secondary",
                               disabled: unref(state).loading
                             }, {
@@ -1376,7 +1262,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                           ]),
                           _: 1
                         }),
-                        createVNode(unref(_sfc_main$2), {
+                        createVNode(unref(_sfc_main$a), {
                           variant: "destructive",
                           disabled: unref(state).loading,
                           onClick: confirm
@@ -1400,27 +1286,27 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
             }, _parent2, _scopeId));
           } else {
             return [
-              createVNode(unref(_sfc_main$9), null, {
+              createVNode(unref(_sfc_main$h), null, {
                 default: withCtx(() => [
-                  createVNode(unref(_sfc_main$6), { class: "space-y-2" }, {
+                  createVNode(unref(_sfc_main$e), { class: "space-y-2" }, {
                     default: withCtx(() => [
-                      createVNode(unref(_sfc_main$4), null, {
+                      createVNode(unref(_sfc_main$c), null, {
                         default: withCtx(() => [
                           createTextVNode(toDisplayString(unref(state).title), 1)
                         ]),
                         _: 1
                       }),
-                      createVNode(unref(_sfc_main$8), {
+                      createVNode(unref(_sfc_main$g), {
                         innerHTML: unref(state).message
                       }, null, 8, ["innerHTML"])
                     ]),
                     _: 1
                   }),
-                  createVNode(unref(_sfc_main$7), { class: "border-t pt-4 flex justify-end gap-2" }, {
+                  createVNode(unref(_sfc_main$f), { class: "border-t pt-4 flex justify-end gap-2" }, {
                     default: withCtx(() => [
-                      createVNode(unref(_sfc_main$a), { "as-child": "" }, {
+                      createVNode(unref(_sfc_main$i), { "as-child": "" }, {
                         default: withCtx(() => [
-                          createVNode(unref(_sfc_main$2), {
+                          createVNode(unref(_sfc_main$a), {
                             variant: "secondary",
                             disabled: unref(state).loading
                           }, {
@@ -1432,7 +1318,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                         ]),
                         _: 1
                       }),
-                      createVNode(unref(_sfc_main$2), {
+                      createVNode(unref(_sfc_main$a), {
                         variant: "destructive",
                         disabled: unref(state).loading,
                         onClick: confirm
@@ -1467,13 +1353,13 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
+const _sfc_setup$9 = _sfc_main$9.setup;
+_sfc_main$9.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/DeleteDialog.vue");
-  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
+  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
 };
-const DeleteDialog = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-011e891f"]]);
+const DeleteDialog = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-011e891f"]]);
 const isOpen = ref(false);
 const shareUrl = ref("");
 const useShareModal = () => {
@@ -1486,7 +1372,7 @@ const useShareModal = () => {
   };
   return { isOpen, shareUrl, open, close };
 };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main$8 = /* @__PURE__ */ defineComponent({
   __name: "ShareModal",
   __ssrInlineRender: true,
   setup(__props) {
@@ -1536,57 +1422,1003 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ShareModal.vue");
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+};
+const ShareModal = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-1ff0f0b3"]]);
+const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+  __name: "Sonner",
+  __ssrInlineRender: true,
+  props: {
+    id: {},
+    invert: { type: Boolean },
+    theme: {},
+    position: {},
+    closeButtonPosition: {},
+    hotkey: {},
+    richColors: { type: Boolean },
+    expand: { type: Boolean },
+    duration: {},
+    gap: {},
+    visibleToasts: {},
+    closeButton: { type: Boolean },
+    toastOptions: {},
+    class: {},
+    style: {},
+    offset: {},
+    mobileOffset: {},
+    dir: {},
+    swipeDirections: {},
+    icons: {},
+    containerAriaLabel: {}
+  },
+  setup(__props) {
+    const props = __props;
+    const delegatedProps = reactiveOmit(props, "toastOptions");
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(ssrRenderComponent(unref(Toaster), mergeProps({
+        class: "toaster group",
+        "toast-options": {
+          classes: {
+            toast: "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
+            description: "group-[.toast]:text-muted-foreground",
+            actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
+            cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground"
+          }
+        }
+      }, unref(delegatedProps), _attrs), {
+        "success-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(CircleCheckIcon), { class: "size-4" }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(CircleCheckIcon), { class: "size-4" })
+            ];
+          }
+        }),
+        "info-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(InfoIcon), { class: "size-4" }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(InfoIcon), { class: "size-4" })
+            ];
+          }
+        }),
+        "warning-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(TriangleAlertIcon), { class: "size-4" }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(TriangleAlertIcon), { class: "size-4" })
+            ];
+          }
+        }),
+        "error-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(OctagonXIcon), { class: "size-4" }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(OctagonXIcon), { class: "size-4" })
+            ];
+          }
+        }),
+        "loading-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<div${_scopeId}>`);
+            _push2(ssrRenderComponent(unref(Loader2Icon), { class: "size-4 animate-spin" }, null, _parent2, _scopeId));
+            _push2(`</div>`);
+          } else {
+            return [
+              createVNode("div", null, [
+                createVNode(unref(Loader2Icon), { class: "size-4 animate-spin" })
+              ])
+            ];
+          }
+        }),
+        "close-icon": withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(XIcon), { class: "size-4" }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(XIcon), { class: "size-4" })
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+    };
+  }
+});
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/sonner/Sonner.vue");
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+};
+const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+  __name: "AppModalHost",
+  __ssrInlineRender: true,
+  setup(__props, { expose: __expose }) {
+    const openState = ref(false);
+    const payload = ref(null);
+    function open(data) {
+      payload.value = data;
+      openState.value = true;
+    }
+    function close() {
+      openState.value = false;
+    }
+    function confirm() {
+      var _a, _b;
+      (_b = (_a = payload.value) == null ? void 0 : _a.onConfirm) == null ? void 0 : _b.call(_a);
+      close();
+    }
+    __expose({
+      open,
+      close
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(ssrRenderComponent(unref(_sfc_main$j), mergeProps({
+        open: openState.value,
+        "onUpdate:open": ($event) => openState.value = $event
+      }, _attrs), {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(_sfc_main$h), { class: "sm:max-w-md" }, {
+              default: withCtx((_22, _push3, _parent3, _scopeId2) => {
+                if (_push3) {
+                  _push3(ssrRenderComponent(unref(_sfc_main$e), null, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      var _a, _b;
+                      if (_push4) {
+                        _push4(ssrRenderComponent(unref(_sfc_main$c), null, {
+                          default: withCtx((_4, _push5, _parent5, _scopeId4) => {
+                            var _a2, _b2;
+                            if (_push5) {
+                              _push5(`${ssrInterpolate((_a2 = payload.value) == null ? void 0 : _a2.title)}`);
+                            } else {
+                              return [
+                                createTextVNode(toDisplayString((_b2 = payload.value) == null ? void 0 : _b2.title), 1)
+                              ];
+                            }
+                          }),
+                          _: 1
+                        }, _parent4, _scopeId3));
+                        if ((_a = payload.value) == null ? void 0 : _a.description) {
+                          _push4(ssrRenderComponent(unref(_sfc_main$g), null, {
+                            default: withCtx((_4, _push5, _parent5, _scopeId4) => {
+                              var _a2, _b2;
+                              if (_push5) {
+                                _push5(`${ssrInterpolate((_a2 = payload.value) == null ? void 0 : _a2.description)}`);
+                              } else {
+                                return [
+                                  createTextVNode(toDisplayString((_b2 = payload.value) == null ? void 0 : _b2.description), 1)
+                                ];
+                              }
+                            }),
+                            _: 1
+                          }, _parent4, _scopeId3));
+                        } else {
+                          _push4(`<!---->`);
+                        }
+                      } else {
+                        return [
+                          createVNode(unref(_sfc_main$c), null, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.title), 1)
+                              ];
+                            }),
+                            _: 1
+                          }),
+                          ((_b = payload.value) == null ? void 0 : _b.description) ? (openBlock(), createBlock(unref(_sfc_main$g), { key: 0 }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.description), 1)
+                              ];
+                            }),
+                            _: 1
+                          })) : createCommentVNode("", true)
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                  _push3(ssrRenderComponent(unref(_sfc_main$f), { class: "flex gap-2" }, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      var _a, _b;
+                      if (_push4) {
+                        if ((_a = payload.value) == null ? void 0 : _a.cancelText) {
+                          _push4(ssrRenderComponent(unref(_sfc_main$a), {
+                            variant: "secondary",
+                            onClick: close
+                          }, {
+                            default: withCtx((_4, _push5, _parent5, _scopeId4) => {
+                              var _a2, _b2;
+                              if (_push5) {
+                                _push5(`${ssrInterpolate(((_a2 = payload.value) == null ? void 0 : _a2.cancelText) ?? "Close")}`);
+                              } else {
+                                return [
+                                  createTextVNode(toDisplayString(((_b2 = payload.value) == null ? void 0 : _b2.cancelText) ?? "Close"), 1)
+                                ];
+                              }
+                            }),
+                            _: 1
+                          }, _parent4, _scopeId3));
+                        } else {
+                          _push4(`<!---->`);
+                        }
+                        _push4(ssrRenderComponent(unref(_sfc_main$a), { onClick: confirm }, {
+                          default: withCtx((_4, _push5, _parent5, _scopeId4) => {
+                            var _a2, _b2;
+                            if (_push5) {
+                              _push5(`${ssrInterpolate(((_a2 = payload.value) == null ? void 0 : _a2.confirmText) ?? "OK")}`);
+                            } else {
+                              return [
+                                createTextVNode(toDisplayString(((_b2 = payload.value) == null ? void 0 : _b2.confirmText) ?? "OK"), 1)
+                              ];
+                            }
+                          }),
+                          _: 1
+                        }, _parent4, _scopeId3));
+                      } else {
+                        return [
+                          ((_b = payload.value) == null ? void 0 : _b.cancelText) ? (openBlock(), createBlock(unref(_sfc_main$a), {
+                            key: 0,
+                            variant: "secondary",
+                            onClick: close
+                          }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.cancelText) ?? "Close"), 1)
+                              ];
+                            }),
+                            _: 1
+                          })) : createCommentVNode("", true),
+                          createVNode(unref(_sfc_main$a), { onClick: confirm }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.confirmText) ?? "OK"), 1)
+                              ];
+                            }),
+                            _: 1
+                          })
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                } else {
+                  return [
+                    createVNode(unref(_sfc_main$e), null, {
+                      default: withCtx(() => {
+                        var _a;
+                        return [
+                          createVNode(unref(_sfc_main$c), null, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.title), 1)
+                              ];
+                            }),
+                            _: 1
+                          }),
+                          ((_a = payload.value) == null ? void 0 : _a.description) ? (openBlock(), createBlock(unref(_sfc_main$g), { key: 0 }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.description), 1)
+                              ];
+                            }),
+                            _: 1
+                          })) : createCommentVNode("", true)
+                        ];
+                      }),
+                      _: 1
+                    }),
+                    createVNode(unref(_sfc_main$f), { class: "flex gap-2" }, {
+                      default: withCtx(() => {
+                        var _a;
+                        return [
+                          ((_a = payload.value) == null ? void 0 : _a.cancelText) ? (openBlock(), createBlock(unref(_sfc_main$a), {
+                            key: 0,
+                            variant: "secondary",
+                            onClick: close
+                          }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.cancelText) ?? "Close"), 1)
+                              ];
+                            }),
+                            _: 1
+                          })) : createCommentVNode("", true),
+                          createVNode(unref(_sfc_main$a), { onClick: confirm }, {
+                            default: withCtx(() => {
+                              var _a2;
+                              return [
+                                createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.confirmText) ?? "OK"), 1)
+                              ];
+                            }),
+                            _: 1
+                          })
+                        ];
+                      }),
+                      _: 1
+                    })
+                  ];
+                }
+              }),
+              _: 1
+            }, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(_sfc_main$h), { class: "sm:max-w-md" }, {
+                default: withCtx(() => [
+                  createVNode(unref(_sfc_main$e), null, {
+                    default: withCtx(() => {
+                      var _a;
+                      return [
+                        createVNode(unref(_sfc_main$c), null, {
+                          default: withCtx(() => {
+                            var _a2;
+                            return [
+                              createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.title), 1)
+                            ];
+                          }),
+                          _: 1
+                        }),
+                        ((_a = payload.value) == null ? void 0 : _a.description) ? (openBlock(), createBlock(unref(_sfc_main$g), { key: 0 }, {
+                          default: withCtx(() => {
+                            var _a2;
+                            return [
+                              createTextVNode(toDisplayString((_a2 = payload.value) == null ? void 0 : _a2.description), 1)
+                            ];
+                          }),
+                          _: 1
+                        })) : createCommentVNode("", true)
+                      ];
+                    }),
+                    _: 1
+                  }),
+                  createVNode(unref(_sfc_main$f), { class: "flex gap-2" }, {
+                    default: withCtx(() => {
+                      var _a;
+                      return [
+                        ((_a = payload.value) == null ? void 0 : _a.cancelText) ? (openBlock(), createBlock(unref(_sfc_main$a), {
+                          key: 0,
+                          variant: "secondary",
+                          onClick: close
+                        }, {
+                          default: withCtx(() => {
+                            var _a2;
+                            return [
+                              createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.cancelText) ?? "Close"), 1)
+                            ];
+                          }),
+                          _: 1
+                        })) : createCommentVNode("", true),
+                        createVNode(unref(_sfc_main$a), { onClick: confirm }, {
+                          default: withCtx(() => {
+                            var _a2;
+                            return [
+                              createTextVNode(toDisplayString(((_a2 = payload.value) == null ? void 0 : _a2.confirmText) ?? "OK"), 1)
+                            ];
+                          }),
+                          _: 1
+                        })
+                      ];
+                    }),
+                    _: 1
+                  })
+                ]),
+                _: 1
+              })
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+    };
+  }
+});
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/AppModalHost.vue");
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+};
+let vm$1 = null;
+let mountEl$1 = null;
+const appModal = {
+  install(app) {
+    var _a;
+    if (typeof document === "undefined") {
+      return;
+    }
+    mountEl$1 = document.createElement("div");
+    document.body.appendChild(mountEl$1);
+    const vnode = createVNode(_sfc_main$6);
+    vnode.appContext = app._context;
+    render(vnode, mountEl$1);
+    vm$1 = (_a = vnode.component) == null ? void 0 : _a.exposed;
+  },
+  open(payload) {
+    vm$1 == null ? void 0 : vm$1.open(payload);
+  },
+  close() {
+    vm$1 == null ? void 0 : vm$1.close();
+  }
+};
+const [useProvideCarousel, useInjectCarousel] = createInjectionState(
+  ({
+    opts,
+    orientation,
+    plugins
+  }, emits) => {
+    const [emblaNode, emblaApi] = emblaCarouselVue({
+      ...opts,
+      axis: orientation === "horizontal" ? "x" : "y"
+    }, plugins);
+    function scrollPrev() {
+      var _a;
+      (_a = emblaApi.value) == null ? void 0 : _a.scrollPrev();
+    }
+    function scrollNext() {
+      var _a;
+      (_a = emblaApi.value) == null ? void 0 : _a.scrollNext();
+    }
+    const canScrollNext = ref(false);
+    const canScrollPrev = ref(false);
+    function onSelect(api) {
+      canScrollNext.value = (api == null ? void 0 : api.canScrollNext()) || false;
+      canScrollPrev.value = (api == null ? void 0 : api.canScrollPrev()) || false;
+    }
+    onMounted(() => {
+      var _a, _b, _c;
+      if (!emblaApi.value)
+        return;
+      (_a = emblaApi.value) == null ? void 0 : _a.on("init", onSelect);
+      (_b = emblaApi.value) == null ? void 0 : _b.on("reInit", onSelect);
+      (_c = emblaApi.value) == null ? void 0 : _c.on("select", onSelect);
+      emits("init-api", emblaApi.value);
+    });
+    return { carouselRef: emblaNode, carouselApi: emblaApi, canScrollPrev, canScrollNext, scrollPrev, scrollNext, orientation };
+  }
+);
+function useCarousel() {
+  const carouselState = useInjectCarousel();
+  if (!carouselState)
+    throw new Error("useCarousel must be used within a <Carousel />");
+  return carouselState;
+}
+const _sfc_main$5 = /* @__PURE__ */ defineComponent({
+  __name: "Carousel",
+  __ssrInlineRender: true,
+  props: {
+    opts: {},
+    plugins: {},
+    orientation: { default: "horizontal" },
+    class: { type: [Boolean, null, String, Object, Array] }
+  },
+  emits: ["init-api"],
+  setup(__props, { expose: __expose, emit: __emit }) {
+    const props = __props;
+    const emits = __emit;
+    const { canScrollNext, canScrollPrev, carouselApi, carouselRef, orientation, scrollNext, scrollPrev } = useProvideCarousel(props, emits);
+    __expose({
+      canScrollNext,
+      canScrollPrev,
+      carouselApi,
+      carouselRef,
+      orientation,
+      scrollNext,
+      scrollPrev
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        class: unref(cn)("relative", props.class),
+        role: "region",
+        "aria-roledescription": "carousel",
+        tabindex: "0"
+      }, _attrs))}>`);
+      ssrRenderSlot(_ctx.$slots, "default", {
+        canScrollNext: unref(canScrollNext),
+        canScrollPrev: unref(canScrollPrev),
+        carouselApi: unref(carouselApi),
+        carouselRef: unref(carouselRef),
+        orientation: unref(orientation),
+        scrollNext: unref(scrollNext),
+        scrollPrev: unref(scrollPrev)
+      }, null, _push, _parent);
+      _push(`</div>`);
+    };
+  }
+});
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/carousel/Carousel.vue");
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+};
+const _sfc_main$4 = /* @__PURE__ */ defineComponent({
+  ...{
+    inheritAttrs: false
+  },
+  __name: "CarouselContent",
+  __ssrInlineRender: true,
+  props: {
+    class: { type: [Boolean, null, String, Object, Array] }
+  },
+  setup(__props) {
+    const props = __props;
+    const { carouselRef, orientation } = useCarousel();
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        ref_key: "carouselRef",
+        ref: carouselRef,
+        class: "overflow-hidden"
+      }, _attrs))}><div${ssrRenderAttrs(mergeProps({
+        class: unref(cn)(
+          "flex",
+          unref(orientation) === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+          props.class
+        )
+      }, _ctx.$attrs))}>`);
+      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+      _push(`</div></div>`);
+    };
+  }
+});
+const _sfc_setup$4 = _sfc_main$4.setup;
+_sfc_main$4.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/carousel/CarouselContent.vue");
+  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+};
+const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+  __name: "CarouselItem",
+  __ssrInlineRender: true,
+  props: {
+    class: { type: [Boolean, null, String, Object, Array] }
+  },
+  setup(__props) {
+    const props = __props;
+    const { orientation } = useCarousel();
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        role: "group",
+        "aria-roledescription": "slide",
+        class: unref(cn)(
+          "min-w-0 shrink-0 grow-0 basis-full",
+          unref(orientation) === "horizontal" ? "pl-4" : "pt-4",
+          props.class
+        )
+      }, _attrs))}>`);
+      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+      _push(`</div>`);
+    };
+  }
+});
+const _sfc_setup$3 = _sfc_main$3.setup;
+_sfc_main$3.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/carousel/CarouselItem.vue");
+  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+};
+const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+  __name: "CarouselNext",
+  __ssrInlineRender: true,
+  props: {
+    class: { type: [Boolean, null, String, Object, Array] }
+  },
+  setup(__props) {
+    const props = __props;
+    const { orientation, canScrollNext, scrollNext } = useCarousel();
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(ssrRenderComponent(unref(_sfc_main$a), mergeProps({
+        disabled: !unref(canScrollNext),
+        class: unref(cn)(
+          "touch-manipulation absolute h-8 w-8 rounded-full p-0",
+          unref(orientation) === "horizontal" ? "-right-12 top-1/2 -translate-y-1/2" : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+          props.class
+        ),
+        variant: "outline",
+        onClick: unref(scrollNext)
+      }, _attrs), {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            ssrRenderSlot(_ctx.$slots, "default", {}, () => {
+              _push2(ssrRenderComponent(unref(ArrowRight), { class: "h-4 w-4 text-current" }, null, _parent2, _scopeId));
+              _push2(`<span class="sr-only"${_scopeId}>Next Slide</span>`);
+            }, _push2, _parent2, _scopeId);
+          } else {
+            return [
+              renderSlot(_ctx.$slots, "default", {}, () => [
+                createVNode(unref(ArrowRight), { class: "h-4 w-4 text-current" }),
+                createVNode("span", { class: "sr-only" }, "Next Slide")
+              ])
+            ];
+          }
+        }),
+        _: 3
+      }, _parent));
+    };
+  }
+});
+const _sfc_setup$2 = _sfc_main$2.setup;
+_sfc_main$2.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/carousel/CarouselNext.vue");
+  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+};
+const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  __name: "CarouselPrevious",
+  __ssrInlineRender: true,
+  props: {
+    class: { type: [Boolean, null, String, Object, Array] }
+  },
+  setup(__props) {
+    const props = __props;
+    const { orientation, canScrollPrev, scrollPrev } = useCarousel();
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(ssrRenderComponent(unref(_sfc_main$a), mergeProps({
+        disabled: !unref(canScrollPrev),
+        class: unref(cn)(
+          "touch-manipulation absolute h-8 w-8 rounded-full p-0",
+          unref(orientation) === "horizontal" ? "-left-12 top-1/2 -translate-y-1/2" : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+          props.class
+        ),
+        variant: "outline",
+        onClick: unref(scrollPrev)
+      }, _attrs), {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            ssrRenderSlot(_ctx.$slots, "default", {}, () => {
+              _push2(ssrRenderComponent(unref(ArrowLeft), { class: "h-4 w-4 text-current" }, null, _parent2, _scopeId));
+              _push2(`<span class="sr-only"${_scopeId}>Previous Slide</span>`);
+            }, _push2, _parent2, _scopeId);
+          } else {
+            return [
+              renderSlot(_ctx.$slots, "default", {}, () => [
+                createVNode(unref(ArrowLeft), { class: "h-4 w-4 text-current" }),
+                createVNode("span", { class: "sr-only" }, "Previous Slide")
+              ])
+            ];
+          }
+        }),
+        _: 3
+      }, _parent));
+    };
+  }
+});
+const _sfc_setup$1 = _sfc_main$1.setup;
+_sfc_main$1.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/carousel/CarouselPrevious.vue");
+  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
+};
+const _sfc_main = /* @__PURE__ */ defineComponent({
+  __name: "ImagePreviewModal",
+  __ssrInlineRender: true,
+  setup(__props, { expose: __expose }) {
+    const openState = ref(false);
+    const images = ref([]);
+    const startIndex = ref(0);
+    function open(imgs, index = 0) {
+      images.value = imgs;
+      startIndex.value = index;
+      openState.value = true;
+    }
+    function close() {
+      openState.value = false;
+    }
+    __expose({
+      open,
+      close
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(ssrRenderComponent(unref(_sfc_main$j), mergeProps({
+        open: openState.value,
+        "onUpdate:open": ($event) => openState.value = $event
+      }, _attrs), {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(_sfc_main$h), { class: "max-w-5xl p-0 bg-black/90 border-none" }, {
+              default: withCtx((_22, _push3, _parent3, _scopeId2) => {
+                if (_push3) {
+                  _push3(ssrRenderComponent(unref(_sfc_main$5), {
+                    class: "w-full",
+                    opts: {
+                      startIndex: startIndex.value,
+                      loop: true
+                    }
+                  }, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      if (_push4) {
+                        _push4(ssrRenderComponent(unref(_sfc_main$4), null, {
+                          default: withCtx((_4, _push5, _parent5, _scopeId4) => {
+                            if (_push5) {
+                              _push5(`<!--[-->`);
+                              ssrRenderList(images.value, (img, i2) => {
+                                _push5(ssrRenderComponent(unref(_sfc_main$3), {
+                                  key: i2,
+                                  class: "flex items-center justify-center"
+                                }, {
+                                  default: withCtx((_5, _push6, _parent6, _scopeId5) => {
+                                    if (_push6) {
+                                      _push6(`<img${ssrRenderAttr("src", img.url)}${ssrRenderAttr("alt", img.alt_text)} class="max-h-[85vh] object-contain select-none"${_scopeId5}>`);
+                                    } else {
+                                      return [
+                                        createVNode("img", {
+                                          src: img.url,
+                                          alt: img.alt_text,
+                                          class: "max-h-[85vh] object-contain select-none"
+                                        }, null, 8, ["src", "alt"])
+                                      ];
+                                    }
+                                  }),
+                                  _: 2
+                                }, _parent5, _scopeId4));
+                              });
+                              _push5(`<!--]-->`);
+                            } else {
+                              return [
+                                (openBlock(true), createBlock(Fragment, null, renderList(images.value, (img, i2) => {
+                                  return openBlock(), createBlock(unref(_sfc_main$3), {
+                                    key: i2,
+                                    class: "flex items-center justify-center"
+                                  }, {
+                                    default: withCtx(() => [
+                                      createVNode("img", {
+                                        src: img.url,
+                                        alt: img.alt_text,
+                                        class: "max-h-[85vh] object-contain select-none"
+                                      }, null, 8, ["src", "alt"])
+                                    ]),
+                                    _: 2
+                                  }, 1024);
+                                }), 128))
+                              ];
+                            }
+                          }),
+                          _: 1
+                        }, _parent4, _scopeId3));
+                        _push4(ssrRenderComponent(unref(_sfc_main$1), { class: "left-2" }, null, _parent4, _scopeId3));
+                        _push4(ssrRenderComponent(unref(_sfc_main$2), { class: "right-2" }, null, _parent4, _scopeId3));
+                      } else {
+                        return [
+                          createVNode(unref(_sfc_main$4), null, {
+                            default: withCtx(() => [
+                              (openBlock(true), createBlock(Fragment, null, renderList(images.value, (img, i2) => {
+                                return openBlock(), createBlock(unref(_sfc_main$3), {
+                                  key: i2,
+                                  class: "flex items-center justify-center"
+                                }, {
+                                  default: withCtx(() => [
+                                    createVNode("img", {
+                                      src: img.url,
+                                      alt: img.alt_text,
+                                      class: "max-h-[85vh] object-contain select-none"
+                                    }, null, 8, ["src", "alt"])
+                                  ]),
+                                  _: 2
+                                }, 1024);
+                              }), 128))
+                            ]),
+                            _: 1
+                          }),
+                          createVNode(unref(_sfc_main$1), { class: "left-2" }),
+                          createVNode(unref(_sfc_main$2), { class: "right-2" })
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                } else {
+                  return [
+                    createVNode(unref(_sfc_main$5), {
+                      class: "w-full",
+                      opts: {
+                        startIndex: startIndex.value,
+                        loop: true
+                      }
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(unref(_sfc_main$4), null, {
+                          default: withCtx(() => [
+                            (openBlock(true), createBlock(Fragment, null, renderList(images.value, (img, i2) => {
+                              return openBlock(), createBlock(unref(_sfc_main$3), {
+                                key: i2,
+                                class: "flex items-center justify-center"
+                              }, {
+                                default: withCtx(() => [
+                                  createVNode("img", {
+                                    src: img.url,
+                                    alt: img.alt_text,
+                                    class: "max-h-[85vh] object-contain select-none"
+                                  }, null, 8, ["src", "alt"])
+                                ]),
+                                _: 2
+                              }, 1024);
+                            }), 128))
+                          ]),
+                          _: 1
+                        }),
+                        createVNode(unref(_sfc_main$1), { class: "left-2" }),
+                        createVNode(unref(_sfc_main$2), { class: "right-2" })
+                      ]),
+                      _: 1
+                    }, 8, ["opts"])
+                  ];
+                }
+              }),
+              _: 1
+            }, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(_sfc_main$h), { class: "max-w-5xl p-0 bg-black/90 border-none" }, {
+                default: withCtx(() => [
+                  createVNode(unref(_sfc_main$5), {
+                    class: "w-full",
+                    opts: {
+                      startIndex: startIndex.value,
+                      loop: true
+                    }
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(unref(_sfc_main$4), null, {
+                        default: withCtx(() => [
+                          (openBlock(true), createBlock(Fragment, null, renderList(images.value, (img, i2) => {
+                            return openBlock(), createBlock(unref(_sfc_main$3), {
+                              key: i2,
+                              class: "flex items-center justify-center"
+                            }, {
+                              default: withCtx(() => [
+                                createVNode("img", {
+                                  src: img.url,
+                                  alt: img.alt_text,
+                                  class: "max-h-[85vh] object-contain select-none"
+                                }, null, 8, ["src", "alt"])
+                              ]),
+                              _: 2
+                            }, 1024);
+                          }), 128))
+                        ]),
+                        _: 1
+                      }),
+                      createVNode(unref(_sfc_main$1), { class: "left-2" }),
+                      createVNode(unref(_sfc_main$2), { class: "right-2" })
+                    ]),
+                    _: 1
+                  }, 8, ["opts"])
+                ]),
+                _: 1
+              })
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+    };
+  }
+});
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ShareModal.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/ImagePreviewModal.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
-const ShareModal = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-1ff0f0b3"]]);
+let mountEl = null;
+let vm = null;
+const imageViewer = {
+  install(app) {
+    var _a;
+    if (typeof document === "undefined") {
+      return;
+    }
+    mountEl = document.createElement("div");
+    document.body.appendChild(mountEl);
+    const vnode = createVNode(_sfc_main);
+    vnode.appContext = app._context;
+    render(vnode, mountEl);
+    vm = (_a = vnode.component) == null ? void 0 : _a.exposed;
+  },
+  open(images, index = 0) {
+    if (!vm) return;
+    vm.open(images, index);
+  },
+  close() {
+    vm == null ? void 0 : vm.close();
+  }
+};
 const appName = "Reliable International Travel Services";
-globalThis.route = (name, params, absolute, config) => P(name, params, absolute, config ?? Ziggy$1);
-createServer(
-  (page) => createInertiaApp({
+createServer(async (page) => {
+  const ziggy = page.props.ziggy;
+  let app;
+  let head = [];
+  if (ziggy) {
+    const ssrGlobal = globalThis;
+    ssrGlobal.Ziggy = ziggy;
+    ssrGlobal.route = (name, params, absolute) => P(name, params, absolute, ziggy);
+  }
+  const response = await createInertiaApp({
     page,
-    render: renderToString,
+    render: async (targetApp) => {
+      if (targetApp === app) {
+        return "";
+      }
+      return renderToString(targetApp);
+    },
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(
       `./pages/${name}.vue`,
-      /* @__PURE__ */ Object.assign({ "./pages/Dashboard.vue": () => import("./assets/Dashboard-D3wOE-EY.js"), "./pages/Welcome.vue": () => import("./assets/Welcome-D9LvnZTF.js"), "./pages/admin/auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-1s3Qpn2l.js"), "./pages/admin/auth/InactiveAccountPage.vue": () => import("./assets/InactiveAccountPage-DOprF5nw.js"), "./pages/admin/auth/Login.vue": () => import("./assets/Login-pKtKmyrw.js"), "./pages/admin/auth/ResetPassword.vue": () => import("./assets/ResetPassword-DfKP-oS1.js"), "./pages/admin/booking/BookingManagement.vue": () => import("./assets/BookingManagement-BoVhPD0c.js"), "./pages/admin/dashboard/DashboardPage.vue": () => import("./assets/DashboardPage-ExvrX64R.js"), "./pages/admin/destination/CreateDestination.vue": () => import("./assets/CreateDestination-BZ1ZhJFI.js"), "./pages/admin/destination/CreateLocation.vue": () => import("./assets/CreateLocation-meGc3YcX.js"), "./pages/admin/destination/DestinationDetail.vue": () => import("./assets/DestinationDetail-Bi2xkz4M.js"), "./pages/admin/destination/EditDestination.vue": () => import("./assets/EditDestination-BwaCR6OS.js"), "./pages/admin/destination/EditLocation.vue": () => import("./assets/EditLocation-WvUpmJjg.js"), "./pages/admin/destination/ServiceCountry.vue": () => import("./assets/ServiceCountry-DS3I_q_E.js"), "./pages/admin/inquiry/ClientsInquiry.vue": () => import("./assets/ClientsInquiry-D5cNzFuo.js"), "./pages/admin/inquiry/InquiryDetail.vue": () => import("./assets/InquiryDetail-DvP64yL1.js"), "./pages/admin/log/ActivityLog.vue": () => import("./assets/ActivityLog-D9W3x1Aw.js"), "./pages/admin/package/CreatePackage.vue": () => import("./assets/CreatePackage-DnFpEMgy.js"), "./pages/admin/package/CreatePackageGroup.vue": () => import("./assets/CreatePackageGroup-iUpxKixd.js"), "./pages/admin/package/CreateTravelBatch.vue": () => import("./assets/CreateTravelBatch-DJzUS8Y8.js"), "./pages/admin/package/EditPackage.vue": () => import("./assets/EditPackage-D8Z_z3d6.js"), "./pages/admin/package/EditPackageGroup.vue": () => import("./assets/EditPackageGroup-Bqd_rcwr.js"), "./pages/admin/package/EditTravelBatch.vue": () => import("./assets/EditTravelBatch-BUabp9A4.js"), "./pages/admin/package/PackageDetail.vue": () => import("./assets/PackageDetail-UHbOh5e3.js"), "./pages/admin/package/PackageGroupDisplay.vue": () => import("./assets/PackageGroupDisplay-DCioSKeV.js"), "./pages/admin/package/PackageGroupPin.vue": () => import("./assets/PackageGroupPin-C7W_5Niw.js"), "./pages/admin/package/ServicePackage.vue": () => import("./assets/ServicePackage-G0k20GzW.js"), "./pages/admin/package/section/PackageAdditionalInfo.vue": () => import("./assets/PackageAdditionalInfo-DyNozL6X.js"), "./pages/admin/package/section/PackageDescriptionAndHighlight.vue": () => import("./assets/PackageDescriptionAndHighlight-Cbb4_1J5.js"), "./pages/admin/package/section/PackageHeaderTitle.vue": () => import("./assets/PackageHeaderTitle-V_56e2FB.js"), "./pages/admin/package/section/PackageImagesAsset.vue": () => import("./assets/PackageImagesAsset-BF-fe_aP.js"), "./pages/admin/package/section/PackageSellingPeriod.vue": () => import("./assets/PackageSellingPeriod-BJ9H331S.js"), "./pages/admin/package/section/PackageTabInfo.vue": () => import("./assets/PackageTabInfo-DTondCFr.js"), "./pages/admin/user/admin/AdminAccountDetail.vue": () => import("./assets/AdminAccountDetail-DIcl_MrR.js"), "./pages/admin/user/admin/AdminManagement.vue": () => import("./assets/AdminManagement-DYMeQqy_.js"), "./pages/admin/user/admin/CreateAdminAccount.vue": () => import("./assets/CreateAdminAccount-BLPavRSz.js"), "./pages/admin/user/admin/EditAdminAccount.vue": () => import("./assets/EditAdminAccount-gE_dSAGL.js"), "./pages/admin/user/client/ClientManagement.vue": () => import("./assets/ClientManagement-biTln3rn.js"), "./pages/auth/ConfirmPassword.vue": () => import("./assets/ConfirmPassword-Bjm2qweh.js"), "./pages/auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-m57OijPX.js"), "./pages/auth/Login.vue": () => import("./assets/Login-DX27bwT2.js"), "./pages/auth/Register.vue": () => import("./assets/Register-DarnGxH_.js"), "./pages/auth/ResetPassword.vue": () => import("./assets/ResetPassword-CV49LYIB.js"), "./pages/auth/VerifyEmail.vue": () => import("./assets/VerifyEmail-BgG7Y9Vt.js"), "./pages/client/about/AboutUsPage.vue": () => import("./assets/AboutUsPage-BBP77R10.js"), "./pages/client/about/section/AboutAgency.vue": () => import("./assets/AboutAgency-vy4nG9wJ.js"), "./pages/client/about/section/AgencyRating.vue": () => import("./assets/AgencyRating-CbDoe17K.js"), "./pages/client/about/section/AgencyVideo.vue": () => import("./assets/AgencyVideo-Di-n7uOh.js"), "./pages/client/about/section/TitleHeader.vue": () => import("./assets/TitleHeader-CZ_f-Lyk.js").then((n2) => n2.T), "./pages/client/contact/ContactPage.vue": () => import("./assets/ContactPage-CEvmTUbx.js"), "./pages/client/contact/section/AgencyFaq.vue": () => import("./assets/AgencyFaq-Dyja7nLn.js"), "./pages/client/contact/section/AgencyOffer.vue": () => import("./assets/AgencyOffer-D6FWzpwk.js"), "./pages/client/contact/section/SocialMedia.vue": () => import("./assets/SocialMedia-DJRbQxHO.js"), "./pages/client/country/ServiceCountryPage.vue": () => import("./assets/ServiceCountryPage-Bf905AMs.js"), "./pages/client/country/section/DestinationList.vue": () => import("./assets/DestinationList-bsiaO63F.js"), "./pages/client/country/section/TitleHeader.vue": () => import("./assets/TitleHeader-DcGdV3d3.js"), "./pages/client/destination/DestinationPage.vue": () => import("./assets/DestinationPage-7ww-xueP.js"), "./pages/client/destination/section/DestinationCarousel.vue": () => import("./assets/DestinationCarousel-C5M3j_-H.js"), "./pages/client/destination/section/FeaturedInboundPackage.vue": () => import("./assets/FeaturedInboundPackage-C42nACFj.js"), "./pages/client/destination/section/FeaturedOutboundPackage.vue": () => import("./assets/FeaturedOutboundPackage-TYARnQUq.js"), "./pages/client/destination/section/TitleHeader.vue": () => import("./assets/TitleHeader-CvDpBPVq.js").then((n2) => n2.T), "./pages/client/home/LandingPage.vue": () => import("./assets/LandingPage-BQIDY1k9.js"), "./pages/client/home/section/AboutAgency.vue": () => import("./assets/AboutAgency-rUqOgpWB.js"), "./pages/client/home/section/AgencyServices.vue": () => import("./assets/AgencyServices-CYrsPMuo.js"), "./pages/client/home/section/ClientFeedback.vue": () => import("./assets/ClientFeedback-DSVhMGsS.js"), "./pages/client/home/section/DestinationCarousel.vue": () => import("./assets/DestinationCarousel-BRaiFNnL.js"), "./pages/client/home/section/ImageCarousel.vue": () => import("./assets/ImageCarousel-WGRTy9ZH.js"), "./pages/client/home/section/InboundPackageCarousel.vue": () => import("./assets/InboundPackageCarousel-DpOjBE9B.js"), "./pages/client/home/section/InquiryForm.vue": () => import("./assets/InquiryForm-BQF3iMFZ.js"), "./pages/client/home/section/OutboundPackageCarousel.vue": () => import("./assets/OutboundPackageCarousel-CIU6sGf6.js"), "./pages/client/home/section/PartnerAgency.vue": () => import("./assets/PartnerAgency-Cx_8K46v.js"), "./pages/client/inbound/InboundPage.vue": () => import("./assets/InboundPage-z2Fkv-24.js"), "./pages/client/inbound/section/InboundFilter.vue": () => import("./assets/InboundFilter-B1--2YRV.js"), "./pages/client/inbound/section/InboundPackageDisplay.vue": () => import("./assets/InboundPackageDisplay-D-bdbpo7.js"), "./pages/client/inbound/section/InboundTitleHeader.vue": () => import("./assets/InboundTitleHeader-UNK5-e8M.js"), "./pages/client/location/LocationPage.vue": () => import("./assets/LocationPage-BPgsywjP.js"), "./pages/client/location/section/LocationList.vue": () => import("./assets/LocationList-CXnbkgns.js"), "./pages/client/location/section/TitleHeader.vue": () => import("./assets/TitleHeader-VTbwCKOz.js"), "./pages/client/message/InquiryResult.vue": () => import("./assets/InquiryResult-DSnqrX8r.js"), "./pages/client/outbound/OutboundPage.vue": () => import("./assets/OutboundPage-Cgj7P0lF.js"), "./pages/client/outbound/section/OutboundFilter.vue": () => import("./assets/OutboundFilter-2Ac2L8ho.js"), "./pages/client/outbound/section/OutboundPackageDisplay.vue": () => import("./assets/OutboundPackageDisplay-CSWcw0IY.js"), "./pages/client/outbound/section/OutboundTitleHeader.vue": () => import("./assets/OutboundTitleHeader-HynFkREz.js"), "./pages/client/package/detail/PackageDetailPage.vue": () => import("./assets/PackageDetailPage-C4TB-XbX.js"), "./pages/client/package/detail/section/PackageDescription.vue": () => import("./assets/PackageDescription-BbWp032w.js"), "./pages/client/package/detail/section/PackageExclusion.vue": () => import("./assets/PackageExclusion-DVATkuUI.js"), "./pages/client/package/detail/section/PackageHighlight.vue": () => import("./assets/PackageHighlight-w87neNFZ.js"), "./pages/client/package/detail/section/PackageIncludedServices.vue": () => import("./assets/PackageIncludedServices-DnpaiqtI.js"), "./pages/client/package/detail/section/PackageInclusion.vue": () => import("./assets/PackageInclusion-Dtn9dhiL.js"), "./pages/client/package/detail/section/PackageItinerary.vue": () => import("./assets/PackageItinerary-CNug2Llt.js"), "./pages/client/package/detail/section/PackageNote.vue": () => import("./assets/PackageNote-DZNcEw9K.js"), "./pages/client/package/detail/section/PackageRateAndPeriod.vue": () => import("./assets/PackageRateAndPeriod-BhoAqLix.js"), "./pages/client/package/detail/section/PackageTitleHeaderWithImage.vue": () => import("./assets/PackageTitleHeaderWithImage-BP95RKW8.js"), "./pages/client/package/detail/section/PackageTravelSchedule.vue": () => import("./assets/PackageTravelSchedule-ChyOgdIB.js"), "./pages/client/package/group/PackageGroupPage.vue": () => import("./assets/PackageGroupPage-CpxRsmYv.js"), "./pages/client/package/group/section/PackageList.vue": () => import("./assets/PackageList-DSLVO2yc.js"), "./pages/client/package/group/section/TitleHeader.vue": () => import("./assets/TitleHeader-BRiqXDNV.js"), "./pages/client/policy/InquiryPolicy.vue": () => import("./assets/InquiryPolicy-DEgqSRXy.js"), "./pages/error/RouteFallbackError.vue": () => import("./assets/RouteFallbackError-DTEBhyp3.js"), "./pages/settings/Appearance.vue": () => import("./assets/Appearance-B3Z1-ntt.js"), "./pages/settings/Currency.vue": () => import("./assets/Currency-IyDCyA1l.js"), "./pages/settings/Password.vue": () => import("./assets/Password-D859sSSH.js"), "./pages/settings/Profile.vue": () => import("./assets/Profile-CqYBAykC.js"), "./pages/verification/employee/EmployeeVerificationResult.vue": () => import("./assets/EmployeeVerificationResult-Ct08U4T4.js") })
+      /* @__PURE__ */ Object.assign({ "./pages/Dashboard.vue": () => import("./assets/Dashboard-CfQA3xNS.js"), "./pages/Welcome.vue": () => import("./assets/Welcome-D9LvnZTF.js"), "./pages/admin/auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-8adetWiS.js"), "./pages/admin/auth/InactiveAccountPage.vue": () => import("./assets/InactiveAccountPage-D8pjVvTL.js"), "./pages/admin/auth/Login.vue": () => import("./assets/Login-C3XpL1JZ.js"), "./pages/admin/auth/ResetPassword.vue": () => import("./assets/ResetPassword-AmLm6iNW.js"), "./pages/admin/booking/BookingManagement.vue": () => import("./assets/BookingManagement-BgDYxelF.js"), "./pages/admin/dashboard/DashboardPage.vue": () => import("./assets/DashboardPage-YdUuIHEn.js"), "./pages/admin/destination/CreateDestination.vue": () => import("./assets/CreateDestination-DgbiklGq.js"), "./pages/admin/destination/CreateLocation.vue": () => import("./assets/CreateLocation-Doqi-wWw.js"), "./pages/admin/destination/DestinationDetail.vue": () => import("./assets/DestinationDetail-DQqm9O9G.js"), "./pages/admin/destination/EditDestination.vue": () => import("./assets/EditDestination-B2X3WPkZ.js"), "./pages/admin/destination/EditLocation.vue": () => import("./assets/EditLocation-BEAVZXmn.js"), "./pages/admin/destination/ServiceCountry.vue": () => import("./assets/ServiceCountry-D9i4zlxz.js"), "./pages/admin/inquiry/ClientsInquiry.vue": () => import("./assets/ClientsInquiry-ClI_Xljc.js"), "./pages/admin/inquiry/InquiryDetail.vue": () => import("./assets/InquiryDetail-CEJSLzW5.js"), "./pages/admin/log/ActivityLog.vue": () => import("./assets/ActivityLog-EBXi32SF.js"), "./pages/admin/package/CreatePackage.vue": () => import("./assets/CreatePackage-DJqLTJlT.js"), "./pages/admin/package/CreatePackageGroup.vue": () => import("./assets/CreatePackageGroup-WVcLJ8I_.js"), "./pages/admin/package/CreateTravelBatch.vue": () => import("./assets/CreateTravelBatch-C3pRrrMl.js"), "./pages/admin/package/EditPackage.vue": () => import("./assets/EditPackage-D49xwVg6.js"), "./pages/admin/package/EditPackageGroup.vue": () => import("./assets/EditPackageGroup-D1Oyst09.js"), "./pages/admin/package/EditTravelBatch.vue": () => import("./assets/EditTravelBatch-DLGtCxYT.js"), "./pages/admin/package/PackageDetail.vue": () => import("./assets/PackageDetail-BIIjUU3m.js"), "./pages/admin/package/PackageGroupDisplay.vue": () => import("./assets/PackageGroupDisplay-Cwh6h8bj.js"), "./pages/admin/package/PackageGroupPin.vue": () => import("./assets/PackageGroupPin-CD-dVJ0F.js"), "./pages/admin/package/ServicePackage.vue": () => import("./assets/ServicePackage-To6YzYa8.js"), "./pages/admin/package/section/PackageAdditionalInfo.vue": () => import("./assets/PackageAdditionalInfo-C6qRVXzn.js"), "./pages/admin/package/section/PackageDescriptionAndHighlight.vue": () => import("./assets/PackageDescriptionAndHighlight-Cbb4_1J5.js"), "./pages/admin/package/section/PackageHeaderTitle.vue": () => import("./assets/PackageHeaderTitle-DUOSQ2YA.js"), "./pages/admin/package/section/PackageImagesAsset.vue": () => import("./assets/PackageImagesAsset-C3mnV4ae.js"), "./pages/admin/package/section/PackageSellingPeriod.vue": () => import("./assets/PackageSellingPeriod-CVgZiHrT.js"), "./pages/admin/package/section/PackageTabInfo.vue": () => import("./assets/PackageTabInfo-BlB5x7lL.js"), "./pages/admin/user/admin/AdminAccountDetail.vue": () => import("./assets/AdminAccountDetail-Cj4cDFzB.js"), "./pages/admin/user/admin/AdminManagement.vue": () => import("./assets/AdminManagement-D1bQjtyO.js"), "./pages/admin/user/admin/CreateAdminAccount.vue": () => import("./assets/CreateAdminAccount-HLNaWe43.js"), "./pages/admin/user/admin/EditAdminAccount.vue": () => import("./assets/EditAdminAccount-CRhDqagl.js"), "./pages/admin/user/client/ClientManagement.vue": () => import("./assets/ClientManagement-IP6hkTba.js"), "./pages/auth/ConfirmPassword.vue": () => import("./assets/ConfirmPassword-xbx5cP8h.js"), "./pages/auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-SXPNq-EV.js"), "./pages/auth/Login.vue": () => import("./assets/Login-D9XnYkml.js"), "./pages/auth/Register.vue": () => import("./assets/Register-B3wLOyns.js"), "./pages/auth/ResetPassword.vue": () => import("./assets/ResetPassword-7m7K0QGT.js"), "./pages/auth/VerifyEmail.vue": () => import("./assets/VerifyEmail-LAkATBYz.js"), "./pages/client/about/AboutUsPage.vue": () => import("./assets/AboutUsPage-C7L2cI1g.js"), "./pages/client/about/section/AboutAgency.vue": () => import("./assets/AboutAgency-D2lPJNUt.js"), "./pages/client/about/section/AgencyRating.vue": () => import("./assets/AgencyRating-tRBDKiVJ.js"), "./pages/client/about/section/AgencyVideo.vue": () => import("./assets/AgencyVideo-DE8A4Vxt.js"), "./pages/client/about/section/TitleHeader.vue": () => import("./assets/TitleHeader-CZ_f-Lyk.js").then((n2) => n2.T), "./pages/client/contact/ContactPage.vue": () => import("./assets/ContactPage-B-02HeAA.js"), "./pages/client/contact/section/AgencyFaq.vue": () => import("./assets/AgencyFaq-Dt3MLpiX.js"), "./pages/client/contact/section/AgencyOffer.vue": () => import("./assets/AgencyOffer-t1zQWiCp.js"), "./pages/client/contact/section/SocialMedia.vue": () => import("./assets/SocialMedia-Cjs9rkc1.js"), "./pages/client/country/ServiceCountryPage.vue": () => import("./assets/ServiceCountryPage-XSoepvgW.js"), "./pages/client/country/section/DestinationList.vue": () => import("./assets/DestinationList-kjXf6dRX.js"), "./pages/client/country/section/TitleHeader.vue": () => import("./assets/TitleHeader-DcGdV3d3.js"), "./pages/client/destination/DestinationPage.vue": () => import("./assets/DestinationPage-BLQXY20E.js"), "./pages/client/destination/section/DestinationCarousel.vue": () => import("./assets/DestinationCarousel-BTDmwSbp.js"), "./pages/client/destination/section/FeaturedInboundPackage.vue": () => import("./assets/FeaturedInboundPackage-DtnYJxlb.js"), "./pages/client/destination/section/FeaturedOutboundPackage.vue": () => import("./assets/FeaturedOutboundPackage-qoMYrv-k.js"), "./pages/client/destination/section/TitleHeader.vue": () => import("./assets/TitleHeader-CvDpBPVq.js").then((n2) => n2.T), "./pages/client/home/LandingPage.vue": () => import("./assets/LandingPage-U1HNR6fZ.js"), "./pages/client/home/section/AboutAgency.vue": () => import("./assets/AboutAgency-CfTctLO8.js"), "./pages/client/home/section/AgencyServices.vue": () => import("./assets/AgencyServices-Dv2i-MlO.js"), "./pages/client/home/section/ClientFeedback.vue": () => import("./assets/ClientFeedback-DvAEI4Cu.js"), "./pages/client/home/section/DestinationCarousel.vue": () => import("./assets/DestinationCarousel-CipOKirq.js"), "./pages/client/home/section/ImageCarousel.vue": () => import("./assets/ImageCarousel-DdEFMAaV.js"), "./pages/client/home/section/InboundPackageCarousel.vue": () => import("./assets/InboundPackageCarousel-BwlqcsyL.js"), "./pages/client/home/section/InquiryForm.vue": () => import("./assets/InquiryForm-ayW2EoIU.js"), "./pages/client/home/section/OutboundPackageCarousel.vue": () => import("./assets/OutboundPackageCarousel-CxhTeb7x.js"), "./pages/client/home/section/PartnerAgency.vue": () => import("./assets/PartnerAgency-ClsfwBfL.js"), "./pages/client/inbound/InboundPage.vue": () => import("./assets/InboundPage-CHgJNN_k.js"), "./pages/client/inbound/section/InboundFilter.vue": () => import("./assets/InboundFilter-B1--2YRV.js"), "./pages/client/inbound/section/InboundPackageDisplay.vue": () => import("./assets/InboundPackageDisplay-qq8WifWG.js"), "./pages/client/inbound/section/InboundTitleHeader.vue": () => import("./assets/InboundTitleHeader-CNxeMPEr.js"), "./pages/client/location/LocationPage.vue": () => import("./assets/LocationPage-pdukxR-z.js"), "./pages/client/location/section/LocationList.vue": () => import("./assets/LocationList-Ct6xGBgi.js"), "./pages/client/location/section/TitleHeader.vue": () => import("./assets/TitleHeader-D8ZJ_wLR.js"), "./pages/client/message/InquiryResult.vue": () => import("./assets/InquiryResult-BTRN2aGK.js"), "./pages/client/outbound/OutboundPage.vue": () => import("./assets/OutboundPage-Df2iAKTS.js"), "./pages/client/outbound/section/OutboundFilter.vue": () => import("./assets/OutboundFilter-2Ac2L8ho.js"), "./pages/client/outbound/section/OutboundPackageDisplay.vue": () => import("./assets/OutboundPackageDisplay-NCYAfhlT.js"), "./pages/client/outbound/section/OutboundTitleHeader.vue": () => import("./assets/OutboundTitleHeader-CKs_u23r.js"), "./pages/client/package/detail/PackageDetailPage.vue": () => import("./assets/PackageDetailPage-Ci03P2NA.js"), "./pages/client/package/detail/section/PackageDescription.vue": () => import("./assets/PackageDescription-BbWp032w.js"), "./pages/client/package/detail/section/PackageExclusion.vue": () => import("./assets/PackageExclusion-DVATkuUI.js"), "./pages/client/package/detail/section/PackageHighlight.vue": () => import("./assets/PackageHighlight-Ch8DomcJ.js"), "./pages/client/package/detail/section/PackageIncludedServices.vue": () => import("./assets/PackageIncludedServices-DnpaiqtI.js"), "./pages/client/package/detail/section/PackageInclusion.vue": () => import("./assets/PackageInclusion-Dtn9dhiL.js"), "./pages/client/package/detail/section/PackageItinerary.vue": () => import("./assets/PackageItinerary-D23Owkqh.js"), "./pages/client/package/detail/section/PackageNote.vue": () => import("./assets/PackageNote-DZNcEw9K.js"), "./pages/client/package/detail/section/PackageRateAndPeriod.vue": () => import("./assets/PackageRateAndPeriod-Bs48YAIk.js"), "./pages/client/package/detail/section/PackageTitleHeaderWithImage.vue": () => import("./assets/PackageTitleHeaderWithImage-MgZfXU6e.js"), "./pages/client/package/detail/section/PackageTravelSchedule.vue": () => import("./assets/PackageTravelSchedule-BJnYlGex.js"), "./pages/client/package/group/PackageGroupPage.vue": () => import("./assets/PackageGroupPage-DVofJDGV.js"), "./pages/client/package/group/section/PackageList.vue": () => import("./assets/PackageList-Ckw2EXt1.js"), "./pages/client/package/group/section/TitleHeader.vue": () => import("./assets/TitleHeader-Dz7UE1Lt.js"), "./pages/client/policy/InquiryPolicy.vue": () => import("./assets/InquiryPolicy-D0SRAdm7.js"), "./pages/error/RouteFallbackError.vue": () => import("./assets/RouteFallbackError-DfMncw85.js"), "./pages/settings/Appearance.vue": () => import("./assets/Appearance-t_t26Pq-.js"), "./pages/settings/Currency.vue": () => import("./assets/Currency-BqwOKPgo.js"), "./pages/settings/Password.vue": () => import("./assets/Password-CIaCQsrg.js"), "./pages/settings/Profile.vue": () => import("./assets/Profile-DmtWYSAD.js"), "./pages/verification/employee/EmployeeVerificationResult.vue": () => import("./assets/EmployeeVerificationResult-Ct08U4T4.js") })
     ),
     setup({ App, props, plugin }) {
-      return createSSRApp({
+      app = createSSRApp({
         render: () => [
-          h$1(App, props),
-          h$1(_sfc_main$c, { richColors: true, position: "top-right" }),
+          h$1(App, {
+            ...props,
+            onHeadUpdate: (elements) => {
+              var _a;
+              head = elements;
+              (_a = props.onHeadUpdate) == null ? void 0 : _a.call(props, elements);
+            }
+          }),
+          h$1(_sfc_main$7, {
+            richColors: true,
+            position: "top-right"
+          }),
           h$1(DeleteDialog),
           h$1(ShareModal)
         ]
-      }).use(plugin).use(U);
+      }).use(imageViewer).use(appModal).use(plugin).use(U, props.ziggy);
     }
-  })
-);
+  });
+  if (!app) {
+    throw new Error("Inertia SSR app was not initialized.");
+  }
+  const renderedApp = await renderToString(app);
+  const rootClosingTag = response.body.lastIndexOf("</div>");
+  if (rootClosingTag === -1) {
+    throw new Error("Inertia SSR root element was not found.");
+  }
+  return {
+    head,
+    body: `${response.body.slice(0, rootClosingTag)}${renderedApp}${response.body.slice(rootClosingTag)}`
+  };
+});
 export {
-  _sfc_main$2 as _,
+  _sfc_main$a as _,
   formatDateString as a,
   formatCurrency as b,
   cn as c,
   getSeasonColor as d,
-  _sfc_main$7 as e,
+  _sfc_main$f as e,
   formatItinerariesForEdit as f,
   getPackageDurationLabel as g,
-  _sfc_main$b as h,
-  _sfc_main$9 as i,
-  _sfc_main$6 as j,
-  _sfc_main$4 as k,
+  _sfc_main$j as h,
+  _sfc_main$h as i,
+  _sfc_main$e as j,
+  _sfc_main$c as k,
   _export_sfc as l,
   getImageUrl as m,
-  _sfc_main$8 as n,
+  formatPackageDateRange as n,
   openDeleteDialog as o,
   packageSellingStatus as p,
-  formatPackageDateRange as q,
-  _sfc_main$3 as r,
+  appModal as q,
+  _sfc_main$b as r,
   scrollToSection as s,
   truncateText as t,
-  _sfc_main$a as u
+  _sfc_main$g as u,
+  _sfc_main$i as v
 };

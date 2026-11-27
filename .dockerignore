@@ -1,0 +1,48 @@
+
+# Git
+.git
+.gitignore
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# PHP dependencies
+/vendor
+
+# Node dependencies
+/node_modules
+
+# Generated frontend assets
+/public/build
+/public/hot
+
+# Generated SSR assets
+/bootstrap/ssr
+
+# Laravel runtime files
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/testing/*
+
+# User uploads - use persistent storage
+/storage/app/public/*
+
+# Laravel generated cache files
+/bootstrap/cache/*.php
+
+# Docker
+**/.DS_Store
+
+# IDE and development tools
+.vscode
+.idea
+.claude
+.mcp.json
+
+# Logs
+npm-debug.log*
+yarn-error.log*

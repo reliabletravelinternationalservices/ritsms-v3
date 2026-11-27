@@ -1,19 +1,149 @@
+
 services:
+  # Laravel PHP-FPM
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/php/Dockerfile
+      target: app
+    image: rits-app:local
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    expose:
+      - "9000"
+    volumes:
+      - uploads:/var/www/html/storage/app/public
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Nginx web server
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: nginx
+    image: rits-nginx:local
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8000:80"
+    volumes:
+      - uploads:/var/www/html/public/storage:ro
+    depends_on:
+      - app
 
+  # Inertia SSR
+  ssr:
+    image: rits-app:local
+    pull_policy: never
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan inertia:start-ssr
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      - app
+    
+
+  # Laravel queue worker
+  queue:
+    image: rits-app:local
+    pull_policy: never
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan queue:work --tries=3 --timeout=90
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    volumes:
+      - uploads:/var/www/html/storage/app/public
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Laravel reverb
+  reverb:
+    image: rits-app:local
+    pull_policy: never
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    expose:
+      - "8080"
+    depends_on:
+      - app
+      - redis
+      
+  # MySQL database
   mysql:
     image: mysql:8.4
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: rits_db
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: ${DB_DATABASE:-rits_db}
+      MYSQL_USER: ${DB_USERNAME:-rits_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-change_this_password}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change_root_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - 127.0.0.1
+        - -uroot
+        - -p${DB_ROOT_PASSWORD:-change_root_password}
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
+  # Redis
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 50M
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  redis_data:
+  uploads:

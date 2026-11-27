@@ -12,6 +12,11 @@ import DeleteDialog from '@/components/ui/DeleteDialog.vue';
 import { imageViewer } from "@/lib/imageViewer"
 import { appModal } from "@/lib/app-modal"
 import ShareModal from './components/ShareModal.vue';
+import { configureEcho } from '@laravel/echo-vue';
+
+configureEcho({
+    broadcaster: 'reverb',
+});
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
