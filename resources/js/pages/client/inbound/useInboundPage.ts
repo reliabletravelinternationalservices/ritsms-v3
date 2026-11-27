@@ -9,7 +9,8 @@ import { FilterState, Option, UseInboundFilteringPackagesProps } from './types';
 
 
 const parseFiltersFromUrl = (pageUrl: string): FilterState => {
-  const currentUrl = new URL(pageUrl, window.location.origin);
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost';
+  const currentUrl = new URL(pageUrl, origin);
   const searchParams = currentUrl.searchParams;
   const durationParam = searchParams.get('duration');
   const duration = durationParam ? Number(durationParam) : null;
@@ -36,6 +37,8 @@ export function useFilteringPackages(props: UseInboundFilteringPackagesProps) {
   const appliedFilters = ref<FilterState>({ ...filters.value });
 
   const updateUrl = (nextFilters: FilterState) => {
+    if (typeof window === 'undefined') return;
+
     const currentUrl = new URL(page.url, window.location.origin);
     const searchParams = currentUrl.searchParams;
 

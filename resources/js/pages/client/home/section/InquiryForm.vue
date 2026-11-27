@@ -4,12 +4,11 @@ import { AGENCY_CONTACTS } from '../constants';
 
 // COMPONENTS
 import 'vue3-carousel/carousel.css'
-import { Icon } from '@iconify/vue'
 import Label from '@/components/ui/label/Label.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Button from '@/components/ui/button/Button.vue';
-import { LoaderCircle } from 'lucide-vue-next';
+import { LoaderCircle, Mail, MapPin, MessageSquare, Phone } from 'lucide-vue-next';
 import InputError from '@/components/InputError.vue';
 
 // FORMS
@@ -47,7 +46,7 @@ const submit = () => {
     <div class="w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div class="w-full md:w-3/4 space-y-2">
         <div class="flex items-end gap-1 text-[var(--tertiary-custom)]">
-          <Icon icon="ix:inquiry-filled" width="28" height="28" class="md:w-7 md:h-7" aria-hidden="true" />
+          <MessageSquare :size="28" class="md:w-7 md:h-7" aria-hidden="true" />
           <p class="font-bold font-roboto text-lg md:text-xl">INQUIRE NOW</p>
         </div>
 
@@ -70,7 +69,7 @@ const submit = () => {
           <address class="flex flex-col gap-2 not-italic">
             <span class="flex items-center justify-start gap-2">
               <span class="bg-[var(--secondary-custom)] p-1">
-                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+                <MapPin :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
               </span>
               <a target="_blank" :href="AGENCY_CONTACTS.address.primary.link" :aria-label="`View ${AGENCY_CONTACTS.address.primary.label} office address on Google Maps`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
                 {{ AGENCY_CONTACTS.address.primary.label }}
@@ -79,7 +78,7 @@ const submit = () => {
 
             <span class="flex items-center justify-start gap-2">
               <span class="bg-[var(--secondary-custom)] p-1">
-                <Icon icon="mdi:location" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+                <MapPin :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
               </span>
               <a target="_blank" :href="AGENCY_CONTACTS.address.secondary.link" :aria-label="`View ${AGENCY_CONTACTS.address.secondary.label} office address on Google Maps`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
                 {{ AGENCY_CONTACTS.address.secondary.label }}
@@ -93,7 +92,7 @@ const submit = () => {
 
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+              <Phone :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
             <a :href="`tel:${AGENCY_CONTACTS.phone.primary}`" :aria-label="`Call ${AGENCY_CONTACTS.phone.primary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               {{ AGENCY_CONTACTS.phone.primary }}
@@ -102,7 +101,7 @@ const submit = () => {
 
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="material-symbols:call" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+              <Phone :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
             <a :href="`tel:${AGENCY_CONTACTS.phone.secondary}`" :aria-label="`Call ${AGENCY_CONTACTS.phone.secondary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               {{ AGENCY_CONTACTS.phone.secondary }}
@@ -114,7 +113,7 @@ const submit = () => {
           <h3 class="font-bold font-roboto text-lg md:text-xl">Email Address</h3>
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+              <Mail :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
               <a :href="`mailto:${AGENCY_CONTACTS.email.primary}`" :aria-label="`Send an email to ${AGENCY_CONTACTS.email.primary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               {{ AGENCY_CONTACTS.email.primary }}
@@ -123,7 +122,7 @@ const submit = () => {
           
           <span class="flex items-center justify-start gap-2">
             <span class="bg-[var(--secondary-custom)] p-1">
-              <Icon icon="ic:baseline-email" width="24" height="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
+              <Mail :size="24" class="md:w-5 md:h-5 text-[var(--tertiary-custom)]" aria-hidden="true" />
             </span>
             <a :href="`mailto:${AGENCY_CONTACTS.email.secondary}`" :aria-label="`Send an email to ${AGENCY_CONTACTS.email.secondary}`" class="font-roboto text-xs md:text-sm font-bold underline hover:text-[var(--tertiary-custom)] duration-75">
               {{ AGENCY_CONTACTS.email.secondary }}
@@ -132,7 +131,6 @@ const submit = () => {
         </div>
       </div>
 
-      <!-- ONLY CHANGED PART (FORM BINDING) -->
       <div class="w-full lg:w-3/4 border border-[var(--shadow-custom)] p-6 flex flex-col gap-2">
         <h3 class="font-bold font-roboto text-lg md:text-xl">Ask us About your Travel?</h3>
 

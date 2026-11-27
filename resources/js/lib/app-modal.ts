@@ -14,6 +14,10 @@ let mountEl: HTMLElement | null = null
 
 export const appModal = {
   install(app: App) {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
     mountEl = document.createElement("div")
     document.body.appendChild(mountEl)
 

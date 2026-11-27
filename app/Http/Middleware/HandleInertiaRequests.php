@@ -6,6 +6,7 @@ use App\Models\Setting;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -57,6 +58,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
             ],
             'settings' => $settings,
+            'ziggy' => fn () => (new Ziggy)->toArray(),
         ]);
     }
 }

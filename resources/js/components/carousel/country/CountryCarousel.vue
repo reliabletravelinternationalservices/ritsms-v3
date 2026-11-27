@@ -16,7 +16,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 defineProps<{ countries : Country[]}>()
 
-const windowWidth = ref(window.innerWidth)
+const windowWidth = ref(0)
+const isMounted = ref(false)
 
 const isDesktop = computed(() => windowWidth.value >= 768)
 
@@ -25,6 +26,8 @@ const updateWidth = () => {
 }
 
 onMounted(() => {
+  updateWidth()
+  isMounted.value = true
   window.addEventListener('resize', updateWidth)
 })
 
@@ -57,7 +60,20 @@ const carouselConfig = {
 </script>
 
 <template>
+  <div
+    v-if="!isMounted"
+    class="grid w-full grid-cols-1 gap-[10px] md:grid-cols-2 lg:grid-cols-3 lg:gap-[15px]"
+  >
+    <CountryCard
+      v-for="country in countries"
+      :key="country.id"
+      :country="country"
+      :href="route('client.destination.country', { slug: country.slug })"
+    />
+  </div>
+
   <Carousel
+    v-else
     v-bind="carouselConfig"
     class="w-full relative"
   >
