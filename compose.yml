@@ -74,23 +74,6 @@ services:
       redis:
         condition: service_healthy
 
-  # Laravel reverb
-  reverb:
-    image: rits-app:local
-    pull_policy: never
-    restart: unless-stopped
-    working_dir: /var/www/html
-    command: php artisan reverb:start --host=0.0.0.0 --port=8080
-    env_file:
-      - .env
-    environment:
-      DB_HOST: mysql
-      REDIS_HOST: redis
-    expose:
-      - "8080"
-    depends_on:
-      - app
-      - redis
       
   # MySQL database
   mysql:

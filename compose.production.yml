@@ -1,0 +1,128 @@
+
+services:
+  # Laravel PHP-FPM
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: app
+    image: rits-app:production
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://reliableinttravel.online
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      FILESYSTEM_DISK: public
+      BROADCAST_CONNECTION: log
+    expose:
+      - "9000"
+    volumes:
+      - uploads:/var/www/html/storage/app/public
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Nginx web server
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: nginx
+    image: rits-nginx:production
+    restart: unless-stopped
+    expose:
+      - "80"
+    volumes:
+      - uploads:/var/www/html/public/storage:ro
+    depends_on:
+      - app
+
+  # Inertia SSR
+  ssr:
+    image: rits-app:production
+    pull_policy: never
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan inertia:start-ssr
+    env_file:
+      - .env.production
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      app:
+        condition: service_started
+
+  # Laravel queue worker
+  queue:
+    image: rits-app:production
+    pull_policy: never
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
+    env_file:
+      - .env.production
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    volumes:
+      - uploads:/var/www/html/storage/app/public
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # MySQL database
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE is required}
+      MYSQL_USER: ${DB_USERNAME:?DB_USERNAME is required}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD is required}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'mysqladmin ping -h 127.0.0.1 -uroot -p"$${MYSQL_ROOT_PASSWORD}" || exit 1'
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql_data:
+    name: rits-production-mysql-data
+  redis_data:
+    name: rits-production-redis-data
+  uploads:
+    name: rits-production-uploads

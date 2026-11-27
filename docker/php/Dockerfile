@@ -42,19 +42,27 @@ FROM php:8.4.27-fpm-alpine AS app
 
 WORKDIR /var/www/html
 
-# System dependencies
+
+# System dependencies and PHP extension build dependencies
 RUN apk add --no-cache \
-    bash \
-    curl \
-    git \
-    icu-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libzip-dev \
-    oniguruma-dev \
-    linux-headers \
-    libstdc++
+        bash \
+        curl \
+        icu-libs \
+        libpng \
+        libjpeg-turbo \
+        freetype \
+        libzip \
+        oniguruma \
+        libstdc++ \
+    && apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
+        libzip-dev \
+        oniguruma-dev \
+        linux-headers
 
 # PHP extensions
 RUN docker-php-ext-configure gd \
@@ -70,7 +78,9 @@ RUN docker-php-ext-configure gd \
         pcntl \
         pdo_mysql \
         sockets \
-        zip
+        zip \
+    && apk del .build-deps
+
 
 # Composer binary
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -85,6 +95,9 @@ RUN rm -f public/storage \
     
 # Composer dependencies
 COPY --from=composer /app/vendor ./vendor
+
+# Laravel package discovery
+RUN php artisan package:discover --ansi
 
 # Compiled frontend assets
 COPY --from=frontend /app/public/build ./public/build
