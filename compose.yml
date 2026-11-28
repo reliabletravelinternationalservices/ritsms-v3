@@ -1,81 +1,6 @@
 
 services:
-  # Laravel PHP-FPM
-  app:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-      target: app
-    image: rits-app:local
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      DB_HOST: mysql
-      REDIS_HOST: redis
-    expose:
-      - "9000"
-    volumes:
-      - uploads:/var/www/html/storage/app/public
-    depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  # Nginx web server
-  nginx:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-      target: nginx
-    image: rits-nginx:local
-    restart: unless-stopped
-    ports:
-      - "8000:80"
-    volumes:
-      - uploads:/var/www/html/public/storage:ro
-    depends_on:
-      - app
-
-  # Inertia SSR
-  ssr:
-    image: rits-app:local
-    pull_policy: never
-    restart: unless-stopped
-    working_dir: /var/www/html
-    command: php artisan inertia:start-ssr
-    env_file:
-      - .env
-    environment:
-      DB_HOST: mysql
-      REDIS_HOST: redis
-    depends_on:
-      - app
-    
-
-  # Laravel queue worker
-  queue:
-    image: rits-app:local
-    pull_policy: never
-    restart: unless-stopped
-    working_dir: /var/www/html
-    command: php artisan queue:work --tries=3 --timeout=90
-    env_file:
-      - .env
-    environment:
-      DB_HOST: mysql
-      REDIS_HOST: redis
-    volumes:
-      - uploads:/var/www/html/storage/app/public
-    depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-      
-  # MySQL database
+  # MySQL Database
   mysql:
     image: mysql:8.4
     restart: unless-stopped
@@ -84,6 +9,8 @@ services:
       MYSQL_USER: ${DB_USERNAME:-rits_user}
       MYSQL_PASSWORD: ${DB_PASSWORD:-change_this_password}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change_root_password}
+    ports:
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -104,6 +31,8 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -129,4 +58,3 @@ services:
 volumes:
   mysql_data:
   redis_data:
-  uploads:
