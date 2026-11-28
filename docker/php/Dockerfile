@@ -88,6 +88,8 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Laravel application
 COPY . .
 
+# Verify HTTPS configuration is included in the image
+RUN grep -n "forceScheme" app/Providers/AppServiceProvider.php
 
 # Replace any Windows-created storage symlink
 RUN rm -f public/storage \
