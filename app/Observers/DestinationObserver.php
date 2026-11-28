@@ -7,13 +7,17 @@ use Illuminate\Support\Facades\Cache;
 
 class DestinationObserver
 {
+
+    private function clearCache(): void
+    {
+        Cache::tags(['countries'])->flush();
+    }
     /**
      * Handle the Destination "created" event.
      */
     public function created(Destination $destination): void
     {
-        Cache::forget('api:countries');
-
+       $this->clearCache();
     }
 
     /**
@@ -21,7 +25,7 @@ class DestinationObserver
      */
     public function updated(Destination $destination): void
     {
-        Cache::forget('api:countries');
+        $this->clearCache();
     }
 
     /**
@@ -29,7 +33,7 @@ class DestinationObserver
      */
     public function deleted(Destination $destination): void
     {
-        Cache::forget('api:countries');
+        $this->clearCache();
     }
 
     /**
@@ -37,7 +41,7 @@ class DestinationObserver
      */
     public function restored(Destination $destination): void
     {
-        Cache::forget('api:countries');
+        $this->clearCache();
     }
 
     /**
@@ -45,6 +49,6 @@ class DestinationObserver
      */
     public function forceDeleted(Destination $destination): void
     {
-        Cache::forget('api:countries');
+        $this->clearCache();
     }
 }

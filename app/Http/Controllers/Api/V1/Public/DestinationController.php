@@ -3,25 +3,31 @@
 namespace App\Http\Controllers\Api\V1\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Destination\GetCountriesRequest;
+use App\Http\Resources\Destination\DestinationResource;
 use App\Services\Api\V1\DestinationRepository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class DestinationController extends Controller
 {
     public function __construct(private DestinationRepository $repo) {}
-    public function getCountries(Request $request)
+
+    public function getCountries(GetCountriesRequest $request)
     {
-
         try {
+            $filters = $request->validated();
 
-            $data = $this->repo->fetchCountries($request->all());
+            // Generate a unique cache key based on filters
+            $cacheKey = 'api:countries:' . md5(json_encode($filters));
 
-            $isEmpty = $data instanceof \Illuminate\Contracts\Pagination\Paginator
-                ? $data->isEmpty()
-                : $data->isEmpty();
+            $data = Cache::tags(['countries'])->remember(
+                $cacheKey,
+                now()->addHours(24),
+                fn () => $this->repo->fetchCountries($filters)
+            );
 
-            if ($isEmpty) {
+            if ($data->isEmpty()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No countries found.',
@@ -29,13 +35,12 @@ class DestinationController extends Controller
                 ], 404);
             }
 
-            return response()->json([
+            return DestinationResource::collection($data)->additional([
                 'success' => true,
                 'message' => 'Countries retrieved successfully.',
-                'data' => $data,
             ]);
-        } catch (\Exception $e) {
 
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong.',

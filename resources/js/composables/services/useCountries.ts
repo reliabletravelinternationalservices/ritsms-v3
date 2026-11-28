@@ -2,12 +2,12 @@ import { computed, ref } from 'vue'
 
 import { countryService } from '@/services/countryService'
 
-import type { PaginatedData } from '@/types/api'
 import type { CountryFilter, CountryWithLocations } from '@/types/country'
+import { PaginatedMeta } from '@/types/api'
 
 export function useCountry() {
     const countries = ref<CountryWithLocations[]>([])
-    const pagination = ref<PaginatedData<CountryWithLocations[]> | null>(null)
+    const pagination = ref<PaginatedMeta | null>(null)
 
     const loading = ref(false)
     const loadingMore = ref(false)
@@ -39,12 +39,12 @@ export function useCountry() {
 
             const response = await countryService.getAll(filters)
 
-            pagination.value = response.data
+            pagination.value = response.meta
 
             if (append) {
-                countries.value.push(...response.data.data)
+                countries.value.push(...response.data)
             } else {
-                countries.value = response.data.data
+                countries.value = response.data
             }
 
             loaded.value = true

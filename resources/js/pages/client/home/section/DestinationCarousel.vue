@@ -20,8 +20,8 @@ const {
   refresh
 } = useCountry()
 
-onMounted(() => {
-  fetchCountries({
+onMounted(async () => {
+  await fetchCountries({
     perPage: 10
   })
 })
@@ -63,9 +63,6 @@ onMounted(() => {
       :countries="countries"
     />
 
-    
-
-    
   </div>
   </section>
 </template>

@@ -1,12 +1,12 @@
 export interface ApiResponse<T> {
     success: boolean
     message: string
-    data: PaginatedData<T>
+    data: T
+    meta: PaginatedMeta
 }
 
-export interface PaginatedData<T> {
+export interface PaginatedMeta {
     current_page: number
-    data: T
     first_page_url: string
     from: number | null
     last_page: number
@@ -25,3 +25,4 @@ export interface PaginationLink {
     label: string
     active: boolean
 }
+

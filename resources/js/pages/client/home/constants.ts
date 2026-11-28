@@ -19,28 +19,28 @@ export const VALID_FOR_FOREIGN_ONLY_TAG = 'VALID FOR FOREIGN ONLY!';
 export const PARTNER_AGENCIES = [
     {
         name: 'Department of Tourism',
-        logo: getImageUrl('upload/agency/pa_dot.png'),
+        logo: getImageUrl('assets/partners/dot.webp'),
         alt: 'Department of Tourism',
     },
     {
         name: 'TPB',
-        logo: getImageUrl('upload/agency/pa_tpb.png'),
-        alt: 'TPB',
+        logo: getImageUrl('assets/partners/tpb.webp'),
+        alt: 'Tourism Promotions Board',
     },
     {
         name: 'RTAA',
-        logo: getImageUrl('upload/agency/pa_rtaa.png'),
-        alt: 'RTAA',
+        logo: getImageUrl('assets/partners/rtaa.webp'),
+        alt: 'Rizal Travel Agencies Association',
     },
     {
         name: 'NITAS',
-        logo: getImageUrl('upload/agency/pa_nitas.png'),
-        alt: 'NITAS',
+        logo: getImageUrl('assets/partners/nitas.webp'),
+        alt: 'Network of Independent Travel Agencies',
     },
     {
         name: 'TBA',
-        logo: getImageUrl('upload/agency/pa_tba.png'),
-        alt: 'TBA',
+        logo: getImageUrl('assets/partners/tba.webp'),
+        alt: 'Global Tourism Business Association',
     },
 ];
 
@@ -129,8 +129,6 @@ export const AGENCY_SERVICES: ServiceProps[] = [
         icon: 'mdi:boat',
     }
 ]
-
-
 
 
 export const CLIENT_IMAGES: ImageProps[] = Array.from(

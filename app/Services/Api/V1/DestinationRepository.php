@@ -10,13 +10,13 @@ class DestinationRepository
 
     public function fetchCountries(array $params = [])
     {
-                    // Only allow supported parameters
+        // Only allow supported parameters
         $filters = Arr::only($params, [
             'countryName',
+            'tag',
             'page',
             'perPage',
             'with',
-            'with.locations',
         ]);
 
         $query = Destination::query()
@@ -25,14 +25,11 @@ class DestinationRepository
                 'country',
                 'tag',
                 'slug',
-                'created_at',
-                'updated_at',
             ])
             ->with([
                 'image:id,mediable_id,mediable_type,file_name,file_path,alt_text',
             ])
-            ->withCount('locations')
-            ->distinct();
+            ->withCount('locations');
 
         /*
         |--------------------------------------------------------------------------
@@ -53,10 +50,7 @@ class DestinationRepository
         // Filter by tag
         $query->when(
             filled(Arr::get($filters, 'tag')),
-            fn ($q) => $q->where(
-                'tag',
-                Arr::get($filters, 'tag')
-            )
+            fn ($q) => $q->where('tag', Arr::get($filters, 'tag'))
         );
 
         /*
@@ -65,9 +59,14 @@ class DestinationRepository
         |--------------------------------------------------------------------------
         */
 
-        if (filter_var(Arr::get($filters, 'with.locations', false), FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var(
+            Arr::get($filters, 'with.locations', false),
+            FILTER_VALIDATE_BOOLEAN
+        )) {
             $query->with([
-            'locations' => fn ($q) => $q->with('image:id,mediable_id,mediable_type,file_name,file_path,alt_text')->latest(),
+                'locations' => fn ($q) => $q
+                    ->with('image:id,mediable_id,mediable_type,file_name,file_path,alt_text')
+                    ->latest(),
             ]);
         }
 
@@ -85,21 +84,20 @@ class DestinationRepository
         |--------------------------------------------------------------------------
         */
 
+        $perPage = max(1, min((int) Arr::get($filters, 'perPage', 10), 100));
+        $page = max(1, (int) Arr::get($filters, 'page', 1));
+
         if (
             filled(Arr::get($filters, 'perPage')) ||
             filled(Arr::get($filters, 'page'))
         ) {
-            $data = $query->paginate(
-                perPage: (int) Arr::get($filters, 'perPage', 10),
-                columns: ['*'],
-                pageName: 'page',
-                page: (int) Arr::get($filters, 'page', 1),
+            return $query->paginate(
+                perPage: $perPage,
+                page: $page,
             );
-        } else {
-            $data = $query->get();
         }
 
-        return $data;
+        return $query->get();
     }
 
 
