@@ -67,60 +67,28 @@ export const AGENCY_CONTACTS = Object.freeze({
     }
 })
 
-export const HERO_CAROUSEL_IMAGES : ImageProps[] = [
-    {
-        id: 1,
-        src: getImageUrl('upload/agency/carousel_1.png'),
-        alt: 'Reliable International Travel Image Destination 1',
-        
-    },
-    {
-        id: 2,
-        src: getImageUrl('upload/agency/carousel_2.png'),
-        alt: 'Reliable International Travel Image Destination 2',
-    },
-    {
-        id: 3,
-        src: getImageUrl('upload/agency/carousel_3.png'),
-        alt: 'Reliable International Travel Image Destination 3',
-    },
-]
+export const HERO_CAROUSEL_IMAGES: ImageProps[] = Array.from(
+    { length: 3 },
+    (_, index) => ({
+        id: index + 1,
+        src: getImageUrl(`assets/landing/carousel_${index + 1}.webp`),
+        alt: `Carousel Image ${index + 1}`,
+    })
+);
 
+export const CLIENT_FEEDBACK: Record<string, ImageProps[]> = {
+    '2009_2024': Array.from({ length: 6 }, (_, index) => ({
+        id: index + 1,
+        alt: `Client feedback ${index + 1}`,
+        src: getImageUrl(`assets/feedbacks/19-24/review_${index + 1}.webp`),
+    })),
 
-export const CLIENT_FEEDBACK : ImageProps[] =  [
-
-    {
-        id: 1,
-        alt: 'client feedback 1',
-        src: getImageUrl('upload/agency/review_1.png'),
-    },
-    {
-        id: 2,
-        alt: 'client feedback 2',
-        src: getImageUrl('upload/agency/review_2.png'),
-    },
-    {
-        id: 3,
-        alt: 'client feedback 3',
-        src: getImageUrl('upload/agency/review_3.png'),
-    },
-    {
-        id: 4,
-        alt: 'client feedback 4',
-        src: getImageUrl('upload/agency/review_4.png'),
-    },
-    {
-        id: 5,
-        alt: 'client feedback 5',
-        src: getImageUrl('upload/agency/review_5.png'),
-    },
-    {
-        id: 6,
-        alt: 'client feedback 6',
-        src: getImageUrl('upload/agency/review_6.png'),
-    }
-
-]
+    '2025_2026': Array.from({ length: 6 }, (_, index) => ({
+        id: index + 1,
+        alt: `Client feedback ${index + 1}`,
+        src: getImageUrl(`assets/feedbacks/25-26/review_${index + 1}.webp`),
+    })),
+};
 
 
 export const AGENCY_SERVICES: ServiceProps[] = [
@@ -165,86 +133,14 @@ export const AGENCY_SERVICES: ServiceProps[] = [
 
 
 
-
-
-
-export const CLIENT_IMAGES: ImageProps[] = [
-    {
-        id: 1,
-        alt: 'Reliable International Travel Satisfied Client 1',
-        src: getImageUrl('upload/agency/client_1.png'),
-    },
-    {
-        id: 2,
-        alt: 'Reliable International Travel Satisfied Client 2',
-        src: getImageUrl('upload/agency/client_2.png'),
-    },
-    {
-        id: 3,
-        alt: 'Reliable International Travel Satisfied Client 3',
-        src: getImageUrl('upload/agency/client_3.png'),
-    },
-    {
-        id: 4,
-        alt: 'Reliable International Travel Satisfied Client 4',
-        src: getImageUrl('upload/agency/client_4.png'),
-    },
-    {
-        id: 5,
-        alt: 'Reliable International Travel Satisfied Client 5',
-        src: getImageUrl('upload/agency/client_5.png'),
-    },
-    {
-        id: 6,
-        alt: 'Reliable International Travel Satisfied Client 6',
-        src: getImageUrl('upload/agency/client_6.png'),
-    },
-    {
-        id: 7,
-        alt: 'Reliable International Travel Satisfied Client 7',
-        src: getImageUrl('upload/agency/client_7.png'),
-    },
-    {
-        id: 8,
-        alt: 'Reliable International Travel Satisfied Client 8',
-        src: getImageUrl('upload/agency/client_8.png'),
-    },
-    {
-        id: 9,
-        alt: 'Reliable International Travel Satisfied Client 9',
-        src: getImageUrl('upload/agency/client_9.png'),
-    },
-    {
-        id: 10,
-        alt: 'Reliable International Travel Satisfied Client 10',
-        src: getImageUrl('upload/agency/client_10.png'),
-    },
-    {
-        id: 11,
-        alt: 'Reliable International Travel Satisfied Client 11',
-        src: getImageUrl('upload/agency/client_11.png'),
-    },
-    {
-        id: 12,
-        alt: 'Reliable International Travel Satisfied Client 12',
-        src: getImageUrl('upload/agency/client_12.png'),
-    },
-    {
-        id: 13,
-        alt: 'Reliable International Travel Satisfied Client 13',
-        src: getImageUrl('upload/agency/client_13.png'),
-    },
-    {
-        id: 14,
-        alt: 'Reliable International Travel Satisfied Client 14',
-        src: getImageUrl('upload/agency/client_14.png'),
-    },
-    {
-        id: 15,
-        alt: 'Reliable International Travel Satisfied Client 15',
-        src: getImageUrl('upload/agency/client_15.png'),
-    },
-];
+export const CLIENT_IMAGES: ImageProps[] = Array.from(
+    { length: 15 },
+    (_, index) => ({
+        id: index + 1,
+        alt: `Reliable International Client Travel Pictures`,
+        src: getImageUrl(`assets/clients/client_${index + 1}.webp`),
+    })
+);
 
 
 export const AGENCY_RATINGS = Object.freeze({
